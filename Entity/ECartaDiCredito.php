@@ -4,7 +4,7 @@ class ECartaDiCredito {
 
     //attributes
 
-    private $nominativo:
+    private $nominativo;
 
     private $numero;
 

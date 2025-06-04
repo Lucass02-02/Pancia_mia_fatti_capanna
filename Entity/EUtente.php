@@ -16,8 +16,6 @@ class Utente{
 
     protected $nickname;
 
-    protected $password;
-
     protected $phonenumber;
 
     //constructor
