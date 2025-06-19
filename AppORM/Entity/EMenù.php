@@ -4,21 +4,21 @@ class EMenù {
 
     //attributes
     
-    private array $categorie;
+    private array $categories;
 
     // Constructor
     
-    public function __construct(array $categorie = []) {
-        $this->categorie = $categorie;
+    public function __construct(array $categories = []) {
+        $this->categories = $categories;
     }
 
     // Getters and Setters
 
-    public function getCategorie(): array {
-        return $this->categorie;
+    public function getCategories(): array {
+        return $this->categories;
     }
 
-    public function setCategorie(array $categorie): void {
-        $this->categorie = $categorie;
+    public function setCategories(array $categories): void {
+        $this->categories = $categories;
     }
 }
