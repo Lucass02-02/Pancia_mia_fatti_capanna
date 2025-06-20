@@ -1,38 +1,19 @@
 <?php
 
+namespace AppORM\Entity;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'restaurant_halls')]
 class ERestaurantHall {
 
     //attributes
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\GeneratedValue]
+    private $idHall;
 
-    private array $table;
-
-    private $ReservationNum;
-
-    //constructor
-
-    public function __construct(array $table = [], $ReservationNum = 0) {
-        $this->table = $table;
-        $this->ReservationNum = $ReservationNum;
+    public function getIdHall() {
+        return $this->idHall;
     }
-
-    //methods getters and setters
-
-    public function getTable() {
-        return $this->table;
-    }
-
-    public function setTable(array $table) {
-        $this->table = $table;
-    }
-
-    public function getReservationNum() {
-        return $this->ReservationNum;
-    }
-
-    public function setReservationNum($ReservationNum) {
-        $this->ReservationNum = $ReservationNum;
-    }
-
-    
-
 }

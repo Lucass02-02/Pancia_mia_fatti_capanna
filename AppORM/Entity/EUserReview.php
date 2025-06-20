@@ -1,23 +1,34 @@
 <?php
 
-class EReview {
+namespace AppORM\Entity;
+use Doctrine\ORM\Mapping as ORM;
+
+
+#[ORM\Entity]
+#[ORM\Table(name: 'user_reviews')]
+class EUserReview {
 
     //attributes
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\GeneratedValue]
+    private $idReview;
 
-    private $id;
-
+    #[ORM\Column(type: 'text', nullable: false)]
     private $description;
 
+    #[ORM\Column(type: 'integer', nullable: false)]
     private $vote;
 
+    #[ORM\Column(type: 'date', nullable: false)]
     private $date;
 
+    #[ORM\Column(type: 'time', nullable: false)]
     private $hour;
 
     //constructor
 
-    public function __construct($id, $description, $vote, $date, $hour) {
-        $this->id = $id;
+    public function __construct( $description, $vote, $date, $hour) {
         $this->description = $description;
         $this->vote = $vote;
         $this->date = $date;
@@ -26,14 +37,9 @@ class EReview {
 
     //methods getters and setters
 
-    public function getId() {
-        return $this->id;
+    public function getIdReview() {
+        return $this->idReview;
     }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
     public function getDescription() {
         return $this->description;
     }

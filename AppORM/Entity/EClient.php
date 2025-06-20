@@ -1,29 +1,26 @@
 <?php
 
+namespace AppORM\Entity;
+use Doctrine\ORM\Mapping as ORM;
+use AppORM\Entity\EUser;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'clients')]
 class EClient extends EUser {
 
-    //attributes
-    protected $idClient;
-
+    
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private array $savedMethods;
 
     
     //constructor
     public function __construct($name, $surname, $email, $password ) {
         parent::__construct( $nome, $cognome, $email, $password);
-        $this->idClient = $idClient;
         $this->savedMethods = [];
     }
 
     
     //methods getters and setters
-    public function getIdClient() {
-        return $this->idClient;
-    }
-
-    public function setIdClient($idClient) {
-        $this->idClient = $idClient;
-    }
 
     public function getSavedMethods() {
         return $this->savedMethods;

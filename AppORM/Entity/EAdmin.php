@@ -1,22 +1,19 @@
 <?php
 
+namespace AppORM\Entity;
+use Doctrine\ORM\Mapping as ORM;
+use AppORM\Entity\EUser;
+
+
+#[ORM\Entity]
+#[ORM\Table(name: 'admins')]
 class EAdmin extends EUser {
 
-    //attributes
-    protected $idAdmin;
+    
 
     //constructor
-    public function __construct($name, $surname, $email, $password, $idAdmin) {
+    public function __construct($name, $surname, $email, $password) {
         parent::__construct($name, $surname, $email, $password);
-        $this->idAdmin = $idAdmin;
     }
 
-    //methods getters and setters
-    public function getIdAdmin() {
-        return $this->idAdmin;
-    }
-
-    public function setIdAdmin($idAdmin) {
-        $this->idAdmin = $idAdmin;
-    }
 }
