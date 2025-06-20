@@ -1,48 +1,40 @@
 <?php
 
+namespace AppORM\Entity;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'orders')]
 class EOrder {
 
     //attributes
 
-    private $id;
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\GeneratedValue]
+    private $idOrder;
 
-    private array $products;
-
+    #[ORM\Column(type: 'text', nullable: false)]
     private $note;
 
+    #[ORM\Column(type: 'float', nullable: false)]
     private float $cost;
 
+    #[ORM\Column(type: 'date', nullable: false)]
     private $date;
-
-    private ETable $table;
 
     //constructor
 
-    public function __construct($id, array $products, $note, float $cost, $date, ETavolo $table) {
-        $this->id = $id;
-        $this->products = $products;
+    public function __construct($note, float $cost, $date) {
         $this->note = $note;
         $this->cost = $cost;
         $this->date = $date;
-        $this->table = $table;
     }
 
     //methods getters and setters
 
-    public function getId() {
-        return $this->id;
-    }
-
-    public function setId($id) {
-        $this->id = $id;
-    }
-
-    public function getProducts() {
-        return $this->products;
-    }
-
-    public function setProducts(array $products) {
-        $this->products = $products;
+    public function getIdOrder() {
+        return $this->idOrder;
     }
 
     public function getNote() {
@@ -69,12 +61,4 @@ class EOrder {
         $this->date = $date;
     }
 
-    public function getTable() {
-        return $this->table;
-    }
-
-    public function setTable(ETable $table) {
-        $this->table = $table;
-    }
-    
 }

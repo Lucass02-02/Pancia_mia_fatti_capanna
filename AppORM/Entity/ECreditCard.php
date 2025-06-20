@@ -1,17 +1,33 @@
 <?php
+namespace AppORM\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'credit_cards')]
 
 class ECreditCard {
 
     //attributes
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\GeneratedValue]
+    private $idCard;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private $nominative;
 
+    #[ORM\Column(type: 'integer', length: 16, nullable: false)]
     private $number;
 
+    #[ORM\Column(type: 'integer', length: 3, nullable: false)]
     private $CVV;
 
+    #[ORM\Column(type: 'date', nullable: false)]
     private $expirationDate;
 
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private $name;
 
     //constructor
@@ -26,6 +42,10 @@ class ECreditCard {
 
     //methods getters and setters
 
+    public function getIdCard() {
+        return $this->idCard;
+    }
+    
     public function getNominative() {
         return $this->nominative;
     }

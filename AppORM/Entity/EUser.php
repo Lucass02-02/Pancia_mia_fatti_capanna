@@ -2,22 +2,36 @@
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-class User{
 
+#[ORM\MappedSuperclass]
+abstract class EUser{
 
     //attributes
+
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\GeneratedValue]
+    protected $id;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]
     protected $name;
 
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]
     protected $surname;
 
+    #[ORM\Column(type: 'date', nullable: false)]
     protected $birthDate;
 
+    #[ORM\Column(type: 'string', length: 100, nullable: false)]
     protected $email;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     protected $password;
 
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]   
     protected $nickname;
 
+    #[ORM\Column(type: 'string', length: 15, nullable: true)]
     protected $phonenumber;
 
     //constructor
@@ -34,6 +48,12 @@ class User{
 
 
     //methods getters and setters
+    public function getId()
+    {
+        return $this->id;
+    }
+
+
     public function getName()
     {
         return $this->name;

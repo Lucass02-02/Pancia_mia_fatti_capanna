@@ -1,45 +1,48 @@
 <?php
 
-class EPrenotazione  {
+namespace AppORM\Entity;
+use Doctrine\ORM\Mapping as ORM;
 
+#[ORM\Entity]
+#[ORM\Table(name: 'reservations')]
+class EReservation {
 
     //attributes
-    private $id;
 
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\GeneratedValue]
+    private $idReservation;
+
+    #[ORM\Column(type: 'date', nullable: false)]
     private $date;
 
+    #[ORM\Column(type: 'time', nullable: false)]
     private $hours;
 
+    #[ORM\Column(type: 'integer', nullable: false)]
     private $peopleNum;
 
+    #[ORM\Column(type: 'text', nullable: true)]
     private $note;
 
-    private ETable $table;
-
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private $nameReservation;
-
-    private EClient $userData;
 
 
     //constructor
-    public function __construct($id, $date, $hours, $peopleNum, $note, ETavolo $table, ECliente $userData, $nameReservation = null) {
-        $this->id = $id;
+    public function __construct( $date, $hours, $peopleNum, $note, $nameReservation) {
         $this->date = $date;
         $this->hours = $hours;
         $this->peopleNum = $peopleNum;
         $this->note = $note;
-        $this->table = $table;
-        $this->userData = $userData;
         $this->nameReservation = $nameReservation;
     }
 
     //methods getters and setters
-    public function getId() {
-        return $this->id;
-    }
 
-    public function setId($id) {
-        $this->id = $id;
+    public function getIdReservation() {
+        return $this->idReservation;
     }
 
     public function getDate() {
@@ -74,28 +77,12 @@ class EPrenotazione  {
         $this->note = $note;
     }
 
-    public function getTable() {
-        return $this->table;
-    }
-
-    public function setTable(ETable $table) {
-        $this->table = $table;
-    }
-
     public function getNameReservation() {
         return $this->nameReservation;
     }
 
     public function setNameReservation($nameReservation) {
         $this->nameReservation = $nameReservation;
-    }
-
-    public function getUserData() {
-        return $this->userData;
-    }
-
-    public function setUserData(EClient $userData) {
-        $this->userData = $userData;
     }
 
     
