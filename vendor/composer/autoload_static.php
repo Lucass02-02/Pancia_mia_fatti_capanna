@@ -12,8 +12,8 @@ class ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f
         '320cde22f66dd4f5d3fd621d3e88b98f' => __DIR__ . '/..' . '/symfony/polyfill-ctype/bootstrap.php',
         '8825ede83f2f289127722d4e842cf7e8' => __DIR__ . '/..' . '/symfony/polyfill-intl-grapheme/bootstrap.php',
         'e69f7f6ee287b969198c3c9d6777bd38' => __DIR__ . '/..' . '/symfony/polyfill-intl-normalizer/bootstrap.php',
-        '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
         'b6b991a57620e2fb6b2f66f03fe9ddc2' => __DIR__ . '/..' . '/symfony/string/Resources/functions.php',
+        '9d2b9fc6db0f153a0a149fefb182415e' => __DIR__ . '/..' . '/symfony/polyfill-php84/bootstrap.php',
     );
 
     public static $prefixLengthsPsr4 = array (
@@ -28,6 +28,7 @@ class ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f
             'Symfony\\Contracts\\Cache\\' => 24,
             'Symfony\\Component\\VarExporter\\' => 30,
             'Symfony\\Component\\String\\' => 25,
+            'Symfony\\Component\\Stopwatch\\' => 28,
             'Symfony\\Component\\Console\\' => 26,
             'Symfony\\Component\\Cache\\' => 24,
         ),
@@ -41,6 +42,7 @@ class ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f
         array (
             'Doctrine\\Persistence\\' => 21,
             'Doctrine\\ORM\\' => 13,
+            'Doctrine\\Migrations\\' => 20,
             'Doctrine\\Instantiator\\' => 22,
             'Doctrine\\Inflector\\' => 19,
             'Doctrine\\Deprecations\\' => 22,
@@ -48,6 +50,10 @@ class ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f
             'Doctrine\\Common\\Lexer\\' => 22,
             'Doctrine\\Common\\Collections\\' => 28,
             'Doctrine\\Common\\' => 16,
+        ),
+        'A' => 
+        array (
+            'AppORM\\' => 7,
         ),
     );
 
@@ -88,6 +94,10 @@ class ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f
         array (
             0 => __DIR__ . '/..' . '/symfony/string',
         ),
+        'Symfony\\Component\\Stopwatch\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/symfony/stopwatch',
+        ),
         'Symfony\\Component\\Console\\' => 
         array (
             0 => __DIR__ . '/..' . '/symfony/console',
@@ -115,6 +125,10 @@ class ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f
         'Doctrine\\ORM\\' => 
         array (
             0 => __DIR__ . '/..' . '/doctrine/orm/src',
+        ),
+        'Doctrine\\Migrations\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/migrations/src',
         ),
         'Doctrine\\Instantiator\\' => 
         array (
@@ -144,10 +158,10 @@ class ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f
         array (
             0 => __DIR__ . '/..' . '/doctrine/event-manager/src',
         ),
-    );
-
-    public static $fallbackDirsPsr0 = array (
-        0 => __DIR__ . '/../..' . '/src',
+        'AppORM\\' => 
+        array (
+            0 => __DIR__ . '/../..' . '/AppORM',
+        ),
     );
 
     public static $classMap = array (
@@ -162,7 +176,6 @@ class ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f
         return \Closure::bind(function () use ($loader) {
             $loader->prefixLengthsPsr4 = ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f::$prefixLengthsPsr4;
             $loader->prefixDirsPsr4 = ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f::$prefixDirsPsr4;
-            $loader->fallbackDirsPsr0 = ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f::$fallbackDirsPsr0;
             $loader->classMap = ComposerStaticInit6f85502b52ffab0d6a85b356c58b065f::$classMap;
 
         }, null, ClassLoader::class);

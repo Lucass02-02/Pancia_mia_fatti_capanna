@@ -1,0 +1,64 @@
+<?php
+
+namespace AppORM\Entity;
+use Doctrine\ORM\Mapping as ORM;
+
+#[ORM\Entity]
+#[ORM\Table(name: 'orders')]
+class EOrder {
+
+    //attributes
+
+    #[ORM\Id]
+    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\GeneratedValue]
+    private $idOrder;
+
+    #[ORM\Column(type: 'text', nullable: false)]
+    private $note;
+
+    #[ORM\Column(type: 'float', nullable: false)]
+    private float $cost;
+
+    #[ORM\Column(type: 'date', nullable: false)]
+    private $date;
+
+    //constructor
+
+    public function __construct($note, float $cost, $date) {
+        $this->note = $note;
+        $this->cost = $cost;
+        $this->date = $date;
+    }
+
+    //methods getters and setters
+
+    public function getIdOrder() {
+        return $this->idOrder;
+    }
+
+    public function getNote() {
+        return $this->note;
+    }
+
+    public function setNote($note) {
+        $this->note = $note;
+    }
+
+    public function getCost() {
+        return $this->cost;
+    }
+
+    public function setCost(float $cost) {
+        $this->cost = $cost;
+    }
+
+    public function getDate() {
+        return $this->date;
+    }
+
+    public function setDate($date) {
+        $this->date = $date;
+    }
+
+}
