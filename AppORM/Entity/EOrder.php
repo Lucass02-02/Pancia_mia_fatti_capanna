@@ -12,7 +12,7 @@ class EOrder {
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
-    private $idOrder;
+    private $id;
 
     #[ORM\Column(type: 'text', nullable: false)]
     private $note;
@@ -22,6 +22,13 @@ class EOrder {
 
     #[ORM\Column(type: 'date', nullable: false)]
     private $date;
+
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'orders')]
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]
+    private EClient $client;
+
+    #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'orders')]
+    private Collection $products;
 
     //constructor
 
@@ -34,7 +41,7 @@ class EOrder {
     //methods getters and setters
 
     public function getIdOrder() {
-        return $this->idOrder;
+        return $this->id;
     }
 
     public function getNote() {

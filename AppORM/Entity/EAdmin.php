@@ -9,7 +9,8 @@ use AppORM\Entity\EUser;
 #[ORM\Table(name: 'admins')]
 class EAdmin extends EUser {
 
-    
+    #[ORM\OneToMany(targetEntity: EAdminResponse::class, mappedBy: 'admins')]
+    private Collection $responses;
 
     //constructor
     public function __construct($name, $surname, $email, $password) {

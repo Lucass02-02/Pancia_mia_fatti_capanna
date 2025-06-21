@@ -12,12 +12,14 @@ class EAllergens {
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
-    private $idAllergens;
+    private $id;
 
 
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private string $allergenType;
 
+    #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'allergens')]
+    private Collection $product;
 
     //constructor
 
@@ -27,7 +29,7 @@ class EAllergens {
 
     //methods getters and setters
     public function getIdAllergens() {
-        return $this->idAllergens;
+        return $this->id;
     }
 
     public function getAllergenType() {

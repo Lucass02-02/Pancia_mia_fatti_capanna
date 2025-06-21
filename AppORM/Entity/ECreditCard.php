@@ -30,6 +30,10 @@ class ECreditCard {
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private $name;
 
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'credit_cards')]
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]
+    private EClient $client;
+
     //constructor
     public function __construct($nominative, $number, $CVV, $expirationDate, $name) {
         $this->nominative = $nominative;
