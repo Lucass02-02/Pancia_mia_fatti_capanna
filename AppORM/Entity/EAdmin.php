@@ -17,4 +17,12 @@ class EAdmin extends EUser {
         parent::__construct($name, $surname, $email, $password);
     }
 
+    //methods getters and setters
+    public function getResponses(): Collection {
+        return $this->responses;
+    }
+
+    public function setResponses(Collection $responses) {
+        $this->responses = $responses;
+    }
 }

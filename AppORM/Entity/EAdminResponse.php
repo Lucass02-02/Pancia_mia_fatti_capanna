@@ -54,4 +54,21 @@ class EAdminResponse {
         $this->responseDate = $responseDate;
     }
     
+    public function getAdmin(): EAdmin {
+        return $this->admin;
+    }
+
+    public function setAdmin(EAdmin $admin) {
+        $this->admin = $admin;
+    }
+
+    public function getUserReviews(): Collection {
+        return $this->userReviews;
+    }
+
+    public function setUserReviews(Collection $userReviews) {
+        $this->userReviews = $userReviews;
+    }
+
+    
 }

@@ -40,4 +40,11 @@ class EAllergens {
         $this->allergenType = $allergenType;
     }
 
+    public function getProduct(): Collection {
+        return $this->product;
+    }
+
+    public function setProduct(Collection $product) {
+        $this->product = $product;
+    }
 }

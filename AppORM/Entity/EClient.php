@@ -24,6 +24,9 @@ class EClient extends EUser {
     #[ORM\OneToMany(targetEntity: EOrder::class, mappedBy: 'clients')]
     private Collection $orders;
 
+    private static $entity = EClient::class;
+
+
     //constructor
     public function __construct($name, $surname, $email, $password ) {
         parent::__construct( $nome, $cognome, $email, $password);
@@ -33,6 +36,10 @@ class EClient extends EUser {
     
     //methods getters and setters
 
+    public function getEntity() {
+        return self::$entity;
+    }
+
     public function getSavedMethods() {
         return $this->savedMethods;
     }
@@ -40,4 +47,38 @@ class EClient extends EUser {
     public function setSavedMethods(array $savedMethods) {
         $this->savedMethods = $savedMethods;
     }
+
+    public function getCreditCards(): Collection {
+        return $this->creditCards;
+    }
+
+    public function setCreditCards(Collection $creditCards) {
+        $this->creditCards = $creditCards;
+    }
+
+    public function getReviews(): Collection {
+        return $this->reviews;
+    }
+
+    public function setReviews(Collection $reviews) {
+        $this->reviews = $reviews;
+    }
+
+    public function getReservations(): Collection {
+        return $this->reservations;
+    }
+
+    public function setReservations(Collection $reservations) {
+        $this->reservations = $reservations;
+    }
+
+    public function getOrders(): Collection {
+        return $this->orders;
+    }
+
+    public function setOrders(Collection $orders) {
+        $this->orders = $orders;
+    }
+
+
 }

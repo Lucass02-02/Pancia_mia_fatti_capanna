@@ -68,4 +68,11 @@ class EOrder {
         $this->date = $date;
     }
 
+    public function getProducts(): Collection {
+        return $this->products;
+    }
+
+    public function setProducts(Collection $products) {
+        $this->products = $products;
+    }
 }
