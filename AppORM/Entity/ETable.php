@@ -3,6 +3,12 @@
 namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
+enum TableState: string {
+    case AVAILABLE = 'available';
+    case RESERVED = 'reserved';
+    case OCCUPIED = 'occupied';
+}
+
 #[ORM\Entity]
 #[ORM\Table(name: 'tables')]
 class ETable {
@@ -18,16 +24,26 @@ class ETable {
     private $seatsNumber;
 
     #[ORM\Column(type: 'string', nullable: false)]
-    private $state;
+    private TableState $state;
 
+    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'tables')]
+    #[ORM\JoinColumn(name: 'hall_id', referencedColumnName: 'idHall')]
+    private ERestaurantHall $restaurantHall;
+
+    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'tables')]
+    private Collection $reservations;
 
     //constructor
-    public function __construct($seatsNumber, $state) {
+    public function __construct($seatsNumber, TableState $state) {
         $this->seatsNumber = $seatsNumber;
         $this->state = $state;
     }
 
     //methods getters and setters
+
+    public function getEntity() {
+        return self::class;
+    }
 
     public function getIdTable() {
         return $this->idTable;
@@ -41,11 +57,11 @@ class ETable {
         $this->seatsNumber = $seatsNumber;
     }
     
-    public function getState() {
+    public function getState(): TableState {
         return $this->state;
     }
 
-    public function setState($state) {
+    public function setState(TableState $state) {
         $this->state = $state;
     }
 

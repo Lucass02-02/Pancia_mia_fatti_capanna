@@ -20,7 +20,7 @@ class EProduct {
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
-    private $idProduct;
+    private $id;
 
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private $name;
@@ -37,6 +37,14 @@ class EProduct {
     #[ORM\Column(type: 'string', length: 50, nullable: false, enumType: ProductCategory::class)]
     private ProductCategory $category;
 
+    #[ORM\ManyToMany(targetEntity: EOrder::class, inversedBy: 'products')]
+    #[ORM\JoinTable(name: 'order_products')]
+    private Collection $orders;
+
+    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products')]
+    #[ORM\JoinTable(name: 'product_allergens')]
+    private Collection $allergens;
+
     //constructor
     public function __construct($name, $description, $cost, ProductCategory $category) {
         $this->category = $category;
@@ -47,8 +55,12 @@ class EProduct {
 
     //methods getters and setters
 
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdProduct() {
-        return $this->idProduct;
+        return $this->id;
     }
 
     public function getName() {

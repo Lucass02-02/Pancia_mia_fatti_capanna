@@ -29,6 +29,13 @@ class EReservation {
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private $nameReservation;
 
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reservations')]
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]        
+    private EClient $client;
+
+    #[ORM\ManyToOne(targetEntity: ETable::class, inversedBy: 'reservations')]
+    #[ORM\JoinColumn(name: 'table_id', referencedColumnName: 'idTable')]    
+    private ETable $table;
 
     //constructor
     public function __construct( $date, $hours, $peopleNum, $note, $nameReservation) {
@@ -40,6 +47,10 @@ class EReservation {
     }
 
     //methods getters and setters
+
+    public function getEntity() {
+        return self::class;
+    }
 
     public function getIdReservation() {
         return $this->idReservation;

@@ -1,6 +1,7 @@
 <?php
 
 namespace AppORM\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -11,13 +12,20 @@ class EAdminResponse {
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
-    private $idResponse;
+    private $id;
 
     #[ORM\Column(type: 'text', nullable: false)]
     private string $responseText;
 
     #[ORM\Column(type: 'datetime', nullable: false)]
     private $responseDate;
+
+    #[ORM\ManyToOne(targetEntity: EAdmin::class, inversedBy: 'admin_responses')]
+    #[ORM\JoinColumn(name: 'admin_id', referencedColumnName: 'id')]
+    private EAdmin $admin;
+
+    #[ORM\ManyToMany(targetEntity: EUserReview::class, mappedBy: 'adminResponses')]
+    private Collection $userReviews;
 
     //constructor
     public function __construct(string $responseText, $responseDate) {
@@ -26,8 +34,13 @@ class EAdminResponse {
     }
 
     //methods getters and setters
+
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdResponse() {
-        return $this->idResponse;
+        return $this->id;
     }
 
     public function getResponseText() {
@@ -45,5 +58,22 @@ class EAdminResponse {
     public function setResponseDate($responseDate) {
         $this->responseDate = $responseDate;
     }
+    
+    public function getAdmin(): EAdmin {
+        return $this->admin;
+    }
+
+    public function setAdmin(EAdmin $admin) {
+        $this->admin = $admin;
+    }
+
+    public function getUserReviews(): Collection {
+        return $this->userReviews;
+    }
+
+    public function setUserReviews(Collection $userReviews) {
+        $this->userReviews = $userReviews;
+    }
+
     
 }

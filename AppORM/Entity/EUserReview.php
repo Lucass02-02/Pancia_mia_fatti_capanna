@@ -12,7 +12,7 @@ class EUserReview {
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
-    private $idReview;
+    private $id;
 
     #[ORM\Column(type: 'text', nullable: false)]
     private $description;
@@ -26,6 +26,13 @@ class EUserReview {
     #[ORM\Column(type: 'time', nullable: false)]
     private $hour;
 
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'user_reviews')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    private EUser $user;
+
+    #[ORM\ManyToMany(targetEntity: EAdminResponse::class, inversedBy: 'user_reviews')]
+    #[ORM\JoinTable(name: 'user_review_responses')]
+    private Collection $adminResponses;
     //constructor
 
     public function __construct( $description, $vote, $date, $hour) {
@@ -37,8 +44,12 @@ class EUserReview {
 
     //methods getters and setters
 
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdReview() {
-        return $this->idReview;
+        return $this->id;
     }
     public function getDescription() {
         return $this->description;

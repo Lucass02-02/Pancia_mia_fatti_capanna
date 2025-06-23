@@ -13,7 +13,18 @@ class ERestaurantHall {
     #[ORM\GeneratedValue]
     private $idHall;
 
+    #[ORM\OneToMany(targetEntity: EWaiter::class, mappedBy: 'restaurant_halls')]
+    private Collection $waiters;
+
+    #[ORM\OneToMany(targetEntity: ETable::class, mappedBy: 'restaurant_halls')]
+    private Collection $tables;
+
+
     public function getIdHall() {
         return $this->idHall;
+    }
+
+    public function getEntity() {
+        return self::class;
     }
 }
