@@ -23,4 +23,8 @@ class ERestaurantHall {
     public function getIdHall() {
         return $this->idHall;
     }
+
+    public function getEntity() {
+        return self::class;
+    }
 }

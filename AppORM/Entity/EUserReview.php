@@ -44,6 +44,10 @@ class EUserReview {
 
     //methods getters and setters
 
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdReview() {
         return $this->id;
     }

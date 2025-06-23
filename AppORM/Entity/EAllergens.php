@@ -28,6 +28,11 @@ class EAllergens {
     }
 
     //methods getters and setters
+    public function getEntity() {
+        return self::class;
+    }
+
+
     public function getIdAllergens() {
         return $this->id;
     }

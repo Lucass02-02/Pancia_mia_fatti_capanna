@@ -40,6 +40,10 @@ class EOrder {
 
     //methods getters and setters
 
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdOrder() {
         return $this->id;
     }

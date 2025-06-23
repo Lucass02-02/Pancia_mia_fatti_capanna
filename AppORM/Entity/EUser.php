@@ -28,9 +28,6 @@ abstract class EUser{
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
     protected $password;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]   
-    protected $nickname;
-
     #[ORM\Column(type: 'string', length: 15, nullable: true)]
     protected $phonenumber;
 
@@ -102,16 +99,6 @@ abstract class EUser{
     public function setPassword($password)
     {
         $this->password = $password;
-    }
-
-    public function getNickname()
-    {
-        return $this->nickname;
-    }
-
-    public function setNickname($nickname)
-    {
-        $this->nickname = $nickname;
     }
 
     public function getPhonenumber()

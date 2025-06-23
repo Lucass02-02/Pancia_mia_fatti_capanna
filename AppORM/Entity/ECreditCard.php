@@ -46,6 +46,10 @@ class ECreditCard {
 
     //methods getters and setters
 
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdCard() {
         return $this->idCard;
     }

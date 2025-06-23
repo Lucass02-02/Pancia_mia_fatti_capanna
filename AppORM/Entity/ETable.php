@@ -41,6 +41,10 @@ class ETable {
 
     //methods getters and setters
 
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdTable() {
         return $this->idTable;
     }

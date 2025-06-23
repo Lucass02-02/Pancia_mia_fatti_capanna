@@ -34,6 +34,11 @@ class EAdminResponse {
     }
 
     //methods getters and setters
+
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdResponse() {
         return $this->id;
     }

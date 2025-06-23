@@ -19,5 +19,7 @@ class EWaiter extends EUser {
         parent::__construct($name, $surname, $email, $password);
     }
 
-    
+    public function getEntity() {
+        return self::class;
+    }
 }

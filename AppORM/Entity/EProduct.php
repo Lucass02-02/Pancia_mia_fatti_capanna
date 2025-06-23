@@ -55,6 +55,10 @@ class EProduct {
 
     //methods getters and setters
 
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdProduct() {
         return $this->id;
     }

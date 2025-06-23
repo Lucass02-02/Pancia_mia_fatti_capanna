@@ -48,6 +48,10 @@ class EReservation {
 
     //methods getters and setters
 
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getIdReservation() {
         return $this->idReservation;
     }

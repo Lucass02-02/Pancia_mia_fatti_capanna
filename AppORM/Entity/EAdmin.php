@@ -18,6 +18,10 @@ class EAdmin extends EUser {
     }
 
     //methods getters and setters
+    public function getEntity() {
+        return self::class;
+    }
+
     public function getResponses(): Collection {
         return $this->responses;
     }

@@ -12,6 +12,9 @@ class EClient extends EUser {
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private array $savedMethods;
 
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]   
+    private $nickname;
+
     #[ORM\OneToMany(targetEntity: ECreditCard::class, mappedBy: 'clients', cascade: ['persist', 'remove'])]
     private Collection $creditCards;
 
@@ -46,6 +49,16 @@ class EClient extends EUser {
 
     public function setSavedMethods(array $savedMethods) {
         $this->savedMethods = $savedMethods;
+    }
+
+    public function getNickname()
+    {
+        return $this->nickname;
+    }
+
+    public function setNickname($nickname)
+    {
+        $this->nickname = $nickname;
     }
 
     public function getCreditCards(): Collection {
