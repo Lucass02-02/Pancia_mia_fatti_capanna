@@ -5,9 +5,7 @@ require_once __DIR__ . '/vendor/autoload.php';
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
-function getEntityManager(): EntityManager
-
-    {
+function getEntityManager(): EntityManager{
         $paths = array(__DIR__ . '/AppORM/Entity');
         $isDevMode = true;
         $config = ORMSetup::createAttributeMetadataConfiguration($paths,true);  # 2. Configurazione per attributi o annotazioni 

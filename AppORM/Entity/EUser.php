@@ -4,10 +4,9 @@ namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\MappedSuperclass]
-abstract class EUser{
-
-    //attributes
-
+abstract class EUser
+{
+    // Attributi
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
@@ -31,25 +30,23 @@ abstract class EUser{
     #[ORM\Column(type: 'string', length: 15, nullable: true)]
     protected $phonenumber;
 
-    //constructor
-    public function __construct($name, $surname, $birthDate, $email, $password, $nickname, $phonenumber)
+    // Costruttore
+    // Rimosso $nickname dal costruttore di EUser in quanto è una proprietà di EClient
+    public function __construct($name, $surname, $birthDate, $email, $password, $phonenumber)
     {
         $this->name = $name;
         $this->surname = $surname;
         $this->birthDate = $birthDate;
         $this->email = $email;
         $this->password = $password;
-        $this->nickname = $nickname;
         $this->phonenumber = $phonenumber;
     }
 
-
-    //methods getters and setters
+    // Metodi getters e setters
     public function getId()
     {
         return $this->id;
     }
-
 
     public function getName()
     {
@@ -110,5 +107,4 @@ abstract class EUser{
     {
         $this->phonenumber = $phonenumber;
     }
-    
 }

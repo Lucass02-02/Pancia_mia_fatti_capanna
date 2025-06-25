@@ -1,10 +1,9 @@
 <?php
-
-require_once __DIR__ . '/../../bootstrap.php';
-
+namespace App\EntityManager; 
+require_once __DIR__ . '/../../../bootstrap.php'; // Tre ".." per tornare alla radice del progetto
 class FEntityManager{
     private static $instance;
-    private $entityManager;
+    private static $entityManager;
 
     private function __construct() {
         self::$entityManager = getEntityManager();

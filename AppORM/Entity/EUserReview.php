@@ -1,13 +1,15 @@
 <?php
 
 namespace AppORM\Entity;
-use Doctrine\ORM\Mapping as ORM;
 
+use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user_reviews')]
-class EUserReview {
-
+class EUserReview
+{
     //attributes
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
@@ -26,61 +28,102 @@ class EUserReview {
     #[ORM\Column(type: 'time', nullable: false)]
     private $hour;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'user_reviews')]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    private EUser $user;
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews')] // Collegato a EClient
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)] // user_id è la foreign key che punta a id di EClient
+    private EClient $user; // Deve essere di tipo EClient
 
     #[ORM\ManyToMany(targetEntity: EAdminResponse::class, inversedBy: 'user_reviews')]
     #[ORM\JoinTable(name: 'user_review_responses')]
     private Collection $adminResponses;
-    //constructor
 
-    public function __construct( $description, $vote, $date, $hour) {
+    // Costruttore
+    // Ho aggiunto EClient $user come parametro obbligatorio per la relazione ManyToOne
+    public function __construct(EClient $user, $description, $vote, $date, $hour)
+    {
+        $this->user = $user;
         $this->description = $description;
         $this->vote = $vote;
         $this->date = $date;
         $this->hour = $hour;
+        $this->adminResponses = new ArrayCollection(); // Inizializza la Collection
     }
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
-    }
-
-    public function getIdReview() {
+    public function getId() // Rinominato da getIdReview() a getId()
+    {
         return $this->id;
     }
-    public function getDescription() {
+    public function getDescription()
+    {
         return $this->description;
     }
 
-    public function setDescription($description) {
+    public function setDescription($description)
+    {
         $this->description = $description;
     }
 
-    public function getVote() {
+    public function getVote()
+    {
         return $this->vote;
     }
 
-    public function setVote($vote) {
+    public function setVote($vote)
+    {
         $this->vote = $vote;
     }
 
-    public function getDate() {
+    public function getDate()
+    {
         return $this->date;
     }
 
-    public function setDate($date) {
+    public function setDate($date)
+    {
         $this->date = $date;
     }
 
-    public function getHour() {
+    public function getHour()
+    {
         return $this->hour;
     }
 
-    public function setHour($hour) {
+    public function setHour($hour)
+    {
         $this->hour = $hour;
     }
 
+    public function getUser(): EClient // Getter per l'oggetto EClient associato
+    {
+        return $this->user;
+    }
+
+    public function setUser(EClient $user): self // Setter per l'oggetto EClient associato
+    {
+        $this->user = $user;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EAdminResponse>
+     */
+    public function getAdminResponses(): Collection
+    {
+        return $this->adminResponses;
+    }
+
+    public function addAdminResponse(EAdminResponse $adminResponse): self
+    {
+        if (!$this->adminResponses->contains($adminResponse)) {
+            $this->adminResponses->add($adminResponse);
+        }
+        return $this;
+    }
+
+    public function removeAdminResponse(EAdminResponse $adminResponse): self
+    {
+        $this->adminResponses->removeElement($adminResponse);
+        return $this;
+    }
 }

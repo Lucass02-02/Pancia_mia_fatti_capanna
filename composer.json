@@ -7,6 +7,10 @@
     },
     "autoload": {
         "psr-4": {
-            "AppORM\\": "AppORM/"}
+            "AppORM\\Entity\\": "AppORM/Entity/",
+            "App\\Foundation\\": "AppORM\\ Services/Foundation/",
+            "App\\EntityManager\\": "AppORM\\ Services/Foundation/"
+            
+        }
     }
 }

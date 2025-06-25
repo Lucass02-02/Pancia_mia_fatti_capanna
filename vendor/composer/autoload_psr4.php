@@ -31,5 +31,7 @@ return array(
     'Doctrine\\Common\\Lexer\\' => array($vendorDir . '/doctrine/lexer/src'),
     'Doctrine\\Common\\Collections\\' => array($vendorDir . '/doctrine/collections/src'),
     'Doctrine\\Common\\' => array($vendorDir . '/doctrine/event-manager/src'),
-    'AppORM\\' => array($baseDir . '/AppORM'),
+    'App\\Foundation\\' => array($baseDir . '/AppORM/ Services/Foundation'),
+    'App\\EntityManager\\' => array($baseDir . '/AppORM/ Services/Foundation'),
+    'AppORM\\Entity\\' => array($baseDir . '/AppORM/Entity'),
 );
