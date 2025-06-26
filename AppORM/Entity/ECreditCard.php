@@ -1,41 +1,43 @@
 <?php
+// PHP Version: 8.1+
+
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'credit_cards')]
-
 class ECreditCard {
 
-    //attributes
-
+    // Attributi
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
-    private $idCard;
+    private ?int $idCard = null; // Reso nullable per i nuovi oggetti prima del persist
 
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private $nominative;
+    private string $nominative;
 
-    #[ORM\Column(type: 'integer', length: 16, nullable: false)]
-    private $number;
+    #[ORM\Column(type: 'string', length: 16, nullable: false)] // Cambiato a string per numeri di carta lunghi e non numerici
+    private string $number;
 
-    #[ORM\Column(type: 'integer', length: 3, nullable: false)]
-    private $CVV;
+    #[ORM\Column(type: 'string', length: 3, nullable: false)] // Cambiato a string per CVV che possono iniziare con 0
+    private string $CVV;
 
     #[ORM\Column(type: 'date', nullable: false)]
-    private $expirationDate;
+    private \DateTime $expirationDate; // Uso \DateTime per la classe globale
 
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private $name;
+    private string $name; // Nome amichevole per la carta (es. "Mia Visa")
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'credit_cards')]
-    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'creditCards')] // 'creditCards' è la proprietà in EClient
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')] // AGGIUNTO: onDelete: 'CASCADE'
     private EClient $client;
 
-    //constructor
-    public function __construct($nominative, $number, $CVV, $expirationDate, $name) {
+    // Costruttore
+    // Aggiunto EClient $client al costruttore
+    public function __construct(EClient $client, string $nominative, string $number, string $CVV, \DateTime $expirationDate, string $name) {
+        $this->client = $client;
         $this->nominative = $nominative;
         $this->number = $number;
         $this->CVV = $CVV;
@@ -43,58 +45,67 @@ class ECreditCard {
         $this->name = $name;
     }
 
+    // Metodi getters e setters
 
-    //methods getters and setters
-
-    public function getEntity() {
+    public function getEntity(): string {
         return self::class;
     }
 
-    public function getIdCard() {
+    public function getIdCard(): ?int {
         return $this->idCard;
     }
-    
-    public function getNominative() {
+
+    public function getNominative(): string {
         return $this->nominative;
     }
 
-    public function setNominative($nominative) {
+    public function setNominative(string $nominative): self {
         $this->nominative = $nominative;
+        return $this;
     }
 
-    public function getNumber() {
+    public function getNumber(): string {
         return $this->number;
     }
 
-    public function setNumber($number) {
+    public function setNumber(string $number): self {
         $this->number = $number;
+        return $this;
     }
 
-    public function getCVV() {
+    public function getCVV(): string {
         return $this->CVV;
     }
 
-    public function setCVV($CVV) {
+    public function setCVV(string $CVV): self {
         $this->CVV = $CVV;
+        return $this;
     }
 
-    public function getExpirationDate() {
+    public function getExpirationDate(): \DateTime {
         return $this->expirationDate;
     }
 
-    public function setExpirationDate($expirationDate) {
+    public function setExpirationDate(\DateTime $expirationDate): self {
         $this->expirationDate = $expirationDate;
+        return $this;
     }
 
-    public function getName() {
+    public function getName(): string {
         return $this->name;
     }
 
-    public function setName($name) {
+    public function setName(string $name): self {
         $this->name = $name;
+        return $this;
     }
 
-  
-    
-    
+    public function getClient(): EClient {
+        return $this->client;
+    }
+
+    public function setClient(EClient $client): self {
+        $this->client = $client;
+        return $this;
+    }
 }

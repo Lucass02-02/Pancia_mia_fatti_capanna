@@ -1,4 +1,5 @@
 <?php
+// PHP Version: 8.1+
 
 namespace AppORM\Entity;
 
@@ -6,22 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 use AppORM\Entity\EUser;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use DateTime;
+use \DateTime; // Uso \DateTime per la classe globale
 
 #[ORM\Entity]
 #[ORM\Table(name: 'clients')]
 class EClient extends EUser
 {
-    #[ORM\Column(type: 'json', nullable: false)]
-    private array $savedMethods;
+    // RIMOSSO il campo savedMethods di tipo json (non più qui)
 
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private ?string $nickname = null;
 
-    #[ORM\OneToMany(targetEntity: ECreditCard::class, mappedBy: 'client', cascade: ['persist', 'remove'])]
-    private Collection $creditCards;
+    #[ORM\OneToMany(targetEntity: ECreditCard::class, mappedBy: 'client', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $creditCards; // Questa Collection ora rappresenta i "metodi salvati"
 
-    // MODIFICA CRUCIALE QUI: mappedBy deve essere 'user' perché in EUserReview la proprietà è $user
     #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'user', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private Collection $reviews;
 
@@ -31,20 +30,25 @@ class EClient extends EUser
     #[ORM\OneToMany(targetEntity: EOrder::class, mappedBy: 'client', cascade: ['persist', 'remove'])]
     private Collection $orders;
 
+    #[ORM\Column(type: 'boolean', options: ['default' => false])]
+    private bool $receivesNotifications = false;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $loyaltyPoints = 0;
+
     // Costruttore
     public function __construct(
         string $name,
         string $surname,
-        DateTime $birthDate,
+        \DateTime $birthDate,
         string $email,
         string $password,
-        ?string $nickname,
-        ?string $phonenumber,
-        array $savedMethods = []
+        ?string $nickname = null,
+        ?string $phonenumber = null
+        // RIMOSSO: `array $savedMethods = []` dal costruttore
     ) {
         parent::__construct($name, $surname, $birthDate, $email, $password, $phonenumber);
         $this->nickname = $nickname;
-        $this->savedMethods = $savedMethods;
 
         $this->creditCards = new ArrayCollection();
         $this->reviews = new ArrayCollection();
@@ -52,19 +56,7 @@ class EClient extends EUser
         $this->orders = new ArrayCollection();
     }
 
-    // Getter e Setter per savedMethods (omessi per brevità, sono gli stessi)
-    public function getSavedMethods(): array
-    {
-        return $this->savedMethods;
-    }
-
-    public function setSavedMethods(array $savedMethods): self
-    {
-        $this->savedMethods = $savedMethods;
-        return $this;
-    }
-
-    // Getter e Setter per nickname (omessi per brevità, sono gli stessi)
+    // Getter e Setter per nickname
     public function getNickname(): ?string
     {
         return $this->nickname;
@@ -96,9 +88,12 @@ class EClient extends EUser
     public function removeCreditCard(ECreditCard $creditCard): self
     {
         if ($this->creditCards->removeElement($creditCard)) {
-            if ($creditCard->getClient() === $this) {
-                $creditCard->setClient(null);
-            }
+            // RIMOSSO: La riga che impostava il client a null
+            // if ($creditCard->getClient() === $this) {
+            //     $creditCard->setClient(null);
+            // }
+            // Con orphanRemoval: true, Doctrine si aspetta di ELIMINARE l'entità orfana.
+            // Tentare di impostare la relazione a null quando la FK non è nullable causa l'errore.
         }
         return $this;
     }
@@ -121,7 +116,6 @@ class EClient extends EUser
     {
         if (!$this->reviews->contains($review)) {
             $this->reviews->add($review);
-            // MODIFICA CRUCIALE QUI: Chiamiamo setUser() su EUserReview
             $review->setUser($this);
         }
         return $this;
@@ -130,7 +124,6 @@ class EClient extends EUser
     public function removeReview(EUserReview $review): self
     {
         if ($this->reviews->removeElement($review)) {
-            // MODIFICA CRUCIALE QUI: Chiamiamo getUser() e setUser(null) su EUserReview
             if ($review->getUser() === $this) {
                 $review->setUser(null);
             }
@@ -198,6 +191,45 @@ class EClient extends EUser
                 $order->setClient(null);
             }
         }
+        return $this;
+    }
+
+    // --- METODI EREDITATI DA EUser (CORRETTI PER COMPATIBILITÀ) ---
+    public function getId(): ?int { return $this->id; }
+    public function getName(): string { return $this->name; }
+    public function setName($name) { $this->name = $name; }
+    public function getSurname(): string { return $this->surname; }
+    public function setSurname($surname) { $this->surname = $surname; }
+    public function getBirthDate(): \DateTime { return $this->birthDate; }
+    public function setBirthDate($birthDate) { $this->birthDate = $birthDate; }
+    public function getEmail(): string { return $this->email; }
+    public function setEmail($email) { $this->email = $email; }
+    public function getPassword(): string { return $this->password; }
+    public function setPassword($password) { $this->password = $password; }
+    public function getPhonenumber(): ?string { return $this->phonenumber; }
+    public function setPhonenumber($phonenumber) { $this->phonenumber = $phonenumber; }
+    // -----------------------------------------------------------------
+
+    // --- GETTER E SETTER PER LE NUOVE PROPRIETÀ ---
+    public function getReceivesNotifications(): bool
+    {
+        return $this->receivesNotifications;
+    }
+
+    public function setReceivesNotifications(bool $receivesNotifications): self
+    {
+        $this->receivesNotifications = $receivesNotifications;
+        return $this;
+    }
+
+    public function getLoyaltyPoints(): int
+    {
+        return $this->loyaltyPoints;
+    }
+
+    public function setLoyaltyPoints(int $loyaltyPoints): self
+    {
+        $this->loyaltyPoints = $loyaltyPoints;
         return $this;
     }
 }

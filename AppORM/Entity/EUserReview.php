@@ -28,8 +28,9 @@ class EUserReview
     #[ORM\Column(type: 'time', nullable: false)]
     private $hour;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews')] // Collegato a EClient
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)] // user_id è la foreign key che punta a id di EClient
+    // Collegato a EClient con eliminazione a cascata
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')] // AGGIUNTO: onDelete: 'CASCADE'
     private EClient $user; // Deve essere di tipo EClient
 
     #[ORM\ManyToMany(targetEntity: EAdminResponse::class, inversedBy: 'user_reviews')]
@@ -45,12 +46,11 @@ class EUserReview
         $this->vote = $vote;
         $this->date = $date;
         $this->hour = $hour;
-        $this->adminResponses = new ArrayCollection(); // Inizializza la Collection
+        $this->adminResponses = new ArrayCollection();
     }
 
-    //methods getters and setters
-
-    public function getId() // Rinominato da getIdReview() a getId()
+    // Metodi getters e setters
+    public function getId()
     {
         return $this->id;
     }

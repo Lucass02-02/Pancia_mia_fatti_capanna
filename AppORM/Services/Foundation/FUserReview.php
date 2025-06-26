@@ -4,13 +4,14 @@ namespace App\Foundation;
 
 use AppORM\Entity\EUserReview; // Importa la tua entità EUserReview
 use AppORM\Entity\EClient;    // Importa EClient se necessario per query incrociate
-use App\EntityManager\FEntityManager; // Importa la tua FEntityManager
+use App\Foundation\FEntityManager; // Corretto il namespace per FEntityManager
+use \DateTime; // AGGIUNTA FONDAMENTALE: Nota il backslash iniziale
 
 /**
  * Classe Foundation per l'entità EUserReview.
  * Gestisce le operazioni di accesso ai dati per l'oggetto EUserReview utilizzando solo metodi statici.
  */
-class FUserReview // Nome corretto della classe
+class FUserReview
 {
     private static string $table = "AppORM\\Entity\\EUserReview"; // Nome completo della classe dell'entità Doctrine
     private static string $key = "id"; // Chiave primaria della recensione
@@ -80,8 +81,6 @@ class FUserReview // Nome corretto della classe
      */
     public static function getReviewsByClient(EClient $client): array
     {
-        // Il campo 'user' nell'entità EUserReview è l'associazione al cliente.
-        // Assicurati che 'id' sia il nome del campo ID dell'entità EClient.
         return FEntityManager::getInstance()->retriveObjectList(self::getTable(), 'user', $client->getId());
     }
 
@@ -95,7 +94,54 @@ class FUserReview // Nome corretto della classe
         return FEntityManager::getInstance()->retriveObjectList(self::getTable(), 'vote', $vote);
     }
 
-    // Aggiungi qui altri metodi specifici per le recensioni, ad esempio:
-    // public static function getAverageRating(EClient $client): float { ... }
-    // public static function getLatestReviews(int $limit): array { ... }
+    /**
+     * Calcola il voto medio per un cliente specifico o per tutte le recensioni.
+     * @param EClient|null $client L'oggetto EClient per cui calcolare la media, o null per la media complessiva.
+     * @return float Il voto medio.
+     */
+    public static function getAverageRating(?EClient $client = null): float
+    {
+        $reviews = [];
+        if ($client) {
+            $reviews = self::getReviewsByClient($client);
+        } else {
+            $reviews = FEntityManager::getInstance()->selectAll(self::getTable());
+        }
+
+        if (empty($reviews)) {
+            return 0.0;
+        }
+
+        $totalVote = 0;
+        foreach ($reviews as $review) {
+            $totalVote += $review->getVote();
+        }
+
+        return $totalVote / count($reviews);
+    }
+
+    /**
+     * Recupera le X recensioni più recenti.
+     * Questa implementazione recupera tutto e poi ordina in PHP.
+     * Per un grande numero di recensioni, sarebbe meglio aggiungere un metodo orderBy
+     * in FEntityManager con DQL o configurare un indice di Doctrine.
+     * @param int $limit Il numero massimo di recensioni da recuperare.
+     * @return EUserReview[] Un array di oggetti EUserReview ordinati per data e ora decrescenti.
+     */
+    public static function getLatestReviews(int $limit = 10): array
+    {
+        $reviews = FEntityManager::getInstance()->selectAll(self::getTable());
+
+        usort($reviews, function (EUserReview $a, EUserReview $b) {
+            $dateTimeA = new \DateTime($a->getDate()->format('Y-m-d') . ' ' . $a->getHour()->format('H:i:s'));
+            $dateTimeB = new \DateTime($b->getDate()->format('Y-m-d') . ' ' . $b->getHour()->format('H:i:s'));
+            return $dateTimeB <=> $dateTimeA;
+        });
+
+        return array_slice($reviews, 0, $limit);
+    }
+
+    // Placeholder per futuri metodi (es. per risposte admin)
+    // public static function getReviewsWithoutAdminResponse(): array { return []; }
+    // public static function getReviewsWithAdminResponse(): array { return []; }
 }

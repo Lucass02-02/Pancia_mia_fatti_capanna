@@ -1,6 +1,7 @@
 <?php
-namespace App\EntityManager; 
-require_once __DIR__ . '/../../../bootstrap.php'; // Tre ".." per tornare alla radice del progetto
+namespace App\Foundation; // <<< CORREZIONENE NECESSARIA: Namespace ora è App\Foundation
+require_once __DIR__ . '/../../../bootstrap.php'; // Percorso corretto
+
 class FEntityManager{
     private static $instance;
     private static $entityManager;
@@ -19,7 +20,6 @@ class FEntityManager{
     public static function getEntityManager() {
         return self::$entityManager;
     }
-
 
     // Method to return an object by its id
     public static function retriveObject($class, $id) {
@@ -94,7 +94,7 @@ class FEntityManager{
         }
     }
 
-    // Method to return a list of object by serching a specific string inside an attribute 
+    // Method to return a list of object by serching a specific string inside an attribute
     public static function retriveObjectSearchedItem($table, $field, $str)
     {
         try{
