@@ -7,5 +7,8 @@ class FRestaurantHall {
         return $results;
     }
 
-       
+    public static function getRestaurantHallByNumPlaces($totalPlaces) {
+        $results = FEntityManager::getInstance()->retriveObjectOnAttribute(ERestaurantHall::getEntity(), 'totalPlaces', $totalPlaces);
+        return $results;
+    }
 }

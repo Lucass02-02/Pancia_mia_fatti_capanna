@@ -30,6 +30,8 @@ class EOrder {
     #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'orders')]
     private Collection $products;
 
+    private static $entity = EOrder::class;
+
     //constructor
 
     public function __construct($note, float $cost, $date) {
@@ -40,8 +42,8 @@ class EOrder {
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdOrder() {

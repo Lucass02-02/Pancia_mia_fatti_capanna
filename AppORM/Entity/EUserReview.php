@@ -33,6 +33,10 @@ class EUserReview {
     #[ORM\ManyToMany(targetEntity: EAdminResponse::class, inversedBy: 'user_reviews')]
     #[ORM\JoinTable(name: 'user_review_responses')]
     private Collection $adminResponses;
+
+    private static $entity = EUserReview::class;
+
+
     //constructor
 
     public function __construct( $description, $vote, $date, $hour) {
@@ -44,8 +48,8 @@ class EUserReview {
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdReview() {

@@ -45,6 +45,8 @@ class EProduct {
     #[ORM\JoinTable(name: 'product_allergens')]
     private Collection $allergens;
 
+    private static $entity = EProduct::class;
+
     //constructor
     public function __construct($name, $description, $cost, ProductCategory $category) {
         $this->category = $category;
@@ -55,8 +57,8 @@ class EProduct {
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdProduct() {

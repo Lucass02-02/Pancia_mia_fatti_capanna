@@ -31,15 +31,16 @@ class EClient extends EUser {
 
 
     //constructor
-    public function __construct($name, $surname, $email, $password ) {
-        parent::__construct( $nome, $cognome, $email, $password);
+    public function __construct($name, $surname, $birthDate,  $email, $password, $phoneNumber, $savedMethods, $nickname ) {
+        parent::__construct( $name, $surname,$birthDate, $email, $password, $phoneNumber);
         $this->savedMethods = [];
+        $this->nickname;
     }
 
     
     //methods getters and setters
 
-    public function getEntity() {
+    public static function getEntity() {
         return self::$entity;
     }
 

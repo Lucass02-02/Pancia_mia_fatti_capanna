@@ -30,8 +30,10 @@ class ETable {
     #[ORM\JoinColumn(name: 'hall_id', referencedColumnName: 'idHall')]
     private ERestaurantHall $restaurantHall;
 
-    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'tables')]
+    #[ORM\ManyToMany(targetEntity: EReservation::class, mappedBy: 'tables')]
     private Collection $reservations;
+
+    private static $entity = ETable::class;
 
     //constructor
     public function __construct($seatsNumber, TableState $state) {
@@ -41,8 +43,8 @@ class ETable {
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdTable() {

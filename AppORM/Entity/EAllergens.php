@@ -21,6 +21,8 @@ class EAllergens {
     #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'allergens')]
     private Collection $product;
 
+    private static $entity = EAllergens::class;
+
     //constructor
 
     public function __construct($allergenType) {
@@ -28,8 +30,8 @@ class EAllergens {
     }
 
     //methods getters and setters
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
 

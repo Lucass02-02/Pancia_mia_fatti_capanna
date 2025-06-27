@@ -17,6 +17,9 @@ class EReservation {
     #[ORM\Column(type: 'date', nullable: false)]
     private $date;
 
+    #[ORM\Column(type: 'integer', nullable: false)]
+    private $duration;
+
     #[ORM\Column(type: 'time', nullable: false)]
     private $hours;
 
@@ -33,14 +36,33 @@ class EReservation {
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]        
     private EClient $client;
 
-    #[ORM\ManyToOne(targetEntity: ETable::class, inversedBy: 'reservations')]
-    #[ORM\JoinColumn(name: 'table_id', referencedColumnName: 'idTable')]    
+    #[ORM\ManyToMany(targetEntity: ETable::class, inversedBy: 'reservations')]
+    #[ORM\JoinTable(
+        name: 'reservation_tables',
+        joinColumns: [
+            new ORM\JoinColumn(name: 'reservation_id', referencedColumnName: 'idReservation')
+    ],  
+        inverseJoinColumns: [
+            new ORM\JoinColumn(name: 'table_id', referencedColumnName: 'idTable')
+        ]
+    )]  
     private ETable $table;
 
+    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'reservations')]
+    #[ORM\JoinColumn(name: 'restaurant_hall_id', referencedColumnName: 'idHall')]
+    private ERestaurantHall $restaurantHall;
+
+    #[ORM\ManyToOne(targetEntity: ETurn::class, inversedBy: 'reservations')]
+    #[ORM\JoinColumn(name: 'turn_id', referencedColumnName: 'idTurn')]
+    private ETurn $turn;
+
+    private static $entity = EReservation::class;
+
     //constructor
-    public function __construct( $date, $hours, $peopleNum, $note, $nameReservation) {
+    public function __construct( $date, $hours, $duration, $peopleNum, $note, $nameReservation) {
         $this->date = $date;
         $this->hours = $hours;
+        $this->duration = $duration;
         $this->peopleNum = $peopleNum;
         $this->note = $note;
         $this->nameReservation = $nameReservation;
@@ -48,8 +70,8 @@ class EReservation {
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdReservation() {
@@ -70,6 +92,14 @@ class EReservation {
 
     public function setHours($hours) {
         $this->hours = $hours;
+    }
+
+    public function getDuration() {
+        return $this->duration;
+    }
+
+    public function setDuration($duration) {
+        $this->duration = $duration;
     }
 
     public function getPeopleNum() {
@@ -96,5 +126,27 @@ class EReservation {
         $this->nameReservation = $nameReservation;
     }
 
-    
+    public function getClient(): EClient {
+        return $this->client;
+    }
+
+    public function getTable(): ETable {
+        return $this->table;
+    }
+
+    public function getRestaurantHall(): ERestaurantHall {
+        return $this->restaurantHall;
+    }
+
+    public function getTurn(): ETurn {
+        return $this->turn;
+    }
+
+    public function addTable(Table $table): void {
+        if (!$this->tables->contains($table)) {
+            $this->tables->add($table);
+            $table->addReservation($this); 
+        }
+    }
+
 }

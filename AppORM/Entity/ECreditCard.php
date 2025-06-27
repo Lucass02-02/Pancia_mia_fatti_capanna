@@ -34,6 +34,8 @@ class ECreditCard {
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]
     private EClient $client;
 
+    private static $entity = ECreditCard::class;
+
     //constructor
     public function __construct($nominative, $number, $CVV, $expirationDate, $name) {
         $this->nominative = $nominative;
@@ -46,8 +48,8 @@ class ECreditCard {
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdCard() {

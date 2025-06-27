@@ -27,6 +27,8 @@ class EAdminResponse {
     #[ORM\ManyToMany(targetEntity: EUserReview::class, mappedBy: 'adminResponses')]
     private Collection $userReviews;
 
+    private static $entity = EAdminResponse::class;
+
     //constructor
     public function __construct(string $responseText, $responseDate) {
         $this->responseText = $responseText;
@@ -35,8 +37,8 @@ class EAdminResponse {
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdResponse() {

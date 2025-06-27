@@ -13,13 +13,15 @@ class EWaiter extends EUser {
     #[ORM\JoinColumn(name: 'restaurant_hall_id', referencedColumnName: 'idHall')]
     private ERestaurantHall $restaurant_hall;
 
+    private static $entity = EWaiter::class;
+
 
     //constructor
     public function __construct($name, $surname, $email, $password) {
         parent::__construct($name, $surname, $email, $password);
     }
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 }
