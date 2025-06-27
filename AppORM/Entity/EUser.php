@@ -1,9 +1,10 @@
 <?php
 namespace AppORM\Entity;
 
-use Doctrine\ORM\Mapping as ORM;
+use Doctrine\ORM\Mapping as ORM; // CORRETTO: Singolo backslash
+use DateTime; // CORRETTO: Singolo backslash (e rimosso il commento inutile)
 
-#[ORM\MappedSuperclass]
+#[ORM\MappedSuperclass] // CORRETTO: Singolo backslash
 abstract class EUser
 {
     // Attributi
@@ -30,8 +31,12 @@ abstract class EUser
     #[ORM\Column(type: 'string', length: 15, nullable: true)]
     protected $phonenumber;
 
+    // --- NUOVA PROPRIETÀ: registrationDate (questa era la causa dell'errore originale) ---
+    #[ORM\Column(type: 'datetime', nullable: false)]
+    protected \DateTime $registrationDate; // CORRETTO: Singolo backslash
+    // ---------------------------------------------------------------------------------
+
     // Costruttore
-    // Rimosso $nickname dal costruttore di EUser in quanto è una proprietà di EClient
     public function __construct($name, $surname, $birthDate, $email, $password, $phonenumber)
     {
         $this->name = $name;
@@ -40,9 +45,12 @@ abstract class EUser
         $this->email = $email;
         $this->password = $password;
         $this->phonenumber = $phonenumber;
+        
+        // Imposta la data di registrazione automaticamente alla creazione
+        $this->registrationDate = new \DateTime(); // CORRETTO: Singolo backslash
     }
 
-    // Metodi getters e setters
+    // Metodi getters e setters (esistenti)
     public function getId()
     {
         return $this->id;
@@ -107,4 +115,17 @@ abstract class EUser
     {
         $this->phonenumber = $phonenumber;
     }
+
+    // --- NUOVI GETTER E SETTER per registrationDate ---
+    public function getRegistrationDate(): \DateTime // CORRETTO: Singolo backslash
+    {
+        return $this->registrationDate;
+    }
+
+    public function setRegistrationDate(\DateTime $registrationDate): self // CORRETTO: Singolo backslash
+    {
+        $this->registrationDate = $registrationDate;
+        return $this;
+    }
+    // ----------------------------------------------------
 }

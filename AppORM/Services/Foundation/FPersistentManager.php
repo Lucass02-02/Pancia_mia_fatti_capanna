@@ -7,7 +7,7 @@ namespace App\Foundation;
 use App\Foundation\FClient;
 use App\Foundation\FUserReview;
 use App\Foundation\FCreditCard; // Importa FCreditCard
-use App\Foundation\FEntityManager;
+use App\Foundation\FEntityManager; // Ensure FEntityManager is imported for direct saving/deleting
 
 // Importa le entità specifiche che i metodi potrebbero ricevere o restituire
 use AppORM\Entity\EClient;
@@ -221,11 +221,11 @@ class FPersistentManager
         return FUserReview::getLatestReviews($limit);
     }
 
-    // --- NUOVI METODI PER GESTIRE ECreditCard TRAMITE FPersistentManager ---
+    // --- METODI SPOSTATI DA FClient PER GESTIRE ECreditCard TRAMITE FPersistentManager ---
 
     /**
      * Aggiunge una carta di credito a un cliente.
-     * Delega a FClient::addCreditCardToClient.
+     * Crea un'istanza di ECreditCard e la associa al cliente, poi salva la carta.
      * @param EClient $client Il cliente a cui aggiungere la carta.
      * @param string $nominative Il nominativo sulla carta.
      * @param string $number Il numero della carta.
@@ -242,31 +242,51 @@ class FPersistentManager
         DateTime $expirationDate,
         string $name
     ): ?ECreditCard {
-        return FClient::addCreditCardToClient($client, $nominative, $number, $CVV, $expirationDate, $name);
+        try {
+            $creditCard = new ECreditCard($client, $nominative, $number, $CVV, $expirationDate, $name);
+            // Non è necessario addCreditCard a EClient qui perché il costruttore di ECreditCard imposta il client
+            // E la persistenza della carta dovrebbe essere gestita da FCreditCard
+            if (FCreditCard::saveObj($creditCard)) { // Salva la carta di credito direttamente
+                return $creditCard;
+            }
+            return null;
+        } catch (\Exception $e) {
+            error_log("Errore durante l'aggiunta della carta di credito al cliente: " . $e->getMessage());
+            return null;
+        }
     }
 
     /**
      * Rimuove una carta di credito da un cliente.
-     * Delega a FClient::removeCreditCardFromClient.
-     * @param EClient $client Il cliente da cui rimuovere la carta.
+     * Delega la rimozione effettiva a FCreditCard::deleteObj.
+     * @param EClient $client Il cliente da cui rimuovere la carta (usato solo per validazione se necessario).
      * @param ECreditCard $creditCard La carta da rimuovere.
      * @return bool True se la rimozione ha successo, false altrimenti.
      */
     public static function removeClientCreditCard(EClient $client, ECreditCard $creditCard): bool
     {
-        return FClient::removeCreditCardFromClient($client, $creditCard);
+        try {
+            // Opzionalmente, potresti voler verificare che la carta appartenga a questo client prima di eliminare
+            // if ($creditCard->getClient()->getId() !== $client->getId()) {
+            //     error_log("Tentativo di rimuovere una carta non associata al cliente fornito.");
+            //     return false;
+            // }
+
+            return FCreditCard::deleteObj($creditCard); // Delega la cancellazione a FCreditCard
+        } catch (\Exception $e) {
+            error_log("Errore durante la rimozione della carta di credito dal cliente: " . $e->getMessage());
+            return false;
+        }
     }
 
     /**
      * Recupera tutte le carte di credito salvate per un dato cliente.
-     * Delega a FCreditCard::getCreditCardListByClient (che a sua volta delega a EClient->getCreditCards()).
+     * Delega a FCreditCard::getCreditCardListByClient.
      * @param EClient $client Il cliente.
      * @return ECreditCard[] Una lista di oggetti ECreditCard.
      */
     public static function getClientCreditCards(EClient $client): array
     {
-        return FCreditCard::getCreditCardListByClient($client); // Delega alla FCreditCard
+        return FCreditCard::getCreditCardListByClient($client);
     }
-
-    // --- Placeholder per futuri metodi ---
 }

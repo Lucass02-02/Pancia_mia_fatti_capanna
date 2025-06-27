@@ -4,7 +4,7 @@
 namespace App\Foundation;
 
 use AppORM\Entity\EClient;
-use AppORM\Entity\ECreditCard; // Importa ECreditCard
+use AppORM\Entity\ECreditCard;
 use AppORM\Entity\EOrder;
 use AppORM\Entity\EReservation;
 use AppORM\Entity\EUserReview;
@@ -196,59 +196,5 @@ class FClient
     {
         $client->setLoyaltyPoints($points);
         self::saveObj($client);
-    }
-
-    // --- NUOVI METODI PER LA GESTIONE DELLE CARTE DI CREDITO (EX "SAVED METHODS") ---
-
-    /**
-     * Aggiunge una carta di credito a un cliente.
-     * Crea un'istanza di ECreditCard e la associa al cliente, poi salva il cliente.
-     * @param EClient $client L'oggetto EClient a cui aggiungere la carta.
-     * @param string $nominative Il nominativo sulla carta.
-     * @param string $number Il numero della carta.
-     * @param string $CVV Il CVV della carta.
-     * @param DateTime $expirationDate La data di scadenza della carta.
-     * @param string $name Un nome descrittivo per la carta (es. "Mia Visa").
-     * @return ECreditCard|null La carta di credito appena creata, o null in caso di errore.
-     */
-    public static function addCreditCardToClient(
-        EClient $client,
-        string $nominative,
-        string $number,
-        string $CVV,
-        DateTime $expirationDate,
-        string $name
-    ): ?ECreditCard {
-        try {
-            $creditCard = new ECreditCard($client, $nominative, $number, $CVV, $expirationDate, $name);
-            $client->addCreditCard($creditCard); // Associa la carta al cliente
-            self::saveObj($client); // Salva il cliente (e la carta associata tramite cascade)
-            return $creditCard;
-        } catch (\Exception $e) {
-            error_log("Errore durante l'aggiunta della carta di credito al cliente: " . $e->getMessage());
-            return null;
-        }
-    }
-
-    /**
-     * Rimuove una carta di credito da un cliente.
-     * Rimuove la carta dalla collezione del cliente e salva il cliente.
-     * @param EClient $client L'oggetto EClient da cui rimuovere la carta.
-     * @param ECreditCard $creditCard La carta di credito da rimuovere.
-     * @return bool True se la rimozione ha successo, false altrimenti.
-     */
-    public static function removeCreditCardFromClient(EClient $client, ECreditCard $creditCard): bool
-    {
-        try {
-            if ($client->getCreditCards()->contains($creditCard)) {
-                $client->removeCreditCard($creditCard); // Rimuove dalla collezione del cliente
-                self::saveObj($client); // Salva il cliente per persistere la rimozione
-                return true;
-            }
-            return false; // La carta non era associata a questo cliente
-        } catch (\Exception $e) {
-            error_log("Errore durante la rimozione della carta di credito dal cliente: " . $e->getMessage());
-            return false;
-        }
     }
 }

@@ -33,23 +33,23 @@ class FCreditCard {
 
     /**
      * Recupera una carta di credito per ID cliente. Utile se il cliente ha solo una carta.
-     * @deprecated Preferire getCreditCardsByClient per liste.
+     * @deprecated Preferire getCreditCardListByClient per liste.
      */
     public static function getCreditCardByClient(int $clientId): ?ECreditCard {
         // Questa funzione recupera UN oggetto, non una lista. Se un cliente ha più carte, ne prenderà solo una.
+        // Utilizza retriveObjectOnAttribute per un singolo risultato.
         $results = FEntityManager::getInstance()->retriveObjectOnAttribute(self::getTable(), 'client', $clientId);
         return $results;
     }
 
     /**
      * Recupera tutte le carte di credito per un cliente specifico.
-     * Si basa sulla relazione OneToMany in EClient.
      * @param EClient $client L'oggetto EClient per cui recuperare le carte.
      * @return ECreditCard[] Un array di oggetti ECreditCard.
      */
     public static function getCreditCardListByClient(EClient $client): array {
-        // La relazione in EClient.php gestisce già la Collection, quindi possiamo delegare a quella.
-        return $client->getCreditCards()->toArray();
+        // Usa retriveObjectList per ottenere una collezione di oggetti basata sull'attributo 'client'
+        return FEntityManager::getInstance()->retriveObjectList(self::getTable(), 'client', $client->getId());
     }
 
     /**
