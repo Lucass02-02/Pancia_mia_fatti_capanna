@@ -28,6 +28,7 @@ class EWaiter extends \AppORM\Entity\EWaiter implements \Doctrine\ORM\Proxy\Inte
         "\0".'*'."\0".'name' => [parent::class, 'name', null, 8],
         "\0".'*'."\0".'password' => [parent::class, 'password', null, 8],
         "\0".'*'."\0".'phonenumber' => [parent::class, 'phonenumber', null, 8],
+        "\0".'*'."\0".'registrationDate' => [parent::class, 'registrationDate', null, 8],
         "\0".'*'."\0".'surname' => [parent::class, 'surname', null, 8],
         "\0".parent::class."\0".'restaurant_hall' => [parent::class, 'restaurant_hall', null, 16],
         'birthDate' => [parent::class, 'birthDate', null, 8],
@@ -36,6 +37,7 @@ class EWaiter extends \AppORM\Entity\EWaiter implements \Doctrine\ORM\Proxy\Inte
         'name' => [parent::class, 'name', null, 8],
         'password' => [parent::class, 'password', null, 8],
         'phonenumber' => [parent::class, 'phonenumber', null, 8],
+        'registrationDate' => [parent::class, 'registrationDate', null, 8],
         'restaurant_hall' => [parent::class, 'restaurant_hall', null, 16],
         'surname' => [parent::class, 'surname', null, 8],
     ];

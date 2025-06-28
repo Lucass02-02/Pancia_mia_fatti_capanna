@@ -23,15 +23,15 @@ class ECreditCard extends \AppORM\Entity\ECreditCard implements \Doctrine\ORM\Pr
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         "\0".parent::class."\0".'cardHolderName' => [parent::class, 'cardHolderName', null, 16],
+        "\0".parent::class."\0".'cardName' => [parent::class, 'cardName', null, 16],
         "\0".parent::class."\0".'cardNumber' => [parent::class, 'cardNumber', null, 16],
-        "\0".parent::class."\0".'cardType' => [parent::class, 'cardType', null, 16],
         "\0".parent::class."\0".'client' => [parent::class, 'client', null, 16],
         "\0".parent::class."\0".'cvv' => [parent::class, 'cvv', null, 16],
         "\0".parent::class."\0".'expirationDate' => [parent::class, 'expirationDate', null, 16],
         "\0".parent::class."\0".'id' => [parent::class, 'id', null, 16],
         'cardHolderName' => [parent::class, 'cardHolderName', null, 16],
+        'cardName' => [parent::class, 'cardName', null, 16],
         'cardNumber' => [parent::class, 'cardNumber', null, 16],
-        'cardType' => [parent::class, 'cardType', null, 16],
         'client' => [parent::class, 'client', null, 16],
         'cvv' => [parent::class, 'cvv', null, 16],
         'expirationDate' => [parent::class, 'expirationDate', null, 16],

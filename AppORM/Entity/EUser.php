@@ -1,10 +1,10 @@
 <?php
 namespace AppORM\Entity;
 
-use Doctrine\ORM\Mapping as ORM; // CORRETTO: Singolo backslash
-use DateTime; // CORRETTO: Singolo backslash (e rimosso il commento inutile)
+use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
-#[ORM\MappedSuperclass] // CORRETTO: Singolo backslash
+#[ORM\MappedSuperclass]
 abstract class EUser
 {
     // Attributi
@@ -28,104 +28,105 @@ abstract class EUser
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
     protected $password;
 
-    #[ORM\Column(type: 'string', length: 15, nullable: true)]
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
     protected $phonenumber;
 
-    // --- NUOVA PROPRIETÀ: registrationDate (questa era la causa dell'errore originale) ---
+    // --- NUOVA PROPRIETÀ: registrationDate ---
     #[ORM\Column(type: 'datetime', nullable: false)]
-    protected \DateTime $registrationDate; // CORRETTO: Singolo backslash
-    // ---------------------------------------------------------------------------------
+    protected DateTime $registrationDate;
+    // ------------------------------------------
 
     // Costruttore
-    public function __construct($name, $surname, $birthDate, $email, $password, $phonenumber)
+    public function __construct($name, $surname, $birthDate, $email, $password)
     {
         $this->name = $name;
         $this->surname = $surname;
         $this->birthDate = $birthDate;
         $this->email = $email;
         $this->password = $password;
-        $this->phonenumber = $phonenumber;
-        
-        // Imposta la data di registrazione automaticamente alla creazione
-        $this->registrationDate = new \DateTime(); // CORRETTO: Singolo backslash
+        $this->registrationDate = new DateTime(); // Inizializza la data di registrazione
     }
 
-    // Metodi getters e setters (esistenti)
-    public function getId()
+    // Metodi Getter e Setter
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
+        return $this;
     }
 
-    public function getSurname()
+    public function getSurname(): string
     {
         return $this->surname;
     }
 
-    public function setSurname($surname)
+    public function setSurname(string $surname): self
     {
         $this->surname = $surname;
+        return $this;
     }
 
-    public function getBirthDate()
+    public function getBirthDate(): DateTime
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate($birthDate)
+    public function setBirthDate(DateTime $birthDate): self
     {
         $this->birthDate = $birthDate;
+        return $this;
     }
 
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+        return $this;
     }
 
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword($password)
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+        return $this;
     }
 
-    public function getPhonenumber()
+    public function getPhonenumber(): ?string
     {
         return $this->phonenumber;
     }
 
-    public function setPhonenumber($phonenumber)
+    public function setPhonenumber(?string $phonenumber): self
     {
         $this->phonenumber = $phonenumber;
+        return $this;
     }
 
-    // --- NUOVI GETTER E SETTER per registrationDate ---
-    public function getRegistrationDate(): \DateTime // CORRETTO: Singolo backslash
+    public function getRegistrationDate(): DateTime
     {
         return $this->registrationDate;
     }
 
-    public function setRegistrationDate(\DateTime $registrationDate): self // CORRETTO: Singolo backslash
+    public function setRegistrationDate(DateTime $registrationDate): self
     {
         $this->registrationDate = $registrationDate;
         return $this;
     }
-    // ----------------------------------------------------
 }

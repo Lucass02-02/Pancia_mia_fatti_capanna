@@ -3,13 +3,22 @@
 
 namespace App\Foundation;
 
-use AppORM\Entity\ECreditCard; // Importa l'entità
-use AppORM\Entity\EClient;    // Importa EClient per i type hint
-use App\Foundation\FEntityManager; // Importa FEntityManager
+use AppORM\Entity\ECreditCard; // Assicurati che ECreditCard sia importato correttamente
+use App\Foundation\FEntityManager;
+use DateTime; // Potrebbe non servire qui, ma lascialo se usato altrove
 
-class FCreditCard {
-    private static string $table = "AppORM\\Entity\\ECreditCard"; // Aggiunto per consistenza
-    private static string $key = "idCard"; // Aggiunto per consistenza
+/**
+ * Classe Foundation per l'entità ECreditCard.
+ * Gestisce le operazioni di accesso ai dati (CRUD) per l'oggetto ECreditCard
+ * utilizzando solo metodi statici. Funge da interfaccia tra l'applicazione
+ * e il gestore delle entità (FEntityManager).
+ */
+class FCreditCard
+{
+    // *** CORREZIONE CRUCIALE QUI: Usa ECreditCard::class per il nome della tabella/classe ***
+    // Questo garantisce che il nome della classe sia passato a Doctrine con backslash singoli
+    private static string $table = ECreditCard::class; 
+    private static string $key = "id";
 
     public static function getTable(): string
     {
@@ -21,54 +30,51 @@ class FCreditCard {
         return self::$key;
     }
 
+    // Il metodo getClass() restituirà il nome della classe Foundation (FCreditCard),
+    // non il nome della classe dell'entità mappata. Se hai bisogno del nome dell'entità, usa getTable().
     public static function getClass(): string
     {
         return self::class;
     }
 
-    public static function getCreditCardById(int $idCreditCard): ?ECreditCard {
-        $results = FEntityManager::getInstance()->retriveObject(self::getTable(), $idCreditCard);
-        return $results;
-    }
-
-    /**
-     * Recupera una carta di credito per ID cliente. Utile se il cliente ha solo una carta.
-     * @deprecated Preferire getCreditCardListByClient per liste.
-     */
-    public static function getCreditCardByClient(int $clientId): ?ECreditCard {
-        // Questa funzione recupera UN oggetto, non una lista. Se un cliente ha più carte, ne prenderà solo una.
-        // Utilizza retriveObjectOnAttribute per un singolo risultato.
-        $results = FEntityManager::getInstance()->retriveObjectOnAttribute(self::getTable(), 'client', $clientId);
-        return $results;
-    }
-
-    /**
-     * Recupera tutte le carte di credito per un cliente specifico.
-     * @param EClient $client L'oggetto EClient per cui recuperare le carte.
-     * @return ECreditCard[] Un array di oggetti ECreditCard.
-     */
-    public static function getCreditCardListByClient(EClient $client): array {
-        // Usa retriveObjectList per ottenere una collezione di oggetti basata sull'attributo 'client'
-        return FEntityManager::getInstance()->retriveObjectList(self::getTable(), 'client', $client->getId());
-    }
-
     /**
      * Salva o aggiorna un oggetto ECreditCard.
-     * @param ECreditCard $card L'entità ECreditCard da salvare.
+     * @param ECreditCard $creditCard L'entità ECreditCard da salvare.
      * @return bool True in caso di successo.
      */
-    public static function saveObj(ECreditCard $card): bool
+    public static function saveObj(ECreditCard $creditCard): bool
     {
-        return FEntityManager::getInstance()->saveObject($card);
+        return FEntityManager::saveObject($creditCard);
     }
 
     /**
-     * Elimina un oggetto ECreditCard.
-     * @param ECreditCard $card L'entità ECreditCard da eliminare.
+     * Recupera una carta di credito tramite il suo ID.
+     * @param int $id L'ID della carta di credito.
+     * @return ECreditCard|null La carta di credito trovata o null.
+     */
+    public static function getObj(int $id): ?ECreditCard
+    {
+        return FEntityManager::retriveObject(self::getTable(), $id);
+    }
+
+    /**
+     * Elimina una carta di credito dal database.
+     * @param ECreditCard $creditCard L'entità ECreditCard da eliminare.
      * @return bool True in caso di successo.
      */
-    public static function deleteObj(ECreditCard $card): bool
+    public static function deleteObj(ECreditCard $creditCard): bool
     {
-        return FEntityManager::getInstance()->deleteObj($card);
+        return FEntityManager::deleteObj($creditCard);
     }
+
+    /**
+     * Seleziona tutte le carte di credito dal database.
+     * @return ECreditCard[] Un array di oggetti ECreditCard.
+     */
+    public static function selectAll(): array
+    {
+        return FEntityManager::selectAll(self::getTable());
+    }
+
+    // Aggiungi qui altri metodi statici per operazioni specifiche su ECreditCard se necessario
 }

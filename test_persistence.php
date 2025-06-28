@@ -4,271 +4,575 @@
 // Assicurati che l'autoloader sia configurato correttamente (es. Composer autoload)
 require __DIR__ . '/vendor/autoload.php';
 
+// Questo debug ci dice se il file EClient è caricabile da Composer
+if (class_exists('AppORM\\Entity\\EClient')) {
+    echo "DEBUG: La classe EClient è stata trovata correttamente!\n";
+} else {
+    echo "DEBUG: ERRORE: La classe EClient NON è stata trovata da Composer. Controlla il percorso del file e i permessi.\n";
+}
+
+// NUOVO DEBUG: Verifica che FEntityManager sia caricabile
+if (class_exists('App\\Foundation\\FEntityManager')) {
+    echo "DEBUG: La classe FEntityManager è stata trovata correttamente!\n";
+} else {
+    echo "DEBUG: ERRORE: La classe FEntityManager NON è stata trovata da Composer. Rigenera l'autoloader.\n";
+    // Potrebbe essere utile terminare lo script qui per evidenziare il problema
+    exit("Errore fatale: FEntityManager non trovato. Esegui 'composer dump-autoload -o'.\n");
+}
+
+
 // Abilita l'output buffering implicito. Questo fa sì che l'output venga inviato
 // al browser non appena viene generato, senza attendere la fine dello script.
 ob_implicit_flush(true);
 
 use AppORM\Entity\EClient;
 use AppORM\Entity\EUserReview;
-use AppORM\Entity\ECreditCard; // Importa ECreditCard
+use AppORM\Entity\ECreditCard;
+use AppORM\Entity\EProduct; // Importa EProduct
+use AppORM\Entity\EAllergens;
+use AppORM\Entity\ProductCategory; // Lascia l'uso, è semanticamente corretto
+
+// *** AGGIUNTA CRUCIALE QUI: FORZA IL CARICAMENTO DEL FILE CHE CONTIENE L'ENUM ***
+// Questo dovrebbe garantire che ProductCategory sia definito quando necessario.
+require_once __DIR__ . '/AppORM/Entity/EProduct.php';
+
+
+// Namespace aggiornato per FPersistentManager
 use App\Foundation\FPersistentManager;
+// Importa FEntityManager per poter chiamare il metodo statico clearEntityManager
+use App\Foundation\FEntityManager;
+// Importa FCreditCard e FAllergens per poter chiamare i metodi getById direttamente
+use App\Foundation\FCreditCard;
+use App\Foundation\FAllergens;
+use App\Foundation\FProduct; // Assicurati sia importato
 
 echo "Avvio test di persistenza (i dati verranno creati e poi eliminati o mantenuti a seconda della configurazione)...\n";
 flush();
 
-$client = null;
-$clientIdToDelete = null;
-$creditCardToRemove = null; // Variabile per tenere traccia della carta da rimuovere
+$clientWithPhone = null; // Sarà il client con numero di telefono per la maggior parte dei test
+$clientNoPhone = null; // Sarà il client senza numero di telefono
+$clientIdToDelete = null; // ID del client con telefono per eliminazione finale
+$creditCardToRemove = null;
+$productToDelete = null; // Per tenere traccia del prodotto da eliminare
+$allergenToDelete = null; // Per tenere traccia dell'allergene da eliminare
 
 try {
-    $uniqueId = uniqid();
-    $email = 'test.client.' . $uniqueId . '@example.com';
-    $nickname = 'supermario_' . $uniqueId;
-    $password = 'securePassword123';
-    $birthDate = new \DateTime('1990-05-15');
-
-    // --- 1. Test: Registrazione di un nuovo cliente ---
-    echo "\n--- 1. Test: Registrazione di un nuovo cliente ---\n";
+    // Pulisci l'EntityManager all'inizio di ogni test run per evitare cache residue
+    FEntityManager::clearEntityManager();
+    echo "EntityManager pulito all'avvio.\n";
     flush();
-    // Non passiamo più savedMethods al costruttore di EClient
-    $client = FPersistentManager::registerClient(
-        'Mario',
-        'Rossi',
-        $birthDate,
-        $email,
-        $password,
-        $nickname,
-        '3331234567'
+
+    // --- 1. Test: Registrazione di un nuovo cliente (CON numero di telefono) ---
+    echo "\n--- 1. Test: Registrazione di un nuovo cliente (CON numero di telefono) ---\n";
+    flush();
+    $uniqueId1 = uniqid(); // Genera un ID univoco per evitare duplicati
+    $emailWithPhone = "test.client.with_phone." . $uniqueId1 . "@example.com";
+    $phoneNumber = "+393451234567890123456789";
+    $nicknameWithPhone = "MarioTheClient_" . $uniqueId1; // Rendi il nickname univoco
+
+    $clientWithPhone = FPersistentManager::registerClient(
+        "Mario",
+        "Rossi",
+        new DateTime("1990-01-01"),
+        $emailWithPhone,
+        "securePassword123",
+        $nicknameWithPhone, // Usa il nickname univoco
+        $phoneNumber
     );
 
-    if ($client) {
-        echo "Cliente registrato con successo! ID: " . $client->getId() . " (Email: " . $client->getEmail() . ")\n";
-        $clientIdToDelete = $client->getId();
-
-        // --- Aggiungi carte di credito DOPO la registrazione ---
-        echo "\n--- 1.1 Test: Aggiunta carte di credito salvate ---\n";
-        flush();
-
-        $expirationDate1 = new \DateTime('+5 years');
-        $card1 = FPersistentManager::addClientCreditCard($client, 'Mario Rossi', '1234567812345678', '123', $expirationDate1, 'Mia Visa');
-        if ($card1) {
-            echo "Carta di credito 1 aggiunta! ID: " . $card1->getIdCard() . ", Tipo: Visa, Desc: " . $card1->getName() . "\n";
-            $creditCardToRemove = $card1; // Salva la carta per testare la rimozione dopo
-        } else {
-            echo "Errore nell'aggiunta della carta 1.\n";
-        }
-
-        $expirationDate2 = new \DateTime('+3 years');
-        $card2 = FPersistentManager::addClientCreditCard($client, 'Mario Rossi', '8765432187654321', '321', $expirationDate2, 'Mastercard Lavoro');
-        if ($card2) {
-            echo "Carta di credito 2 aggiunta! ID: " . $card2->getIdCard() . ", Tipo: Mastercard, Desc: " . $card2->getName() . "\n";
-        } else {
-            echo "Errore nell'aggiunta della carta 2.\n";
-        }
-        flush();
-
-        // Verifica che le carte siano state aggiunte
-        $clientCreditCards = FPersistentManager::getClientCreditCards($client);
-        echo "Carte di credito per " . $client->getName() . ": " . count($clientCreditCards) . "\n";
-        foreach ($clientCreditCards as $cc) {
-            echo "  - ID: " . $cc->getIdCard() . ", Nome: " . $cc->getName() . ", Numero (ultime 4): " . substr($cc->getNumber(), -4) . "\n";
-        }
-        flush();
-
+    if ($clientWithPhone) {
+        echo "Cliente CON telefono registrato con successo! ID: " . $clientWithPhone->getId() . ", Email: " . $clientWithPhone->getEmail() . ", Telefono: " . $clientWithPhone->getPhonenumber() . "\n";
+        $clientIdToDelete = $clientWithPhone->getId();
     } else {
-        echo "Errore nella registrazione del cliente (potrebbe già esistere o altri errori).\n";
-        die("Test terminato a causa di errore di registrazione del cliente.\n");
+        echo "Errore critico: Registrazione del cliente CON telefono fallita. Interruzione dei test.\n";
+        throw new Exception("Registrazione cliente CON telefono fallita.");
     }
     flush();
 
-    // --- 2. Test: Autenticazione del cliente ---
+    // --- 1.1 Test: Registrazione di un nuovo cliente (SENZA numero di telefono) ---
+    echo "\n--- 1.1 Test: Registrazione di un nuovo cliente (SENZA numero di telefono) ---\n";
+    flush();
+    $uniqueId2 = uniqid(); // Genera un ID univoco
+    $emailNoPhone = "test.client.no_phone." . $uniqueId2 . "@example.com";
+    $nicknameNoPhone = "LuigiTheClient_" . $uniqueId2; // Rendi il nickname univoco
+
+    $clientNoPhone = FPersistentManager::registerClient(
+        "Luigi",
+        "Verdi",
+        new DateTime("1985-05-15"),
+        $emailNoPhone,
+        "anotherSecurePassword",
+        $nicknameNoPhone // Usa il nickname univoco
+    );
+
+    if ($clientNoPhone) {
+        echo "Cliente SENZA telefono registrato con successo! ID: " . $clientNoPhone->getId() . ", Email: " . $clientNoPhone->getEmail() . ", Telefono: " . ($clientNoPhone->getPhonenumber() ?? "N/A") . "\n";
+    } else {
+        echo "Errore critico: Registrazione del cliente SENZA telefono fallita. Interruzione dei test.\n";
+        throw new Exception("Registrazione cliente SENZA telefono fallita.");
+    }
+    flush();
+
+    // Pulisci l'EntityManager prima del prossimo test per garantire un nuovo stato
+    FEntityManager::clearEntityManager();
+
     echo "\n--- 2. Test: Autenticazione del cliente ---\n";
     flush();
-    $authenticatedClient = FPersistentManager::authenticateClient($email, $password);
-    if ($authenticatedClient) {
+    $authenticatedClient = FPersistentManager::authenticateClient($emailWithPhone, "securePassword123");
+    if ($authenticatedClient && $authenticatedClient->getId() === $clientWithPhone->getId()) {
         echo "Cliente autenticato con successo: " . $authenticatedClient->getName() . "\n";
     } else {
-        echo "Autenticazione fallita per email: " . $email . "\n";
+        echo "Autenticazione fallita per il cliente: " . $emailWithPhone . "\n";
+        throw new Exception("Autenticazione cliente fallita.");
     }
     flush();
 
-    // --- 3. Test: Recupero del cliente tramite ID ---
-    echo "\n--- 3. Test: Recupero del cliente tramite ID ---\n";
+    FEntityManager::clearEntityManager();
+
+    echo "\n--- 3. Test: Recupero del cliente tramite ID e Email ---\n";
     flush();
-    // Ricarica il client per assicurarti che Doctrine carichi le nuove relazioni se non già caricate
-    $retrievedClientById = FPersistentManager::getClientById($client->getId());
-    if ($retrievedClientById) {
-        echo "Cliente recuperato tramite ID: " . $retrievedClientById->getName() . " " . $retrievedClientById->getSurname() . " (Email: " . $retrievedClientById->getEmail() . ")\n";
-        // Verifica anche le carte di credito dopo il recupero
-        $retrievedCards = FPersistentManager::getClientCreditCards($retrievedClientById);
-        echo "Carte di credito recuperate tramite ID: " . count($retrievedCards) . "\n";
+    $retrievedClientById = FPersistentManager::getClientById($clientWithPhone->getId());
+    if ($retrievedClientById && $retrievedClientById->getId() === $clientWithPhone->getId()) {
+        echo "Cliente recuperato per ID con successo.\n";
     } else {
-        echo "Cliente non trovato tramite ID: " . $client->getId() . "\n";
+        echo "Errore nel recupero del cliente per ID.\n";
+        throw new Exception("Recupero cliente per ID fallito.");
     }
-    flush();
 
-    // --- 4. Test: Recupero del cliente tramite email ---
-    echo "\n--- 4. Test: Recupero del cliente tramite email ---\n";
-    flush();
-    $retrievedClientByEmail = FPersistentManager::getClientByEmail($email);
-    if ($retrievedClientByEmail) {
-        echo "Cliente recuperato tramite email: " . $retrievedClientByEmail->getName() . "\n";
+    $retrievedClientByEmail = FPersistentManager::getClientByEmail($emailWithPhone);
+    if ($retrievedClientByEmail && $retrievedClientByEmail->getId() === $clientWithPhone->getId()) {
+        echo "Cliente recuperato per Email con successo.\n";
     } else {
-        echo "Cliente con email '" . $email . "' non trovato.\n";
+        echo "Errore nel recupero del cliente per Email.\n";
+        throw new Exception("Recupero cliente per Email fallito.");
     }
     flush();
 
-    // --- 5. Test: Verifica esistenza email ---
-    echo "\n--- 5. Test: Verifica esistenza email ---\n";
+    echo "\n--- 4. Test: Aggiornamento dati cliente ---\n";
     flush();
-    $emailExists = FPersistentManager::checkClientEmailExists($email);
-    if ($emailExists) {
-        echo "Email '" . $email . "' esiste.\n";
+    // Ricarica il cliente per assicurarsi che sia gestito e non in stato detached
+    // Questo clientToUpdate sarà usato per tutti gli aggiornamenti in questo blocco
+    $clientToUpdate = FPersistentManager::getClientById($clientWithPhone->getId());
+    if (!$clientToUpdate) {
+        echo "Errore: cliente da aggiornare non trovato.\n";
+        throw new Exception("Cliente per aggiornamento non disponibile.");
+    }
+
+    // Test aggiornamento numero di telefono
+    $newPhoneNumber = "+391234567890";
+    if (FPersistentManager::updateClientPhonenumber($clientToUpdate, $newPhoneNumber)) {
+        echo "Numero di telefono aggiornato con successo.\n";
     } else {
-        echo "Email '" . $email . "' NON esiste.\n";
+        echo "Errore nell'aggiornamento del numero di telefono.\n";
+        throw new Exception("Aggiornamento numero di telefono fallito.");
+    }
+    // Verifica immediata senza clear/re-fetch per questo specifico sub-test
+    if ($clientToUpdate->getPhonenumber() === $newPhoneNumber) {
+        echo "Verifica aggiornamento telefono riuscita.\n";
+    } else {
+        echo "Verifica aggiornamento telefono fallita. Valore atteso: " . $newPhoneNumber . ", Trovato: " . $clientToUpdate->getPhonenumber() . "\n";
+        throw new Exception("Verifica aggiornamento telefono fallita.");
+    }
+
+    // Test aggiornamento nickname (usa lo stesso $clientToUpdate)
+    $newNickname = "SuperMario" . uniqid();
+    if (FPersistentManager::updateClientNickname($clientToUpdate, $newNickname)) {
+        echo "Nickname aggiornato con successo.\n";
+    } else {
+        echo "Errore nell'aggiornamento del nickname.\n";
+        throw new Exception("Aggiornamento nickname fallito.");
+    }
+    // Verifica immediata
+    if ($clientToUpdate->getNickname() === $newNickname) {
+        echo "Verifica aggiornamento nickname riuscita.\n";
+    } else {
+        echo "Verifica aggiornamento nickname fallita. Valore atteso: " . $newNickname . ", Trovato: " . $clientToUpdate->getNickname() . "\n";
+        throw new Exception("Verifica aggiornamento nickname fallita.");
+    }
+
+    // Test aggiornamento notifiche (usa lo stesso $clientToUpdate)
+    if (FPersistentManager::updateClientReceivesNotifications($clientToUpdate, true)) {
+        echo "Notifiche abilitate con successo.\n";
+    } else {
+        echo "Errore nell'abilitazione delle notifiche.\n";
+        throw new Exception("Abilitazione notifiche fallita.");
+    }
+    // Verifica immediata
+    if ($clientToUpdate->getReceivesNotifications() === true) {
+        echo "Verifica abilitazione notifiche riuscita.\n";
+    } else {
+        echo "Verifica abilitazione notifiche fallita.\n";
+        throw new Exception("Verifica abilitazione notifiche fallita.");
     }
     flush();
 
-    // --- 6. Test: Aggiornamento completo del profilo del cliente ---
-    echo "\n--- 6. Test: Aggiornamento completo del profilo del cliente ---\n";
+    // Ora pulisci l'EntityManager per il prossimo blocco di test
+    FEntityManager::clearEntityManager();
+
+    echo "\n--- 5. Test: Aggiunta/Rimozione Loyalty Points ---\n";
     flush();
-    $newEmail = 'mario.new.updated.' . $uniqueId . '@example.com';
-    $updateData = [
-        'name' => 'Luigi',
-        'surname' => 'Verdi',
-        'phonenumber' => '3391122334',
-        'email' => $newEmail,
-        'nickname' => 'greenluigi',
-        'loyaltyPoints' => 100,
-        'receivesNotifications' => true,
-        'password' => 'newSecurePass456'
-    ];
+    // Ricarica il client per questo blocco
+    $clientPoints = FPersistentManager::getClientById($clientWithPhone->getId());
+    if (!$clientPoints) {
+        echo "Errore: cliente per punti fedeltà non trovato.\n";
+        throw new Exception("Cliente per punti fedeltà non disponibile.");
+    }
 
-    if (FPersistentManager::updateClientProfile($client, $updateData)) {
-        echo "Profilo cliente aggiornato con successo!\n";
-        $client = FPersistentManager::getClientById($client->getId()); // Ricarica per i dati aggiornati
-        echo "Nuovo Nome: " . $client->getName() . "\n";
-        echo "Nuovo Cognome: " . $client->getSurname() . "\n";
-        echo "Nuovo Telefono: " . $client->getPhonenumber() . "\n";
-        echo "Nuova Email: " . $client->getEmail() . "\n";
-        echo "Nuovo Nickname: " . $client->getNickname() . "\n";
-        echo "Nuovi Punti Fedeltà: " . $client->getLoyaltyPoints() . "\n";
-        echo "Riceve Notifiche: " . ($client->getReceivesNotifications() ? 'Sì' : 'No') . "\n";
+    $initialPoints = $clientPoints->getLoyaltyPoints();
 
-        $authenticatedAfterUpdate = FPersistentManager::authenticateClient($newEmail, 'newSecurePass456');
-        if ($authenticatedAfterUpdate) {
-            echo "Autenticazione con nuova password riuscita.\n";
+    // Aggiungi punti
+    if (FPersistentManager::addClientLoyaltyPoints($clientPoints, 100)) {
+        echo "Aggiunti 100 punti fedeltà.\n";
+    } else {
+        echo "Errore nell'aggiunta punti fedeltà.\n";
+        throw new Exception("Aggiunta punti fedeltà fallita.");
+    }
+    // Verifica immediata
+    if ($clientPoints->getLoyaltyPoints() === ($initialPoints + 100)) {
+        echo "Verifica punti fedeltà (aggiunta) riuscita.\n";
+    } else {
+        echo "Verifica punti fedeltà (aggiunta) fallita.\n";
+        throw new Exception("Verifica aggiunta punti fedeltà fallita.");
+    }
+
+    // Rimuovi punti
+    if (FPersistentManager::removeClientLoyaltyPoints($clientPoints, 50)) {
+        echo "Rimossi 50 punti fedeltà.\n";
+    } else {
+        echo "Errore nella rimozione punti fedeltà.\n";
+        throw new Exception("Rimozione punti fedeltà fallita.");
+    }
+    // Verifica immediata
+    if ($clientPoints->getLoyaltyPoints() === ($initialPoints + 50)) {
+        echo "Verifica punti fedeltà (rimozione) riuscita.\n";
+    } else {
+        echo "Verifica punti fedeltà (rimozione) fallita.\n";
+        throw new Exception("Verifica rimozione punti fedeltà fallita.");
+    }
+    flush();
+
+    FEntityManager::clearEntityManager();
+
+    echo "\n--- 6. Test: Aggiunta di una recensione ---\n";
+    flush();
+    $clientForReview = FPersistentManager::getClientById($clientWithPhone->getId());
+    if (!$clientForReview) {
+        echo "Errore: cliente per recensione non trovato.\n";
+        throw new Exception("Cliente per recensione non disponibile.");
+    }
+    $review = new EUserReview($clientForReview, "Ottimo servizio e qualità!", 5);
+    if (FPersistentManager::addClientReview($review)) {
+        echo "Recensione aggiunta con successo! ID Recensione: " . $review->getId() . "\n";
+    } else {
+        echo "Errore nell'aggiunta della recensione.\n";
+        throw new Exception("Aggiunta recensione fallita.");
+    }
+    flush();
+
+    FEntityManager::clearEntityManager();
+
+    echo "\n--- 7. Test: Gestione Carte di Credito ---\n";
+    flush();
+    $clientForCreditCard = FPersistentManager::getClientById($clientWithPhone->getId());
+    if (!$clientForCreditCard) {
+        echo "Errore: cliente per gestione carte di credito non trovato.\n";
+        throw new Exception("Cliente per gestione carte di credito non disponibile.");
+    }
+
+    $expirationDate = new DateTime('+5 years');
+    $cardNumber = '1111222233334444';
+    $cvv = '123';
+    $cardHolderName = $clientForCreditCard->getName() . " " . $clientForCreditCard->getSurname();
+    $cardName = "My Visa " . uniqid();
+
+    $creditCard = FPersistentManager::addClientCreditCard(
+        $clientForCreditCard,
+        $cardHolderName,
+        $cardNumber,
+        $cvv,
+        $expirationDate,
+        $cardName
+    );
+
+    if ($creditCard) {
+        echo "Carta di credito aggiunta con successo! ID: " . $creditCard->getId() . ", Nome: " . $creditCard->getCardName() . "\n";
+        $creditCardToRemove = $creditCard; // Tieni traccia per la rimozione successiva
+    } else {
+        echo "Errore nell'aggiunta della carta di credito.\n";
+        throw new Exception("Aggiunta carta di credito fallita.");
+    }
+
+    FEntityManager::clearEntityManager();
+    $retrievedCards = FPersistentManager::getClientCreditCards($clientForCreditCard); // Ricarica il client per ottenere la collezione aggiornata
+    if (!empty($retrievedCards)) {
+        echo "Verifica: Carte di credito recuperate con successo (" . count($retrievedCards) . ").\n";
+        $found = false;
+        foreach ($retrievedCards as $card) {
+            if ($card->getId() === $creditCard->getId()) {
+                $found = true;
+                break;
+            }
+        }
+        if ($found) {
+            echo "Verifica: Carta aggiunta trovata nella collezione.\n";
         } else {
-            echo "Autenticazione con nuova password fallita.\n";
+            echo "Verifica: Carta aggiunta NON trovata nella collezione.\n";
+            throw new Exception("Verifica: Carta aggiunta NON trovata.");
+        }
+    } else {
+        echo "Verifica: Nessuna carta di credito recuperata.\n";
+        // throw new Exception("Verifica: Nessuna carta di credito recuperata."); // Non lanciare un errore se non ci sono altre carte
+    }
+
+    // Test rimozione carta di credito
+    if ($creditCardToRemove) {
+        FEntityManager::clearEntityManager(); // Pulisce per ricaricare la carta e il client se necessario
+        $cardToDelete = FCreditCard::getObj($creditCardToRemove->getId()); // Recupera la carta
+        if (!$cardToDelete) {
+            echo "Errore: Carta di credito da rimuovere non trovata dopo la ricarica.\n";
+            throw new Exception("Carta di credito da rimuovere non trovata.");
+        }
+        
+        // Ricarica il clientForCreditCard per assicurarsi che sia gestito e la sua collezione sia fresca
+        $clientForCreditCardReloaded = FPersistentManager::getClientById($clientForCreditCard->getId());
+        if (!$clientForCreditCardReloaded) {
+             echo "Errore: Client per rimozione carta non trovato dopo ricarica.\n";
+             throw new Exception("Client per rimozione carta non disponibile.");
         }
 
-        // --- 6.1 Test: Rimozione di una carta di credito salvata ---
-        echo "\n--- 6.1 Test: Rimozione carta di credito salvata ---\n";
-        flush();
-        if ($creditCardToRemove) { // Assicurati che $creditCardToRemove sia stato effettivamente aggiunto e non sia nullo
-            if (FPersistentManager::removeClientCreditCard($client, $creditCardToRemove)) {
-                echo "Carta di credito ID: " . $creditCardToRemove->getIdCard() . " rimossa con successo!\n";
-            } else {
-                echo "Errore nella rimozione della carta di credito ID: " . $creditCardToRemove->getIdCard() . ".\n";
-            }
-            // Ricarica il client per assicurarti che la collezione sia aggiornata
-            $client = FPersistentManager::getClientById($client->getId());
-            $updatedCreditCards = FPersistentManager::getClientCreditCards($client);
-            echo "Carte di credito dopo la rimozione: " . count($updatedCreditCards) . "\n";
-            foreach ($updatedCreditCards as $cc) {
-                echo "  - ID: " . $cc->getIdCard() . ", Nome: " . $cc->getName() . "\n";
-            }
+        if (FPersistentManager::removeClientCreditCard($clientForCreditCardReloaded, $cardToDelete)) {
+            echo "Carta di credito rimossa con successo.\n";
         } else {
-            echo "Nessuna carta di credito da rimuovere ($creditCardToRemove non è stato inizializzato).\n";
+            echo "Errore nella rimozione della carta di credito.\n";
+            throw new Exception("Rimozione carta di credito fallita.");
         }
-        flush();
+        FEntityManager::clearEntityManager();
+        $remainingCards = FPersistentManager::getClientCreditCards($clientForCreditCardReloaded);
+        
+        $cardStillPresent = false;
+        foreach ($remainingCards as $card) {
+            if ($card->getId() === $cardToDelete->getId()) {
+                $cardStillPresent = true;
+                break;
+            }
+        }
 
+        if (!$cardStillPresent) {
+            echo "Verifica: Rimozione carta di credito riuscita. La carta specifica non è più presente.\n";
+        } else {
+            echo "Verifica: Rimozione carta di credito fallita. La carta è ancora presente.\n";
+            throw new Exception("Verifica rimozione carta di credito fallita (carta ancora presente).");
+        }
+    }
+    flush();
+
+    FEntityManager::clearEntityManager();
+
+    echo "\n--- 8. Test: Gestione Prodotti e Allergeni ---\n";
+    flush();
+    // Test Aggiunta Prodotto
+    $productName = "Pizza Margherita " . uniqid();
+    $productDescription = "Pomodoro, mozzarella, basilico.";
+    $productCost = 8.50;
+    // --- MODIFICA QUI: Creazione dell'enum in modo più robusto ---
+    $productCategory = ProductCategory::tryFrom('primo'); // Usa tryFrom() per una gestione più sicura
+    if ($productCategory === null) {
+        throw new Exception("Categoria Prodotto 'primo' non valida o non trovata.");
+    }
+    // -----------------------------------------------------------
+
+    $newProduct = new EProduct($productName, $productDescription, $productCost, $productCategory);
+    if (FPersistentManager::saveProduct($newProduct)) {
+        echo "Prodotto aggiunto con successo! ID: " . $newProduct->getId() . ", Nome: " . $newProduct->getName() . "\n";
+        $productToDelete = $newProduct;
     } else {
-        echo "Errore nell'aggiornamento del profilo cliente.\n";
+        echo "Errore nell'aggiunta del prodotto.\n";
+        throw new Exception("Aggiunta prodotto fallita.");
     }
-    flush();
 
-    // --- 7. Test: Invio e recupero recensioni cliente ---
-    echo "\n--- 7. Test: Invio e recupero recensioni cliente ---\n";
-    flush();
+    FEntityManager::clearEntityManager(); // Clear dopo l'aggiunta di un nuovo prodotto
 
-    $review1 = FPersistentManager::submitClientReview($client, 'Servizio eccellente, cibo squisito!', 5);
-    if ($review1) {
-        echo "Recensione 1 salvata con successo! ID: " . $review1->getId() . " (Voto: " . $review1->getVote() . ")\n";
+    $retrievedProduct = FPersistentManager::getProductById($newProduct->getId());
+    if ($retrievedProduct && $retrievedProduct->getName() === $productName) {
+        echo "Verifica: Prodotto recuperato con successo.\n";
     } else {
-        echo "Errore nel salvataggio della recensione 1.\n";
+        echo "Verifica: Prodotto non trovato o dati non corrispondenti.\n";
+        throw new Exception("Recupero prodotto fallito.");
     }
-    flush();
 
-    $review2 = FPersistentManager::submitClientReview($client, 'Ottima atmosfera, ma un po\' lento il servizio.', 3);
-    if ($review2) {
-        echo "Recensione 2 salvata con successo! ID: " . $review2->getId() . " (Voto: " . $review2->getVote() . ")\n";
+    // Test Aggiornamento Disponibilità Prodotto (usa lo stesso $retrievedProduct)
+    if ($retrievedProduct) { // Usa l'entità appena recuperata
+        if (FPersistentManager::updateProductAvailability($retrievedProduct, false)) {
+            echo "Disponibilità prodotto aggiornata a false.\n";
+        } else {
+            echo "Errore nell'aggiornamento disponibilità prodotto.\n";
+            throw new Exception("Aggiornamento disponibilità prodotto fallita.");
+        }
+        // Verifica immediata
+        if ($retrievedProduct->getAvailability() === false) {
+            echo "Verifica: Disponibilità prodotto aggiornata correttamente.\n";
+        } else {
+            echo "Verifica: Errore nell'aggiornamento disponibilità prodotto.\n";
+            throw new Exception("Verifica aggiornamento disponibilità prodotto fallita.");
+        }
+    }
+
+    // Test Aggiunta Allergene
+    $allergenType = "Glutine " . uniqid();
+    $newAllergen = new EAllergens($allergenType);
+    if (FPersistentManager::saveAllergen($newAllergen)) {
+        echo "Allergene aggiunto con successo! ID: " . $newAllergen->getId() . ", Tipo: " . $newAllergen->getAllergenType() . "\n";
+        $allergenToDelete = $newAllergen;
     } else {
-        echo "Errore nel salvataggio della recensione 2.\n";
+        echo "Errore nell'aggiunta dell'allergene.\n";
+        throw new Exception("Aggiunta allergene fallita.");
+    }
+
+    FEntityManager::clearEntityManager(); // Clear dopo l'aggiunta di un nuovo allergene
+
+    $retrievedAllergen = FPersistentManager::getAllergenById($newAllergen->getId());
+    if ($retrievedAllergen && $retrievedAllergen->getAllergenType() === $allergenType) {
+        echo "Verifica: Allergene recuperato con successo.\n";
+    } else {
+        echo "Verifica: Allergene non trovato o dati non corrispondenti.\n";
+        throw new Exception("Recupero allergene fallito.");
+    }
+
+    // Test Associazione Prodotto-Allergene
+    if ($retrievedProduct && $retrievedAllergen) { // Usa le entità già recuperate
+        // Ricarica le entità per assicurarsi che siano gestite e aggiornate (anche se il clear è stato fatto dopo)
+        $productToAssociate = FPersistentManager::getProductById($retrievedProduct->getId());
+        $allergenToAssociate = FPersistentManager::getAllergenById($retrievedAllergen->getId());
+
+        if (!$productToAssociate || !$allergenToAssociate) {
+            echo "Errore: Prodotto o Allergene per associazione non trovati.\n";
+            throw new Exception("Prodotto o Allergene per associazione non disponibili.");
+        }
+
+        if (FPersistentManager::addAllergenToProduct($productToAssociate, $allergenToAssociate)) {
+            echo "Allergene associato al prodotto con successo.\n";
+        } else {
+            echo "Errore nell'associazione allergene al prodotto.\n";
+            throw new Exception("Associazione allergene al prodotto fallita.");
+        }
+        // Verifica immediata
+        if ($productToAssociate->getAllergens()->contains($allergenToAssociate)) {
+            echo "Verifica: Associazione allergene-prodotto riuscita.\n";
+        } else {
+            echo "Verifica: Associazione allergene-prodotto fallita.\n";
+            throw new Exception("Verifica associazione allergene-prodotto fallita.");
+        }
+
+        // Test Rimozione Associazione Prodotto-Allergene (usa le stesse entità)
+        if (FPersistentManager::removeAllergenFromProduct($productToAssociate, $allergenToAssociate)) {
+            echo "Allergene rimosso dal prodotto con successo.\n";
+        } else {
+            echo "Errore nella rimozione allergene dal prodotto.\n";
+            throw new Exception("Rimozione allergene dal prodotto fallita.");
+        }
+        // Verifica immediata
+        if (!$productToAssociate->getAllergens()->contains($allergenToAssociate)) {
+            echo "Verifica: Rimozione associazione allergene-prodotto riuscita. La carta specifica non è più presente.\n";
+        } else {
+            echo "Verifica: Rimozione associazione allergene-prodotto fallita. La carta è ancora presente.\n";
+            throw new Exception("Verifica rimozione associazione allergene-prodotto fallita (carta ancora presente).");
+        }
     }
     flush();
 
-    $reviewsForClient = FPersistentManager::getReviewsForClient($client);
-    echo "Recensioni per " . $client->getName() . ": " . count($reviewsForClient) . "\n";
-    foreach ($reviewsForClient as $idx => $rev) {
-        echo "  Recensione " . ($idx + 1) . ": \"" . $rev->getDescription() . "\" (Voto: " . $rev->getVote() . ")\n";
-    }
-    flush();
+    FEntityManager::clearEntityManager();
 
-    $averageRatingClient = FPersistentManager::getAverageUserRating($client);
-    echo "Voto medio per " . $client->getName() . ": " . number_format($averageRatingClient, 2) . "\n";
+    echo "\n--- 9. Test: Eliminazione del cliente (con recensioni e carte di credito associate) ---\n";
     flush();
+    if ($clientIdToDelete) {
+        $clientToDelete = FPersistentManager::getClientById($clientIdToDelete);
+        if (!$clientToDelete) {
+            echo "Errore: Cliente per eliminazione finale non trovato.\n";
+            throw new Exception("Cliente per eliminazione non disponibile.");
+        }
 
-    $averageRatingGlobal = FPersistentManager::getAverageUserRating();
-    echo "Voto medio globale delle recensioni: " . number_format($averageRatingGlobal, 2) . "\n";
-    flush();
-
-    $recentReviews = FPersistentManager::getRecentUserReviews(2);
-    echo "Recensioni più recenti (globali):\n";
-    foreach ($recentReviews as $idx => $recentRev) {
-        echo "  Recente " . ($idx + 1) . ": \"" . $recentRev->getDescription() . "\" (Voto: " . $recentRev->getVote() . ")\n";
-    }
-    flush();
-
-} catch (\Exception $e) {
-    echo "\nErrore Critico durante il test: " . $e->getMessage() . "\n";
-    echo "Stack Trace:\n" . $e->getTraceAsString() . "\n";
-    flush();
-}
-
-// --- 8. Test: Eliminazione del cliente (con recensioni e carte di credito associate) ---
-echo "\n--- 8. Test: Eliminazione del cliente (con recensioni e carte di credito associate) ---\n";
-flush();
-if (isset($clientIdToDelete)) {
-    try {
-        $clientToErase = FPersistentManager::getClientById($clientIdToDelete);
-        if ($clientToErase && FPersistentManager::deleteClient($clientToErase)) {
+        if (FPersistentManager::deleteClient($clientToDelete)) {
             echo "Cliente eliminato con successo! (e recensioni e carte di credito associate tramite cascade)\n";
         } else {
             echo "Errore nell'eliminazione del cliente.\n";
+            throw new Exception("Eliminazione cliente fallita.");
         }
-        flush();
-
-        $deletedClientCheck = FPersistentManager::getClientById($clientIdToDelete);
-        if ($deletedClientCheck === null) {
+        FEntityManager::clearEntityManager(); // Pulisce per verificare l'eliminazione
+        $deletedClient = FPersistentManager::getClientById($clientIdToDelete);
+        if ($deletedClient === null) {
             echo "Verifica: Cliente ID " . $clientIdToDelete . " non trovato (eliminazione riuscita).\n";
         } else {
-            echo "Verifica: ERRORE! Cliente ID " . $clientIdToDelete . " trovato dopo l'eliminazione.\n";
+            echo "Verifica: Cliente ID " . $clientIdToDelete . " ancora presente (eliminazione fallita).\n";
+            throw new Exception("Verifica eliminazione cliente fallita.");
         }
-        flush();
-
         echo "Verifica: Le recensioni e le carte di credito associate sono state eliminate tramite CASCADE (confermato dal messaggio precedente).\n";
         flush();
-
-    } catch (\Exception $e) {
-        echo "Errore durante l'eliminazione del cliente: " . $e->getMessage() . "\n";
-        echo "Stack Trace:\n" . $e->getTraceAsString() . "\n";
+    } else {
+        echo "Cliente per eliminazione finale non disponibile.\n";
         flush();
     }
-} else {
-    echo "Cliente non valido o non esiste più per l'eliminazione finale.\n";
+
+} catch (Exception $e) {
+    echo "\n--- ERRORE CRITICO DURANTE I TEST ---\n";
+    echo "Messaggio: " . $e->getMessage() . "\n";
+    echo "File: " . $e->getFile() . " Linea: " . $e->getLine() . "\n";
+    echo "Stack Trace:\n" . $e->getTraceAsString() . "\n";
     flush();
+} finally {
+    // Pulizia finale (indipendentemente dagli errori precedenti)
+    // Per eliminare il prodotto e l'allergene aggiunti
+    try {
+        if ($productToDelete && $productToDelete->getId()) {
+            FEntityManager::clearEntityManager();
+            $productToErase = FPersistentManager::getProductById($productToDelete->getId());
+            if ($productToErase && FPersistentManager::deleteProduct($productToErase)) {
+                echo "Prodotto eliminato con successo!\n";
+            } else {
+                echo "Errore nell'eliminazione del prodotto.\n";
+            }
+        }
+    } catch (\Exception $e) {
+        echo "Errore durante l'eliminazione del prodotto: " . $e->getMessage() . "\n";
+    }
+
+    try {
+        if ($allergenToDelete && $allergenToDelete->getId()) {
+            FEntityManager::clearEntityManager();
+            $allergenToErase = FPersistentManager::getAllergenById($allergenToDelete->getId());
+            if ($allergenToErase && FPersistentManager::deleteAllergen($allergenToErase)) {
+                echo "Allergene eliminato con successo!\n";
+            } else {
+                echo "Errore nell'eliminazione dell'allergene.\n";
+            }
+        }
+    } catch (\Exception $e) {
+        echo "Errore durante l'eliminazione dell'allergene: " . $e->getMessage() . "\n";
+    }
+
+
+    // Pulizia del secondo cliente (senza telefono)
+    if ($clientNoPhone && $clientNoPhone->getId()) {
+        echo "\n--- Pulizia: Eliminazione del cliente SENZA telefono ---\n";
+        flush();
+        try {
+            // Ricarica il client per assicurarti che sia gestito prima dell'eliminazione
+            FEntityManager::clearEntityManager(); // Pulisce l'entity manager prima di recuperare
+            $clientNoPhoneToErase = FPersistentManager::getClientById($clientNoPhone->getId());
+            if ($clientNoPhoneToErase && FPersistentManager::deleteClient($clientNoPhoneToErase)) {
+                echo "Cliente SENZA telefono eliminato con successo!\n";
+            } else {
+                echo "Errore nell'eliminazione del cliente SENZA telefono.\\n";
+            }
+        } catch (\Exception $e) {
+            echo "Errore durante l'eliminazione del cliente SENZA telefono: " . $e->getMessage() . "\n";
+        }
+        flush();
+    } else {
+        echo "Cliente non valido o non esiste più per l'eliminazione finale.\n";
+        flush();
+    }
 }
 
-echo "\n--- Test di persistenza completato. Controlla l'output e il tuo DB! ---\n";
+
+echo "\n--- Test di persistenza completato. Controlla l'output e il tuo database. ---\n";
 flush();

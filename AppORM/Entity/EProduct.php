@@ -2,6 +2,8 @@
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection; // Aggiunto per ArrayCollection
 
 enum ProductCategory: string {
     case ANTIPASTO = 'antipasto';
@@ -25,7 +27,7 @@ class EProduct {
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private $name;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: false)] 
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private $description;
 
     #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: false)]
@@ -46,54 +48,112 @@ class EProduct {
     private Collection $allergens;
 
     //constructor
-    public function __construct($name, $description, $cost, ProductCategory $category) {
-        $this->category = $category;
+    public function __construct(string $name, string $description, float $cost, ProductCategory $category) {
         $this->name = $name;
         $this->description = $description;
         $this->cost = $cost;
-    }   
+        $this->category = $category;
+        $this->availability = true; // Default
+        $this->orders = new ArrayCollection();
+        $this->allergens = new ArrayCollection();
+    }
 
     //methods getters and setters
 
-    public function getEntity() {
+    public function getEntity(): string {
         return self::class;
     }
 
-    public function getIdProduct() {
+    public function getId(): ?int {
         return $this->id;
     }
 
-    public function getName() {
+    public function getName(): string {
         return $this->name;
     }
 
-    public function setName($name) {
+    public function setName(string $name): self {
         $this->name = $name;
+        return $this;
     }
 
-    public function getDescription() {
+    public function getDescription(): string {
         return $this->description;
     }
 
-    public function setDescription($description) {
+    public function setDescription(string $description): self {
         $this->description = $description;
+        return $this;
     }
 
-    public function getCost() {
+    public function getCost(): float {
         return $this->cost;
     }
 
-    public function setCost($cost) {
+    public function setCost(float $cost): self {
         $this->cost = $cost;
+        return $this;
+    }
+
+    public function getAvailability(): bool {
+        return $this->availability;
+    }
+
+    public function setAvailability(bool $availability): self {
+        $this->availability = $availability;
+        return $this;
     }
 
     public function getCategory(): ProductCategory {
         return $this->category;
     }
 
-    public function setCategory(ProductCategory $category) {
+    public function setCategory(ProductCategory $category): self {
         $this->category = $category;
+        return $this;
     }
 
+    /**
+     * @return Collection<int, EOrder>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
 
+    public function addOrder(EOrder $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+        }
+        return $this;
+    }
+
+    public function removeOrder(EOrder $order): self
+    {
+        $this->orders->removeElement($order);
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EAllergens>
+     */
+    public function getAllergens(): Collection
+    {
+        return $this->allergens;
+    }
+
+    public function addAllergen(EAllergens $allergen): self
+    {
+        if (!$this->allergens->contains($allergen)) {
+            $this->allergens->add($allergen);
+        }
+        return $this;
+    }
+
+    public function removeAllergen(EAllergens $allergen): self
+    {
+        $this->allergens->removeElement($allergen);
+        return $this;
+    }
 }

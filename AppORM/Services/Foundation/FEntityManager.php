@@ -1,61 +1,81 @@
 <?php
-namespace App\Foundation; // <<< CORREZIONENE NECESSARIA: Namespace ora è App\Foundation
-require_once __DIR__ . '/../../../bootstrap.php'; // Percorso corretto
+namespace App\Foundation;
+require_once __DIR__ . '/../../../bootstrap.php';
+
+use Exception; // Importa la classe Exception
+use Doctrine\ORM\ORMException; // Importa Doctrine\ORM\ORMException per un catch più specifico
 
 class FEntityManager{
     private static $instance;
     private static $entityManager;
 
+    // Il costruttore viene chiamato solo una volta dal getInstance
     private function __construct() {
         self::$entityManager = getEntityManager();
     }
 
-    public static function getInstance() {
+    public static function getInstance() : self { // Aggiunto tipo di ritorno per chiarezza
         if (!self::$instance) {
             self::$instance = new self();
         }
         return self::$instance;
     }
 
-    public static function getEntityManager() {
+    // Questo metodo ora restituisce l'EntityManager dalla singola istanza.
+    public static function getEntityManager() : \Doctrine\ORM\EntityManager { // Aggiunto tipo di ritorno per chiarezza
+        // Assicurati che l'istanza sia stata creata prima di accedere a $entityManager
+        self::getInstance();
         return self::$entityManager;
+    }
+
+    /**
+     * Pulisce l'EntityManager, staccando tutti gli oggetti gestiti.
+     * Questo forza il ricaricamento degli oggetti dal database
+     * nelle successive operazioni di recupero.
+     * È essenziale quando si modificano entità e poi le si ricarica per vederne i cambiamenti,
+     * soprattutto in script di test.
+     */
+    public static function clearEntityManager(): void
+    {
+        // Ottieni l'EntityManager tramite l'istanza prima di chiamare clear()
+        self::getEntityManager()->clear();
     }
 
     // Method to return an object by its id
     public static function retriveObject($class, $id) {
         try {
-            $object = self::$entityManager->find($class, $id);
-            return $object;
+            return self::getEntityManager()->find($class, $id);
         }
         catch (Exception $e) {
-            print "ERROR: " . $e->getMessage();
+            // DEBUG DETTAGLIATO CON STACK TRACE:
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
             return null;
         }
     }
 
     // Method to return an object by a specific attribute
-    public static function retriveObjectOnAttribute($class, $field, $id) {
+    public static function retriveObjectOnAttribute($class, $field, $value) {
         try {
-            $object = self::$entityManager->getRepository($class)->findOneBy([$field => $id]);
-            return $object;
+            return self::getEntityManager()->getRepository($class)->findOneBy([$field => $value]);
         }
         catch (Exception $e) {
-            print "ERROR: " . $e->getMessage();
+            // DEBUG DETTAGLIATO
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
             return null;
         }
     }
 
     // Method to return a list of objects based on a specific field and value
-    public static function retriveObjectList($table, $field, $id) {
-        try{
-            $dql = "SELECT e FROM " . $table . " e WHERE e." . $field . " = :creatorId";
-            $query = self::$entityManager->createQuery($dql);
-            $query->setParameter('creatorId', $id);
-            $results = $query->getResult();
-            return $results;
+    public static function retriveObjectList($class, $field, $value) {
+        try {
+            return self::getEntityManager()->getRepository($class)->findBy([$field => $value]);
         }
         catch (Exception $e) {
-            print "ERROR: " . $e->getMessage();
+            // DEBUG DETTAGLIATO
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
             return [];
         }
     }
@@ -64,7 +84,7 @@ class FEntityManager{
     public static function retriveObjectListFieldNull($table, $field){
         try{
             $dql = "SELECT e FROM " . $table . " e WHERE e." .$field. " IS NULL";
-            $query = self::$entityManager->createQuery($dql);
+            $query = self::getEntityManager()->createQuery($dql);
             $result = $query->getResult();
             if(count($result) > 0){
                 return $result;
@@ -72,7 +92,9 @@ class FEntityManager{
                 return array();
             }
         }catch(Exception $e){
-                print "ERROR " . $e->getMessage();
+                // DEBUG DETTAGLIATO
+                print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+                print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
                 return null;
         }
     }
@@ -82,15 +104,16 @@ class FEntityManager{
     {
         try{
             $dql = "SELECT e FROM " . $table . " e WHERE e." . $field1 . " = :id1 AND e." . $field2 . " = :id2";
-            $query = self::$entityManager->createQuery($dql);
+            $query = self::getEntityManager()->createQuery($dql);
             $query->setParameter('id1', $id1);
             $query->setParameter('id2', $id2);
             $result = $query->getOneOrNullResult();
             return $result;
         }catch(Exception $e){
-            self::$entityManager->getConnection();
-            print "ERROR: " . $e->getMessage();
-            return false;
+            // DEBUG DETTAGLIATO
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
+            return null;
         }
     }
 
@@ -99,7 +122,7 @@ class FEntityManager{
     {
         try{
             $dql = "SELECT e FROM " . $table . " e WHERE e." . $field . " LIKE :searchedStr";
-            $query = self::$entityManager->createQuery($dql)->setParameter('searchedStr', '%' . $str . '%');
+            $query = self::getEntityManager()->createQuery($dql)->setParameter('searchedStr', '%' . $str . '%');
             $result = $query->getResult();
             if(count($result) > 0)
             {
@@ -108,24 +131,27 @@ class FEntityManager{
                 return array();
             }
         }catch(Exception $e){
-            print "ERROR " . $e->getMessage();
+            // DEBUG DETTAGLIATO
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
             return null;
         }
     }
-
 
     //Method to return the number of objects in a list finding on a specific attribute
     public static function countObjectListAttribute($table, $field, $id)
     {
         try{
             $dql = "SELECT COUNT(e) FROM " . $table . " e WHERE  e." .$field . " = :attribute";
-            $query = self::$entityManager->createQuery($dql);
+            $query = self::getEntityManager()->createQuery($dql);
             $query->setParameter('attribute', $id);
 
             $result = $query->getSingleScalarResult();
             return $result;
         }catch(Exception $e){
-            print "ERROR " . $e->getMessage();
+            // DEBUG DETTAGLIATO
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
             return [];
         }
     }
@@ -134,7 +160,7 @@ class FEntityManager{
     public static function verifyAttributes($fieldId, $table, $field, $id){
         try{
             $dql = "SELECT u.id".$fieldId. " FROM " . $table . " u WHERE u." . $field . " = :attribute";
-            $query = self::$entityManager->createQuery($dql);
+            $query = self::getEntityManager()->createQuery($dql);
             $query->setParameter('attribute', $id);
 
             $result = $query->getResult();
@@ -144,7 +170,9 @@ class FEntityManager{
                 return false;
             }
         }catch(Exception $e){
-                echo "ERROR " . $e->getMessage();
+                // DEBUG DETTAGLIATO
+                print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+                print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
                 return null;
             }
     }
@@ -154,29 +182,31 @@ class FEntityManager{
     // Method to save an object in the DB
     public static function saveObject($obj) {
         try{
-                self::$entityManager->getConnection()->beginTransaction();
-                self::$entityManager->persist($obj);
-                self::$entityManager->flush();
-                self::$entityManager->getConnection()->commit();
-                return true;
+            $em = self::getEntityManager();
+            // RIMOZIONE DELLA GESTIONE DELLA TRANSAZIONE QUI. La transazione sarà gestita esternamente, se necessaria.
+            $em->persist($obj);
+            $em->flush(); // Flush immediato, ma senza transazione locale
+            return true;
         }catch(Exception $e){
-                self::$entityManager->getConnection()->rollBack();
-                print "ERROR: " . $e->getMessage();
-                return false;
-            }
+            // Non c'è transazione da fare rollback qui, poiché la gestione è esterna.
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
+            return false;
+        }
     }
 
     // Method to delete an object from the DB
     public static function deleteObj($obj){
         try{
-            self::$entityManager->getConnection()->beginTransaction();
-            self::$entityManager->remove($obj);
-            self::$entityManager->flush();
-            self::$entityManager->getConnection()->commit();
+            $em = self::getEntityManager();
+            // RIMOZIONE DELLA GESTIONE DELLA TRANSAZIONE QUI. La transazione sarà gestita esternamente, se necessaria.
+            $em->remove($obj);
+            $em->flush(); // Flush immediato, ma senza transazione locale
             return true;
         }catch(Exception $e){
-            self::$entityManager->getConnection();
-            print "ERROR: " . $e->getMessage();
+            // Non c'è transazione da fare rollback qui.
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
             return false;
         }
     }
@@ -185,11 +215,13 @@ class FEntityManager{
     public static function selectAll($table){
         try{
             $dql = "SELECT e FROM " . $table . " e";
-            $query = self::$entityManager->createQuery($dql);
+            $query = self::getEntityManager()->createQuery($dql);
             $result = $query->getResult();
             return $result;
         }catch(Exception $e){
-            print "ERROR " . $e->getMessage();
+            // DEBUG DETTAGLIATO CON STACK TRACE
+            print "ERROR caught in FEntityManager (" . __FUNCTION__ . "): " . get_class($e) . " - " . $e->getMessage() . "\n";
+            print "Stack Trace:\n" . $e->getTraceAsString() . "\n";
             return [];
         }
     }

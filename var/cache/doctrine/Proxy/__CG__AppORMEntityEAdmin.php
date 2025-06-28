@@ -28,6 +28,7 @@ class EAdmin extends \AppORM\Entity\EAdmin implements \Doctrine\ORM\Proxy\Intern
         "\0".'*'."\0".'name' => [parent::class, 'name', null, 8],
         "\0".'*'."\0".'password' => [parent::class, 'password', null, 8],
         "\0".'*'."\0".'phonenumber' => [parent::class, 'phonenumber', null, 8],
+        "\0".'*'."\0".'registrationDate' => [parent::class, 'registrationDate', null, 8],
         "\0".'*'."\0".'surname' => [parent::class, 'surname', null, 8],
         "\0".parent::class."\0".'responses' => [parent::class, 'responses', null, 16],
         'birthDate' => [parent::class, 'birthDate', null, 8],
@@ -36,6 +37,7 @@ class EAdmin extends \AppORM\Entity\EAdmin implements \Doctrine\ORM\Proxy\Intern
         'name' => [parent::class, 'name', null, 8],
         'password' => [parent::class, 'password', null, 8],
         'phonenumber' => [parent::class, 'phonenumber', null, 8],
+        'registrationDate' => [parent::class, 'registrationDate', null, 8],
         'responses' => [parent::class, 'responses', null, 16],
         'surname' => [parent::class, 'surname', null, 8],
     ];

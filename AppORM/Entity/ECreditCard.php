@@ -1,111 +1,125 @@
 <?php
-// PHP Version: 8.1+
+// AppORM/Entity/ECreditCard.php
 
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'credit_cards')]
-class ECreditCard {
-
-    // Attributi
+class ECreditCard
+{
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private ?int $idCard = null; // Reso nullable per i nuovi oggetti prima del persist
+    private $id;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private string $nominative;
-
-    #[ORM\Column(type: 'string', length: 16, nullable: false)] // Cambiato a string per numeri di carta lunghi e non numerici
-    private string $number;
-
-    #[ORM\Column(type: 'string', length: 3, nullable: false)] // Cambiato a string per CVV che possono iniziare con 0
-    private string $CVV;
-
-    #[ORM\Column(type: 'date', nullable: false)]
-    private \DateTime $expirationDate; // Uso \DateTime per la classe globale
-
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private string $name; // Nome amichevole per la carta (es. "Mia Visa")
-
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'creditCards')] // 'creditCards' è la proprietà in EClient
-    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')] // AGGIUNTO: onDelete: 'CASCADE'
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'creditCards')]
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false)]
     private EClient $client;
 
-    // Costruttore
-    // Aggiunto EClient $client al costruttore
-    public function __construct(EClient $client, string $nominative, string $number, string $CVV, \DateTime $expirationDate, string $name) {
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $cardHolderName;
+
+    #[ORM\Column(type: 'string', length: 20)] // Per numero di carta (mascherato o hashed in prod)
+    private string $cardNumber;
+
+    #[ORM\Column(type: 'string', length: 4)] // Per CVV (mascherato o hashed in prod)
+    private string $cvv;
+
+    #[ORM\Column(type: 'date')]
+    private DateTime $expirationDate;
+
+    #[ORM\Column(type: 'string', length: 50, nullable: true)] // Il nome amichevole della carta
+    private ?string $cardName;
+
+    public function __construct(
+        EClient $client,
+        string $cardHolderName,
+        string $cardNumber,
+        string $cvv,
+        DateTime $expirationDate,
+        ?string $cardName = null // Ora accetta il nome della carta, opzionale
+    ) {
         $this->client = $client;
-        $this->nominative = $nominative;
-        $this->number = $number;
-        $this->CVV = $CVV;
+        $this->cardHolderName = $cardHolderName;
+        $this->cardNumber = $cardNumber;
+        $this->cvv = $cvv;
         $this->expirationDate = $expirationDate;
-        $this->name = $name;
+        $this->cardName = $cardName; // Assegna il nome della carta
     }
 
-    // Metodi getters e setters
-
-    public function getEntity(): string {
-        return self::class;
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
-    public function getIdCard(): ?int {
-        return $this->idCard;
-    }
-
-    public function getNominative(): string {
-        return $this->nominative;
-    }
-
-    public function setNominative(string $nominative): self {
-        $this->nominative = $nominative;
-        return $this;
-    }
-
-    public function getNumber(): string {
-        return $this->number;
-    }
-
-    public function setNumber(string $number): self {
-        $this->number = $number;
-        return $this;
-    }
-
-    public function getCVV(): string {
-        return $this->CVV;
-    }
-
-    public function setCVV(string $CVV): self {
-        $this->CVV = $CVV;
-        return $this;
-    }
-
-    public function getExpirationDate(): \DateTime {
-        return $this->expirationDate;
-    }
-
-    public function setExpirationDate(\DateTime $expirationDate): self {
-        $this->expirationDate = $expirationDate;
-        return $this;
-    }
-
-    public function getName(): string {
-        return $this->name;
-    }
-
-    public function setName(string $name): self {
-        $this->name = $name;
-        return $this;
-    }
-
-    public function getClient(): EClient {
+    public function getClient(): EClient
+    {
         return $this->client;
     }
 
-    public function setClient(EClient $client): self {
+    // *** CORREZIONE CRUCIALE QUI: Aggiunto '?' per rendere il parametro nullable ***
+    // E aggiunto '= null' come valore di default (anche se non strettamente necessario con '?', è buona pratica)
+    public function setClient(?EClient $client = null): self
+    {
         $this->client = $client;
+        return $this;
+    }
+
+    public function getCardHolderName(): string
+    {
+        return $this->cardHolderName;
+    }
+
+    public function setCardHolderName(string $cardHolderName): self
+    {
+        $this->cardHolderName = $cardHolderName;
+        return $this;
+    }
+
+    public function getCardNumber(): string
+    {
+        return $this->cardNumber;
+    }
+
+    public function setCardNumber(string $cardNumber): self
+    {
+        $this->cardNumber = $cardNumber;
+        return $this;
+    }
+
+    public function getCvv(): string
+    {
+        return $this->cvv;
+    }
+
+    public function setCvv(string $cvv): self
+    {
+        $this->cvv = $cvv;
+        return $this;
+    }
+
+    public function getExpirationDate(): DateTime
+    {
+        return $this->expirationDate;
+    }
+
+    public function setExpirationDate(DateTime $expirationDate): self
+    {
+        $this->expirationDate = $expirationDate;
+        return $this;
+    }
+
+    public function getCardName(): ?string
+    {
+        return $this->cardName;
+    }
+
+    public function setCardName(?string $cardName): self
+    {
+        $this->cardName = $cardName;
         return $this;
     }
 }

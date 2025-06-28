@@ -24,10 +24,10 @@ class EAllergens extends \AppORM\Entity\EAllergens implements \Doctrine\ORM\Prox
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
         "\0".parent::class."\0".'allergenType' => [parent::class, 'allergenType', null, 16],
         "\0".parent::class."\0".'id' => [parent::class, 'id', null, 16],
-        "\0".parent::class."\0".'product' => [parent::class, 'product', null, 16],
+        "\0".parent::class."\0".'products' => [parent::class, 'products', null, 16],
         'allergenType' => [parent::class, 'allergenType', null, 16],
         'id' => [parent::class, 'id', null, 16],
-        'product' => [parent::class, 'product', null, 16],
+        'products' => [parent::class, 'products', null, 16],
     ];
 
     public function __isInitialized(): bool

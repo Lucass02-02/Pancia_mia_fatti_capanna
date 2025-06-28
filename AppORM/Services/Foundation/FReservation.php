@@ -1,4 +1,5 @@
 <?php
+namespace App\Foundation;
 
 class FReservation {
 

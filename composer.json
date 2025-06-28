@@ -2,7 +2,6 @@
     "require": {
         "doctrine/orm": "^3",
         "doctrine/dbal": "^4",
-        "doctrine/orm-cli": "^3",
         "symfony/cache": "^7"
     },
     "autoload": {

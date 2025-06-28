@@ -22,20 +22,16 @@ class EUserReview extends \AppORM\Entity\EUserReview implements \Doctrine\ORM\Pr
     
 
     private const LAZY_OBJECT_PROPERTY_SCOPES = [
-        "\0".parent::class."\0".'adminResponses' => [parent::class, 'adminResponses', null, 16],
-        "\0".parent::class."\0".'date' => [parent::class, 'date', null, 16],
-        "\0".parent::class."\0".'description' => [parent::class, 'description', null, 16],
-        "\0".parent::class."\0".'hour' => [parent::class, 'hour', null, 16],
+        "\0".parent::class."\0".'comment' => [parent::class, 'comment', null, 16],
         "\0".parent::class."\0".'id' => [parent::class, 'id', null, 16],
+        "\0".parent::class."\0".'rating' => [parent::class, 'rating', null, 16],
+        "\0".parent::class."\0".'reviewDate' => [parent::class, 'reviewDate', null, 16],
         "\0".parent::class."\0".'user' => [parent::class, 'user', null, 16],
-        "\0".parent::class."\0".'vote' => [parent::class, 'vote', null, 16],
-        'adminResponses' => [parent::class, 'adminResponses', null, 16],
-        'date' => [parent::class, 'date', null, 16],
-        'description' => [parent::class, 'description', null, 16],
-        'hour' => [parent::class, 'hour', null, 16],
+        'comment' => [parent::class, 'comment', null, 16],
         'id' => [parent::class, 'id', null, 16],
+        'rating' => [parent::class, 'rating', null, 16],
+        'reviewDate' => [parent::class, 'reviewDate', null, 16],
         'user' => [parent::class, 'user', null, 16],
-        'vote' => [parent::class, 'vote', null, 16],
     ];
 
     public function __isInitialized(): bool

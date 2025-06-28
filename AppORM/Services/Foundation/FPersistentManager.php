@@ -3,86 +3,38 @@
 
 namespace App\Foundation;
 
-// Importa le classi Foundation che FPersistentManager coordinerà
-use App\Foundation\FClient;
-use App\Foundation\FUserReview;
-use App\Foundation\FCreditCard; // Importa FCreditCard
-use App\Foundation\FEntityManager; // Ensure FEntityManager is imported for direct saving/deleting
-
-// Importa le entità specifiche che i metodi potrebbero ricevere o restituire
 use AppORM\Entity\EClient;
+use AppORM\Entity\ECreditCard;
 use AppORM\Entity\EUserReview;
-use AppORM\Entity\ECreditCard; // Importa ECreditCard
-
+use AppORM\Entity\EProduct;
+use AppORM\Entity\EAllergens;
+use App\Foundation\FEntityManager;
+use App\Foundation\FClient;
+use App\Foundation\FCreditCard;
+use App\Foundation\FAllergens;
+use App\Foundation\FProduct;
 use DateTime;
-use Doctrine\Common\Collections\ArrayCollection;
+use Exception;
 
 /**
- * Class FPersistentManager
- * Questa classe funge da facade o gestore di alto livello per le operazioni di persistenza.
- * I suoi metodi delegano il lavoro effettivo alle classi Foundation (FClient, FUserReview, ecc.).
- * Può anche incapsulare logica di business a livello di processo che coinvolge più entità.
+ * Classe FPersistentManager.
+ * Questa classe funge da facciata per tutte le operazioni di persistenza
+ * del dominio, astrando l'applicazione dai dettagli specifici di Doctrine ORM.
+ * Fornisce un'interfaccia semplice e coerente per la gestione di entità chiave.
  */
 class FPersistentManager
 {
-    public static function saveClient(EClient $client): bool
-    {
-        return FClient::saveObj($client);
-    }
-
-    public static function getClientById(int $clientId): ?EClient
-    {
-        return FClient::getObj($clientId);
-    }
-
-    public static function getClientByEmail(string $email): ?EClient
-    {
-        return FClient::getObjByEmail($email);
-    }
-
-    public static function checkClientEmailExists(string $email): bool
-    {
-        return FClient::checkEmailExists($email);
-    }
-
-    public static function updateClientPhonenumber(EClient $client, ?string $phonenumber): void
-    {
-        FClient::setPhonenumber($client, $phonenumber);
-    }
-
-    public static function updateClientEmail(EClient $client, string $email): void
-    {
-        FClient::setEmail($client, $email);
-    }
-
-    public static function saveUserReview(EUserReview $review): bool
-    {
-        return FUserReview::saveObj($review);
-    }
-
-    public static function getReviewsForClient(EClient $client): array
-    {
-        return FUserReview::getReviewsByClient($client);
-    }
-
-    public static function deleteClient(EClient $client): bool
-    {
-        return FClient::deleteObj($client);
-    }
-
-    // --- NUOVI METODI UTILI BASATI SULLA DESCRIZIONE DEL PROGETTO ---
-
     /**
      * Registra un nuovo cliente nel sistema.
-     * Il parametro `savedMethods` è stato rimosso in quanto le carte di credito sono gestite separatamente.
-     * @param string $name
-     * @param string $surname
-     * @param DateTime $birthDate
-     * @param string $email
-     * @param string $password La password in chiaro, verrà hashata internamente.
-     * @param string|null $nickname
-     * @param string|null $phonenumber
-     * @return EClient|null Il cliente appena registrato o null in caso di fallimento.
+     *
+     * @param string $name Il nome del cliente.
+     * @param string $surname Il cognome del cliente.
+     * @param DateTime $birthDate La data di nascita del cliente.
+     * @param string $email L'indirizzo email del cliente (deve essere unico).
+     * @param string $password La password in chiaro del cliente.
+     * @param string|null $nickname Il nickname del cliente (opzionale, deve essere unico se fornito).
+     * @param string|null $phoneNumber Il numero di telefono del cliente (opzionale).
+     * @return EClient|null L'oggetto EClient registrato o null in caso di fallimento (es. email/nickname già esistenti).
      */
     public static function registerClient(
         string $name,
@@ -91,202 +43,298 @@ class FPersistentManager
         string $email,
         string $password,
         ?string $nickname = null,
-        ?string $phonenumber = null
+        ?string $phoneNumber = null
     ): ?EClient {
-        try {
-            if (self::checkClientEmailExists($email)) {
-                echo "DEBUG REGISTRATION: Email '" . $email . "' esiste già nel database, registrazione bloccata.\n"; // AGGIUNTO DEBUG
-                error_log("Tentativo di registrazione con email duplicata: " . $email);
-                return null;
-            }
-
-            $client = new EClient(
-                $name,
-                $surname,
-                $birthDate,
-                $email,
-                password_hash($password, PASSWORD_BCRYPT),
-                $nickname,
-                $phonenumber
-            );
-
-            if (FClient::saveObj($client)) {
-                return $client;
-            }
-            return null;
-        } catch (\Exception $e) {
-            echo "DEBUG REGISTRATION: Errore durante la registrazione: " . $e->getMessage() . "\n"; // AGGIUNTO DEBUG
-            error_log("Errore durante la registrazione del cliente: " . $e->getMessage());
-            return null;
+        // Verifica se l'email o il nickname sono già in uso
+        if (FClient::getClientByEmail($email) !== null) {
+            error_log("Tentativo di registrazione con email già esistente: " . $email);
+            return null; // Email già in uso
         }
-    }
+        if ($nickname !== null && FClient::getClientByNickname($nickname) !== null) {
+            error_log("Tentativo di registrazione con nickname già esistente: " . $nickname);
+            return null; // Nickname già in uso
+        }
 
-    public static function authenticateClient(string $email, string $password): ?EClient
-    {
-        $client = self::getClientByEmail($email);
-        if ($client) {
-            $storedHash = $client->getPassword();
-            // --- INIZIO DEBUG PASSWORD ---
-            error_log("DEBUG AUTH: Tentativo di autenticazione per email: {$email}");
-            error_log("DEBUG AUTH: Password fornita (non hashata): '{$password}'");
-            error_log("DEBUG AUTH: Password hashata nel DB: '{$storedHash}'");
-            // --- FINE DEBUG PASSWORD ---
+        $client = new EClient($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT));
+        $client->setNickname($nickname);
+        $client->setPhonenumber($phoneNumber);
+        $client->setReceivesNotifications(false); // Default
+        $client->setLoyaltyPoints(0);             // Default
 
-            $isVerified = password_verify($password, $storedHash);
-
-            // --- INIZIO DEBUG PASSWORD ---
-            error_log("DEBUG AUTH: Risultato di password_verify(): " . ($isVerified ? 'TRUE' : 'FALSE'));
-            // --- FINE DEBUG PASSWORD ---
-
-            if ($isVerified) {
-                return $client;
-            }
+        if (FClient::saveObj($client)) {
+            return $client;
         }
         return null;
     }
 
     /**
-     * Aggiorna il profilo di un cliente con i dati forniti.
-     * La gestione dei metodi di pagamento salvati è ora tramite metodi dedicati (es. addClientCreditCard).
-     * @param EClient $client L'oggetto EClient da aggiornare.
-     * @param array $data Un array associativo con i campi da aggiornare.
+     * Autentica un cliente tramite email e password.
+     *
+     * @param string $email L'email del cliente.
+     * @param string $password La password in chiaro fornita dall'utente.
+     * @return EClient|null L'oggetto EClient autenticato o null in caso di credenziali non valide.
+     */
+    public static function authenticateClient(string $email, string $password): ?EClient
+    {
+        $client = FClient::getClientByEmail($email);
+        if ($client && password_verify($password, $client->getPassword())) {
+            return $client;
+        }
+        return null;
+    }
+
+    /**
+     * Recupera un cliente tramite il suo ID.
+     * @param int $id L'ID del cliente.
+     * @return EClient|null Il cliente trovato o null.
+     */
+    public static function getClientById(int $id): ?EClient
+    {
+        return FClient::getObj($id);
+    }
+
+    /**
+     * Recupera un cliente tramite la sua email.
+     * @param string $email L'email del cliente.
+     * @return EClient|null Il cliente trovato o null.
+     */
+    public static function getClientByEmail(string $email): ?EClient
+    {
+        return FClient::getClientByEmail($email);
+    }
+
+    /**
+     * Aggiorna il numero di telefono di un cliente.
+     * @param EClient $client L'oggetto cliente da aggiornare.
+     * @param string|null $newPhoneNumber Il nuovo numero di telefono.
      * @return bool True se l'aggiornamento ha successo, false altrimenti.
      */
-    public static function updateClientProfile(EClient $client, array $data): bool
+    public static function updateClientPhonenumber(EClient $client, ?string $newPhoneNumber): bool
     {
-        try {
-            if (isset($data['name'])) {
-                FClient::setName($client, $data['name']);
-            }
-            if (isset($data['surname'])) {
-                FClient::setSurname($client, $data['surname']);
-            }
-            if (isset($data['email'])) {
-                $existingClient = self::getClientByEmail($data['email']);
-                if ($existingClient && $existingClient->getId() !== $client->getId()) {
-                    error_log("Aggiornamento fallito: email '" . $data['email'] . "' già in uso da un altro utente.");
-                    return false;
-                }
-                FClient::setEmail($client, $data['email']);
-            }
-            if (isset($data['password'])) {
-                $newHashedPassword = password_hash($data['password'], PASSWORD_BCRYPT);
-                FClient::setPassword($client, $newHashedPassword);
-            }
-            if (isset($data['phonenumber'])) {
-                FClient::setPhonenumber($client, $data['phonenumber']);
-            }
-            if (isset($data['nickname'])) {
-                FClient::setNickname($client, $data['nickname']);
-            }
-            if (isset($data['receivesNotifications'])) {
-                FClient::setReceivesNotifications($client, (bool)$data['receivesNotifications']);
-            }
-            if (isset($data['loyaltyPoints'])) {
-                FClient::setLoyaltyPoints($client, (int)$data['loyaltyPoints']);
-            }
-            return true;
-        } catch (\Exception $e) {
-            error_log("Errore in FPersistentManager::updateClientProfile: " . $e->getMessage());
-            return false;
-        }
+        return FClient::setPhonenumber($client, $newPhoneNumber);
     }
 
-    public static function getAllRegisteredClients(): array
+    /**
+     * Aggiorna il nickname di un cliente.
+     * @param EClient $client L'oggetto cliente da aggiornare.
+     * @param string|null $newNickname Il nuovo nickname.
+     * @return bool True se l'aggiornamento ha successo, false altrimenti.
+     */
+    public static function updateClientNickname(EClient $client, ?string $newNickname): bool
     {
-        return FClient::getAllClients();
+        return FClient::setNickname($client, $newNickname);
     }
 
-    public static function submitClientReview(EClient $client, string $description, int $vote): ?EUserReview
+    /**
+     * Aggiorna lo stato di ricezione notifiche di un cliente.
+     * @param EClient $client L'oggetto cliente da aggiornare.
+     * @param bool $status Lo stato di ricezione notifiche.
+     * @return bool True se l'aggiornamento ha successo, false altrimenti.
+     */
+    public static function updateClientReceivesNotifications(EClient $client, bool $status): bool
     {
-        try {
-            $review = new EUserReview($client, $description, $vote, new DateTime(), new DateTime());
-            if (FUserReview::saveObj($review)) {
-                return $review;
-            }
-            return null;
-        } catch (\Exception $e) {
-            error_log("Errore durante l'invio della recensione: " . $e->getMessage());
-            return null;
-        }
+        return FClient::setReceivesNotifications($client, $status);
     }
 
-    public static function getAverageUserRating(?EClient $client = null): float
+    /**
+     * Aggiunge punti fedeltà a un cliente.
+     * @param EClient $client L'oggetto cliente.
+     * @param int $pointsToAdd I punti da aggiungere.
+     * @return bool True se l'aggiornamento ha successo.
+     */
+    public static function addClientLoyaltyPoints(EClient $client, int $pointsToAdd): bool
     {
-        return FUserReview::getAverageRating($client);
+        $newPoints = $client->getLoyaltyPoints() + $pointsToAdd;
+        return FClient::setLoyaltyPoints($client, $newPoints);
     }
 
-    public static function getRecentUserReviews(int $limit = 10): array
+    /**
+     * Rimuove punti fedeltà a un cliente. Non scende sotto zero.
+     * @param EClient $client L'oggetto cliente.
+     * @param int $pointsToRemove I punti da rimuovere.
+     * @return bool True se l'aggiornamento ha successo.
+     */
+    public static function removeClientLoyaltyPoints(EClient $client, int $pointsToRemove): bool
     {
-        return FUserReview::getLatestReviews($limit);
+        $newPoints = max(0, $client->getLoyaltyPoints() - $pointsToRemove);
+        return FClient::setLoyaltyPoints($client, $newPoints);
     }
 
-    // --- METODI SPOSTATI DA FClient PER GESTIRE ECreditCard TRAMITE FPersistentManager ---
+    /**
+     * Aggiunge una recensione a un cliente.
+     * @param EUserReview $review L'oggetto recensione da salvare.
+     * @return bool True in caso di successo.
+     */
+    public static function addClientReview(EUserReview $review): bool
+    {
+        return FEntityManager::saveObject($review); // Modificato per usare il metodo statico di FEntityManager
+    }
+
 
     /**
      * Aggiunge una carta di credito a un cliente.
-     * Crea un'istanza di ECreditCard e la associa al cliente, poi salva la carta.
      * @param EClient $client Il cliente a cui aggiungere la carta.
-     * @param string $nominative Il nominativo sulla carta.
-     * @param string $number Il numero della carta.
-     * @param string $CVV Il CVV della carta.
-     * @param DateTime $expirationDate La data di scadenza della carta.
-     * @param string $name Un nome descrittivo per la carta (es. "Mia Visa").
-     * @return ECreditCard|null La carta di credito appena creata, o null in caso di errore.
+     * @param string $cardHolderName Nome del titolare.
+     * @param string $cardNumber Numero della carta.
+     * @param string $cvv CVV della carta.
+     * @param DateTime $expirationDate Data di scadenza.
+     * @param string|null $cardName Nome amichevole della carta (es. "La mia Visa").
+     * @return ECreditCard|null La carta di credito salvata o null in caso di fallimento.
      */
     public static function addClientCreditCard(
         EClient $client,
-        string $nominative,
-        string $number,
-        string $CVV,
+        string $cardHolderName,
+        string $cardNumber,
+        string $cvv,
         DateTime $expirationDate,
-        string $name
+        ?string $cardName = null
     ): ?ECreditCard {
-        try {
-            $creditCard = new ECreditCard($client, $nominative, $number, $CVV, $expirationDate, $name);
-            // Non è necessario addCreditCard a EClient qui perché il costruttore di ECreditCard imposta il client
-            // E la persistenza della carta dovrebbe essere gestita da FCreditCard
-            if (FCreditCard::saveObj($creditCard)) { // Salva la carta di credito direttamente
-                return $creditCard;
-            }
-            return null;
-        } catch (\Exception $e) {
-            error_log("Errore durante l'aggiunta della carta di credito al cliente: " . $e->getMessage());
-            return null;
+        // Linea corretta: passa $cardName al costruttore di ECreditCard
+        $creditCard = new ECreditCard($client, $cardHolderName, $cardNumber, $cvv, $expirationDate, $cardName);
+
+        if (FCreditCard::saveObj($creditCard)) {
+            return $creditCard;
         }
+        return null;
+    }
+
+    /**
+     * Recupera tutte le carte di credito associate a un cliente.
+     * @param EClient $client L'oggetto cliente.
+     * @return array Un array di oggetti ECreditCard.
+     */
+    public static function getClientCreditCards(EClient $client): array
+    {
+        // Doctrine dovrebbe caricare automaticamente la collezione se la relazione è configurata
+        return $client->getCreditCards()->toArray();
     }
 
     /**
      * Rimuove una carta di credito da un cliente.
-     * Delega la rimozione effettiva a FCreditCard::deleteObj.
-     * @param EClient $client Il cliente da cui rimuovere la carta (usato solo per validazione se necessario).
-     * @param ECreditCard $creditCard La carta da rimuovere.
+     *
+     * @param EClient $client Il cliente da cui rimuovere la carta.
+     * @param ECreditCard $creditCard La carta di credito da rimuovere (deve essere un'entità gestita).
      * @return bool True se la rimozione ha successo, false altrimenti.
      */
     public static function removeClientCreditCard(EClient $client, ECreditCard $creditCard): bool
     {
-        try {
-            // Opzionalmente, potresti voler verificare che la carta appartenga a questo client prima di eliminare
-            // if ($creditCard->getClient()->getId() !== $client->getId()) {
-            //     error_log("Tentativo di rimuovere una carta non associata al cliente fornito.");
-            //     return false;
-            // }
-
-            return FCreditCard::deleteObj($creditCard); // Delega la cancellazione a FCreditCard
-        } catch (\Exception $e) {
-            error_log("Errore durante la rimozione della carta di credito dal cliente: " . $e->getMessage());
-            return false;
+        // Rimuove la carta dalla collezione del client (se bidirezionale)
+        if ($client->getCreditCards()->contains($creditCard)) {
+            $client->removeCreditCard($creditCard);
+            FClient::saveObj($client); // Salva la modifica alla relazione nel client
         }
+        // Elimina l'entità CreditCard dal database
+        return FCreditCard::deleteObj($creditCard);
     }
 
     /**
-     * Recupera tutte le carte di credito salvate per un dato cliente.
-     * Delega a FCreditCard::getCreditCardListByClient.
-     * @param EClient $client Il cliente.
-     * @return ECreditCard[] Una lista di oggetti ECreditCard.
+     * Elimina un cliente e le sue dipendenze (recensioni, carte di credito, ordini, prenotazioni)
+     * se configurate con cascade.
+     * @param EClient $client L'oggetto cliente da eliminare.
+     * @return bool True se l'eliminazione ha successo.
      */
-    public static function getClientCreditCards(EClient $client): array
+    public static function deleteClient(EClient $client): bool
     {
-        return FCreditCard::getCreditCardListByClient($client);
+        return FClient::deleteObj($client);
     }
+
+    /**
+     * Salva un oggetto EProduct nel database.
+     * @param EProduct $product L'entità EProduct da salvare.
+     * @return bool True in caso di successo.
+     */
+    public static function saveProduct(EProduct $product): bool
+    {
+        return FProduct::saveObj($product);
+    }
+
+    /**
+     * Recupera un prodotto tramite il suo ID.
+     * @param int $id L'ID del prodotto.
+     * @return EProduct|null Il prodotto trovato o null.
+     */
+    public static function getProductById(int $id): ?EProduct
+    {
+        return FProduct::getObj($id);
+    }
+
+    /**
+     * Aggiorna la disponibilità di un prodotto.
+     * @param EProduct $product L'oggetto prodotto.
+     * @param bool $availability La nuova disponibilità.
+     * @return bool True se l'aggiornamento ha successo.
+     */
+    public static function updateProductAvailability(EProduct $product, bool $availability): bool
+    {
+        return FProduct::setAvailability($product, $availability);
+    }
+
+    /**
+     * Elimina un prodotto dal database.
+     * @param EProduct $product L'entità EProduct da eliminare.
+     * @return bool True in caso di successo.
+     */
+    public static function deleteProduct(EProduct $product): bool
+    {
+        return FProduct::deleteObj($product);
+    }
+
+    /**
+     * Salva un oggetto EAllergens nel database.
+     * @param EAllergens $allergen L'entità EAllergens da salvare.
+     * @return bool True in caso di successo.
+     */
+    public static function saveAllergen(EAllergens $allergen): bool
+    {
+        return FAllergens::saveObj($allergen);
+    }
+
+    /**
+     * Recupera un allergene tramite il suo ID.
+     * @param int $id L'ID dell'allergene.
+     * @return EAllergens|null L'allergene trovato o null.
+     */
+    public static function getAllergenById(int $id): ?EAllergens
+    {
+        return FAllergens::getAllergenById($id);
+    }
+
+    /**
+     * Elimina un allergene dal database.
+     * @param EAllergens $allergen L'entità EAllergens da eliminare.
+     * @return bool True in caso di successo.
+     */
+    public static function deleteAllergen(EAllergens $allergen): bool
+    {
+        return FAllergens::deleteObj($allergen);
+    }
+
+    /**
+     * Associa un allergene a un prodotto.
+     * @param EProduct $product L'oggetto prodotto.
+     * @param EAllergens $allergen L'oggetto allergene.
+     * @return bool True in caso di successo.
+     */
+    public static function addAllergenToProduct(EProduct $product, EAllergens $allergen): bool
+    {
+        $product->addAllergen($allergen);
+        // Doctrine gestisce la persistenza della relazione bidirezionale
+        // Il prodotto dovrebbe essere già gestito dall'EntityManager
+        return FProduct::saveObj($product);
+    }
+
+    /**
+     * Rimuove un allergene da un prodotto.
+     * @param EProduct $product L'oggetto prodotto.
+     * @param EAllergens $allergen L'oggetto allergene.
+     * @return bool True in caso di successo.
+     */
+    public static function removeAllergenFromProduct(EProduct $product, EAllergens $allergen): bool
+    {
+        $product->removeAllergen($allergen);
+        // Doctrine gestisce la persistenza della relazione bidirezionale
+        return FProduct::saveObj($product);
+    }
+
+    // Aggiungi qui altri metodi statici per altre entità man mano che le sviluppi
 }
