@@ -1,5 +1,10 @@
 <?php
 
+require_once __DIR__ . '/../Entity/EUserReview.php';
+use AppORM\Entity\EUserReview;
+require_once __DIR__ . '/FEntityManager.php';
+use AppORM\Services\Foundation\FEntityManager;
+
 class FUserReview {
 
     public static function getUserReviewById($id) {

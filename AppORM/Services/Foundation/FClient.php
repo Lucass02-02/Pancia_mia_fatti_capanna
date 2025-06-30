@@ -1,5 +1,12 @@
 <?php
 
+require_once __DIR__ . '/../Entity/EClient.php';
+use AppORM\Entity\EClient;
+require_once __DIR__ . '/FEntityManager.php';
+use AppORM\Services\Foundation\FEntityManager;
+
+
+
 class FClient {
 
     public static function getClientByNickname($nickname) {

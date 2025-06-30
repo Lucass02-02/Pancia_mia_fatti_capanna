@@ -9,7 +9,7 @@ use AppORM\Entity\EUser;
 #[ORM\Table(name: 'waiters')]
 class EWaiter extends EUser {
     
-    #[ORm\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'waiters')]
+    #[ORm\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'waiters', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'restaurant_hall_id', referencedColumnName: 'idHall')]
     private ERestaurantHall $restaurant_hall;
 

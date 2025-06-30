@@ -2,6 +2,7 @@
 
 namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'orders')]
@@ -23,11 +24,11 @@ class EOrder {
     #[ORM\Column(type: 'date', nullable: false)]
     private $date;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'orders')]
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'orders', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]
     private EClient $client;
 
-    #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'orders')]
+    #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'orders', cascade: ['persist'])]
     private Collection $products;
 
     private static $entity = EOrder::class;

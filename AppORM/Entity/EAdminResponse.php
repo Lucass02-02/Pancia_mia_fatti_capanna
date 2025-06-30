@@ -3,6 +3,7 @@
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'admin_responses')]
@@ -20,11 +21,11 @@ class EAdminResponse {
     #[ORM\Column(type: 'datetime', nullable: false)]
     private $responseDate;
 
-    #[ORM\ManyToOne(targetEntity: EAdmin::class, inversedBy: 'admin_responses')]
+    #[ORM\ManyToOne(targetEntity: EAdmin::class, inversedBy: 'admin_responses', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'admin_id', referencedColumnName: 'id')]
     private EAdmin $admin;
 
-    #[ORM\ManyToMany(targetEntity: EUserReview::class, mappedBy: 'adminResponses')]
+    #[ORM\ManyToMany(targetEntity: EUserReview::class, mappedBy: 'adminResponses', cascade: ['persist'])]
     private Collection $userReviews;
 
     private static $entity = EAdminResponse::class;

@@ -2,6 +2,7 @@
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 enum ProductCategory: string {
     case ANTIPASTO = 'antipasto';
@@ -37,11 +38,11 @@ class EProduct {
     #[ORM\Column(type: 'string', length: 50, nullable: false, enumType: ProductCategory::class)]
     private ProductCategory $category;
 
-    #[ORM\ManyToMany(targetEntity: EOrder::class, inversedBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: EOrder::class, inversedBy: 'products', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'order_products')]
     private Collection $orders;
 
-    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'product_allergens')]
     private Collection $allergens;
 

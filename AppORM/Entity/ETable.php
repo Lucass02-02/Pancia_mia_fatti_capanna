@@ -2,6 +2,8 @@
 
 namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 
 enum TableState: string {
     case AVAILABLE = 'available';
@@ -23,23 +25,25 @@ class ETable {
     #[ORM\Column(type: 'integer', nullable: false)]
     private $seatsNumber;
 
-    #[ORM\Column(type: 'string', nullable: false)]
+    #[ORM\Column(type: 'string', nullable: false, enumType: TableState::class)]
     private TableState $state;
 
-    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'tables')]
+    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'table', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'hall_id', referencedColumnName: 'idHall')]
     private ERestaurantHall $restaurantHall;
 
-    #[ORM\ManyToMany(targetEntity: EReservation::class, mappedBy: 'tables')]
+    #[ORM\ManyToMany(targetEntity: EReservation::class, mappedBy: 'table', cascade: ['persist'])]
     private Collection $reservations;
 
     private static $entity = ETable::class;
 
-    //constructor
+    
     public function __construct($seatsNumber, TableState $state) {
         $this->seatsNumber = $seatsNumber;
         $this->state = $state;
+        $this->reservations = new ArrayCollection();
     }
+    
 
     //methods getters and setters
 
@@ -67,5 +71,32 @@ class ETable {
         $this->state = $state;
     }
 
+
+    /**
+     * Returns a collection of reservations for this table.
+     * @return \Doctrine\Common\Collections\Collection|array
+     */
+    public function getReservations() {
+        // Assuming $this->reservations holds the reservations collection
+        return $this->reservations;
+    }
+
+
+    public function setRestaurantHall(ERestaurantHall $restaurantHall) {
+        $this->restaurantHall = $restaurantHall;
+    }
+
+    public function getRestaurantHall(): ERestaurantHall {
+        return $this->restaurantHall;
+    }
+
+    public function addReservation(EReservation $reservation) {
+        if (!$this->reservations->contains($reservation)) {
+            $this->reservations->add($reservation);
+            if (!$reservation->getTable()->contains($this)) { //messo per evitare errori silenziosi nel caso $reservation->getTable non sia inizializzata
+                 $reservation->addTable($this);
+            }           
+        }
+    }
     
 }

@@ -1,5 +1,11 @@
 <?php
 
+require_once __DIR__ . '/../Entity/EOrder.php';
+use AppORM\Entity\EOrder;
+require_once __DIR__ . '/FEntityManager.php';
+use AppORM\Services\Foundation\FEntityManager;
+
+
 class FOrder {
 
     public static function getOrderById($idOrder) {

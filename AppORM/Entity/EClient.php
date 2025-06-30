@@ -3,28 +3,29 @@
 namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use AppORM\Entity\EUser;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'clients')]
 class EClient extends EUser {
 
     
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private array $savedMethods;
+    #[ORM\Column(type: 'json', length: 50, nullable: false)]
+    private array $savedMethods = [];
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]   
+    #[ORM\Column(type: 'string', length: 50, nullable: false)]   
     private $nickname;
 
     #[ORM\OneToMany(targetEntity: ECreditCard::class, mappedBy: 'clients', cascade: ['persist', 'remove'])]
     private Collection $creditCards;
 
-    #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'clients')]
+    #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'clients', cascade: ['persist'])]
     private Collection $reviews;
     
-    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'clients')]
+    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'clients', cascade: ['persist'])]
     private Collection $reservations;
 
-    #[ORM\OneToMany(targetEntity: EOrder::class, mappedBy: 'clients')]
+    #[ORM\OneToMany(targetEntity: EOrder::class, mappedBy: 'clients', cascade: ['persist'])]
     private Collection $orders;
 
     private static $entity = EClient::class;

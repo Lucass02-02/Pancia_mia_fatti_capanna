@@ -1,6 +1,9 @@
 <?php
 
 namespace AppORM\Entity;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity]
@@ -32,11 +35,11 @@ class EReservation {
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private $nameReservation;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reservations')]
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]        
     private EClient $client;
 
-    #[ORM\ManyToMany(targetEntity: ETable::class, inversedBy: 'reservations')]
+    #[ORM\ManyToMany(targetEntity: ETable::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinTable(
         name: 'reservation_tables',
         joinColumns: [
@@ -46,13 +49,13 @@ class EReservation {
             new ORM\JoinColumn(name: 'table_id', referencedColumnName: 'idTable')
         ]
     )]  
-    private ETable $table;
+    private Collection $table;
 
-    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'reservations')]
+    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'restaurant_hall_id', referencedColumnName: 'idHall')]
     private ERestaurantHall $restaurantHall;
 
-    #[ORM\ManyToOne(targetEntity: ETurn::class, inversedBy: 'reservations')]
+    #[ORM\ManyToOne(targetEntity: ETurn::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'turn_id', referencedColumnName: 'idTurn')]
     private ETurn $turn;
 
@@ -66,6 +69,7 @@ class EReservation {
         $this->peopleNum = $peopleNum;
         $this->note = $note;
         $this->nameReservation = $nameReservation;
+        $this->table = new ArrayCollection();
     }
 
     //methods getters and setters
@@ -130,21 +134,34 @@ class EReservation {
         return $this->client;
     }
 
-    public function getTable(): ETable {
+    public function setClient(EClient $client): void {
+        $this->client = $client;
+    }
+
+    public function getTable() {
         return $this->table;
     }
+    
 
     public function getRestaurantHall(): ERestaurantHall {
         return $this->restaurantHall;
+    }
+
+    public function setRestaurantHall(ERestaurantHall $restaurantHall): void {
+        $this->restaurantHall = $restaurantHall;
     }
 
     public function getTurn(): ETurn {
         return $this->turn;
     }
 
-    public function addTable(Table $table): void {
-        if (!$this->tables->contains($table)) {
-            $this->tables->add($table);
+    public function setTurn(ETurn $turn): void {
+        $this->turn = $turn;
+    }
+
+    public function addTable(ETable $table): void {
+        if (!$this->table->contains($table)) {
+            $this->table->add($table);
             $table->addReservation($this); 
         }
     }

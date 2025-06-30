@@ -1,5 +1,9 @@
 <?php
 
+require_once __DIR__ . '/../Entity/EProduct.php';
+use AppORM\Entity\EProduct;
+require_once __DIR__ . '/FEntityManager.php';
+use AppORM\Services\Foundation\FEntityManager;
 
 class FProduct {
 

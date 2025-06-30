@@ -30,7 +30,7 @@ class ECreditCard {
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private $name;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'credit_cards')]
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'credit_cards', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]
     private EClient $client;
 

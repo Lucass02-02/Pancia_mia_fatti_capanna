@@ -3,6 +3,7 @@
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 enum TurnName: string {
     case LUNCH = 'lunch';
@@ -21,7 +22,7 @@ class ETurn {
     private $idTurn;
 
 
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
+    #[ORM\Column(type: 'string', length: 50, nullable: false, enumType: TurnName::class)]
     private TurnName $name;
 
     #[ORM\Column(type: 'time', nullable: false)]
@@ -30,11 +31,11 @@ class ETurn {
     #[ORM\Column(type: 'time', nullable: false)]
     private $endTime;
 
-    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'turns')]
+    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'turns', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'restaurant_hall_id', referencedColumnName: 'idHall')]
     private ERestaurantHall $restaurantHall;
 
-    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'turn')]
+    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'turn', cascade: ['persist'])]
     private Collection $reservations;
 
     private static $entity = ETurn::class;
