@@ -1,22 +1,20 @@
 <?php
 // PHP Version: 8.1+
 
-namespace App\Foundation;
+namespace AppORM\Services\Foundation; // MODIFICA: Namespace corretto
 
 use AppORM\Entity\ECreditCard; // Assicurati che ECreditCard sia importato correttamente
-use App\Foundation\FEntityManager;
-use DateTime; // Potrebbe non servire qui, ma lascialo se usato altrove
+// MODIFICA: 'use' statement corretto per FEntityManager
+use AppORM\Services\Foundation\FEntityManager; 
+use DateTime;
 
 /**
  * Classe Foundation per l'entità ECreditCard.
- * Gestisce le operazioni di accesso ai dati (CRUD) per l'oggetto ECreditCard
- * utilizzando solo metodi statici. Funge da interfaccia tra l'applicazione
- * e il gestore delle entità (FEntityManager).
+ * Gestisce le operazioni di accesso ai dati (CRUD) per l'oggetto ECreditCard.
  */
 class FCreditCard
 {
-    // *** CORREZIONE CRUCIALE QUI: Usa ECreditCard::class per il nome della tabella/classe ***
-    // Questo garantisce che il nome della classe sia passato a Doctrine con backslash singoli
+    // Usa ECreditCard::class per passare il nome corretto della classe a Doctrine
     private static string $table = ECreditCard::class; 
     private static string $key = "id";
 
@@ -30,8 +28,6 @@ class FCreditCard
         return self::$key;
     }
 
-    // Il metodo getClass() restituirà il nome della classe Foundation (FCreditCard),
-    // non il nome della classe dell'entità mappata. Se hai bisogno del nome dell'entità, usa getTable().
     public static function getClass(): string
     {
         return self::class;
@@ -75,6 +71,4 @@ class FCreditCard
     {
         return FEntityManager::selectAll(self::getTable());
     }
-
-    // Aggiungi qui altri metodi statici per operazioni specifiche su ECreditCard se necessario
 }

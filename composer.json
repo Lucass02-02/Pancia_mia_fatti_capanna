@@ -5,9 +5,8 @@
         "symfony/cache": "^7"
     },
     "autoload": {
-        "psr-4": {
-            "AppORM\\Entity\\": "AppORM/Entity/",
-            "App\\": "AppORM/Services/"
-        }
+    "psr-4": {
+        "AppORM\\": "AppORM/"
     }
+}
 }

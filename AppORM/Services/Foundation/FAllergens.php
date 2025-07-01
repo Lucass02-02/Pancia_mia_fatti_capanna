@@ -1,38 +1,50 @@
 <?php
 // PHP Version: 8.1+
 
-namespace App\Foundation;
+namespace AppORM\Services\Foundation;
 
-use AppORM\Entity\EAllergens; // Importa l'entità EAllergens
-use AppORM\Entity\EProduct;   // Potrebbe essere necessario per le relazioni, se non già importato
-use App\Foundation\FEntityManager; // Importa la classe FEntityManager per le operazioni ORM
+use AppORM\Entity\EAllergens;
+use AppORM\Services\Foundation\FEntityManager; 
 
 /**
  * Classe Foundation per l'entità EAllergens.
- * Gestisce le operazioni di accesso ai dati (CRUD) per l'oggetto EAllergens
- * utilizzando solo metodi statici. Funge da interfaccia tra l'applicazione
- * e il gestore delle entità (FEntityManager).
  */
 class FAllergens
 {
-    // *** CORREZIONE CRUCIALE QUI: Usa EAllergens::class per il nome della tabella/classe ***
     private static string $table = EAllergens::class;
     private static string $key = "id";
 
+    // --- MODIFICA CRUCIALE QUI ---
+    // Abbiamo implementato i metodi che prima erano vuoti.
+
+    /**
+     * Restituisce il nome della classe dell'entità gestita.
+     * @return string
+     */
     public static function getTable(): string
     {
-        return self::$table;
+        return self::$table; // Restituisce la proprietà statica $table
     }
 
+    /**
+     * Restituisce il nome della chiave primaria dell'entità.
+     * @return string
+     */
     public static function getKey(): string
     {
-        return self::$key;
+        return self::$key; // Restituisce la proprietà statica $key
     }
 
+    /**
+     * Restituisce il nome della classe Foundation corrente.
+     * @return string
+     */
     public static function getClass(): string
     {
-        return self::class;
+        return self::class; // Restituisce il nome di questa classe (FAllergens)
     }
+
+    // --- Il resto dei metodi era già corretto ---
 
     /**
      * Salva o aggiorna un oggetto EAllergens.
@@ -76,7 +88,7 @@ class FAllergens
 
     /**
      * Seleziona tutti gli allergeni dal database.
-     * @return EAllergens[] Un array di oggetti EAllergens.
+     * @return array
      */
     public static function selectAll(): array
     {

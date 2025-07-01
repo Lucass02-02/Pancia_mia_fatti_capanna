@@ -16,124 +16,57 @@ enum ProductCategory: string {
 
 #[ORM\Entity]
 #[ORM\Table(name: 'products')]
-class EProduct {
-
-    //attributes
+class EProduct
+{
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private $id;
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private $name;
+    #[ORM\Column(type: 'string', length: 100)]
+    private string $name;
 
-    #[ORM\Column(type: 'string', length: 255, nullable: false)]
-    private $description;
+    #[ORM\Column(type: 'text')]
+    private string $description;
 
-    #[ORM\Column(type: 'decimal', precision: 10, scale: 2, nullable: false)]
-    private $cost;
+    #[ORM\Column(type: 'float')]
+    private float $price;
 
-    #[ORM\Column(type: 'boolean', nullable: false)]
-    private $availability;
-
-    #[ORM\Column(type: 'string', length: 50, nullable: false, enumType: ProductCategory::class)]
+    #[ORM\Column(type: 'string', enumType: ProductCategory::class)]
     private ProductCategory $category;
+    
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $availability = true;
 
-    #[ORM\ManyToMany(targetEntity: EOrder::class, inversedBy: 'products')]
-    #[ORM\JoinTable(name: 'order_products')]
-    private Collection $orders;
+    // --- MODIFICHE FONDAMENTALI ALLA RELAZIONE ---
 
-    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products')]
-    #[ORM\JoinTable(name: 'product_allergens')]
+    /**
+     * @var Collection<int, EAllergens>
+     */
+    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products', cascade: ['persist'])]
+    #[ORM\JoinTable(name: 'products_allergens')] // Definisce la tabella "ponte" che collega prodotti e allergeni
     private Collection $allergens;
 
-    //constructor
-    public function __construct(string $name, string $description, float $cost, ProductCategory $category) {
+    public function __construct(string $name, string $description, float $price, ProductCategory $category)
+    {
         $this->name = $name;
         $this->description = $description;
-        $this->cost = $cost;
+        $this->price = $price;
         $this->category = $category;
-        $this->availability = true; // Default
-        $this->orders = new ArrayCollection();
+        // Inizializza la collezione come un array vuoto. È un passo obbligatorio.
         $this->allergens = new ArrayCollection();
     }
 
-    //methods getters and setters
+    // --- GETTERS E SETTERS (invariati) ---
+    public function getId(): ?int { return $this->id; }
+    public function getName(): string { return $this->name; }
+    public function getDescription(): string { return $this->description; }
+    public function getPrice(): float { return $this->price; }
+    public function getCategory(): ProductCategory { return $this->category; }
+    public function isAvailable(): bool { return $this->availability; }
+    public function setAvailability(bool $availability): void { $this->availability = $availability; }
 
-    public function getEntity(): string {
-        return self::class;
-    }
-
-    public function getId(): ?int {
-        return $this->id;
-    }
-
-    public function getName(): string {
-        return $this->name;
-    }
-
-    public function setName(string $name): self {
-        $this->name = $name;
-        return $this;
-    }
-
-    public function getDescription(): string {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self {
-        $this->description = $description;
-        return $this;
-    }
-
-    public function getCost(): float {
-        return $this->cost;
-    }
-
-    public function setCost(float $cost): self {
-        $this->cost = $cost;
-        return $this;
-    }
-
-    public function getAvailability(): bool {
-        return $this->availability;
-    }
-
-    public function setAvailability(bool $availability): self {
-        $this->availability = $availability;
-        return $this;
-    }
-
-    public function getCategory(): ProductCategory {
-        return $this->category;
-    }
-
-    public function setCategory(ProductCategory $category): self {
-        $this->category = $category;
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, EOrder>
-     */
-    public function getOrders(): Collection
-    {
-        return $this->orders;
-    }
-
-    public function addOrder(EOrder $order): self
-    {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-        }
-        return $this;
-    }
-
-    public function removeOrder(EOrder $order): self
-    {
-        $this->orders->removeElement($order);
-        return $this;
-    }
+    // --- NUOVI METODI PER GESTIRE LA RELAZIONE CORRETTAMENTE ---
 
     /**
      * @return Collection<int, EAllergens>
@@ -143,17 +76,29 @@ class EProduct {
         return $this->allergens;
     }
 
-    public function addAllergen(EAllergens $allergen): self
+    /**
+     * Aggiunge un allergene a questo prodotto, assicurando che la relazione
+     * sia consistente su entrambi i lati.
+     */
+    public function addAllergen(EAllergens $allergen): void
     {
         if (!$this->allergens->contains($allergen)) {
             $this->allergens->add($allergen);
+            // Sincronizza l'altro lato della relazione:
+            // dice all'allergene che è stato aggiunto a questo prodotto.
+            $allergen->addProduct($this);
         }
-        return $this;
     }
 
-    public function removeAllergen(EAllergens $allergen): self
+    /**
+     * Rimuove un allergene da questo prodotto.
+     */
+    public function removeAllergen(EAllergens $allergen): void
     {
-        $this->allergens->removeElement($allergen);
-        return $this;
+        if ($this->allergens->contains($allergen)) {
+            $this->allergens->removeElement($allergen);
+            // Sincronizza l'altro lato della relazione.
+            $allergen->removeProduct($this);
+        }
     }
 }
