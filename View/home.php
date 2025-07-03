@@ -24,14 +24,11 @@ use AppORM\Services\Utility\USession;
         <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Visualizza Menù</a> |
 
         <?php if (USession::isSet('user_id')): ?>
-            
-            <!-- Se l'utente è loggato, mostra questi link -->
-            <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=profile">Mio Profilo</a> |
+            <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=view">Carrello</a> | <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=profile">Mio Profilo</a> |
             <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=logout">Logout</a>
 
         <?php else: ?>
 
-            <!-- Se l'utente NON è loggato, mostra questi link -->
             <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=login">Login</a> |
             <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=registration">Registrati</a>
 

@@ -1,4 +1,4 @@
-<?php // File: View/profile.php (Aggiornato) ?>
+<?php // File: View/profile.php (Aggiornato con stile link arancione desiderato) ?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -15,8 +15,33 @@
         .review:last-child, .card:last-child { border-bottom: none; }
         .card form { display: inline; }
         .card button { background: none; border: none; color: red; cursor: pointer; text-decoration: underline; }
-        nav { margin-top: 1em; }
-        nav a { margin-right: 15px; text-decoration: none; font-weight: bold; color: #e8491d; }
+        
+        /* Stile per i link che si comportano come "bottoni" ma più leggeri */
+        .action-link-style {
+            display: inline-block; /* Permette padding e margin */
+            margin: 0 10px; /* Spazio tra i link */
+            text-decoration: none; /* Nessuna sottolineatura di default */
+            font-weight: bold; /* Grassetto */
+            color: #e8491d; /* Testo arancione */
+            padding: 8px 15px; /* Spaziatura interna */
+            border-radius: 5px; /* Bordi leggermente arrotondati */
+            transition: all 0.2s ease-in-out; /* Effetto di transizione all'hover */
+            /* Rimosso border e background-color iniziale per look "link" */
+        }
+        .action-link-style:hover {
+            background-color: #f0f0f0; /* Sfondo grigio chiaro all'hover, come la tua richiesta */
+            color: #e8491d; /* Mantiene il testo arancione all'hover */
+            text-decoration: underline; /* Aggiunge sottolineatura all'hover per chiarezza */
+        }
+
+        /* Contenitori per l'allineamento dei link */
+        .profile-nav-links, .section-action-links { /* Rinominato per chiarezza */
+            margin-top: 1.5em; /* Spazio dalla sezione precedente */
+            display: flex; /* Usa flexbox per allineare */
+            justify-content: center; /* Centra orizzontalmente */
+            flex-wrap: wrap; /* Per andare a capo su schermi piccoli */
+            gap: 15px; /* Spazio tra i link */
+        }
     </style>
 </head>
 <body>
@@ -34,9 +59,12 @@
         <div class="profile-section">
             <h1>Ciao, <?php echo htmlspecialchars($client->getName()); ?>!</h1>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($client->getEmail()); ?></p>
-            <nav>
-                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=logout">Logout</a>
-            </nav>
+            
+            <div class="profile-nav-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/" class="action-link-style">Torna alla Home</a>
+                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" class="action-link-style">Visualizza Menù</a>
+                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=view" class="action-link-style">Vai al Carrello</a>
+                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=logout" class="action-link-style">Logout</a>
+            </div>
         </div>
 
         <div class="reviews-section">
@@ -51,7 +79,8 @@
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <nav><a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview">Lascia una recensione</a></nav>
+            <div class="section-action-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview" class="action-link-style">Lascia una recensione</a>
+            </div>
         </div>
 
         <div class="cards-section">
@@ -64,12 +93,13 @@
                         <span><?php echo htmlspecialchars($card->getBrand()); ?> che finisce con **** <?php echo htmlspecialchars($card->getLast4()); ?></span>
                         <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
                             <input type="hidden" name="card_id" value="<?php echo $card->getId(); ?>">
-                            <button type="submit">Elimina</button>
+                            <button type="submit" style="background: none; border: none; color: red; cursor: pointer; text-decoration: underline;">Elimina</button>
                         </form>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <nav><a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard">Aggiungi una carta</a></nav>
+            <div class="section-action-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard" class="action-link-style">Aggiungi una carta</a>
+            </div>
         </div>
     </div>
 </body>
