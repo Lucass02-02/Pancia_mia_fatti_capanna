@@ -6,7 +6,6 @@ use Exception;
 
 class FEntityManager
 {
-    // ... tutti gli altri metodi rimangono uguali ...
 
     /**
      * Salva un oggetto (Entity) nel database.
@@ -26,14 +25,16 @@ class FEntityManager
             return true;
         } catch (Exception $e) {
             $em->rollback();
-            // Oltre a loggarlo, ora "lanciamo" l'errore verso l'alto,
-            // così lo script che ha chiamato questo metodo può vederlo.
             error_log("Errore durante il salvataggio dell'oggetto: " . $e->getMessage());
-            throw $e; // <-- RIGA AGGIUNTA
+            throw $e; 
         }
     }
-
-    // ... tutti gli altri metodi rimangono uguali ...
+    /**
+     * Recupera un oggetto dal database per ID.
+     * @param string $class Il nome della classe dell'oggetto.
+     * @param int $id L'ID dell'oggetto da recuperare.
+     * @return object|null L'oggetto recuperato o null se non trovato.
+     */
     private static ?EntityManager $instance = null;
     public static function setEntityManager(EntityManager $entityManager): void { self::$instance = $entityManager; }
     public static function getEntityManager(): EntityManager { if (self::$instance === null) { throw new Exception("L'EntityManager non è stato configurato."); } return self::$instance; }

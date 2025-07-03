@@ -19,7 +19,6 @@ class EAllergens
     #[ORM\Column(type: 'string', length: 50, unique: true)]
     private string $allergenType;
 
-    // --- DEFINIZIONE DELLA RELAZIONE (LATO INVERSO) ---
     
     /**
      * @var Collection<int, EProduct>
@@ -34,12 +33,10 @@ class EAllergens
         $this->products = new ArrayCollection();
     }
 
-    // --- GETTERS E SETTERS ---
     public function getId(): ?int { return $this->id; }
     public function getAllergenType(): string { return $this->allergenType; }
     public function setAllergenType(string $type): void { $this->allergenType = $type; }
 
-    // --- NUOVI METODI PER GESTIRE LA RELAZIONE ---
 
     /**
      * @return Collection<int, EProduct>

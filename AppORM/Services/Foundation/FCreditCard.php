@@ -1,10 +1,8 @@
 <?php
-// PHP Version: 8.1+
 
-namespace AppORM\Services\Foundation; // MODIFICA: Namespace corretto
+namespace AppORM\Services\Foundation; 
 
-use AppORM\Entity\ECreditCard; // Assicurati che ECreditCard sia importato correttamente
-// MODIFICA: 'use' statement corretto per FEntityManager
+use AppORM\Entity\ECreditCard; 
 use AppORM\Services\Foundation\FEntityManager; 
 use DateTime;
 

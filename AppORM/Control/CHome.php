@@ -1,4 +1,4 @@
-<?php // File: AppORM/Control/CHome.php (Logica di filtro in PHP)
+<?php // File: AppORM/Control/CHome.php 
 
 namespace AppORM\Control;
 

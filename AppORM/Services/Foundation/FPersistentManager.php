@@ -12,13 +12,13 @@ use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Services\Foundation\FClient;
 use AppORM\Services\Foundation\FCreditCard;
 use AppORM\Services\Foundation\FAllergens;
-use AppORM\Services\Foundation\FProduct; // Assicurati che questa riga ci sia
+use AppORM\Services\Foundation\FProduct; 
 use DateTime;
 use Exception;
 
 class FPersistentManager
 {
-    // --- METODI ESISTENTI ---
+   
     public static function registerClient(string $name, string $surname, DateTime $birthDate, string $email, string $password, ?string $nickname = null, ?string $phoneNumber = null): ?EClient {
         if (FClient::getClientByEmail($email) !== null) { return null; }
         if ($nickname !== null && FClient::getClientByNickname($nickname) !== null) { return null; }
@@ -41,12 +41,17 @@ class FPersistentManager
     public static function addClientLoyaltyPoints(EClient $client, int $pointsToAdd): bool { $newPoints = $client->getLoyaltyPoints() + $pointsToAdd; return FClient::setLoyaltyPoints($client, $newPoints); }
     public static function removeClientLoyaltyPoints(EClient $client, int $pointsToRemove): bool { $newPoints = max(0, $client->getLoyaltyPoints() - $pointsToRemove); return FClient::setLoyaltyPoints($client, $newPoints); }
     public static function addClientReview(EUserReview $review): bool { return FEntityManager::saveObject($review); }
+    
     public static function addClientPaymentMethod(EClient $client, string $paymentToken, string $brand, string $last4, int $expMonth, int $expYear, ?string $cardName = null): ?ECreditCard {
         $creditCard = new ECreditCard($client, $paymentToken, $brand, $last4, $expMonth, $expYear, $cardName);
         if (FCreditCard::saveObj($creditCard)) { return $creditCard; }
         return null;
     }
-    public static function getClientCreditCards(EClient $client): array { return $client->getCreditCards()->toArray(); }
+    
+    public static function getClientCreditCards(EClient $client): array { 
+        return $client->getCreditCards()->toArray();
+     }
+    
     public static function removeClientCreditCard(EClient $client, ECreditCard $creditCard): bool {
         $entityManager = FEntityManager::getEntityManager();
         $entityManager->beginTransaction();
@@ -74,7 +79,7 @@ class FPersistentManager
     public static function removeAllergenFromProduct(EProduct $product, EAllergens $allergen): bool { $product->removeAllergen($allergen); return FProduct::saveObj($product); }
 
 
-    // --- METODO MANCANTE AGGIUNTO QUI ---
+    
     /**
      * Recupera tutti i prodotti dal database.
      * @return array Un array di oggetti EProduct.

@@ -1,5 +1,5 @@
 <?php
-namespace AppORM\Services\Foundation; // MODIFICA: Namespace corretto
+namespace AppORM\Services\Foundation; 
 
 use AppORM\Entity\EUserReview;
 use AppORM\Entity\EClient;
@@ -7,7 +7,6 @@ use DateTime;
 
 class FUserReview
 {
-    // MODIFICA: Usato EUserReview::class, più robusto di una stringa
     private static string $table = EUserReview::class; 
     private static string $key = "id";
 
@@ -15,8 +14,7 @@ class FUserReview
     public static function getKey(): string { return self::$key; }
     public static function getClass(): string { return self::class; }
 
-    // MODIFICA: Chiamate a FEntityManager corrette (senza getInstance)
-    
+
     public static function getObj(int $id): ?EUserReview
     {
         return FEntityManager::retriveObject(self::getTable(), $id);
@@ -34,11 +32,6 @@ class FUserReview
 
     public static function getReviewsByClient(EClient $client): array
     {
-        // Nota: retriveObjectList non esiste in FEntityManager, presumo sia un tuo metodo custom.
-        // Se FEntityManager ha solo i metodi che mi hai mostrato, questa chiamata va adattata.
-        // Per ora la lascio, ma potrebbe dare errore.
         return FEntityManager::retriveObjectList(self::getTable(), 'user', $client->getId());
     }
-    
-    // ... il resto dei metodi di FUserReview andrebbe adattato allo stesso modo ...
 }

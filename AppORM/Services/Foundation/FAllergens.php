@@ -14,7 +14,6 @@ class FAllergens
     private static string $table = EAllergens::class;
     private static string $key = "id";
 
-    // --- MODIFICA CRUCIALE QUI ---
     // Abbiamo implementato i metodi che prima erano vuoti.
 
     /**
@@ -44,7 +43,6 @@ class FAllergens
         return self::class; // Restituisce il nome di questa classe (FAllergens)
     }
 
-    // --- Il resto dei metodi era già corretto ---
 
     /**
      * Salva o aggiorna un oggetto EAllergens.

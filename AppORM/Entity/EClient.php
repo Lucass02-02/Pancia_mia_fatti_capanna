@@ -130,7 +130,6 @@ class EClient extends EUser
     public function removeCreditCard(ECreditCard $creditCard): self
     {
         if ($this->creditCards->removeElement($creditCard)) {
-            // *** CORREZIONE CRUCIALE QUI: RIMOSSA LA RIGA PROBLEMATICA ***
             // Se ECreditCard::$client non è nullable, non possiamo settarlo a null.
             // L'eliminazione dell'entità ECreditCard stessa è il modo corretto di rimuovere il legame.
             // Il cascade 'remove' sull'OneToMany del client gestirà l'eliminazione della credit card.

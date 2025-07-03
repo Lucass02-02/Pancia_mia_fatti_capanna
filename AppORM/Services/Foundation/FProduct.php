@@ -1,21 +1,14 @@
 <?php
-// PHP Version: 8.1+
 
-namespace AppORM\Services\Foundation; // MODIFICA: Namespace corretto
+namespace AppORM\Services\Foundation;
 
 use AppORM\Entity\EProduct;
-// MODIFICA: 'use' statement corretto per FEntityManager
 use AppORM\Services\Foundation\FEntityManager; 
 
-/**
- * Classe Foundation per l'entità EProduct.
- */
 class FProduct 
 {
     private static string $table = EProduct::class;
     private static string $key = "id";
-
-    // --- NESSUN'ALTRA MODIFICA NECESSARIA QUI, LA LOGICA ERA GIÀ CORRETTA ---
 
     public static function getTable(): string { return self::$table; }
     public static function getKey(): string { return self::$key; }
@@ -25,8 +18,5 @@ class FProduct
     public static function setAvailability(EProduct $product, bool $availability): bool { $product->setAvailability($availability); return self::saveObj($product); }
     public static function deleteObj(EProduct $product): bool { return FEntityManager::deleteObj($product); }
     public static function selectAll(): array { return FEntityManager::selectAll(self::getTable()); }
-    public static function fetchAll(): array
-    {
-        return FEntityManager::retrieveAll(EProduct::class);
-    }
+    public static function fetchAll(): array{ return FEntityManager::retrieveAll(EProduct::class);}
 }

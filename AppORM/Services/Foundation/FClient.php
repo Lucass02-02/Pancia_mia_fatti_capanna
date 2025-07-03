@@ -22,8 +22,6 @@ class FClient
     private static string $table = EClient::class;
     private static string $key = "id";
 
-    // --- NESSUN'ALTRA MODIFICA NECESSARIA QUI, LA LOGICA ERA GIÀ CORRETTA ---
-
     public static function getTable(): string { return self::$table; }
     public static function getKey(): string { return self::$key; }
     public static function getClass(): string { return self::class; }

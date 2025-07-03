@@ -49,7 +49,6 @@ class EProduct
         $this->allergens = new ArrayCollection();
     }
 
-    // --- GETTERS E SETTERS (invariati) ---
     public function getId(): ?int { return $this->id; }
     public function getName(): string { return $this->name; }
     public function getDescription(): string { return $this->description; }

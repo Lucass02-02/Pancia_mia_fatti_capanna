@@ -10,8 +10,68 @@ use DateTime;
 
 class CClient
 {
-    // --- METODI ESISTENTI (registration, login, logout) ---
-    // ...
+     public static function registration(): void
+    {
+        if (UHTTPMethods::isGet()) {
+            UView::render('registration');
+        } elseif (UHTTPMethods::isPost()) {
+            $name = UHTTPMethods::getPostValue('name');
+            $surname = UHTTPMethods::getPostValue('surname');
+            $email = UHTTPMethods::getPostValue('email');
+            $password = UHTTPMethods::getPostValue('password');
+            $birthDateStr = UHTTPMethods::getPostValue('birthDate');
+            
+            if ($name && $surname && $email && $password && $birthDateStr) {
+                try {
+                    $birthDate = new DateTime($birthDateStr);
+                    $client = FPersistentManager::registerClient($name, $surname, $birthDate, $email, $password);
+                    if ($client) {
+                        UView::render('registration', ['success' => true, 'message' => 'Registrazione completata! Ora puoi effettuare il login.']);
+                    } else {
+                        UView::render('registration', ['success' => false, 'message' => 'Errore: Email già in uso. Prova con un\'altra email.']);
+                    }
+                } catch (\Exception $e) {
+                    UView::render('registration', ['success' => false, 'message' => 'Si è verificato un errore tecnico. Dettagli: ' . $e->getMessage()]);
+                }
+            } else {
+                UView::render('registration', ['success' => false, 'message' => 'Tutti i campi sono obbligatori.']);
+            }
+        }
+    }
+    /**
+     * Gestisce il login di un cliente.
+     * GET: mostra il form di login.
+     * POST: autentica l'utente e crea la sessione.
+     */
+    public static function login(): void
+    {
+        if (UHTTPMethods::isGet()) {
+            UView::render('login');
+        } elseif (UHTTPMethods::isPost()) {
+            $email = UHTTPMethods::getPostValue('email');
+            $password = UHTTPMethods::getPostValue('password');
+
+            if ($email && $password) {
+                // Usiamo il metodo già pronto del PersistentManager
+                $client = FPersistentManager::authenticateClient($email, $password);
+
+                if ($client) {
+                    // Login riuscito! Salviamo l'ID del cliente in sessione.
+                    USession::setValue('user_id', $client->getId());
+                    // Reindirizziamo l'utente alla sua pagina del profilo.
+                    header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
+                    exit;
+                } else {
+                    // Login fallito
+                    UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
+                }
+            } else {
+                UView::render('login', ['error' => 'Email e password sono obbligatori.']);
+            }
+        }
+    }
+
+
 
     /**
      * Mostra la pagina del profilo, ora arricchita con recensioni e carte.
@@ -37,8 +97,19 @@ class CClient
             self::logout();
         }
     }
+    
+     /**
+     * Esegue il logout distruggendo la sessione.
+     */
+    public static function logout(): void
+    {
+        USession::destroy();
+        // Reindirizziamo l'utente alla homepage.
+        header('Location: /GitHub/Pancia_mia_fatti_capanna/');
+        exit;
+    }
 
-    // --- NUOVI METODI ---
+
 
     /**
      * Gestisce l'aggiunta di una nuova recensione.

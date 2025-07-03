@@ -22,8 +22,6 @@ class ECreditCard
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private EClient $client;
 
-    // --- NUOVI CAMPI SICURI ---
-
     #[ORM\Column(type: 'string', length: 255)]
     private string $paymentGatewayToken; // Token del gateway (es. "pm_...")
 
@@ -64,7 +62,6 @@ class ECreditCard
         $this->cardName = $cardName;
     }
 
-    // --- GETTERS E SETTERS AGGIORNATI ---
 
     public function getId(): ?int
     {
