@@ -83,4 +83,12 @@ class FPersistentManager
     {
         return FProduct::fetchAll();
     }
+    /**
+     * Recupera TUTTI gli allergeni dal database.
+     * @return array Un array di oggetti EAllergens.
+     */
+    public static function getAllAllergens(): array
+    {
+        return FAllergens::fetchAll();
+    }
 }

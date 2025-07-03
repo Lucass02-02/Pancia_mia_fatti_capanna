@@ -94,4 +94,8 @@ class FAllergens
     {
         return FEntityManager::selectAll(self::getTable());
     }
+     public static function fetchAll(): array
+    {
+        return FEntityManager::retrieveAll(EAllergens::class);
+    }
 }

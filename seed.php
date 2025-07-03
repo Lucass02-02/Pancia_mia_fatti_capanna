@@ -1,4 +1,4 @@
-<?php // File: seed.php (da eseguire una sola volta)
+<?php // File: seed.php
 
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
@@ -6,72 +6,62 @@ ini_set('display_errors', 1);
 require __DIR__ . '/bootstrap.php';
 
 use AppORM\Entity\EProduct;
-use AppORM\Entity\ProductCategory; // Importiamo l'enum delle categorie
+use AppORM\Entity\EAllergens;
+use AppORM\Entity\ProductCategory;
 use AppORM\Services\Foundation\FPersistentManager;
+use AppORM\Services\Foundation\FEntityManager;
 
 echo "<h1>Seeding del Database...</h1>";
 
-// Aggiungiamo la categoria a ogni prodotto
-$products = [
-    [
-        'name' => 'Spaghetti alla Carbonara',
-        'description' => 'Un classico della cucina romana con guanciale, uova, pecorino e pepe.',
-        'price' => 12.50,
-        'category' => ProductCategory::PRIMO, // Categoria aggiunta
-        'imageUrl' => 'https://www.giallozafferano.it/images/228-22822/Spaghetti-alla-Carbonara_650x433_wm.jpg'
-    ],
-    [
-        'name' => 'Pizza Margherita',
-        'description' => 'La regina delle pizze con pomodoro, mozzarella fior di latte e basilico fresco.',
-        'price' => 8.00,
-        'category' => ProductCategory::SECONDO, // Tecnicamente un piatto unico, ma lo mettiamo qui
-        'imageUrl' => 'https://www.giallozafferano.it/images/219-21928/Pizza-Margherita_650x433_wm.jpg'
-    ],
-    [
-        'name' => 'Tiramisù',
-        'description' => 'Dolce al cucchiaio con savoiardi, caffè, mascarpone e cacao.',
-        'price' => 6.00,
-        'category' => ProductCategory::DOLCE, // Categoria aggiunta
-        'imageUrl' => 'https://www.giallozafferano.it/images/2-246/Tiramisu_650x433_wm.jpg'
-    ],
-    [
-        'name' => 'Tagliata di Manzo',
-        'description' => 'Controfiletto di manzo servito con rucola, pomodorini e scaglie di grana.',
-        'price' => 18.00,
-        'category' => ProductCategory::SECONDO, // Categoria aggiunta
-        'imageUrl' => 'https://www.giallozafferano.it/images/231-23176/Tagliata-di-manzo_650x433_wm.jpg'
-    ]
-];
+$em = FEntityManager::getEntityManager();
+$connection = $em->getConnection();
+$dbPlatform = $connection->getDatabasePlatform();
+$connection->executeStatement('SET FOREIGN_KEY_CHECKS=0;');
+$connection->executeStatement($dbPlatform->getTruncateTableSql('products_allergens', true));
+$connection->executeStatement($dbPlatform->getTruncateTableSql($em->getClassMetadata(EProduct::class)->getTableName(), true));
+$connection->executeStatement($dbPlatform->getTruncateTableSql($em->getClassMetadata(EAllergens::class)->getTableName(), true));
+echo "<p>Tabelle prodotti e allergeni svuotate.</p>";
 
-foreach ($products as $p) {
-    echo "Aggiungo: " . $p['name'] . "... ";
-    
+// --- 1. Creiamo gli Allergeni ---
+$allergensData = ['Glutine', 'Uova', 'Lattosio', 'Frutta a guscio'];
+$allergenObjects = [];
+echo "<h2>Aggiungo Allergeni...</h2>";
+foreach ($allergensData as $name) {
     try {
-        // --- MODIFICA FONDAMENTALE QUI ---
-        // Creiamo l'oggetto passando tutti i parametri richiesti dal costruttore
-        $product = new EProduct(
-            $p['name'],
-            $p['description'],
-            $p['price'],
-            $p['category']
-        );
+        // --- CORREZIONE QUI ---
+        // Creiamo l'oggetto passando il nome direttamente al costruttore, come richiesto.
+        $allergen = new EAllergens($name);
 
-        // Ora impostiamo le proprietà aggiuntive che non sono nel costruttore
-        $product->setAvailability(true);
-        // Nota: la tua entity EProduct non ha un metodo setImageUrl, quindi non possiamo impostarlo.
-        // Se vuoi aggiungere l'immagine, dovrai aggiungere il campo e il metodo setImageUrl() alla classe EProduct.
-
-        FPersistentManager::saveProduct($product);
-        
-        echo "<b style='color: green;'>Fatto!</b><br>";
-
+        FPersistentManager::saveAllergen($allergen);
+        $allergenObjects[$name] = $allergen;
+        echo "Aggiunto: $name<br>";
     } catch (Exception $e) {
-        echo "<b style='color: red;'>Errore!</b><br>";
-        echo "<p style='color: red; border: 1px solid red; padding: 10px;'><strong>Dettaglio Errore:</strong> " . $e->getMessage() . "</p>";
-        break; 
+        echo "Errore durante l'aggiunta di $name: " . $e->getMessage() . "<br>";
     }
 }
 
+// --- 2. Creiamo i Prodotti e li colleghiamo agli allergeni ---
+echo "<h2>Aggiungo Prodotti...</h2>";
+$productsData = [
+    ['name' => 'Spaghetti alla Carbonara', 'description' => 'Guanciale, uova, pecorino.', 'price' => 12.50, 'category' => ProductCategory::PRIMO, 'allergens' => ['Glutine', 'Uova', 'Lattosio']],
+    ['name' => 'Pizza Margherita', 'description' => 'Pomodoro e mozzarella.', 'price' => 8.00, 'category' => ProductCategory::SECONDO, 'allergens' => ['Glutine', 'Lattosio']],
+    ['name' => 'Tiramisù', 'description' => 'Savoiardi, caffè, mascarpone.', 'price' => 6.00, 'category' => ProductCategory::DOLCE, 'allergens' => ['Glutine', 'Uova', 'Lattosio']],
+    ['name' => 'Tagliata di Manzo', 'description' => 'Controfiletto con rucola.', 'price' => 18.00, 'category' => ProductCategory::SECONDO, 'allergens' => []]
+];
+
+foreach ($productsData as $p) {
+    echo "Aggiungo: " . $p['name'] . "... ";
+    $product = new EProduct($p['name'], $p['description'], $p['price'], $p['category']);
+    $product->setAvailability(true);
+    foreach ($p['allergens'] as $allergenName) {
+        if (isset($allergenObjects[$allergenName])) {
+            $product->addAllergen($allergenObjects[$allergenName]);
+        }
+    }
+    FPersistentManager::saveProduct($product);
+    echo "<b style='color: green;'>Fatto!</b><br>";
+}
+
+$connection->executeStatement('SET FOREIGN_KEY_CHECKS=1;');
 echo "<h2>Seeding completato!</h2>";
-echo "<p>Ora puoi cancellare questo file (seed.php).</p>";
 echo '<a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Vai al Menù</a>';
