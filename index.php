@@ -1,43 +1,26 @@
 <?php
-// Forza la visualizzazione di TUTTI gli errori PHP, anche quelli critici
+// File: index.php (il punto di ingresso principale)
+
+// Mostra tutti gli errori (utile in fase di sviluppo)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
 
-try {
-    // Carica le dipendenze di Composer
-    require __DIR__ . '/vendor/autoload.php';
+// Carica il file di bootstrap, che configura Doctrine e l'autoloader.
+require __DIR__ . '/bootstrap.php';
 
-    // Carica il file bootstrap della tua applicazione
-    require __DIR__ . '/bootstrap.php';
+// Avvia la sessione per tutto il sito
+use AppORM\Services\Utility\USession;
+USession::start();
 
-    // --- Codice per eseguire test_persistence.php ---
-    echo "<h1>Output da test_persistence.php:</h1>";
+// --- ROUTING SEMPLICE ---
+$controllerName = $_GET['c'] ?? 'home';
+$actionName = $_GET['a'] ?? 'home';
 
-    // Includi il file test_persistence.php.
-    // Il percorso è corretto perché test_persistence.php si trova nella stessa directory di index.php. // MODIFICA QUI
-    require __DIR__ . '/test_persistence.php';
+$controllerClass = 'AppORM\\Control\\C' . ucfirst($controllerName);
 
-    // Messaggio di conferma che l'esecuzione del test è completata.
-    echo "<p>Esecuzione di test_persistence.php completata.</p>";
-    // -----------------------------------------------------------
-
-    // Qui sotto potrai aggiungere il tuo codice principale.
-    // Per esempio, la logica di routing per gestire diverse pagine
-    // o l'inclusione di altri controller che generano l'output della tua app.
-
-} catch (\Exception $e) {
-    // Cattura qualsiasi eccezione
-    echo "<h2 style='color: red;'>Errore Critico nell'Applicazione:</h2>";
-    echo "<p style='color: red;'><strong>Messaggio:</strong> " . $e->getMessage() . "</p>";
-    echo "<p style='color: red;'><strong>File:</strong> " . $e->getFile() . " (Linea: " . $e->getLine() . ")</p>";
-    echo "<h3>Stack Trace:</h3>";
-    echo "<pre>" . $e->getTraceAsString() . "</pre>";
-} catch (\Error $e) {
-    // Cattura errori PHP più gravi (es. Fatal Errors)
-    echo "<h2 style='color: red;'>Errore Fatale PHP:</h2>";
-    echo "<p style='color: red;'><strong>Messaggio:</strong> " . $e->getMessage() . "</p>";
-    echo "<p style='color: red;'><strong>File:</strong> " . $e->getFile() . " (Linea: " . $e->getLine() . ")</p>";
-    echo "<h3>Stack Trace:</h3>";
-    echo "<pre>" . $e->getTraceAsString() . "</pre>";
+if (class_exists($controllerClass) && method_exists($controllerClass, $actionName)) {
+    $controllerClass::$actionName();
+} else {
+    http_response_code(404);
+    echo "<h1>Errore 404</h1><p>Pagina non trovata.</p>";
 }

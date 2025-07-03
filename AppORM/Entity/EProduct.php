@@ -1,18 +1,12 @@
-<?php
+<?php // File: AppORM/Entity/EProduct.php
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\Common\Collections\ArrayCollection; // Aggiunto per ArrayCollection
+use Doctrine\Common\Collections\ArrayCollection;
 
-enum ProductCategory: string {
-    case ANTIPASTO = 'antipasto';
-    case PRIMO = 'primo';
-    case SECONDO = 'secondo';
-    case CONTORNO = 'contorno';
-    case DOLCE = 'dolce';
-    case BEVANDA = 'bevanda';
-}
+// L'enum ProductCategory è stato spostato nel suo file.
+// La classe EProduct ora inizia direttamente qui.
 
 #[ORM\Entity]
 #[ORM\Table(name: 'products')]
@@ -32,19 +26,18 @@ class EProduct
     #[ORM\Column(type: 'float')]
     private float $price;
 
+    // Nota come ora usiamo l'enum che è definito nel suo file.
     #[ORM\Column(type: 'string', enumType: ProductCategory::class)]
     private ProductCategory $category;
     
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $availability = true;
 
-    // --- MODIFICHE FONDAMENTALI ALLA RELAZIONE ---
-
     /**
      * @var Collection<int, EAllergens>
      */
     #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products', cascade: ['persist'])]
-    #[ORM\JoinTable(name: 'products_allergens')] // Definisce la tabella "ponte" che collega prodotti e allergeni
+    #[ORM\JoinTable(name: 'products_allergens')]
     private Collection $allergens;
 
     public function __construct(string $name, string $description, float $price, ProductCategory $category)
@@ -53,7 +46,6 @@ class EProduct
         $this->description = $description;
         $this->price = $price;
         $this->category = $category;
-        // Inizializza la collezione come un array vuoto. È un passo obbligatorio.
         $this->allergens = new ArrayCollection();
     }
 
@@ -66,8 +58,6 @@ class EProduct
     public function isAvailable(): bool { return $this->availability; }
     public function setAvailability(bool $availability): void { $this->availability = $availability; }
 
-    // --- NUOVI METODI PER GESTIRE LA RELAZIONE CORRETTAMENTE ---
-
     /**
      * @return Collection<int, EAllergens>
      */
@@ -76,28 +66,18 @@ class EProduct
         return $this->allergens;
     }
 
-    /**
-     * Aggiunge un allergene a questo prodotto, assicurando che la relazione
-     * sia consistente su entrambi i lati.
-     */
     public function addAllergen(EAllergens $allergen): void
     {
         if (!$this->allergens->contains($allergen)) {
             $this->allergens->add($allergen);
-            // Sincronizza l'altro lato della relazione:
-            // dice all'allergene che è stato aggiunto a questo prodotto.
             $allergen->addProduct($this);
         }
     }
 
-    /**
-     * Rimuove un allergene da questo prodotto.
-     */
     public function removeAllergen(EAllergens $allergen): void
     {
         if ($this->allergens->contains($allergen)) {
             $this->allergens->removeElement($allergen);
-            // Sincronizza l'altro lato della relazione.
             $allergen->removeProduct($this);
         }
     }

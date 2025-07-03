@@ -25,4 +25,8 @@ class FProduct
     public static function setAvailability(EProduct $product, bool $availability): bool { $product->setAvailability($availability); return self::saveObj($product); }
     public static function deleteObj(EProduct $product): bool { return FEntityManager::deleteObj($product); }
     public static function selectAll(): array { return FEntityManager::selectAll(self::getTable()); }
+    public static function fetchAll(): array
+    {
+        return FEntityManager::retrieveAll(EProduct::class);
+    }
 }
