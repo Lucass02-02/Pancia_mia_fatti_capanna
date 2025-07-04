@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione - Pancia mia fatti capanna</title>
     <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; }
-        .container { background-color: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 100%; max-width: 400px; }
+        body { font-family: sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; padding: 2em 0; }
+        .container { background-color: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 100%; max-width: 450px; }
         h1 { text-align: center; color: #333; }
         .form-group { margin-bottom: 1em; }
         label { display: block; margin-bottom: 0.5em; color: #555; }
@@ -49,6 +49,14 @@
             <div class="form-group">
                 <label for="password">Password</label>
                 <input type="password" id="password" name="password" required>
+            </div>
+            <div class="form-group">
+                <label for="phoneNumber">Numero di Telefono (Opzionale)</label>
+                <input type="tel" id="phoneNumber" name="phoneNumber">
+            </div>
+            <div class="form-group">
+                <label for="nickname">Nickname (Opzionale)</label>
+                <input type="text" id="nickname" name="nickname">
             </div>
             <button type="submit">Registrati</button>
         </form>

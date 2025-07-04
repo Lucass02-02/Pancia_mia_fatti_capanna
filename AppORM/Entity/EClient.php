@@ -16,12 +16,18 @@ class EClient extends EUser
     #[ORM\Column(type: 'string', length: 50, nullable: true, unique: true)]
     private ?string $nickname;
 
+<<<<<<< Updated upstream
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $receivesNotifications;
+=======
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]   
+    private ?string $nickname;
+>>>>>>> Stashed changes
 
-    #[ORM\Column(type: 'integer', nullable: false)]
-    private int $loyaltyPoints;
+    #[ORM\Column(type: 'integer')]
+    private int $loyaltyPoints = 0;
 
+<<<<<<< Updated upstream
     #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'user', cascade: ['persist', 'remove'])]
     private Collection $reviews;
 
@@ -33,11 +39,35 @@ class EClient extends EUser
     public function __construct(string $name, string $surname, DateTime $birthDate, string $email, string $password)
     {
         parent::__construct($name, $surname, $birthDate, $email, $password);
+=======
+    /**
+     * CORREZIONE: 'mappedBy' ora punta a 'client' (singolare).
+     * cascade e orphanRemoval sono aggiunti per una gestione corretta delle eliminazioni.
+     */
+    #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'client', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $reviews;
+
+    #[ORM\Column(type: 'boolean')]
+    private bool $receivesNotifications = false;
+    
+    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'client')] // Assumendo che in EReservation ci sia una prop $client
+    private Collection $reservations;
+
+    #[ORM\OneToMany(targetEntity: ECreditCard::class, mappedBy: 'client', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $creditCards;
+
+
+    //constructor
+    public function __construct($name, $surname, $birthDate, $email, $password, $phoneNumber,  $nickname ) {
+        parent::__construct( $name, $surname, $birthDate, $email, $password, $phoneNumber);
+        $this->nickname = $nickname;
+>>>>>>> Stashed changes
         $this->reviews = new ArrayCollection();
         $this->creditCards = new ArrayCollection();
         $this->receivesNotifications = false;
         $this->loyaltyPoints = 0; // Inizializza i punti fedeltà a 0 per un nuovo cliente
     }
+<<<<<<< Updated upstream
 
     public function getEntity(): string
     {
@@ -137,3 +167,18 @@ class EClient extends EUser
         return $this;
     }
 }
+=======
+    
+    // ... tutti i tuoi metodi getters e setters rimangono invariati ...
+
+    public function getNickname(): ?string { return $this->nickname; }
+    public function setNickname(?string $nickname): self { $this->nickname = $nickname; return $this; }
+    public function getReceivesNotifications(): bool { return $this->receivesNotifications; }
+    public function setReceivesNotifications(bool $receivesNotifications): self { $this->receivesNotifications = $receivesNotifications; return $this; }
+    public function getLoyaltyPoints(): int { return $this->loyaltyPoints; }
+    public function setLoyaltyPoints(int $loyaltyPoints): self { $this->loyaltyPoints = $loyaltyPoints; return $this; }
+    public function getReviews(): Collection { return $this->reviews; }
+    public function getCreditCards(): Collection { return $this->creditCards; }
+    public function getReservations(): Collection { return $this->reservations; }
+}
+>>>>>>> Stashed changes

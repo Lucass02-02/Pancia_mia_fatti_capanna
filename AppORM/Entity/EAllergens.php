@@ -1,11 +1,13 @@
 <?php
-// Posizione: AppORM/Entity/EAllergens.php
-
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+<<<<<<< Updated upstream
+use Doctrine\Common\Collections\ArrayCollection;
+=======
+>>>>>>> Stashed changes
 
 #[ORM\Entity]
 #[ORM\Table(name: 'allergens')]
@@ -19,16 +21,24 @@ class EAllergens
     #[ORM\Column(type: 'string', length: 50, unique: true)]
     private string $allergenType;
 
+<<<<<<< Updated upstream
     
+=======
+>>>>>>> Stashed changes
     /**
      * @var Collection<int, EProduct>
      */
     #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'allergens')]
+<<<<<<< Updated upstream
     private Collection $products;
+=======
+    private Collection $product;
+>>>>>>> Stashed changes
 
     public function __construct(string $allergenType)
     {
         $this->allergenType = $allergenType;
+<<<<<<< Updated upstream
         // Inizializza la collezione come un array vuoto.
         $this->products = new ArrayCollection();
     }
@@ -65,3 +75,34 @@ class EAllergens
         $this->products->removeElement($product);
     }
 }
+=======
+        $this->product = new ArrayCollection();
+    }
+
+    // --- METODO GETTER MANCANTE ---
+    /**
+     * Restituisce l'ID dell'allergene.
+     * Questo è il metodo che mancava e che causava l'errore.
+     */
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    // -----------------------------
+
+    public function getAllergenType(): string
+    {
+        return $this->allergenType;
+    }
+
+    public function setAllergenType(string $allergenType): void
+    {
+        $this->allergenType = $allergenType;
+    }
+
+    public function getProduct(): Collection 
+    {
+        return $this->product;
+    }
+}
+>>>>>>> Stashed changes

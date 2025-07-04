@@ -1,64 +1,39 @@
-<?php // File: View/profile.php (Aggiornato con stile link arancione desiderato) ?>
+<?php
+use AppORM\Entity\EClient;
+use AppORM\Entity\EUserReview;
+use AppORM\Entity\ECreditCard;
+
+/** @var EClient $client */
+/** @var EUserReview[] $reviews */
+/** @var ECreditCard[] $creditCards */
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Profilo di <?php echo htmlspecialchars($client->getName()); ?></title>
     <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; color: #333; }
-        .container { max-width: 800px; margin: 50px auto; padding: 2em; }
-        .profile-section, .reviews-section, .cards-section { background-color: #fff; border-radius: 8px; box-shadow: 0 0 15px rgba(0,0,0,0.1); padding: 2em; margin-bottom: 2em; }
-        h1, h2 { color: #e8491d; }
-        .message { padding: 1em; border-radius: 4px; margin-bottom: 1em; text-align: center; }
-        .success { background-color: #d4edda; color: #155724; }
-        .review, .card { border-bottom: 1px solid #eee; padding: 1em 0; }
-        .review:last-child, .card:last-child { border-bottom: none; }
-        .card form { display: inline; }
-        .card button { background: none; border: none; color: red; cursor: pointer; text-decoration: underline; }
-        
-        /* Stile per i link che si comportano come "bottoni" ma più leggeri */
-        .action-link-style {
-            display: inline-block; /* Permette padding e margin */
-            margin: 0 10px; /* Spazio tra i link */
-            text-decoration: none; /* Nessuna sottolineatura di default */
-            font-weight: bold; /* Grassetto */
-            color: #e8491d; /* Testo arancione */
-            padding: 8px 15px; /* Spaziatura interna */
-            border-radius: 5px; /* Bordi leggermente arrotondati */
-            transition: all 0.2s ease-in-out; /* Effetto di transizione all'hover */
-            /* Rimosso border e background-color iniziale per look "link" */
-        }
-        .action-link-style:hover {
-            background-color: #f0f0f0; /* Sfondo grigio chiaro all'hover, come la tua richiesta */
-            color: #e8491d; /* Mantiene il testo arancione all'hover */
-            text-decoration: underline; /* Aggiunge sottolineatura all'hover per chiarezza */
-        }
-
-        /* Contenitori per l'allineamento dei link */
-        .profile-nav-links, .section-action-links { /* Rinominato per chiarezza */
-            margin-top: 1.5em; /* Spazio dalla sezione precedente */
-            display: flex; /* Usa flexbox per allineare */
-            justify-content: center; /* Centra orizzontalmente */
-            flex-wrap: wrap; /* Per andare a capo su schermi piccoli */
-            gap: 15px; /* Spazio tra i link */
-        }
+        body { font-family: sans-serif; background-color: #f9f9f9; line-height: 1.6; }
+        .container { max-width: 900px; margin: 2em auto; padding: 1em; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #e8491d; }
+        .profile-details, .reviews-section, .cards-section { margin-bottom: 2em; padding: 1.5em; border: 1px solid #ddd; border-radius: 5px; }
+        .card-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .card-item:last-child { border-bottom: none; }
+        .delete-form button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .nav-links { margin-top: 1.5em; text-align: center; }
+        .nav-links a { margin: 0 10px; color: #007bff; text-decoration: none; }
     </style>
 </head>
 <body>
     <div class="container">
-        <?php if (isset($_GET['review']) && $_GET['review'] === 'success'): ?>
-            <div class="message success">Recensione aggiunta con successo!</div>
-        <?php endif; ?>
-        <?php if (isset($_GET['card']) && $_GET['card'] === 'success'): ?>
-            <div class="message success">Carta di credito aggiunta con successo!</div>
-        <?php endif; ?>
-        <?php if (isset($_GET['card']) && $_GET['card'] === 'deleted'): ?>
-            <div class="message success">Carta di credito rimossa con successo!</div>
-        <?php endif; ?>
+        <h1>Ciao, <?php echo htmlspecialchars($client->getName()); ?>!</h1>
 
-        <div class="profile-section">
-            <h1>Ciao, <?php echo htmlspecialchars($client->getName()); ?>!</h1>
+        <div class="profile-details">
+            <h2>I tuoi dati</h2>
+            <p><strong>Nome Completo:</strong> <?php echo htmlspecialchars($client->getName() . ' ' . $client->getSurname()); ?></p>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($client->getEmail()); ?></p>
+<<<<<<< Updated upstream
             
             <div class="profile-nav-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/" class="action-link-style">Torna alla Home</a>
                 <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" class="action-link-style">Visualizza Menù</a>
@@ -81,25 +56,66 @@
             <?php endif; ?>
             <div class="section-action-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview" class="action-link-style">Lascia una recensione</a>
             </div>
+=======
+            <p><strong>Data di Nascita:</strong> <?php echo htmlspecialchars($client->getBirthDate()->format('d/m/Y')); ?></p>
+            <p><strong>Nickname:</strong> <?php echo htmlspecialchars($client->getNickname() ?: 'Non impostato'); ?></p>
+            <p><strong>Telefono:</strong> <?php echo htmlspecialchars($client->getPhonenumber() ?: 'Non impostato'); ?></p>
+>>>>>>> Stashed changes
         </div>
 
         <div class="cards-section">
-            <h2>Le Tue Carte</h2>
-            <?php if ($creditCards->isEmpty()): ?>
-                <p>Non hai nessuna carta di credito salvata.</p>
-            <?php else: ?>
+            <h2>Le tue carte di credito</h2>
+            <?php if (count($creditCards) > 0): ?>
                 <?php foreach ($creditCards as $card): ?>
+<<<<<<< Updated upstream
                     <div class="card">
                         <span><?php echo htmlspecialchars($card->getBrand()); ?> che finisce con **** <?php echo htmlspecialchars($card->getLast4()); ?></span>
                         <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
+=======
+                    <div class="card-item">
+                        <span>
+                            <strong><?php echo htmlspecialchars($card->getBrand()); ?></strong> che termina con **** <?php echo htmlspecialchars($card->getLast4()); ?>
+                            (Scade: <?php echo htmlspecialchars($card->getExpMonth() . '/' . $card->getExpYear()); ?>)
+                        </span>
+                        <form class="delete-form" action="/Pancia_mia_fatti_capanna/index.php?c=client&a=deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
+>>>>>>> Stashed changes
                             <input type="hidden" name="card_id" value="<?php echo $card->getId(); ?>">
-                            <button type="submit" style="background: none; border: none; color: red; cursor: pointer; text-decoration: underline;">Elimina</button>
+                            <button type="submit">Elimina</button>
                         </form>
                     </div>
                 <?php endforeach; ?>
+            <?php else: ?>
+                <p>Non hai ancora aggiunto nessuna carta di credito.</p>
             <?php endif; ?>
+<<<<<<< Updated upstream
             <div class="section-action-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard" class="action-link-style">Aggiungi una carta</a>
             </div>
+=======
+            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard">Aggiungi una nuova carta</a>
+        </div>
+
+        <div class="reviews-section">
+            <h2>Le tue recensioni</h2>
+            <?php if (count($reviews) > 0): ?>
+                <ul>
+                    <?php foreach ($reviews as $review): ?>
+                        <li>
+                            <strong>Voto: <?php echo $review->getRating(); ?>/5</strong> - 
+                            <em>"<?php echo htmlspecialchars($review->getComment()); ?>"</em>
+                            (<?php echo $review->getReviewDate()->format('d/m/Y'); ?>)
+                        </li>
+                    <?php endforeach; ?>
+                </ul>
+            <?php else: ?>
+                <p>Non hai ancora lasciato nessuna recensione.</p>
+            <?php endif; ?>
+            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview">Lascia una nuova recensione</a>
+        </div>
+
+        <div class="nav-links">
+            <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a> |
+            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=logout">Logout</a>
+>>>>>>> Stashed changes
         </div>
     </div>
 </body>
