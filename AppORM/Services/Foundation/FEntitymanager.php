@@ -194,39 +194,38 @@ class FEntityManager{
             }
     }
 
-    /**
-     * save one object in the db (persistance of Entity)
+       /**
+     * Prepara un oggetto per il salvataggio (persist) e lo scrive nel DB (flush).
+     * NON gestisce la transazione.
      * @return boolean
      */
-    public static function saveObject($obj)
+    public static function saveObject($obj): bool
     {
-        try{
-            self::$entityManager->getConnection()->beginTransaction();
+        try {
             self::$entityManager->persist($obj);
             self::$entityManager->flush();
-            self::$entityManager->getConnection()->commit();
             return true;
-        }catch(\Exception $e){
-            self::$entityManager->getConnection();
-            echo "ERROR: " . $e->getMessage();
+        } catch(\Exception $e) {
+            // Non stampiamo più l'errore qui, lo lasciamo "salire" al chiamante
+            // che è dentro un blocco try/catch più grande.
+            // echo "ERROR: " . $e->getMessage();
             return false;
         }
     }
 
     /**
-     * delete an object from the db
+     * Prepara un oggetto per la cancellazione (remove) e lo rimuove dal DB (flush).
+     * NON gestisce la transazione.
      * @return boolean
      */
-    public static function deleteObject($obj){
-        try{
-            self::$entityManager->getConnection()->beginTransaction();
+    public static function deleteObject($obj): bool
+    {
+        try {
             self::$entityManager->remove($obj);
             self::$entityManager->flush();
-            self::$entityManager->getConnection()->commit();
             return true;
-        }catch(\Exception $e){
-            self::$entityManager->getConnection();
-            echo "ERROR: " . $e->getMessage();
+        } catch(\Exception $e) {
+            // echo "ERROR: " . $e->getMessage();
             return false;
         }
     }

@@ -26,6 +26,7 @@ use AppORM\Entity\TableState;
 use AppORM\Services\Foundation\FOrder;
 use AppORM\Entity\EOrder;
 use AppORM\Entity\OrderStatus;
+use AppORM\Entity\EProductCategory; 
 
 class FPersistentManager {
 
@@ -88,6 +89,14 @@ class FPersistentManager {
             error_log("Errore durante il salvataggio della recensione: " . $e->getMessage());
             return false;
         }
+    }
+    /**
+     * Recupera tutte le recensioni dal database.
+     * @return array
+     */
+    public static function getAllReviews(): array
+    {
+        return FUserReview::fetchAll();
     }
 
     public static function addCreditCardToClient(EClient $client, string $brand, string $last4, int $expMonth, int $expYear, ?string $cardName): bool
@@ -152,6 +161,46 @@ class FPersistentManager {
     
     public static function removeAllergenFromProduct(EProduct $product, EAllergens $allergen): bool { $product->removeAllergen($allergen); return FProduct::saveObj($product); }
     
+    /**
+     * Salva o aggiorna una categoria di prodotti.
+     */
+    public static function saveProductCategory(EProductCategory $category): bool 
+    { 
+        return FProductCategory::saveObj($category); 
+    }
+    
+    /**
+     * Recupera una categoria tramite ID.
+     */
+    public static function getProductCategoryById(int $id): ?EProductCategory 
+    { 
+        return FProductCategory::getObj($id); 
+    }
+
+    /**
+     * Recupera tutte le categorie di prodotti.
+     */
+    public static function getAllProductCategories(): array
+    {
+        return FProductCategory::selectAll();
+    }
+    
+    /**
+     * Cancella una categoria di prodotti.
+     */
+    public static function deleteProductCategory(EProductCategory $category): bool 
+    { 
+        return FProductCategory::deleteObj($category); 
+    }
+
+    /**
+     * Aggiorna il nome di una categoria esistente.
+     */
+    public static function updateProductCategoryName(EProductCategory $category, string $newName): bool
+    {
+        $category->setName($newName);
+        return FProductCategory::saveObj($category);
+    }
 
     //Funzione che crea una prenotazione, passi in ingeresso solo l'oggetto reservation e l'associazione al client la fai nel controllore
     //mentre l'associazione al tavolo e al turno viene fatta nella funzione
@@ -390,5 +439,12 @@ class FPersistentManager {
             'items' => $order->getOrderItems(),
             'total' => FOrder::calculateTotalPrice($order),
         ];
+    }
+
+    public static function getEntityManager()
+    {
+        // Questo metodo semplicemente inoltra la richiesta a FEntityManager,
+        // che è l'unico a dover conoscere l'istanza di Doctrine.
+        return FEntityManager::getInstance()->getEntityManager();
     }
 }

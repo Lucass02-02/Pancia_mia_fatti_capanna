@@ -1,7 +1,8 @@
 <?php // File: AppORM/Control/CReview.php
+
 namespace AppORM\Control;
 
-use AppORM\Services\Foundation\FUserReview;
+use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UView;
 
 class CReview 
@@ -11,14 +12,14 @@ class CReview
      */
     public static function showAll(): void
     {
-        // 1. Recupera tutte le recensioni usando il metodo creato al Passo 1
-        $allReviews = FUserReview::fetchAll();
+        // 1. Usa il metodo appena aggiunto a FPersistentManager.
+        // In questo modo, il controller rispetta la regola di usare solo il manager.
+        $allReviews = FPersistentManager::getInstance()->getAllReviews();
 
-        // 2. Passa l'array di recensioni alla vista per la visualizzazione
+        // 2. Passa l'array di recensioni alla vista per la visualizzazione.
         UView::render('all_reviews', [
             'reviews' => $allReviews,
             'titolo' => 'Tutte le Recensioni'
         ]);
     }
-
 }

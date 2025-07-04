@@ -11,81 +11,50 @@ use DateTime;
 class EUserReview
 {
     #[ORM\Id]
-    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private $id;
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    // Questa è la relazione che è stata modificata con cascade: ['persist']
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews', cascade: ['persist'])]
+    /**
+     * CORREZIONE: Questa è la relazione inversa.
+     * 'inversedBy' punta a 'reviews' (la proprietà in EClient).
+     * La colonna nel database si chiamerà 'client_id'.
+     */
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews')]
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false)]
-    private EClient $user;
+    private EClient $client;
 
-    #[ORM\Column(type: 'string', length: 255)]
+    #[ORM\Column(type: 'text')]
     private string $comment;
 
     #[ORM\Column(type: 'integer')]
-    private int $rating; // Esempio: da 1 a 5
+    private int $rating;
 
     #[ORM\Column(type: 'datetime')]
     private DateTime $reviewDate;
 
-    // Costruttore
-    public function __construct(EClient $user, string $comment, int $rating)
+
+    public function __construct(EClient $client, string $comment, int $rating)
     {
-        $this->user = $user;
+        $this->client = $client;
         $this->comment = $comment;
-        $this->rating = $rating;
+        $this->setRating($rating); // Usa il setter per la validazione
         $this->reviewDate = new DateTime();
     }
 
-    // Metodi Getter
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    // --- Getters ---
+    public function getId(): ?int { return $this->id; }
+    public function getClient(): EClient { return $this->client; }
+    public function getComment(): string { return $this->comment; }
+    public function getRating(): int { return $this->rating; }
+    public function getReviewDate(): DateTime { return $this->reviewDate; }
 
-    public function getUser(): EClient
+    // --- Setters con validazione ---
+    public function setRating(int $rating): void
     {
-        return $this->user;
-    }
-
-    public function getComment(): string
-    {
-        return $this->comment;
-    }
-
-    public function getRating(): int
-    {
-        return $this->rating;
-    }
-
-    public function getReviewDate(): DateTime
-    {
-        return $this->reviewDate;
-    }
-
-    // Metodi Setter
-    public function setUser(EClient $user): self
-    {
-        $this->user = $user;
-        return $this;
-    }
-
-    public function setComment(string $comment): self
-    {
-        $this->comment = $comment;
-        return $this;
-    }
-
-    public function setRating(int $rating): self
-    {
+        if ($rating < 1 || $rating > 5) {
+            throw new \InvalidArgumentException("Il voto deve essere compreso tra 1 e 5.");
+        }
         $this->rating = $rating;
-        return $this;
-    }
-
-    public function setReviewDate(DateTime $reviewDate): self
-    {
-        $this->reviewDate = $reviewDate;
-        return $this;
     }
 }
