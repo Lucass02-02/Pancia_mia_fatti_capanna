@@ -1,10 +1,13 @@
 <?php
 require_once "bootstrap.php";
 
+use AppORM\Entity\DayOfWeek;
 use AppORM\Entity\EClient;
+use AppORM\Entity\EProduct;
 use AppORM\Entity\ERestaurantHall;
 use AppORM\Entity\ETable;
 use AppORM\Entity\ETurn;
+use AppORM\Entity\ProductCategory;
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Entity\TableState;
 use AppORM\Entity\TurnName;
@@ -28,19 +31,157 @@ $hall = new ERestaurantHall(20); // totalPlaces
 FEntityManager::getInstance()->saveObject($hall);
 
 // 3. Crea un turno (es: pranzo)
-$turn = new ETurn(
-    TurnName::LUNCH,                  // enum
-    new DateTime("12:00"),
-    new DateTime("15:00")
-);
-FEntityManager::getInstance()->saveObject($turn);
+    $turn = new ETurn(
+        TurnName::LUNCH,
+        DayOfWeek::MONDAY,                  // enum
+        new DateTime("12:00"),
+        new DateTime("15:00")
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+
+    $turn = new ETurn(
+        TurnName::DINNER,
+        DayOfWeek::MONDAY,                  
+        new DateTime("19:00"),
+        new DateTime("22:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+    
+    $turn = new ETurn(
+        TurnName::LUNCH,
+        DayOfWeek::TUESDAY,                  
+        new DateTime("12:00"),
+        new DateTime("15:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::DINNER,
+        DayOfWeek::TUESDAY,                  
+        new DateTime("19:00"),
+        new DateTime("22:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::DINNER,
+        DayOfWeek::WEDNESDAY,                  
+        new DateTime("19:00"),
+        new DateTime("22:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+    
+    $turn = new ETurn(
+        TurnName::DINNER,
+        DayOfWeek::WEDNESDAY,                  
+        new DateTime("19:00"),
+        new DateTime("22:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::LUNCH,
+        DayOfWeek::THURSDAY,                  
+        new DateTime("12:00"),
+        new DateTime("15:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::DINNER,
+        DayOfWeek::THURSDAY,                  
+        new DateTime("19:00"),
+        new DateTime("22:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::LUNCH,
+        DayOfWeek::FRIDAY,                  
+        new DateTime("12:00"),
+        new DateTime("15:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::DINNER,
+        DayOfWeek::FRIDAY,                  
+        new DateTime("19:00"),
+        new DateTime("22:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::LUNCH,
+        DayOfWeek::SATURDAY,                  
+        new DateTime("12:00"),
+        new DateTime("15:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::DINNER,
+        DayOfWeek::SATURDAY,                  
+        new DateTime("19:00"),
+        new DateTime("22:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::LUNCH,
+        DayOfWeek::SUNDAY,                  
+        new DateTime("12:00"),
+        new DateTime("15:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
+    $turn = new ETurn(
+        TurnName::DINNER,
+        DayOfWeek::SUNDAY,                  
+        new DateTime("19:00"),
+        new DateTime("22:00")                 
+    );
+    $turn->setRestaurantHall($hall); // assegna la sala al turno
+    FEntityManager::getInstance()->saveObject($turn);
+  
 
 // 4. Crea un tavolo
 $table = new ETable(
-    4,                                 // seatsNumber
-    TableState::AVAILABLE              // enum stato
+    4,                                 // seatsNumber             // enum stato
 );               // se hai un numero identificativo
 $table->setRestaurantHall($hall);     // assegna la sala
 FEntityManager::getInstance()->saveObject($table);
+
+
+$product = new EProduct(
+    'Pizza Margherita',
+    'Una classica pizza con pomodoro e mozzarella',
+    8.50,                             
+    ProductCategory::PRIMO
+);
+FEntityManager::getInstance()->saveObject($product);
+
+$product2 = new EProduct(
+    'Filetto di Manzo',
+    'Succulento filetto di manzo',
+    20.00,
+    ProductCategory::SECONDO
+);
+FEntityManager::getInstance()->saveObject($product2);
+
+
 
 echo "✅ Dati iniziali inseriti correttamente nel database.\n";

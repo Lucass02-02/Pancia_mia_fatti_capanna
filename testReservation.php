@@ -11,7 +11,7 @@ use AppORM\Services\Foundation\FEntityManager;
 
 try {
     // 1. Recupera entità necessarie
-    $client = FEntityManager::getInstance()->retriveObjectOnAttribute(EClient::class, 'id', 5);
+    $client = FEntityManager::getInstance()->retriveObjectOnAttribute(EClient::class, 'id', 1);
     $hall = FEntityManager::getInstance()->retriveObjectOnAttribute(ERestaurantHall::class, 'idHall', 1);
 
     $date = new DateTime('2025-07-01');
@@ -38,10 +38,13 @@ try {
 
     // 3. Chiama la funzione di prenotazione
     $result = FPersistentManager::getInstance()->createReservation($reservation);
+    
 
     // 4. Controlla risultato
     if ($result['status']) {
         echo "✅ Prenotazione effettuata con successo!\n";
+        FPersistentManager::getInstance()->createOrderFromReservation($reservation);
+        echo "Ordine creato con successo per la prenotazione.\n";
     } else {
         echo "❌ Errore durante la prenotazione: " . $result['message'] . "\n";
     }

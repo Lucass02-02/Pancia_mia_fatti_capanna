@@ -3,7 +3,15 @@ namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\MappedSuperclass]
+#[ORM\Entity]
+#[ORM\Table(name: 'users')]
+#[ORM\InheritanceType('JOINED')]
+#[ORM\DiscriminatorColumn(name: 'role', type: 'string')]
+#[ORM\DiscriminatorMap([
+    'client' => EClient::class,
+    'waiter' => EWaiter::class,
+    'admin' => EAdmin::class,
+])]
 abstract class EUser{
 
     //attributes

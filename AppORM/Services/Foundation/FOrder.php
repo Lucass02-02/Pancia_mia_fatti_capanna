@@ -1,10 +1,12 @@
 <?php
 
-require_once __DIR__ . '/../Entity/EOrder.php';
-use AppORM\Entity\EOrder;
-require_once __DIR__ . '/FEntityManager.php';
-use AppORM\Services\Foundation\FEntityManager;
+namespace AppORM\Services\Foundation;
 
+use AppORM\Entity\EOrder;
+use AppORM\Services\Foundation\FEntityManager;
+use AppORM\Entity\EReservation;
+use AppORM\Entity\ReservationStatus;
+use AppORM\Entity\EOrderItem;
 
 class FOrder {
 
@@ -24,4 +26,27 @@ class FOrder {
     }
 
 
+    public static function createOrder(EReservation $reservation) {
+        if ($reservation->getStatus() == ReservationStatus::APPROVED) {
+            $order = new EOrder($date = $reservation->getDate());
+            $order->setReservation($reservation);
+            FEntityManager::getInstance()->saveObject($order);
+            return $order;
+        }
+
+    }
+
+
+    public static function calculateTotalPrice(EOrder $order ) {
+        $totalPrice = 0;
+        $orderItems = FEntityManager::getInstance()->selectAll(EOrderItem::getEntity());
+
+        foreach ($orderItems as $item) {
+            if ($item->getOrder() === $order) {
+                $totalPrice += $item->getPrice() * $item->getQuantity();
+            }
+        }
+
+        return $totalPrice;
+    }
 }

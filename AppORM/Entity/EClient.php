@@ -35,7 +35,7 @@ class EClient extends EUser {
     public function __construct($name, $surname, $birthDate,  $email, $password, $phoneNumber, $savedMethods, $nickname ) {
         parent::__construct( $name, $surname,$birthDate, $email, $password, $phoneNumber);
         $this->savedMethods = [];
-        $this->nickname;
+        $this->nickname = $nickname;
     }
 
     

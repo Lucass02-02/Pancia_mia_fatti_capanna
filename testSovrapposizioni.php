@@ -29,7 +29,7 @@ function createReservationForTest($date, $startTime, $durationMinutes, $peopleNu
     $reservation = new EReservation($date, $startTime, $durationMinutes, $peopleNum, "Test note", "Test Reservation");
 
     // Recupera il client dal DB
-$client = FEntityManager::getInstance()->retriveObjectOnAttribute(EClient::class, 'id', 5);
+$client = FEntityManager::getInstance()->retriveObjectOnAttribute(EClient::class, 'id', 1);
 if (!$client) {
     throw new Exception("Client non trovato");
 }
@@ -39,11 +39,6 @@ $hall = FEntityManager::getInstance()->retriveObjectOnAttribute(ERestaurantHall:
 if (!$hall) {
     throw new Exception("Restaurant Hall non trovato");
 }
-
-
-
-
-
 
     $reservation->setClient($client);
     $reservation->setRestaurantHall($hall);

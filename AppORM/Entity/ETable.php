@@ -32,15 +32,15 @@ class ETable {
     #[ORM\JoinColumn(name: 'hall_id', referencedColumnName: 'idHall')]
     private ERestaurantHall $restaurantHall;
 
-    #[ORM\ManyToMany(targetEntity: EReservation::class, mappedBy: 'table', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: EReservationTable::class, mappedBy: 'table', cascade: ['persist'])]
     private Collection $reservations;
 
     private static $entity = ETable::class;
 
     
-    public function __construct($seatsNumber, TableState $state) {
+    public function __construct($seatsNumber) {
         $this->seatsNumber = $seatsNumber;
-        $this->state = $state;
+        $this->state = TableState::AVAILABLE; // Default state when a table is created
         $this->reservations = new ArrayCollection();
     }
     
@@ -76,7 +76,7 @@ class ETable {
      * Returns a collection of reservations for this table.
      * @return \Doctrine\Common\Collections\Collection|array
      */
-    public function getReservations() {
+    public function getReservationTables() {
         // Assuming $this->reservations holds the reservations collection
         return $this->reservations;
     }
@@ -90,13 +90,13 @@ class ETable {
         return $this->restaurantHall;
     }
 
-    public function addReservation(EReservation $reservation) {
+    /*public function addReservation(EReservation $reservation) {
         if (!$this->reservations->contains($reservation)) {
             $this->reservations->add($reservation);
             if (!$reservation->getTable()->contains($this)) { //messo per evitare errori silenziosi nel caso $reservation->getTable non sia inizializzata
                  $reservation->addTable($this);
             }           
         }
-    }
+    }*/
     
 }

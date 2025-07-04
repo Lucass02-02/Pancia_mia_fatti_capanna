@@ -10,6 +10,32 @@ enum TurnName: string {
     case DINNER = 'dinner';
 }
 
+enum DayOfWeek: int {
+    case MONDAY = 1;
+    case TUESDAY = 2;
+    case WEDNESDAY = 3;
+    case THURSDAY = 4;
+    case FRIDAY = 5;
+    case SATURDAY = 6;
+    case SUNDAY = 7;
+
+    
+    public static function fromDate(\DateTimeInterface $date): self {
+        $w = (int) $date->format('w'); 
+        return match ($w) {
+        //return match ((int) $date->format('W')) {
+            
+            1 => self::MONDAY,
+            2 => self::TUESDAY,
+            3 => self::WEDNESDAY,
+            4 => self::THURSDAY,
+            5 => self::FRIDAY,
+            6 => self::SATURDAY,
+            7 => self::SUNDAY,
+            default => throw new \InvalidArgumentException("Invalid day of the week"),
+        };
+    }
+}
 
 #[ORM\Entity]
 #[ORM\Table(name: 'turns')]
@@ -21,9 +47,11 @@ class ETurn {
     #[ORM\GeneratedValue]
     private $idTurn;
 
-
     #[ORM\Column(type: 'string', length: 50, nullable: false, enumType: TurnName::class)]
     private TurnName $name;
+
+    #[ORM\Column(enumType: DayOfWeek::class, nullable: false)]
+    private DayOfWeek $dayOfWeek;
 
     #[ORM\Column(type: 'time', nullable: false)]
     private $startTime;
@@ -41,8 +69,9 @@ class ETurn {
     private static $entity = ETurn::class;
 
     //constructor
-    public function __construct(TurnName $name, $startTime, $endTime) {
+    public function __construct(TurnName $name, DayOfWeek $dayOfWeek, $startTime, $endTime) {
         $this->name = $name;
+        $this->dayOfWeek = $dayOfWeek;
         $this->startTime = $startTime;
         $this->endTime = $endTime;
     }
@@ -65,6 +94,14 @@ class ETurn {
         $this->name = $name;
     }
 
+    public function getDayOfWeek(): DayOfWeek {
+        return $this->dayOfWeek;
+    }
+
+    public function setDayOfWeek(DayOfWeek $dayOfWeek) {
+        $this->dayOfWeek = $dayOfWeek;
+    }
+
     public function getStartTime() {
         return $this->startTime;
     }
@@ -83,6 +120,10 @@ class ETurn {
 
     public function getRestaurantHall(): ERestaurantHall {
         return $this->restaurantHall;
+    }
+
+    public function setRestaurantHall(ERestaurantHall $restaurantHall) {
+        $this->restaurantHall = $restaurantHall;
     }
 
 }

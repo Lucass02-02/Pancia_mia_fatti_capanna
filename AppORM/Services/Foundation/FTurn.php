@@ -4,6 +4,7 @@ namespace AppORM\Services\Foundation;
 
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Entity\ETurn;
+use AppORM\Entity\DayOfWeek;
 
 class FTurn {
 
@@ -22,10 +23,14 @@ class FTurn {
             $endTimeStr = $turn->getEndTime()->format('H:i:s');
 
             if ($inputTimeStr >= $startTimeStr && $inputTimeStr <= $endTimeStr) {
-                echo "turno trovato\n";
                 return $turn;
             }
         }
         return null; // No matching turn found
+    }
+
+    public static function getTurnByDayOfTheWeek(DayOfWeek $dayOfWeek) {
+        $results = FEntityManager::getInstance()->retriveObjectList(ETurn::getEntity(), 'dayOfWeek', $dayOfWeek);
+        return $results;
     }
 }
