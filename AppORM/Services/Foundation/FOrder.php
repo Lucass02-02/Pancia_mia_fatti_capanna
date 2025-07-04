@@ -13,17 +13,17 @@ class FOrder {
     // MODIFICA: Chiamate a FEntityManager corrette e usato EOrder::class
     
     public static function getOrderById($idOrder) {
-        return FEntityManager::retriveObject(EOrder::class, $idOrder);
+        return FEntityManager::getInstance()->retriveObject(EOrder::class, $idOrder);
     }
 
     public static function getOrderByClient($clientId) {
-        return FEntityManager::retriveObjectOnAttribute(EOrder::class, 'client', $clientId);
+        return FEntityManager::getInstance()->retriveObjectOnAttribute(EOrder::class, 'client', $clientId);
     }
 
     public static function getOrderListByDate($date) {
         // Nota: retriveObjectList non è tra i metodi che mi hai mostrato per FEntityManager.
         // Se esiste, la sintassi corretta è questa. Altrimenti dovrai implementarlo.
-        return FEntityManager::retriveObjectList(EOrder::class, 'date', $date);
+        return FEntityManager::getInstance()->retriveObjectList(EOrder::class, 'date', $date);
     }
 
 

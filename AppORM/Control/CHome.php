@@ -26,7 +26,7 @@ class CHome
         $selectedAllergens = array_map('intval', $_GET['allergens'] ?? []);
         
         // 2. Carichiamo SEMPRE tutti i prodotti dal database
-        $allProducts = FPersistentManager::getAllProducts();
+        $allProducts = FPersistentManager::getInstance()->getAllProducts();
         $filteredProducts = [];
 
         // 3. Se l'utente ha scelto dei filtri, filtriamo la lista in PHP
@@ -54,7 +54,7 @@ class CHome
         }
 
         // 4. Recuperiamo tutti gli allergeni da mostrare come checkbox
-        $allAllergens = FPersistentManager::getAllAllergens();
+        $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
 
         // 5. Passiamo i dati (la lista filtrata) alla vista
         UView::render('menu', [

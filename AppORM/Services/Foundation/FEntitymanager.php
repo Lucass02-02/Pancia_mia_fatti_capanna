@@ -10,7 +10,7 @@ class FEntityManager{
 
 
     private function __construct() {
-        self::$entityManager;
+        self::$entityManager = getEntityManager();
     }
 
     public static function getInstance(){

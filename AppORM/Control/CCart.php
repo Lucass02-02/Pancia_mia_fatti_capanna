@@ -26,7 +26,7 @@ class CCart
             $fromCart = UHTTPMethods::getPostValue('from_cart'); // NUOVA RIGA: Verifica se proviene dal carrello
 
             if ($productId > 0 && $quantity > 0) {
-                $product = FPersistentManager::getProductById($productId);
+                $product = FPersistentManager::getInstance()->getProductById($productId);
 
                 if ($product) {
                     $cart = USession::getValue('cart', []);
@@ -79,7 +79,7 @@ class CCart
                 foreach ($productIds as $productId) {
                     $productId = (int) $productId;
                     if ($productId > 0) {
-                        $product = FPersistentManager::getProductById($productId);
+                        $product = FPersistentManager::getInstance()->getProductById($productId);
                         if ($product) {
                             if (isset($cart[$productId])) {
                                 $cart[$productId]['quantity'] += 1;

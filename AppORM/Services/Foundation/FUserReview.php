@@ -1,6 +1,7 @@
 <?php
 namespace AppORM\Services\Foundation;
 
+use AppORm\Services\Foundation\FEntityManager;
 use AppORM\Entity\EUserReview;
 use AppORM\Entity\EClient;
 use DateTime;
@@ -16,18 +17,18 @@ class FUserReview
 
     public static function getObj(int $id): ?EUserReview
     {
-        return FEntityManager::retriveObject(self::getTable(), $id);
+        return FEntityManager::getInstance()->retriveObject(self::getTable(), $id);
     }
 
     public static function saveObj(EUserReview $review): bool
     {
-        return FEntityManager::saveObject($review);
+        return FEntityManager::getInstance()->saveObject($review);
     }
 
     public static function deleteObj(EUserReview $review): bool
     {
         // Se FEntityManager non ha deleteObj, ma removeObject, usa quello
-        return FEntityManager::removeObject($review); 
+        return FEntityManager::getInstance()->deleteObject($review); 
     }
 
     /**
@@ -36,6 +37,6 @@ class FUserReview
      */
     public static function fetchAll(): array
     {
-        return FEntityManager::retrieveAll(self::getTable());
+        return FEntityManager::getInstance()->selectAll(self::getTable());
     }
 }

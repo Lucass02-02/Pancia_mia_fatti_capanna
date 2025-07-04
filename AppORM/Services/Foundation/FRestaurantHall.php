@@ -9,7 +9,7 @@ class FRestaurantHall {
 
     // MODIFICA: Chiamata a FEntityManager corretta e usato ERestaurantHall::class
     public static function getRestaurantHallById($idRestaurantHall) {
-        return FEntityManager::retriveObject(ERestaurantHall::class, $idRestaurantHall);
+        return FEntityManager::getInstance()->retriveObject(ERestaurantHall::class, $idRestaurantHall);
     }
 
     public static function getRestaurantHallByNumPlaces($totalPlaces) {

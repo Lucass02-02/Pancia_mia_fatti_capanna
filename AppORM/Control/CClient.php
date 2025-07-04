@@ -26,7 +26,7 @@ class CClient
             if ($name && $surname && $email && $password && $birthDateStr) {
                 try {
                     $birthDate = new DateTime($birthDateStr);
-                    $client = FPersistentManager::registerClient($name, $surname, $birthDate, $email, $password);
+                    $client = FPersistentManager::getInstance()->registerClient($name, $surname, $birthDate, $email, $password);
                     if ($client) {
                         UView::render('registration', ['success' => true, 'message' => 'Registrazione completata! Ora puoi effettuare il login.']);
                     } else {
@@ -55,7 +55,7 @@ class CClient
 
             if ($email && $password) {
                 // Usiamo il metodo già pronto del PersistentManager
-                $client = FPersistentManager::authenticateClient($email, $password);
+                $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
 
                 if ($client) {
                     // Login riuscito! Salviamo l'ID del cliente in sessione.
@@ -86,7 +86,7 @@ class CClient
         }
 
         $clientId = USession::getValue('user_id');
-        $client = FPersistentManager::getClientById($clientId);
+        $client = FPersistentManager::getInstance()->getClientById($clientId);
 
         if ($client) {
             // Passiamo alla vista non solo il cliente, ma anche le sue recensioni e carte
@@ -132,7 +132,7 @@ class CClient
             $comment = UHTTPMethods::getPostValue('comment');
 
             if ($client && $rating >= 1 && $rating <= 5 && !empty($comment)) {
-                FPersistentManager::addReviewToClient($client, $comment, $rating);
+                FPersistentManager::getInstance()->addReviewToClient($client, $comment, $rating);
                 header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&review=success');
             } else {
                 UView::render('add_review', ['error' => 'Per favore, compila tutti i campi correttamente.']);
@@ -154,7 +154,7 @@ class CClient
             UView::render('add_credit_card');
         } elseif (UHTTPMethods::isPost()) {
             $clientId = USession::getValue('user_id');
-            $client = FPersistentManager::getClientById($clientId);
+            $client = FPersistentManager::getInstance()->getClientById($clientId);
             
             // In un'app reale, qui ci sarebbe la validazione dei dati della carta
             $brand = UHTTPMethods::getPostValue('brand');
@@ -164,7 +164,7 @@ class CClient
             $cardName = UHTTPMethods::getPostValue('cardName');
 
             if ($client && $brand && strlen($last4) === 4 && $expMonth && $expYear) {
-                FPersistentManager::addCreditCardToClient($client, $brand, $last4, $expMonth, $expYear, $cardName);
+                FPersistentManager::getInstance()->addCreditCardToClient($client, $brand, $last4, $expMonth, $expYear, $cardName);
                 header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&card=success');
             } else {
                 UView::render('add_credit_card', ['error' => 'Per favore, compila tutti i campi correttamente.']);
@@ -186,11 +186,11 @@ class CClient
         if (UHTTPMethods::isPost()) {
             $cardId = (int)UHTTPMethods::getPostValue('card_id');
             $clientId = USession::getValue('user_id');
-            $card = FEntityManager::retriveObject(ECreditCard::class, $cardId);
+            $card = FEntityManager::getInstance()->retriveObject(ECreditCard::class, $cardId);
 
             // Ulteriore sicurezza: l'utente può cancellare solo le proprie carte
             if ($card && $card->getClient()->getId() === $clientId) {
-                FPersistentManager::deleteCreditCard($cardId);
+                FPersistentManager::getInstance()->deleteCreditCard($cardId);
                 header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&card=deleted');
                 exit;
             }

@@ -109,9 +109,9 @@ class FPersistentManager {
     public static function deleteCreditCard(int $cardId): bool
     {
         try {
-            $creditCard = FEntityManager::retriveObject(ECreditCard::class, $cardId);
+            $creditCard = FEntityManager::getInstance()->retriveObject(ECreditCard::class, $cardId);
             if ($creditCard) {
-                return FEntityManager::deleteObject($creditCard);
+                return FEntityManager::getInstance()->deleteObject($creditCard);
             }
             return false;
         } catch (\Exception $e) {

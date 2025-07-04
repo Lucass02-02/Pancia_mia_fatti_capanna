@@ -51,7 +51,7 @@ class FAllergens
      */
     public static function saveObj(EAllergens $allergen): bool
     {
-        return FEntityManager::saveObject($allergen);
+        return FEntityManager::getInstance()->saveObject($allergen);
     }
 
     /**
@@ -61,7 +61,7 @@ class FAllergens
      */
     public static function getAllergenById(int $id): ?EAllergens
     {
-        return FEntityManager::retriveObject(self::getTable(), $id);
+        return FEntityManager::getInstance()->retriveObject(self::getTable(), $id);
     }
 
     /**
@@ -71,7 +71,7 @@ class FAllergens
      */
     public static function getAllergenByType(string $allergenType): ?EAllergens
     {
-        return FEntityManager::retriveObjectOnAttribute(self::getTable(), 'allergenType', $allergenType);
+        return FEntityManager::getInstance()->retriveObjectOnAttribute(self::getTable(), 'allergenType', $allergenType);
     }
 
     /**
@@ -81,7 +81,7 @@ class FAllergens
      */
     public static function deleteObj(EAllergens $allergen): bool
     {
-        return FEntityManager::deleteObject($allergen);
+        return FEntityManager::getInstance()->deleteObject($allergen);
     }
 
     /**
@@ -90,10 +90,10 @@ class FAllergens
      */
     public static function selectAll(): array
     {
-        return FEntityManager::selectAll(self::getTable());
+        return FEntityManager::getInstance()->selectAll(self::getTable());
     }
      public static function fetchAll(): array
     {
-        return FEntityManager::selectAll(EAllergens::class);
+        return FEntityManager::getInstance()->selectAll(EAllergens::class);
     }
 }

@@ -38,7 +38,7 @@ class FCreditCard
      */
     public static function saveObj(ECreditCard $creditCard): bool
     {
-        return FEntityManager::saveObject($creditCard);
+        return FEntityManager::getInstance()->saveObject($creditCard);
     }
 
     /**
@@ -48,7 +48,7 @@ class FCreditCard
      */
     public static function getObj(int $id): ?ECreditCard
     {
-        return FEntityManager::retriveObject(self::getTable(), $id);
+        return FEntityManager::getInstance()->retriveObject(self::getTable(), $id);
     }
 
     /**
@@ -58,7 +58,7 @@ class FCreditCard
      */
     public static function deleteObj(ECreditCard $creditCard): bool
     {
-        return FEntityManager::deleteObject($creditCard);
+        return FEntityManager::getInstance()->deleteObject($creditCard);
     }
 
     /**
@@ -67,6 +67,6 @@ class FCreditCard
      */
     public static function selectAll(): array
     {
-        return FEntityManager::selectAll(self::getTable());
+        return FEntityManager::getInstance()->selectAll(self::getTable());
     }
 }
