@@ -1,75 +1,60 @@
 <?php
+// AppORM/Entity/EUserReview.php
 
 namespace AppORM\Entity;
-use Doctrine\ORM\Mapping as ORM;
 
+use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user_reviews')]
-class EUserReview {
-
-    //attributes
+class EUserReview
+{
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
-    private $idReview;
+    #[ORM\Column(type: 'integer')]
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'text', nullable: false)]
-    private $description;
+    /**
+     * CORREZIONE: Questa è la relazione inversa.
+     * 'inversedBy' punta a 'reviews' (la proprietà in EClient).
+     * La colonna nel database si chiamerà 'client_id'.
+     */
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews')]
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false)]
+    private EClient $client;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
-    private $vote;
+    #[ORM\Column(type: 'text')]
+    private string $comment;
 
-    #[ORM\Column(type: 'date', nullable: false)]
-    private $date;
+    #[ORM\Column(type: 'integer')]
+    private int $rating;
 
-    #[ORM\Column(type: 'time', nullable: false)]
-    private $hour;
+    #[ORM\Column(type: 'datetime')]
+    private DateTime $reviewDate;
 
-    //constructor
 
-    public function __construct( $description, $vote, $date, $hour) {
-        $this->description = $description;
-        $this->vote = $vote;
-        $this->date = $date;
-        $this->hour = $hour;
+    public function __construct(EClient $client, string $comment, int $rating)
+    {
+        $this->client = $client;
+        $this->comment = $comment;
+        $this->setRating($rating); // Usa il setter per la validazione
+        $this->reviewDate = new DateTime();
     }
 
-    //methods getters and setters
+    // --- Getters ---
+    public function getId(): ?int { return $this->id; }
+    public function getClient(): EClient { return $this->client; }
+    public function getComment(): string { return $this->comment; }
+    public function getRating(): int { return $this->rating; }
+    public function getReviewDate(): DateTime { return $this->reviewDate; }
 
-    public function getIdReview() {
-        return $this->idReview;
+    // --- Setters con validazione ---
+    public function setRating(int $rating): void
+    {
+        if ($rating < 1 || $rating > 5) {
+            throw new \InvalidArgumentException("Il voto deve essere compreso tra 1 e 5.");
+        }
+        $this->rating = $rating;
     }
-    public function getDescription() {
-        return $this->description;
-    }
-
-    public function setDescription($description) {
-        $this->description = $description;
-    }
-
-    public function getVote() {
-        return $this->vote;
-    }
-
-    public function setVote($vote) {
-        $this->vote = $vote;
-    }
-
-    public function getDate() {
-        return $this->date;
-    }
-
-    public function setDate($date) {
-        $this->date = $date;
-    }
-
-    public function getHour() {
-        return $this->hour;
-    }
-
-    public function setHour($hour) {
-        $this->hour = $hour;
-    }
-
 }

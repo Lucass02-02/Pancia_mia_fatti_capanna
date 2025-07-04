@@ -2,8 +2,17 @@
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
-#[ORM\MappedSuperclass]
+#[ORM\Entity]
+#[ORM\Table(name: 'users')]
+#[ORM\InheritanceType('JOINED')]
+#[ORM\DiscriminatorColumn(name: 'role', type: 'string')]
+#[ORM\DiscriminatorMap([
+    'client' => EClient::class,
+    'waiter' => EWaiter::class,
+    'admin' => EAdmin::class,
+])]
 abstract class EUser{
 
     //attributes
@@ -28,100 +37,93 @@ abstract class EUser{
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
     protected $password;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: true)]   
-    protected $nickname;
 
     #[ORM\Column(type: 'string', length: 15, nullable: true)]
     protected $phonenumber;
 
     //constructor
-    public function __construct($name, $surname, $birthDate, $email, $password, $nickname, $phonenumber)
+    public function __construct($name, $surname, $birthDate, $email, $password,  $phonenumber)
     {
         $this->name = $name;
         $this->surname = $surname;
         $this->birthDate = $birthDate;
         $this->email = $email;
         $this->password = $password;
-        $this->nickname = $nickname;
         $this->phonenumber = $phonenumber;
     }
 
-
-    //methods getters and setters
-    public function getId()
+    // Metodi Getter e Setter
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    public function setName($name)
+    public function setName(string $name): self
     {
         $this->name = $name;
+        return $this;
     }
 
-    public function getSurname()
+    public function getSurname(): string
     {
         return $this->surname;
     }
 
-    public function setSurname($surname)
+    public function setSurname(string $surname): self
     {
         $this->surname = $surname;
+        return $this;
     }
 
-    public function getBirthDate()
+    public function getBirthDate(): DateTime
     {
         return $this->birthDate;
     }
 
-    public function setBirthDate($birthDate)
+    public function setBirthDate(DateTime $birthDate): self
     {
         $this->birthDate = $birthDate;
+        return $this;
     }
 
-    public function getEmail()
+    public function getEmail(): string
     {
         return $this->email;
     }
 
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
+        return $this;
     }
 
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    public function setPassword($password)
+    public function setPassword(string $password): self
     {
         $this->password = $password;
+        return $this;
     }
 
-    public function getNickname()
-    {
-        return $this->nickname;
-    }
-
-    public function setNickname($nickname)
-    {
-        $this->nickname = $nickname;
-    }
-
-    public function getPhonenumber()
+    public function getPhonenumber(): ?string
     {
         return $this->phonenumber;
     }
 
-    public function setPhonenumber($phonenumber)
+    public function setPhonenumber(?string $phonenumber): self
     {
         $this->phonenumber = $phonenumber;
+        return $this;
     }
+
+   
     
 }
