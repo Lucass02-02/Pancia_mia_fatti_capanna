@@ -68,7 +68,7 @@ use AppORM\Services\Utility\USession;
         <h1>Il Nostro Menù</h1>
         <div class="filter-container">
             <h3>Filtra per allergeni (mostra piatti senza):</h3>
-            <form action="/GitHub/Pancia_mia_fatti_capanna/index.php" method="GET">
+            <form action="/Pancia_mia_fatti_capanna/index.php" method="GET">
                 <input type="hidden" name="c" value="home">
                 <input type="hidden" name="a" value="menu">
                 <div class="allergen-list">
@@ -81,7 +81,7 @@ use AppORM\Services\Utility\USession;
                     <?php endforeach; ?>
                 </div>
                 <button type="submit">Applica Filtro</button>
-                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" style="margin-left: 10px;">Rimuovi Filtro</a>
+                <a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" style="margin-left: 10px;">Rimuovi Filtro</a>
             </form>
         </div>
 
@@ -90,7 +90,7 @@ use AppORM\Services\Utility\USession;
         <?php else: ?>
             <?php if (USession::isSet('user_id')): ?>
                 <div class="add-all-container">
-                    <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=addAll" method="POST" style="display: inline-block;">
+                    <form action="/Pancia_mia_fatti_capanna/index.php?c=cart&a=addAll" method="POST" style="display: inline-block;">
                         <?php
                         // Questo loop deve popolare gli ID di *tutti* i prodotti visualizzati
                         // E deve essere specifico per il form "aggiungi tutto"
@@ -111,7 +111,7 @@ use AppORM\Services\Utility\USession;
                         
                         <?php if (USession::isSet('user_id')): ?>
                             <div class="product-actions">
-                                <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=add" method="POST">
+                                <form action="/Pancia_mia_fatti_capanna/index.php?c=cart&a=add" method="POST">
                                     <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
                                     <input type="number" name="quantity" value="1" min="1" max="99" aria-label="Quantità">
                                     <button type="submit">Aggiungi al Carrello</button>
@@ -126,9 +126,9 @@ use AppORM\Services\Utility\USession;
         <?php endif; ?>
 
         <div class="nav-actions">
-            <a href="/GitHub/Pancia_mia_fatti_capanna/">Torna alla Home</a>
+            <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a>
             <?php if (USession::isSet('user_id')): ?>
-                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=view">Vai al Carrello</a>
+                <a href="/Pancia_mia_fatti_capanna/index.php?c=cart&a=view">Vai al Carrello</a>
             <?php endif; ?>
         </div>
     </div>

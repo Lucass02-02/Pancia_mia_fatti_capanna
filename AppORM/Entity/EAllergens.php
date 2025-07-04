@@ -1,22 +1,22 @@
 <?php
+// Posizione: AppORM/Entity/EAllergens.php
 
 namespace AppORM\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
-
+use AppORM\Entity\EProduct;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'allergens')]
-class EAllergens {
-
-    //attributes
+class EAllergens
+{
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private $id;
+    private ?int $id = null;
 
-
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
+    #[ORM\Column(type: 'string', length: 50, unique: true)]
     private string $allergenType;
 
     #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'allergens', cascade: ['persist'])]
@@ -24,9 +24,8 @@ class EAllergens {
 
     private static $entity = EAllergens::class;
 
-    //constructor
-
-    public function __construct($allergenType) {
+    public function __construct(string $allergenType)
+    {
         $this->allergenType = $allergenType;
     }
 
@@ -52,7 +51,22 @@ class EAllergens {
         return $this->product;
     }
 
-    public function setProduct(Collection $product) {
-        $this->product = $product;
+    /**
+     * Metodo di supporto chiamato da EProduct.addAllergen()
+     * per mantenere la coerenza.
+     */
+    public function addProduct(EProduct $product): void
+    {
+        if (!$this->product->contains($product)) {
+            $this->product->add($product);
+        }
+    }
+
+    /**
+     * Metodo di supporto chiamato da EProduct.removeAllergen()
+     */
+    public function removeProduct(EProduct $product): void
+    {
+        $this->product->removeElement($product);
     }
 }

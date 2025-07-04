@@ -58,7 +58,7 @@ class FCreditCard
      */
     public static function deleteObj(ECreditCard $creditCard): bool
     {
-        return FEntityManager::deleteObj($creditCard);
+        return FEntityManager::deleteObject($creditCard);
     }
 
     /**

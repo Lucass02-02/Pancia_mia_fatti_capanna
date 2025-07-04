@@ -60,10 +60,10 @@
             <h1>Ciao, <?php echo htmlspecialchars($client->getName()); ?>!</h1>
             <p><strong>Email:</strong> <?php echo htmlspecialchars($client->getEmail()); ?></p>
             
-            <div class="profile-nav-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/" class="action-link-style">Torna alla Home</a>
-                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" class="action-link-style">Visualizza Menù</a>
-                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=view" class="action-link-style">Vai al Carrello</a>
-                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=logout" class="action-link-style">Logout</a>
+            <div class="profile-nav-links"> <a href="/Pancia_mia_fatti_capanna/" class="action-link-style">Torna alla Home</a>
+                <a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" class="action-link-style">Visualizza Menù</a>
+                <a href="/Pancia_mia_fatti_capanna/index.php?c=cart&a=view" class="action-link-style">Vai al Carrello</a>
+                <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=logout" class="action-link-style">Logout</a>
             </div>
         </div>
 
@@ -79,7 +79,7 @@
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <div class="section-action-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview" class="action-link-style">Lascia una recensione</a>
+            <div class="section-action-links"> <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview" class="action-link-style">Lascia una recensione</a>
             </div>
         </div>
 
@@ -91,14 +91,14 @@
                 <?php foreach ($creditCards as $card): ?>
                     <div class="card">
                         <span><?php echo htmlspecialchars($card->getBrand()); ?> che finisce con **** <?php echo htmlspecialchars($card->getLast4()); ?></span>
-                        <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
+                        <form action="/Pancia_mia_fatti_capanna/index.php?c=client&a=deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
                             <input type="hidden" name="card_id" value="<?php echo $card->getId(); ?>">
                             <button type="submit" style="background: none; border: none; color: red; cursor: pointer; text-decoration: underline;">Elimina</button>
                         </form>
                     </div>
                 <?php endforeach; ?>
             <?php endif; ?>
-            <div class="section-action-links"> <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard" class="action-link-style">Aggiungi una carta</a>
+            <div class="section-action-links"> <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard" class="action-link-style">Aggiungi una carta</a>
             </div>
         </div>
     </div>

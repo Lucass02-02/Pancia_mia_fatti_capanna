@@ -21,7 +21,7 @@
         <?php if (isset($error)): ?>
             <p class="error"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>
-        <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard" method="POST">
             <div><label for="cardName">Nome Carta (es. La mia Visa)</label><input type="text" id="cardName" name="cardName"></div>
             <div><label for="brand">Circuito (es. Visa, MasterCard)</label><input type="text" id="brand" name="brand" required></div>
             <div><label for="last4">Ultime 4 Cifre</label><input type="text" id="last4" name="last4" maxlength="4" required></div>

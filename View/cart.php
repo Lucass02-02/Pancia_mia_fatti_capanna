@@ -46,7 +46,7 @@
         <h1>Il Mio Carrello</h1>
 
         <?php if (empty($cartItems)): ?>
-            <p class="empty-cart-message">Il tuo carrello è vuoto. <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Vai al menù</a> per aggiungere prodotti!</p>
+            <p class="empty-cart-message">Il tuo carrello è vuoto. <a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Vai al menù</a> per aggiungere prodotti!</p>
         <?php else: ?>
             <?php
             // NUOVA RIGA: Inizializza $total a 0 PRIMA del ciclo
@@ -61,18 +61,18 @@
                         Quantità: <?php echo $item['quantity']; ?> x € <?php echo number_format($item['price'], 2, ',', '.'); ?> = € <?php echo number_format($item['price'] * $item['quantity'], 2, ',', '.'); ?>
                     </div>
                     <div class="item-actions">
-                        <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=remove" method="POST" style="display: inline;">
+                        <form action="/Pancia_mia_fatti_capanna/index.php?c=cart&a=remove" method="POST" style="display: inline;">
                             <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
                             <input type="hidden" name="remove_one" value="1">
                             <button type="submit">-</button>
                         </form>
-                        <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=add" method="POST" style="display: inline;">
+                        <form action="/Pancia_mia_fatti_capanna/index.php?c=cart&a=add" method="POST" style="display: inline;">
                             <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
                             <input type="hidden" name="quantity" value="1">
                             <input type="hidden" name="from_cart" value="true">
                             <button type="submit">+</button>
                         </form>
-                        <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=remove" method="POST" style="display: inline;">
+                        <form action="/Pancia_mia_fatti_capanna/index.php?c=cart&a=remove" method="POST" style="display: inline;">
                             <input type="hidden" name="product_id" value="<?php echo $item['product_id']; ?>">
                             <button type="submit" class="remove-btn">Rimuovi</button>
                         </form>
@@ -85,11 +85,11 @@
             </div>
 
             <div class="cart-actions">
-                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Torna al Menù</a>
+                <a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Torna al Menù</a>
                 <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=clear" method="POST" style="display: inline;">
                     <button type="submit" class="clear-btn">Svuota Carrello</button>
                 </form>
-                <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=checkout">Procedi al Checkout</a>
+                <a href="/Pancia_mia_fatti_capanna/index.php?c=cart&a=checkout">Procedi al Checkout</a>
             </div>
         <?php endif; ?>
     </div>

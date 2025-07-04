@@ -96,6 +96,10 @@ class EProduct
         return $this->availability;
     }
 
+    public function setAvailability($availability) {
+        $this->availability = $availability;
+    }
+
     public function getCategory(): ProductCategory {
         return $this->category;
     }

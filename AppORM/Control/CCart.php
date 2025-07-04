@@ -16,7 +16,7 @@ class CCart
     {
         // Reindirizza al login se non loggato
         if (!USession::isSet('user_id')) {
-            header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
             exit;
         }
 
@@ -37,7 +37,7 @@ class CCart
                         $cart[$productId] = [
                             'product_id' => $productId,
                             'name' => $product->getName(),
-                            'price' => $product->getPrice(),
+                            'price' => $product->getCost(),
                             'quantity' => $quantity
                         ];
                     }
@@ -46,16 +46,16 @@ class CCart
 
                     // LOGICA DI REINDIRIZZAMENTO MODIFICATA
                     if ($fromCart) { // Se la richiesta proviene dal carrello, torna al carrello
-                        header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
+                        header('Location: /Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
                     } else { // Altrimenti (richiesta dal menù), torna al menù
-                        header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+                        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
                     }
                     exit;
                 }
             }
         }
         // Se non è una POST valida o il prodotto non è trovato, reindirizza al menù
-        header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
         exit;
     }
 
@@ -66,7 +66,7 @@ class CCart
     {
         // Reindirizza al login se non loggato
         if (!USession::isSet('user_id')) {
-            header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
             exit;
         }
 
@@ -87,7 +87,7 @@ class CCart
                                 $cart[$productId] = [
                                     'product_id' => $productId,
                                     'name' => $product->getName(),
-                                    'price' => $product->getPrice(),
+                                    'price' => $product->getCost(),
                                     'quantity' => 1
                                 ];
                             }
@@ -96,12 +96,12 @@ class CCart
                 }
                 USession::setValue('cart', $cart);
                 // Dopo aver aggiunto tutto, reindirizza sempre al menù
-                header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+                header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
                 exit;
             }
         }
         // Se non è una POST valida o non ci sono ID, torna al menù
-        header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
         exit;
     }
 
@@ -112,7 +112,7 @@ class CCart
     public static function view(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
             exit;
         }
         $cart = USession::getValue('cart', []);
@@ -125,7 +125,7 @@ class CCart
     public static function remove(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
             exit;
         }
 
@@ -145,7 +145,7 @@ class CCart
             }
         }
         // Reindirizza sempre al carrello dopo la rimozione
-        header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
+        header('Location: /Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
         exit;
     }
     
@@ -155,7 +155,7 @@ class CCart
     public static function clear(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
             exit;
         }
         
@@ -163,7 +163,7 @@ class CCart
             USession::setValue('cart', []);
         }
         // Reindirizza sempre al carrello dopo aver svuotato
-        header('Location: /GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
+        header('Location: /Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
         exit;
     }
 }

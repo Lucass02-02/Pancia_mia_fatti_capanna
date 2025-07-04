@@ -14,7 +14,6 @@ use AppORM\Entity\EUserReview;
 #[ORM\Table(name: 'clients')]
 class EClient extends EUser {
 
-
     #[ORM\Column(type: 'string', length: 50, nullable: true)]   
     private $nickname;
 
@@ -23,6 +22,7 @@ class EClient extends EUser {
 
     #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'clients')]
     private Collection $reviews;
+
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $receivesNotifications;
     
@@ -36,8 +36,8 @@ class EClient extends EUser {
 
 
     //constructor
-    public function __construct($name, $surname, $birthDate, $email, $password, $nickname ) {
-        parent::__construct( $name, $surname, $email, $password);
+    public function __construct($name, $surname, $birthDate, $email, $password, $phoneNumber,  $nickname ) {
+        parent::__construct( $name, $surname, $birthDate, $email, $password, $phoneNumber);
         $this->nickname = $nickname;
         $this->loyaltyPoints = 0; 
         $this->receivesNotifications = false; 
@@ -147,4 +147,10 @@ class EClient extends EUser {
         }
         return $this;
     }
+
+    public function getReservations () {
+        return $this->reservations;
+    }
+
+    
 }

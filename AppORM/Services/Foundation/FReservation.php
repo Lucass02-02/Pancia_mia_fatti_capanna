@@ -12,9 +12,10 @@ use AppORM\Services\Foundation\FEntityManager;
 
 class FReservation {
 
+    // MODIFICA: Chiamate a FEntityManager corrette e usato EReservation::class
+
     public static function getReservationById($idReservation) {
-        $results = FEntityManager::getInstance()->retriveObject(EReservation::getEntity(), $idReservation);
-        return $results;
+        return FEntityManager::retriveObject(EReservation::class, $idReservation);
     }
 
     public static function getReservationByDate($date, $hours) {
@@ -23,13 +24,13 @@ class FReservation {
     }
 
     public static function getReservationByClient($clientId) {
-        $results = FEntityManager::getInstance()->retriveObjectOnAttribute(EReservation::getEntity(), 'client', $clientId);
-        return $results;
+        return FEntityManager::retriveObjectOnAttribute(EReservation::class, 'client', $clientId);
     }
 
     public static function getReservationListByDate($date) {
-        $results = FEntityManager::getInstance()->retriveObjectList(EReservation::getEntity(), 'date', $date);
-        return $results;
+        // Nota: retriveObjectList non è tra i metodi che mi hai mostrato per FEntityManager.
+        // Se esiste, la sintassi corretta è questa. Altrimenti dovrai implementarlo.
+        return FEntityManager::retriveObjectList(EReservation::class, 'date', $date);
     }
 
     // Trova le prenotazioni per un tavolo specifico in una data specifica

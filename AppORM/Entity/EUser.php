@@ -124,14 +124,6 @@ abstract class EUser{
         return $this;
     }
 
-    public function getRegistrationDate(): DateTime
-    {
-        return $this->registrationDate;
-    }
-
-    public function setRegistrationDate(DateTime $registrationDate): self
-    {
-        $this->registrationDate = $registrationDate;
-        return $this;
-    }
+   
+    
 }

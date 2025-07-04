@@ -3,30 +3,20 @@
 namespace AppORM\Services\Foundation;
 
 use AppORM\Entity\EProduct;
-use AppORM\Services\Foundation\FEntityManager;
+use AppORM\Services\Foundation\FEntityManager; 
 
-class FProduct {
+class FProduct 
+{
+    private static string $table = EProduct::class;
+    private static string $key = "id";
 
-    public static function getProductById($idProduct) {
-        $results = FEntityManager::getInstance()->retriveObject(EProduct::getEntity(), $idProduct);
-        return $results;
-    }
-
-    public static function getProductByName($name) {
-        $results = FEntityManager::getInstance()->retriveObjectOnAttribute(EProduct::getEntity(), 'name', $name);
-        return $results;
-    }
-
-    public static function getProductListByAvaiability($availability) {
-        $results = FEntityManager::getInstance()->retriveObjectList(EProduct::getEntity(), 'availability', $availability);
-        return $results;
-    }
-
-    public static function getProductListByCategory($category) {
-        $results = FEntityManager::getInstance()->retriveObjectList(EProduct::getEntity(), 'category', $category);
-        return $results;
-    }
-
-
-
+    public static function getTable(): string { return self::$table; }
+    public static function getKey(): string { return self::$key; }
+    public static function getClass(): string { return self::class; }
+    public static function saveObj(EProduct $product): bool { return FEntityManager::saveObject($product); }
+    public static function getObj(int $id): ?EProduct { return FEntityManager::retriveObject(self::getTable(), $id); }
+    public static function setAvailability(EProduct $product, bool $availability): bool { $product->setAvailability($availability); return self::saveObj($product); }
+    public static function deleteObj(EProduct $product): bool { return FEntityManager::deleteObject($product); }
+    public static function selectAll(): array { return FEntityManager::selectAll(self::getTable()); }
+    public static function fetchAll(): array{ return FEntityManager::selectAll(EProduct::class);}
 }

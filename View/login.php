@@ -43,7 +43,7 @@
             <div class="error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=login" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/index.php?c=client&a=login" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>
@@ -54,7 +54,7 @@
             </div>
             <button type="submit">Accedi</button>
         </form>
-        <a href="/GitHub/Pancia_mia_fatti_capanna/" class="button-link">Torna alla Home</a> 
+        <a href="/Pancia_mia_fatti_capanna/" class="button-link">Torna alla Home</a> 
     </div>
 </body>
 </html>

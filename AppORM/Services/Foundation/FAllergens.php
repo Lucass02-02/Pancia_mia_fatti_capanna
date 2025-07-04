@@ -81,7 +81,7 @@ class FAllergens
      */
     public static function deleteObj(EAllergens $allergen): bool
     {
-        return FEntityManager::deleteObj($allergen);
+        return FEntityManager::deleteObject($allergen);
     }
 
     /**
@@ -94,6 +94,6 @@ class FAllergens
     }
      public static function fetchAll(): array
     {
-        return FEntityManager::retrieveAll(EAllergens::class);
+        return FEntityManager::selectAll(EAllergens::class);
     }
 }

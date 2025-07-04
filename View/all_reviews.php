@@ -46,7 +46,7 @@
             <p class="no-reviews">Non ci sono ancora recensioni da mostrare.</p>
         <?php endif; ?>
         
-        <a class="back-link" href="/GitHub/Pancia_mia_fatti_capanna/">Torna alla Home</a>
+        <a class="back-link" href="/Pancia_mia_fatti_capanna/">Torna alla Home</a>
     </div>
 
 </body>

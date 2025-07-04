@@ -29,7 +29,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=registration" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/index.php?c=client&a=registration" method="POST">
             <div class="form-group">
                 <label for="name">Nome</label>
                 <input type="text" id="name" name="name" required>
@@ -53,7 +53,7 @@
             <button type="submit">Registrati</button>
         </form>
         <nav>
-            <a href="/GitHub/Pancia_mia_fatti_capanna/">Torna alla Home</a>
+            <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a>
         </nav>
     </div>
 </body>

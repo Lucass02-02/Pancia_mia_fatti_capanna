@@ -20,7 +20,7 @@
         <?php if (isset($error)): ?>
             <p class="error"><?php echo htmlspecialchars($error); ?></p>
         <?php endif; ?>
-        <form action="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview" method="POST">
             <div>
                 <label for="rating">Voto (da 1 a 5)</label>
                 <select id="rating" name="rating" required>
