@@ -1,5 +1,5 @@
 <?php
-namespace AppORM\Services\Foundation; 
+namespace AppORM\Services\Foundation;
 
 use AppORM\Entity\EUserReview;
 use AppORM\Entity\EClient;
@@ -11,9 +11,8 @@ class FUserReview
     private static string $key = "id";
 
     public static function getTable(): string { return self::$table; }
-    public static function getKey(): string { return self::$key; }
+    public static function getKey(): string { return self::class; }
     public static function getClass(): string { return self::class; }
-
 
     public static function getObj(int $id): ?EUserReview
     {
@@ -27,11 +26,16 @@ class FUserReview
 
     public static function deleteObj(EUserReview $review): bool
     {
-        return FEntityManager::deleteObj($review);
+        // Se FEntityManager non ha deleteObj, ma removeObject, usa quello
+        return FEntityManager::removeObject($review); 
     }
 
-    public static function getReviewsByClient(EClient $client): array
+    /**
+     * Recupera tutte le recensioni presenti nel database.
+     * @return array Un array di oggetti EUserReview.
+     */
+    public static function fetchAll(): array
     {
-        return FEntityManager::retriveObjectList(self::getTable(), 'user', $client->getId());
+        return FEntityManager::retrieveAll(self::getTable());
     }
 }

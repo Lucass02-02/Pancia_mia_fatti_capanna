@@ -19,9 +19,10 @@ use AppORM\Services\Utility\USession;
 <body>
     <h1><?php echo htmlspecialchars($titolo); ?></h1>
     <p><?php echo htmlspecialchars($messaggio); ?></p>
-    <nav>
+<nav>
         <a href="/GitHub/Pancia_mia_fatti_capanna/">Home</a> |
         <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Visualizza Menù</a> |
+        <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=review&a=showAll">Vedi le Recensioni</a> |
 
         <?php if (USession::isSet('user_id')): ?>
             <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=cart&a=view">Carrello</a> | <a href="/GitHub/Pancia_mia_fatti_capanna/index.php?c=client&a=profile">Mio Profilo</a> |

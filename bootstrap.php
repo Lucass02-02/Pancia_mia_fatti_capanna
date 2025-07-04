@@ -1,4 +1,4 @@
-<?php // File: bootstrap.php
+<?php // File: bootstrap.php (Versione Definitiva Corretta)
 
 // Carica l'autoloader di Composer
 require_once 'vendor/autoload.php';
@@ -10,15 +10,20 @@ use AppORM\Services\Foundation\FEntityManager;
 
 // --- 1. Configurazione di Doctrine ---
 $entityPaths = [__DIR__ . '/AppORM/Entity'];
-$isDevMode = true;
-$proxyDir = null;
-$cache = null;
+$isDevMode = true; // Ideale per lo sviluppo
 
+// --- PUNTO CHIAVE DELLA SOLUZIONE ---
+// Questa riga è FONDAMENTALE. Deve puntare alla tua cartella locale, non essere null.
+$proxyDir = __DIR__ . '/AppORM/Proxies';
+
+$cache = null; // Per lo sviluppo non usiamo cache
+
+// La configurazione ora usa la variabile $proxyDir aggiornata
 $config = ORMSetup::createAttributeMetadataConfiguration($entityPaths, $isDevMode, $proxyDir, $cache);
 
 // --- 2. Configurazione del Database ---
 $connectionParams = [
-    'dbname'   => 'testdb', // <-- MODIFICA ESEGUITA QUI!
+    'dbname'   => 'testdb',
     'user'     => 'root',
     'password' => '',
     'host'     => 'localhost',
