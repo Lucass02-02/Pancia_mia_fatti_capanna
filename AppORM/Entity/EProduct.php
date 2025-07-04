@@ -2,6 +2,7 @@
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 enum ProductCategory: string {
     case ANTIPASTO = 'antipasto';
@@ -37,13 +38,14 @@ class EProduct {
     #[ORM\Column(type: 'string', length: 50, nullable: false, enumType: ProductCategory::class)]
     private ProductCategory $category;
 
-    #[ORM\ManyToMany(targetEntity: EOrder::class, inversedBy: 'products')]
-    #[ORM\JoinTable(name: 'order_products')]
-    private Collection $orders;
+    #[ORM\OneToMany(targetEntity: EOrderItem::class, mappedBy: 'product', cascade: ['persist'])]
+    private Collection $orderItems;
 
-    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products', cascade: ['persist'])]
     #[ORM\JoinTable(name: 'product_allergens')]
     private Collection $allergens;
+
+    private static $entity = EProduct::class;
 
     //constructor
     public function __construct($name, $description, $cost, ProductCategory $category) {
@@ -51,12 +53,13 @@ class EProduct {
         $this->name = $name;
         $this->description = $description;
         $this->cost = $cost;
+        $this->availability = true;
     }   
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdProduct() {
@@ -87,6 +90,10 @@ class EProduct {
         $this->cost = $cost;
     }
 
+    public function isAvailable(): bool {
+        return $this->availability;
+    }
+
     public function getCategory(): ProductCategory {
         return $this->category;
     }
@@ -95,5 +102,11 @@ class EProduct {
         $this->category = $category;
     }
 
-
+    public function getOrderItems(): Collection {
+        return $this->orderItems;
+    }
+    
+    public function setOrderItems(Collection $orderItems) {
+        $this->orderItems = $orderItems;
+    }
 }

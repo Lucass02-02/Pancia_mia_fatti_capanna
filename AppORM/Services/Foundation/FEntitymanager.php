@@ -1,10 +1,14 @@
 <?php
 
-require_once __DIR__ . '/../../bootstrap.php';
+
+namespace AppORM\Services\Foundation;
+require_once __DIR__ . '/../../../bootstrap.php';
+
+
 
 class FEntityManager{
     private static $instance;
-    private $entityManager;
+    private static $entityManager;
 
     private function __construct() {
         self::$entityManager = getEntityManager();
@@ -28,7 +32,7 @@ class FEntityManager{
             $object = self::$entityManager->find($class, $id);
             return $object;
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             print "ERROR: " . $e->getMessage();
             return null;
         }
@@ -40,7 +44,7 @@ class FEntityManager{
             $object = self::$entityManager->getRepository($class)->findOneBy([$field => $id]);
             return $object;
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             print "ERROR: " . $e->getMessage();
             return null;
         }
@@ -55,7 +59,7 @@ class FEntityManager{
             $results = $query->getResult();
             return $results;
         }
-        catch (Exception $e) {
+        catch (\Exception $e) {
             print "ERROR: " . $e->getMessage();
             return [];
         }
@@ -72,14 +76,14 @@ class FEntityManager{
             }else{
                 return array();
             }
-        }catch(Exception $e){
+        }catch(\Exception $e){
                 print "ERROR " . $e->getMessage();
                 return null;
         }
     }
 
     // Method to return an object based on two attributes
-    public static function retriveObjOnTwoAttributes($table, $field1, $id1, $field2, $id2)
+    public static function retriveObjectOnTwoAttributes($table, $field1, $id1, $field2, $id2)
     {
         try{
             $dql = "SELECT e FROM " . $table . " e WHERE e." . $field1 . " = :id1 AND e." . $field2 . " = :id2";
@@ -88,7 +92,7 @@ class FEntityManager{
             $query->setParameter('id2', $id2);
             $result = $query->getOneOrNullResult();
             return $result;
-        }catch(Exception $e){
+        }catch(\Exception $e){
             self::$entityManager->getConnection();
             print "ERROR: " . $e->getMessage();
             return false;
@@ -108,7 +112,7 @@ class FEntityManager{
             }else{
                 return array();
             }
-        }catch(Exception $e){
+        }catch(\Exception $e){
             print "ERROR " . $e->getMessage();
             return null;
         }
@@ -125,7 +129,7 @@ class FEntityManager{
 
             $result = $query->getSingleScalarResult();
             return $result;
-        }catch(Exception $e){
+        }catch(\Exception $e){
             print "ERROR " . $e->getMessage();
             return [];
         }
@@ -144,7 +148,7 @@ class FEntityManager{
             }else{
                 return false;
             }
-        }catch(Exception $e){
+        }catch(\Exception $e){
                 echo "ERROR " . $e->getMessage();
                 return null;
             }
@@ -160,10 +164,11 @@ class FEntityManager{
                 self::$entityManager->flush();
                 self::$entityManager->getConnection()->commit();
                 return true;
-        }catch(Exception $e){
-                self::$entityManager->getConnection()->rollBack();
+        }catch(\Exception $e){
+                self::$entityManager->getConnection();
                 print "ERROR: " . $e->getMessage();
                 return false;
+                
             }
     }
 
@@ -175,7 +180,7 @@ class FEntityManager{
             self::$entityManager->flush();
             self::$entityManager->getConnection()->commit();
             return true;
-        }catch(Exception $e){
+        }catch(\Exception $e){
             self::$entityManager->getConnection();
             print "ERROR: " . $e->getMessage();
             return false;
@@ -189,7 +194,7 @@ class FEntityManager{
             $query = self::$entityManager->createQuery($dql);
             $result = $query->getResult();
             return $result;
-        }catch(Exception $e){
+        }catch(\Exception $e){
             print "ERROR " . $e->getMessage();
             return [];
         }

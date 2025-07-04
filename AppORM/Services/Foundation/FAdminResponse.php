@@ -1,5 +1,9 @@
 <?php
 
+use AppORM\Entity\EAdminResponse;
+use AppORM\Services\Foundation\FEntityManager;
+
+
 class FAdminResponse {
 
     public static function getAdminResponseById($idResponse) {

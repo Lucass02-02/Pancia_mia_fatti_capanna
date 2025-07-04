@@ -2,6 +2,7 @@
 
 namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\Common\Collections\Collection;
 
 
 #[ORM\Entity]
@@ -18,8 +19,10 @@ class EAllergens {
     #[ORM\Column(type: 'string', length: 50, nullable: false)]
     private string $allergenType;
 
-    #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'allergens')]
+    #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'allergens', cascade: ['persist'])]
     private Collection $product;
+
+    private static $entity = EAllergens::class;
 
     //constructor
 
@@ -28,8 +31,8 @@ class EAllergens {
     }
 
     //methods getters and setters
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
 

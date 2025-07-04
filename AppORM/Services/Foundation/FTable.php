@@ -1,6 +1,15 @@
 <?php
 
+require_once __DIR__ . '/../../Entity/ETable.php';
+require_once __DIR__ . '/FEntityManager.php';
+use AppORM\Entity\ETable;
+use AppORM\Services\Foundation\FEntityManager;
+
+
 class FTable {
+
+    // Add the reservations property
+    protected $reservations = [];
 
     public static function getTableById($idTable) {
         $results = FEntityManager::getInstance()->retriveObject(ETable::getEntity(), $idTable);
@@ -16,4 +25,6 @@ class FTable {
         $results = FEntityManager::getInstance()->retriveObjectList(ETable::getEntity(), 'state', $state);
         return $results;
     }
+
+   
 }

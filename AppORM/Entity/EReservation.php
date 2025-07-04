@@ -1,7 +1,19 @@
 <?php
 
 namespace AppORM\Entity;
+
+use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
+
+enum ReservationStatus: string {
+    case CREATED = 'created';
+    case APPROVED = 'approved';
+    case ORDER_IN_PROGRESS = 'order_in_progress';
+    case ORDER_COMPLETED = 'order_completed';
+    case ENDED = 'ended';
+    case CANCELED = 'canceled';
+}
 
 #[ORM\Entity]
 #[ORM\Table(name: 'reservations')]
@@ -17,6 +29,9 @@ class EReservation {
     #[ORM\Column(type: 'date', nullable: false)]
     private $date;
 
+    #[ORM\Column(type: 'integer', nullable: false)]
+    private $duration;
+
     #[ORM\Column(type: 'time', nullable: false)]
     private $hours;
 
@@ -29,27 +44,45 @@ class EReservation {
     #[ORM\Column(type: 'string', length: 50, nullable: true)]
     private $nameReservation;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reservations')]
+    #[ORM\Column(type: 'string', length: 20, nullable: false, enumType: ReservationStatus::class)]
+    private ReservationStatus $status;
+
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]        
     private EClient $client;
 
-    #[ORM\ManyToOne(targetEntity: ETable::class, inversedBy: 'reservations')]
-    #[ORM\JoinColumn(name: 'table_id', referencedColumnName: 'idTable')]    
-    private ETable $table;
+    #[ORM\OneToMany(targetEntity: EOrder::class, mappedBy: 'reservation', cascade: ['persist'])]
+    private Collection $orders;
+
+    #[ORM\OneToMany(targetEntity: EReservationTable::class, mappedBy: 'reservation', cascade: ['persist'])]
+    private Collection $table;
+
+    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'reservations', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'restaurant_hall_id', referencedColumnName: 'idHall')]
+    private ERestaurantHall $restaurantHall;
+
+    #[ORM\ManyToOne(targetEntity: ETurn::class, inversedBy: 'reservations', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'turn_id', referencedColumnName: 'idTurn')]
+    private ETurn $turn;
+
+    private static $entity = EReservation::class;
 
     //constructor
-    public function __construct( $date, $hours, $peopleNum, $note, $nameReservation) {
+    public function __construct( $date, $hours, $duration, $peopleNum, $note, $nameReservation) {
         $this->date = $date;
         $this->hours = $hours;
+        $this->duration = $duration;
         $this->peopleNum = $peopleNum;
         $this->note = $note;
         $this->nameReservation = $nameReservation;
+        $this->table = new ArrayCollection(); 
+        $this->status = ReservationStatus::CREATED;
     }
 
     //methods getters and setters
 
-    public function getEntity() {
-        return self::class;
+    public static function getEntity() {
+        return self::$entity;
     }
 
     public function getIdReservation() {
@@ -70,6 +103,14 @@ class EReservation {
 
     public function setHours($hours) {
         $this->hours = $hours;
+    }
+
+    public function getDuration() {
+        return $this->duration;
+    }
+
+    public function setDuration($duration) {
+        $this->duration = $duration;
     }
 
     public function getPeopleNum() {
@@ -96,5 +137,51 @@ class EReservation {
         $this->nameReservation = $nameReservation;
     }
 
+    public function getStatus(): ReservationStatus {
+        return $this->status;
+    }
+
+    public function setStatus(ReservationStatus $status): void {
+        $this->status = $status;
+    }
+
+    public function getClient(): EClient {
+        return $this->client;
+    }
+
+    public function setClient(EClient $client): void {
+        $this->client = $client;
+    }
+
+    public function getTable() {
+        return $this->table;
+    }
     
+    public function getOrders(): Collection {
+        return $this->orders;
+    }
+
+    public function getRestaurantHall(): ERestaurantHall {
+        return $this->restaurantHall;
+    }
+
+    public function setRestaurantHall(ERestaurantHall $restaurantHall): void {
+        $this->restaurantHall = $restaurantHall;
+    }
+
+    public function getTurn(): ETurn {
+        return $this->turn;
+    }
+
+    public function setTurn(ETurn $turn): void {
+        $this->turn = $turn;
+    }
+
+    public function addTableReservation(EReservationTable $reservationTable): void {
+        if (!$this->table->contains($reservationTable)) {
+            $this->table->add($reservationTable);
+            $reservationTable->setReservation($this); // Ensure the reservation is set in the table reservation
+        }
+    }
+
 }

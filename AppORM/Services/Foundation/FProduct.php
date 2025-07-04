@@ -1,5 +1,9 @@
 <?php
 
+namespace AppORM\Services\Foundation;
+
+use AppORM\Entity\EProduct;
+use AppORM\Services\Foundation\FEntityManager;
 
 class FProduct {
 
