@@ -7,9 +7,9 @@ use AppORM\Services\Foundation\FEntityManager;
 
 class FRestaurantHall {
 
+    // MODIFICA: Chiamata a FEntityManager corretta e usato ERestaurantHall::class
     public static function getRestaurantHallById($idRestaurantHall) {
-        $results = FEntityManager::getInstance()->retriveObject(ERestaurantHall::getEntity(), $idRestaurantHall);
-        return $results;
+        return FEntityManager::retriveObject(ERestaurantHall::class, $idRestaurantHall);
     }
 
     public static function getRestaurantHallByNumPlaces($totalPlaces) {

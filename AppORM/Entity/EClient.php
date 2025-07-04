@@ -1,99 +1,150 @@
 <?php
+// AppORM/Entity/EClient.php
 
 namespace AppORM\Entity;
+
 use Doctrine\ORM\Mapping as ORM;
-use AppORM\Entity\EUser;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use DateTime;
+use AppORM\Entity\EUserReview;
+
 
 #[ORM\Entity]
 #[ORM\Table(name: 'clients')]
 class EClient extends EUser {
 
-    
-    #[ORM\Column(type: 'json', length: 50, nullable: false)]
-    private array $savedMethods = [];
 
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]   
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]   
     private $nickname;
 
-    #[ORM\OneToMany(targetEntity: ECreditCard::class, mappedBy: 'clients', cascade: ['persist', 'remove'])]
-    private Collection $creditCards;
+    #[ORM\Column(type: 'integer', nullable: false)]
+    private int $loyaltyPoints;
 
-    #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'clients', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'clients')]
     private Collection $reviews;
+    #[ORM\Column(type: 'boolean', nullable: false)]
+    private bool $receivesNotifications;
     
-    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'clients', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'clients')]
     private Collection $reservations;
 
-    #[ORM\OneToMany(targetEntity: EOrder::class, mappedBy: 'clients', cascade: ['persist'])]
-    private Collection $orders;
+    #[ORM\OneToMany(targetEntity: ECreditCard::class, mappedBy: 'client', cascade: ['persist', 'remove'])]
+    private Collection $creditCards;
 
     private static $entity = EClient::class;
 
 
     //constructor
-    public function __construct($name, $surname, $birthDate,  $email, $password, $phoneNumber, $savedMethods, $nickname ) {
-        parent::__construct( $name, $surname,$birthDate, $email, $password, $phoneNumber);
-        $this->savedMethods = [];
+    public function __construct($name, $surname, $birthDate, $email, $password, $nickname ) {
+        parent::__construct( $name, $surname, $email, $password);
         $this->nickname = $nickname;
+        $this->loyaltyPoints = 0; 
+        $this->receivesNotifications = false; 
+        $this->reviews = new ArrayCollection();
+        $this->reservations = new ArrayCollection();
+        $this->creditCards = new ArrayCollection();
     }
 
     
     //methods getters and setters
 
-    public static function getEntity() {
+    public function getEntity() {
         return self::$entity;
     }
 
-    public function getSavedMethods() {
-        return $this->savedMethods;
-    }
+    
 
-    public function setSavedMethods(array $savedMethods) {
-        $this->savedMethods = $savedMethods;
-    }
+    // Metodi specifici di EClient (getter e setter)
 
-    public function getNickname()
+    public function getNickname(): ?string
     {
         return $this->nickname;
     }
 
-    public function setNickname($nickname)
+    public function setNickname(?string $nickname): self
     {
         $this->nickname = $nickname;
+        return $this;
     }
 
-    public function getCreditCards(): Collection {
-        return $this->creditCards;
+    public function getReceivesNotifications(): bool
+    {
+        return $this->receivesNotifications;
     }
 
-    public function setCreditCards(Collection $creditCards) {
-        $this->creditCards = $creditCards;
+    public function setReceivesNotifications(bool $receivesNotifications): self
+    {
+        $this->receivesNotifications = $receivesNotifications;
+        return $this;
     }
 
-    public function getReviews(): Collection {
+    public function getLoyaltyPoints(): int
+    {
+        return $this->loyaltyPoints;
+    }
+
+    public function setLoyaltyPoints(int $loyaltyPoints): self
+    {
+        $this->loyaltyPoints = $loyaltyPoints;
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, EUserReview>
+     */
+    public function getReviews(): Collection
+    {
         return $this->reviews;
     }
 
-    public function setReviews(Collection $reviews) {
-        $this->reviews = $reviews;
+    public function addReview(EUserReview $review): self
+    {
+        if (!$this->reviews->contains($review)) {
+            $this->reviews->add($review);
+            $review->setUser($this); // Assicura la coerenza bidirezionale
+        }
+        return $this;
     }
 
-    public function getReservations(): Collection {
-        return $this->reservations;
+    public function removeReview(EUserReview $review): self
+    {
+        if ($this->reviews->removeElement($review)) {
+            // Se EUserReview::$user è nullable, potresti fare:
+            // if ($review->getUser() === $this) {
+            //     $review->setUser(null);
+            // }
+            // Dato che EUserReview::$user non è nullable, non tentare di settarlo a null qui.
+            // L'eliminazione dell'entità EUserReview stessa è il modo corretto di rimuovere il legame.
+            // Il cascade 'remove' sull'OneToMany del client gestirà l'eliminazione della review.
+        }
+        return $this;
     }
 
-    public function setReservations(Collection $reservations) {
-        $this->reservations = $reservations;
+    /**
+     * @return Collection<int, ECreditCard>
+     */
+    public function getCreditCards(): Collection
+    {
+        return $this->creditCards;
     }
 
-    public function getOrders(): Collection {
-        return $this->orders;
+    public function addCreditCard(ECreditCard $creditCard): self
+    {
+        if (!$this->creditCards->contains($creditCard)) {
+            $this->creditCards->add($creditCard);
+            $creditCard->setClient($this); // Assicura la coerenza bidirezionale
+        }
+        return $this;
     }
 
-    public function setOrders(Collection $orders) {
-        $this->orders = $orders;
+    public function removeCreditCard(ECreditCard $creditCard): self
+    {
+        if ($this->creditCards->removeElement($creditCard)) {
+            // Se ECreditCard::$client non è nullable, non possiamo settarlo a null.
+            // L'eliminazione dell'entità ECreditCard stessa è il modo corretto di rimuovere il legame.
+            // Il cascade 'remove' sull'OneToMany del client gestirà l'eliminazione della credit card.
+        }
+        return $this;
     }
-
-
 }

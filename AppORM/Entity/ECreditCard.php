@@ -1,102 +1,147 @@
 <?php
+// AppORM/Entity/ECreditCard.php
+
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+/**
+ * Rappresenta un metodo di pagamento tokenizzato, non una carta di credito reale.
+ * NON contiene dati sensibili come il numero completo della carta o il CVV.
+ */
 #[ORM\Entity]
 #[ORM\Table(name: 'credit_cards')]
-
-class ECreditCard {
-
-    //attributes
-
+class ECreditCard
+{
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
-    private $idCard;
+    private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private $nominative;
-
-    #[ORM\Column(type: 'integer', length: 16, nullable: false)]
-    private $number;
-
-    #[ORM\Column(type: 'integer', length: 3, nullable: false)]
-    private $CVV;
-
-    #[ORM\Column(type: 'date', nullable: false)]
-    private $expirationDate;
-
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
-    private $name;
-
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'credit_cards', cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'creditCards')]
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false, onDelete: 'CASCADE')]
     private EClient $client;
 
-    private static $entity = ECreditCard::class;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $paymentGatewayToken; // Token del gateway (es. "pm_...")
 
-    //constructor
-    public function __construct($nominative, $number, $CVV, $expirationDate, $name) {
-        $this->nominative = $nominative;
-        $this->number = $number;
-        $this->CVV = $CVV;
-        $this->expirationDate = $expirationDate;
-        $this->name = $name;
+    #[ORM\Column(type: 'string', length: 50)]
+    private string $brand; // Es. "Visa", "MasterCard"
+
+    #[ORM\Column(type: 'string', length: 4)]
+    private string $last4; // Ultime 4 cifre della carta
+
+    #[ORM\Column(type: 'integer')]
+    private int $expMonth; // Mese di scadenza (es. 12)
+
+    #[ORM\Column(type: 'integer')]
+    private int $expYear; // Anno di scadenza (es. 2028)
+
+    #[ORM\Column(type: 'string', length: 50, nullable: true)]
+    private ?string $cardName; // Nome amichevole (es. "La mia Visa Lavoro")
+
+
+    /**
+     * Costruttore aggiornato per accettare solo dati sicuri e tokenizzati.
+     */
+    public function __construct(
+        EClient $client,
+        string $paymentToken,
+        string $brand,
+        string $last4,
+        int $expMonth,
+        int $expYear,
+        ?string $cardName = null
+    ) {
+        $this->client = $client;
+        $this->paymentGatewayToken = $paymentToken;
+        $this->brand = $brand;
+        $this->last4 = $last4;
+        $this->expMonth = $expMonth;
+        $this->expYear = $expYear;
+        $this->cardName = $cardName;
     }
 
 
-    //methods getters and setters
-
-    public static function getEntity() {
-        return self::$entity;
+    public function getId(): ?int
+    {
+        return $this->id;
     }
 
-    public function getIdCard() {
-        return $this->idCard;
-    }
-    
-    public function getNominative() {
-        return $this->nominative;
+    public function getClient(): EClient
+    {
+        return $this->client;
     }
 
-    public function setNominative($nominative) {
-        $this->nominative = $nominative;
+    public function setClient(EClient $client): self
+    {
+        $this->client = $client;
+        return $this;
     }
 
-    public function getNumber() {
-        return $this->number;
+    public function getPaymentGatewayToken(): string
+    {
+        return $this->paymentGatewayToken;
     }
 
-    public function setNumber($number) {
-        $this->number = $number;
+    public function setPaymentGatewayToken(string $paymentGatewayToken): self
+    {
+        $this->paymentGatewayToken = $paymentGatewayToken;
+        return $this;
     }
 
-    public function getCVV() {
-        return $this->CVV;
+    public function getBrand(): string
+    {
+        return $this->brand;
     }
 
-    public function setCVV($CVV) {
-        $this->CVV = $CVV;
+    public function setBrand(string $brand): self
+    {
+        $this->brand = $brand;
+        return $this;
     }
 
-    public function getExpirationDate() {
-        return $this->expirationDate;
+    public function getLast4(): string
+    {
+        return $this->last4;
     }
 
-    public function setExpirationDate($expirationDate) {
-        $this->expirationDate = $expirationDate;
+    public function setLast4(string $last4): self
+    {
+        $this->last4 = $last4;
+        return $this;
     }
 
-    public function getName() {
-        return $this->name;
+    public function getExpMonth(): int
+    {
+        return $this->expMonth;
     }
 
-    public function setName($name) {
-        $this->name = $name;
+    public function setExpMonth(int $expMonth): self
+    {
+        $this->expMonth = $expMonth;
+        return $this;
     }
 
-  
-    
-    
+    public function getExpYear(): int
+    {
+        return $this->expYear;
+    }
+
+    public function setExpYear(int $expYear): self
+    {
+        $this->expYear = $expYear;
+        return $this;
+    }
+
+    public function getCardName(): ?string
+    {
+        return $this->cardName;
+    }
+
+    public function setCardName(?string $cardName): self
+    {
+        $this->cardName = $cardName;
+        return $this;
+    }
 }

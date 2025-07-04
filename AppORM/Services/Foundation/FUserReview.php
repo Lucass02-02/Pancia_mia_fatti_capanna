@@ -1,30 +1,41 @@
 <?php
+namespace AppORM\Services\Foundation;
 
-require_once __DIR__ . '/../Entity/EUserReview.php';
 use AppORM\Entity\EUserReview;
-require_once __DIR__ . '/FEntityManager.php';
-use AppORM\Services\Foundation\FEntityManager;
+use AppORM\Entity\EClient;
+use DateTime;
 
-class FUserReview {
+class FUserReview
+{
+    private static string $table = EUserReview::class; 
+    private static string $key = "id";
 
-    public static function getUserReviewById($id) {
-        $results = FEntityManager::getInstance()->retriveObject(EUserReview::getEntity(), $id);
-        return $results;
+    public static function getTable(): string { return self::$table; }
+    public static function getKey(): string { return self::class; }
+    public static function getClass(): string { return self::class; }
+
+    public static function getObj(int $id): ?EUserReview
+    {
+        return FEntityManager::retriveObject(self::getTable(), $id);
     }
 
-    public static function getUserReviewByClient($user) {
-        $results = FEntityManager::getInstance()->retriveObjectOnAttribute(EUserReview::getEntity(), 'user', $user);
-        return $results;
+    public static function saveObj(EUserReview $review): bool
+    {
+        return FEntityManager::saveObject($review);
     }
 
-    public static function getUserReviewListByClient($user) {
-        $results = FEntityManager::getInstance()->retriveObjectList(EUserReview::getEntity(), 'user', $user);
-        return $results;
+    public static function deleteObj(EUserReview $review): bool
+    {
+        // Se FEntityManager non ha deleteObj, ma removeObject, usa quello
+        return FEntityManager::removeObject($review); 
     }
 
-    public static function getUserReviewListByVote($vote) {
-        $results = FEntityManager::getInstance()->retriveObjectList(EUserReview::getEntity(), 'vote', $vote);
-        return $results;
+    /**
+     * Recupera tutte le recensioni presenti nel database.
+     * @return array Un array di oggetti EUserReview.
+     */
+    public static function fetchAll(): array
+    {
+        return FEntityManager::retrieveAll(self::getTable());
     }
-
 }

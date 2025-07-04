@@ -1,91 +1,91 @@
 <?php
+// AppORM/Entity/EUserReview.php
 
 namespace AppORM\Entity;
-use Doctrine\ORM\Mapping as ORM;
-use Doctrine\Common\Collections\Collection;
 
+use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user_reviews')]
-class EUserReview {
-
-    //attributes
+class EUserReview
+{
     #[ORM\Id]
-    #[ORM\Column(type: 'integer', nullable: false)]
+    #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     private $id;
 
-    #[ORM\Column(type: 'text', nullable: false)]
-    private $description;
+    // Questa è la relazione che è stata modificata con cascade: ['persist']
+    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews', cascade: ['persist'])]
+    #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false)]
+    private EClient $user;
 
-    #[ORM\Column(type: 'integer', nullable: false)]
-    private $vote;
+    #[ORM\Column(type: 'string', length: 255)]
+    private string $comment;
 
-    #[ORM\Column(type: 'date', nullable: false)]
-    private $date;
+    #[ORM\Column(type: 'integer')]
+    private int $rating; // Esempio: da 1 a 5
 
-    #[ORM\Column(type: 'time', nullable: false)]
-    private $hour;
+    #[ORM\Column(type: 'datetime')]
+    private DateTime $reviewDate;
 
-    #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'user_reviews', cascade: ['persist'])]
-    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
-    private EUser $user;
-
-    #[ORM\ManyToMany(targetEntity: EAdminResponse::class, inversedBy: 'user_reviews', cascade: ['persist'])]
-    #[ORM\JoinTable(name: 'user_review_responses')]
-    private Collection $adminResponses;
-
-    private static $entity = EUserReview::class;
-
-
-    //constructor
-
-    public function __construct( $description, $vote, $date, $hour) {
-        $this->description = $description;
-        $this->vote = $vote;
-        $this->date = $date;
-        $this->hour = $hour;
+    // Costruttore
+    public function __construct(EClient $user, string $comment, int $rating)
+    {
+        $this->user = $user;
+        $this->comment = $comment;
+        $this->rating = $rating;
+        $this->reviewDate = new DateTime();
     }
 
-    //methods getters and setters
-
-    public static function getEntity() {
-        return self::$entity;
-    }
-
-    public function getIdReview() {
+    // Metodi Getter
+    public function getId(): ?int
+    {
         return $this->id;
     }
-    public function getDescription() {
-        return $this->description;
+
+    public function getUser(): EClient
+    {
+        return $this->user;
     }
 
-    public function setDescription($description) {
-        $this->description = $description;
+    public function getComment(): string
+    {
+        return $this->comment;
     }
 
-    public function getVote() {
-        return $this->vote;
+    public function getRating(): int
+    {
+        return $this->rating;
     }
 
-    public function setVote($vote) {
-        $this->vote = $vote;
+    public function getReviewDate(): DateTime
+    {
+        return $this->reviewDate;
     }
 
-    public function getDate() {
-        return $this->date;
+    // Metodi Setter
+    public function setUser(EClient $user): self
+    {
+        $this->user = $user;
+        return $this;
     }
 
-    public function setDate($date) {
-        $this->date = $date;
+    public function setComment(string $comment): self
+    {
+        $this->comment = $comment;
+        return $this;
     }
 
-    public function getHour() {
-        return $this->hour;
+    public function setRating(int $rating): self
+    {
+        $this->rating = $rating;
+        return $this;
     }
 
-    public function setHour($hour) {
-        $this->hour = $hour;
+    public function setReviewDate(DateTime $reviewDate): self
+    {
+        $this->reviewDate = $reviewDate;
+        return $this;
     }
-
 }

@@ -12,18 +12,15 @@ class FTable {
     protected $reservations = [];
 
     public static function getTableById($idTable) {
-        $results = FEntityManager::getInstance()->retriveObject(ETable::getEntity(), $idTable);
-        return $results;
+        return FEntityManager::retriveObject(ETable::class, $idTable);
     }
 
     public static function getTableBySeatNumber($seatNumber) {
-        $results = FEntityManager::getInstance()->retriveObjectOnAttribute(ETable::getEntity(), 'seatNumber', $seatNumber);
-        return $results;
+        return FEntityManager::retriveObjectOnAttribute(ETable::class, 'seatNumber', $seatNumber);
     }
 
     public static function getTableListByState($state) {
-        $results = FEntityManager::getInstance()->retriveObjectList(ETable::getEntity(), 'state', $state);
-        return $results;
+        return FEntityManager::retriveObjectList(ETable::class, 'state', $state);
     }
 
    
