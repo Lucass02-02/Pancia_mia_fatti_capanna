@@ -391,4 +391,6 @@ class FPersistentManager {
             'total' => FOrder::calculateTotalPrice($order),
         ];
     }
+
+    public static function boh() {}
 }
