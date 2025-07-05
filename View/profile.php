@@ -47,7 +47,7 @@ use AppORM\Entity\ECreditCard;
                             <strong><?php echo htmlspecialchars($card->getBrand()); ?></strong> che termina con **** <?php echo htmlspecialchars($card->getLast4()); ?>
                             (Scade: <?php echo htmlspecialchars($card->getExpMonth() . '/' . $card->getExpYear()); ?>)
                         </span>
-                        <form class="delete-form" action="/Pancia_mia_fatti_capanna/index.php?c=client&a=deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
+                        <form class="delete-form" action="/Pancia_mia_fatti_capanna/client/deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
                             <input type="hidden" name="card_id" value="<?php echo $card->getId(); ?>">
                             <button type="submit">Elimina</button>
                         </form>
@@ -56,7 +56,7 @@ use AppORM\Entity\ECreditCard;
             <?php else: ?>
                 <p>Non hai ancora aggiunto nessuna carta di credito.</p>
             <?php endif; ?>
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=addCreditCard">Aggiungi una nuova carta</a>
+            <a href="/Pancia_mia_fatti_capanna/client/addCreditCard">Aggiungi una nuova carta</a>
         </div>
 
         <div class="reviews-section">
@@ -74,12 +74,12 @@ use AppORM\Entity\ECreditCard;
             <?php else: ?>
                 <p>Non hai ancora lasciato nessuna recensione.</p>
             <?php endif; ?>
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=addReview">Lascia una nuova recensione</a>
+            <a href="/Pancia_mia_fatti_capanna/client/addReview">Lascia una nuova recensione</a>
         </div>
 
         <div class="nav-links">
             <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a> |
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=logout">Logout</a>
+            <a href="/Pancia_mia_fatti_capanna/client/logout">Logout</a>
         </div>
     </div>
 </body>

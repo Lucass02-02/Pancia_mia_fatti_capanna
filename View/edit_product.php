@@ -25,7 +25,7 @@
 <body>
     <div class="container">
         <h1>Modifica Prodotto</h1>
-        <form action="/Pancia_mia_fatti_capanna/index.php?c=product&a=update" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/product/update" method="POST">
             <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
             
             <div class="form-group">
@@ -45,7 +45,7 @@
             
             <button type="submit">Salva Modifiche</button>
         </form>
-        <a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" class="nav-link">Annulla e torna al Menù</a>
+        <a href="/Pancia_mia_fatti_capanna/home/menu" class="nav-link">Annulla e torna al Menù</a>
     </div>
 </body>
 </html>

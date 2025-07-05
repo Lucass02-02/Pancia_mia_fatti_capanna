@@ -25,7 +25,7 @@
 <body>
     <div class="container">
         <h1>Crea Nuovo Prodotto</h1>
-        <form action="/Pancia_mia_fatti_capanna/index.php?c=product&a=create" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/product/create" method="POST">
             <div class="form-group">
                 <label for="name">Nome Prodotto</label>
                 <input type="text" id="name" name="name" required>
@@ -66,7 +66,7 @@
             
             <button type="submit">Crea Prodotto</button>
         </form>
-        <a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" class="nav-link">Annulla</a>
+        <a href="/Pancia_mia_fatti_capanna/home/menu" class="nav-link">Annulla</a>
     </div>
 </body>
 </html>

@@ -1,5 +1,5 @@
 <?php
-// File: View/manage_waiters.php (CODICE COMPLETO E FUNZIONANTE)
+// File: View/manage_waiters.php (CODICE COMPLETO E FUNZIONANTE CON URL AGGIUSTATI)
 /** @var \AppORM\Entity\EWaiter[] $waiters */
 /** @var \AppORM\Entity\ERestaurantHall[] $halls */
 ?>
@@ -36,7 +36,7 @@
         <h1>Gestione Camerieri</h1>
         <div class="form-section">
             <h2>Registra Nuovo Cameriere</h2>
-            <form action="/Pancia_mia_fatti_capanna/index.php?c=waiter&a=register" method="POST" class="registration-form">
+            <form action="/Pancia_mia_fatti_capanna/waiter/register" method="POST" class="registration-form">
                 <div class="form-group">
                     <label for="name">Nome</label>
                     <input type="text" id="name" name="name" placeholder="Mario" required>
@@ -99,7 +99,7 @@
                             <td><?php echo htmlspecialchars($waiter->getSerialNumber()); ?></td>
                             <td>
                                 <?php if ($waiter->getRestaurantHall()): ?>
-                                    <form class="hall-update-form" action="/Pancia_mia_fatti_capanna/index.php?c=waiter&a=updateHall" method="POST">
+                                    <form class="hall-update-form" action="/Pancia_mia_fatti_capanna/waiter/updateHall" method="POST">
                                         <input type="hidden" name="waiter_id" value="<?php echo $waiter->getId(); ?>">
                                         <select name="hall_id">
                                             <?php foreach($halls as $hall): ?>
@@ -115,7 +115,7 @@
                                 <?php endif; ?>
                             </td>
                             <td>
-                                <a href="/Pancia_mia_fatti_capanna/index.php?c=waiter&a=delete&id=<?php echo $waiter->getId(); ?>" class="delete-btn" onclick="return confirm('Sei sicuro?');">Elimina</a>
+                                <a href="/Pancia_mia_fatti_capanna/waiter/delete/<?php echo $waiter->getId(); ?>" class="delete-btn" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
                             </td>
                         </tr>
                         <?php endforeach; ?>
@@ -124,7 +124,7 @@
             </table>
         </div>
         <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=admin&a=profile">Torna al Pannello di Controllo</a>
+            <a href="/Pancia_mia_fatti_capanna/admin/profile">Torna al Pannello di Controllo</a>
         </div>
     </div>
 </body>

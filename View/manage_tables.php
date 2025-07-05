@@ -1,5 +1,5 @@
 <?php
-// File: View/manage_tables.php (CON CSS COMPLETO)
+// File: View/manage_tables.php (CON CSS COMPLETO E URL AGGIUSTATI)
 /** @var \AppORM\Entity\ETable[] $tables */
 /** @var \AppORM\Entity\ERestaurantHall[] $halls */
 use AppORM\Entity\TableState;
@@ -146,12 +146,12 @@ use AppORM\Entity\TableState;
         <h1>Gestione Tavoli</h1>
 
         <div class="top-link">
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=hall&a=manage">Gestisci Sale</a>
+            <a href="/Pancia_mia_fatti_capanna/hall/manage">Gestisci Sale</a>
         </div>
 
         <div class="form-section">
             <h2>Aggiungi Nuovo Tavolo</h2>
-            <form action="/Pancia_mia_fatti_capanna/index.php?c=table&a=create" method="POST" class="form-inline">
+            <form action="/Pancia_mia_fatti_capanna/table/create" method="POST" class="form-inline">
                 <label for="seatsNumber">Numero Posti:</label>
                 <input type="number" id="seatsNumber" name="seatsNumber" min="1" required>
                 
@@ -192,7 +192,7 @@ use AppORM\Entity\TableState;
                                 </span>
                             </td>
                             <td>
-                                <form action="/Pancia_mia_fatti_capanna/index.php?c=table&a=updateState" method="POST" class="action-form">
+                                <form action="/Pancia_mia_fatti_capanna/table/updateState" method="POST" class="action-form">
                                     <input type="hidden" name="table_id" value="<?php echo $table->getIdTable(); ?>">
                                     <select name="state">
                                         <option value="available" <?php if ($table->getState() === TableState::AVAILABLE) echo 'selected'; ?>>Disponibile</option>
@@ -203,7 +203,7 @@ use AppORM\Entity\TableState;
                                 </form>
                             </td>
                             <td>
-                                <a href="/Pancia_mia_fatti_capanna/index.php?c=table&a=delete&id=<?php echo $table->getIdTable(); ?>" class="delete-btn" onclick="return confirm('Sei sicuro di voler eliminare questo tavolo?');">Elimina</a>
+                                <a href="/Pancia_mia_fatti_capanna/table/delete/<?php echo $table->getIdTable(); ?>" class="delete-btn" onclick="return confirm('Sei sicuro di voler eliminare questo tavolo?');">Elimina</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

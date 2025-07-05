@@ -1,38 +1,49 @@
 <?php
-// File: index.php (il punto di ingresso principale)
+// File: index.php (NUOVA VERSIONE CON PRETTY URLS)
 
 // Mostra tutti gli errori (utile in fase di sviluppo)
 error_reporting(E_ALL);
 ini_set('display_errors', 1);
 
-// Carica il file di bootstrap, che configura Doctrine e l'autoloader.
-// Questo file si occupa di includere 'vendor/autoload.php', rendendo disponibili
-// tutte le classi, inclusi i controller come CClient, CHome, e il NUOVO CCart.
+// Carica il file di bootstrap, che configura tutto il resto.
 require __DIR__ . '/bootstrap.php';
 
-// Avvia la sessione per tutto il sito.
-// È cruciale che la sessione sia avviata prima di qualsiasi output HTML.
+// Avvia la sessione
 use AppORM\Services\Utility\USession;
 USession::start();
 
-// --- ROUTING DINAMICO ---
-// Recupera il nome del controller e dell'azione dall'URL.
-// Se non specificati, usa 'home' come default per entrambi.
-$controllerName = $_GET['c'] ?? 'home';
-$actionName = $_GET['a'] ?? 'home';
+// --- NUOVO ROUTING CON PRETTY URLS ---
 
-// Costruisce il nome completo della classe del controller.
-// Esempio: 'home' diventa 'AppORM\Control\CHome'
+// 1. Ottieni l'URI della richiesta (es. /Pancia_mia_fatti_capanna/client/profile?id=1)
+$requestUri = $_SERVER['REQUEST_URI'];
+
+// 2. Rimuovi eventuali query string (tutto ciò che viene dopo il '?')
+if (false !== $pos = strpos($requestUri, '?')) {
+    $requestUri = substr($requestUri, 0, $pos);
+}
+
+// 3. Rimuovi la cartella base del progetto per ottenere il percorso pulito
+//    Esempio: /Pancia_mia_fatti_capanna/client/profile -> /client/profile
+$basePath = '/Pancia_mia_fatti_capanna'; // Assicurati che corrisponda alla tua cartella
+$path = substr($requestUri, strlen($basePath));
+
+// 4. Rimuovi gli slash iniziali/finali e dividi il percorso in segmenti
+//    Esempio: /client/profile/ -> ['client', 'profile']
+$segments = explode('/', trim($path, '/'));
+
+// 5. Determina il controller e l'azione dai segmenti
+$controllerName = $segments[0] ?: 'home'; // Se il percorso è vuoto, usa 'home'
+$actionName = $segments[1] ?? 'home';     // Se manca il secondo pezzo, usa 'home'
+
+// Costruisce il nome completo della classe del controller
 // Esempio: 'client' diventa 'AppORM\Control\CClient'
-// Esempio: 'cart' diventa 'AppORM\Control\CCart'
 $controllerClass = 'AppORM\\Control\\C' . ucfirst($controllerName);
 
-// Verifica se la classe del controller esiste e se il metodo (azione) esiste al suo interno.
-// Se entrambi esistono, chiama il metodo staticamente.
-// Grazie all'autoloader caricato in bootstrap.php, non c'è bisogno di un 'require_once' esplicito
-// per ogni controller (CHome, CClient, CCart, etc.).
+// Il resto della logica è identico: verifica e chiama il metodo
 if (class_exists($controllerClass) && method_exists($controllerClass, $actionName)) {
-    $controllerClass::$actionName(); // Chiama il metodo statico dell'azione (es. CHome::home() o CCart::add())
+    // Nota: questo router semplice non gestisce parametri nell'URL come /product/edit/123
+    // Per ora, eventuali ID andranno passati come parametri GET tradizionali se necessario.
+    $controllerClass::$actionName();
 } else {
     // Se il controller o l'azione non esistono, restituisci un errore 404.
     http_response_code(404);

@@ -1,5 +1,5 @@
 <?php
-// File: AppORM/Control/CRestaurantHall.php (DA CREARE)
+// File: AppORM/Control/CRestaurantHall.php
 namespace AppORM\Control;
 
 use AppORM\Entity\ERestaurantHall;
@@ -27,7 +27,6 @@ class CRestaurantHall
     {
         self::checkAdmin();
         if (UHTTPMethods::isPost()) {
-            // Ora recuperiamo sia il nome che i posti
             $name = UHTTPMethods::getPostValue('name');
             $totalPlaces = (int)UHTTPMethods::getPostValue('totalPlaces');
             if ($name && $totalPlaces > 0) {
@@ -35,22 +34,24 @@ class CRestaurantHall
                 FPersistentManager::getInstance()->saveRestaurantHall($hall);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=hall&a=manage');
+        header('Location: /Pancia_mia_fatti_capanna/hall/manage');
         exit;
     }
     
-    /** Cancella una sala esistente */
-    public static function delete(): void
+    /** * Cancella una sala esistente.
+     * Modificato per accettare l'ID come segmento dell'URL.
+     */
+    public static function delete(int $id): void
     {
         self::checkAdmin();
-        $id = (int)UHTTPMethods::getQueryValue('id');
+        // L'ID viene passato come parametro della funzione, non da query GET
         if ($id > 0) {
             $hall = FPersistentManager::getInstance()->getRestaurantHallById($id);
             if ($hall) {
                 FPersistentManager::getInstance()->deleteRestaurantHall($hall);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=hall&a=manage');
+        header('Location: /Pancia_mia_fatti_capanna/hall/manage');
         exit;
     }
 }

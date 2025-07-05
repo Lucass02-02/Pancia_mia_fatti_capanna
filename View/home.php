@@ -21,25 +21,25 @@ use AppORM\Services\Utility\USession;
     <p><?php echo htmlspecialchars($messaggio ?? 'Il miglior ristorante della zona.'); ?></p>
     <nav>
         <a href="/Pancia_mia_fatti_capanna/">Home</a> |
-        <a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Visualizza Menù</a> |
-        <a href="/Pancia_mia_fatti_capanna/index.php?c=review&a=showAll">Vedi le Recensioni</a> |
+        <a href="/Pancia_mia_fatti_capanna/home/menu">Visualizza Menù</a> |
+        <a href="/Pancia_mia_fatti_capanna/review/showAll">Vedi le Recensioni</a> |
 
         <?php if (USession::isSet('user_id')): ?>
             <?php if (USession::getValue('user_role') === 'admin'): ?>
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=admin&a=profile">Mio Profilo</a> |
+                <a href="/Pancia_mia_fatti_capanna/admin/profile">Mio Profilo</a> |
                 
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=table&a=listAll">Gestione Tavoli</a> |
+                <a href="/Pancia_mia_fatti_capanna/table/listAll">Gestione Tavoli</a> |
                 
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=logout">Logout</a>
+                <a href="/Pancia_mia_fatti_capanna/client/logout">Logout</a>
 
             <?php else: ?>
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=cart&a=view">Carrello</a> |
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=profile">Mio Profilo</a> |
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=logout">Logout</a>
+                <a href="/Pancia_mia_fatti_capanna/cart/view">Carrello</a> |
+                <a href="/Pancia_mia_fatti_capanna/client/profile">Mio Profilo</a> |
+                <a href="/Pancia_mia_fatti_capanna/client/logout">Logout</a>
             <?php endif; ?>
         <?php else: ?>
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=login">Login</a> |
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=registration">Registrati</a>
+            <a href="/Pancia_mia_fatti_capanna/client/login">Login</a> |
+            <a href="/Pancia_mia_fatti_capanna/client/registration">Registrati</a>
         <?php endif; ?>
     </nav>
 </body>

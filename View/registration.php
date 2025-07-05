@@ -29,7 +29,7 @@
             </div>
         <?php endif; ?>
 
-        <form action="/Pancia_mia_fatti_capanna/index.php?c=client&a=registration" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/client/registration" method="POST">
             <div class="form-group">
                 <label for="name">Nome</label>
                 <input type="text" id="name" name="name" required>

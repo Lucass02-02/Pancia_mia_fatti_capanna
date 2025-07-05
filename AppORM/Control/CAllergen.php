@@ -1,4 +1,4 @@
-<?php
+<?php // File: AppORM/Control/CAllergen.php
 namespace AppORM\Control;
 
 use AppORM\Entity\EAllergens;
@@ -33,21 +33,23 @@ class CAllergen
                 FPersistentManager::getInstance()->saveAllergen($allergen);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=allergen&a=manage');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/allergen/manage');
         exit;
     }
     
-    public static function delete(): void
+    // Modificato per accettare l'ID come segmento dell'URL
+    public static function delete(int $id): void
     {
         self::checkAdmin();
-        $id = (int)UHTTPMethods::getQueryValue('id');
         if ($id > 0) {
             $allergen = FPersistentManager::getInstance()->getAllergenById($id);
             if ($allergen) {
                 FPersistentManager::getInstance()->deleteAllergen($allergen);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=allergen&a=manage');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/allergen/manage');
         exit;
     }
 }

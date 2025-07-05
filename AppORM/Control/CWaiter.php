@@ -55,23 +55,25 @@ class CWaiter
 
             FPersistentManager::getInstance()->registerWaiter($name, $surname, $birthDate, $email, $password, $serialNumber, $hallId);
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=waiter&a=manage');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
         exit;
     }
 
     /**
      * Cancella un cameriere.
+     * Modificato per accettare l'ID come segmento dell'URL.
      */
-    public static function delete(): void
+    public static function delete(int $id): void
     {
         self::checkAdmin();
-        
-        $waiterId = (int)UHTTPMethods::getQueryValue('id');
-        if ($waiterId > 0) {
-            FPersistentManager::getInstance()->deleteWaiter($waiterId);
+        // L'ID viene passato come parametro della funzione, non da query GET
+        if ($id > 0) {
+            FPersistentManager::getInstance()->deleteWaiter($id);
         }
         
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=waiter&a=manage');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
         exit;
     }
 
@@ -94,7 +96,8 @@ class CWaiter
                 FPersistentManager::getInstance()->saveWaiter($waiter);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=waiter&a=manage');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
         exit;
     }
 
@@ -133,6 +136,7 @@ class CWaiter
 
         if ($waiter) {
             $hall = $waiter->getRestaurantHall();
+            // Assicurati che getTables() sia lazy-loaded o recuperi i tavoli correttamente
             $tablesInHall = $hall->getTables(); 
             
             UView::render('waiter_tables_view', ['tables' => $tablesInHall, 'hall' => $hall]);
@@ -169,7 +173,7 @@ class CWaiter
                 }
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=waiter&a=viewTables');
+        header('Location: /Pancia_mia_fatti_capanna/waiter/viewTables');
         exit;
     }
 }

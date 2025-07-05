@@ -45,7 +45,7 @@ class CTable
                 }
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=table&a=listAll');
+        header('Location: /Pancia_mia_fatti_capanna/table/listAll');
         exit;
     }
     
@@ -67,21 +67,25 @@ class CTable
                 }
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=table&a=listAll');
+        header('Location: /Pancia_mia_fatti_capanna/table/listAll');
         exit;
     }
 
-    public static function delete(): void
+    /**
+     * Cancella un tavolo.
+     * Modificato per accettare l'ID come segmento dell'URL.
+     */
+    public static function delete(int $id): void
     {
         self::checkAdmin();
-        $tableId = (int)UHTTPMethods::getQueryValue('id');
-        if ($tableId > 0) {
-            $table = FPersistentManager::getInstance()->getTableById($tableId);
+        // L'ID viene passato come parametro della funzione, non da query GET
+        if ($id > 0) {
+            $table = FPersistentManager::getInstance()->getTableById($id);
             if ($table) {
                 FPersistentManager::getInstance()->deleteTable($table);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=table&a=listAll');
+        header('Location: /Pancia_mia_fatti_capanna/table/listAll');
         exit;
     }
 }

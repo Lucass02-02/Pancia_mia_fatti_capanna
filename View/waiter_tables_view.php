@@ -53,7 +53,7 @@ use AppORM\Entity\TableState;
                                 </span>
                             </td>
                             <td>
-                                <form class="action-form" action="/Pancia_mia_fatti_capanna/index.php?c=waiter&a=updateTableState" method="POST">
+                                <form class="action-form" action="/Pancia_mia_fatti_capanna/waiter/updateTableState" method="POST">
                                     <input type="hidden" name="table_id" value="<?php echo $table->getIdTable(); ?>">
                                     <select name="state">
                                         <option value="available" <?php if ($table->getState() === TableState::AVAILABLE) echo 'selected'; ?>>Disponibile</option>
@@ -70,7 +70,7 @@ use AppORM\Entity\TableState;
         <?php endif; ?>
 
         <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=waiter&a=profile">Torna alla Dashboard</a>
+            <a href="/Pancia_mia_fatti_capanna/waiter/profile">Torna alla Dashboard</a>
         </div>
     </div>
 </body>

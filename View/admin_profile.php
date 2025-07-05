@@ -36,22 +36,22 @@
             <div class="dashboard-item">
                 <h3>Gestione Ristorante</h3>
                 <ul>
-                    <li><a href="/Pancia_mia_fatti_capanna/index.php?c=table&a=listAll">Gestisci Tavoli e Sale</a></li>
-                    <li><a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu">Gestisci Menù e Prodotti</a></li>
+                    <li><a href="/Pancia_mia_fatti_capanna/table/listAll">Gestisci Tavoli e Sale</a></li>
+                    <li><a href="/Pancia_mia_fatti_capanna/home/menu">Gestisci Menù e Prodotti</a></li>
                 </ul>
             </div>
             <div class="dashboard-item">
                 <h3>Gestione Utenti</h3>
                 <ul>
-                    <li><a href="/Pancia_mia_fatti_capanna/index.php?c=admin&a=manageClients">Gestisci Clienti</a></li>
-                    <li><a href="/Pancia_mia_fatti_capanna/index.php?c=waiter&a=manage">Gestisci Camerieri</a></li>
+                    <li><a href="/Pancia_mia_fatti_capanna/admin/manageClients">Gestisci Clienti</a></li>
+                    <li><a href="/Pancia_mia_fatti_capanna/waiter/manage">Gestisci Camerieri</a></li>
                 </ul>
             </div>
         </div>
 
         <div class="nav-links">
             <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a> |
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=logout">Logout</a>
+            <a href="/Pancia_mia_fatti_capanna/client/logout">Logout</a>
         </div>
     </div>
 </body>

@@ -1,5 +1,5 @@
 <?php
-// File: AppORM/Control/CProduct.php (CON LA LOGICA MANCANTE)
+// File: AppORM/Control/CProduct.php
 namespace AppORM\Control;
 
 use AppORM\Services\Foundation\FPersistentManager;
@@ -41,14 +41,12 @@ class CProduct {
                 }
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
         exit;
     }
 
-    // --- La logica mancante viene aggiunta qui sotto ---
-
     /**
-     * COMPLETATO: Gestisce l'aggiornamento di un prodotto esistente.
+     * Gestisce l'aggiornamento di un prodotto esistente.
      */
     public static function update(): void {
         self::checkAdmin();
@@ -57,67 +55,64 @@ class CProduct {
             $product = FPersistentManager::getInstance()->getProductById($productId);
 
             if ($product) {
-                // Aggiorna l'oggetto EProduct con i nuovi dati dal form
                 $product->setName(UHTTPMethods::getPostValue('name'));
                 $product->setDescription(UHTTPMethods::getPostValue('description'));
                 $product->setPrice((float)UHTTPMethods::getPostValue('price'));
                 
                 // TODO: Gestire la modifica di categoria e allergeni se necessario
                 
-                // Salva le modifiche nel database
                 FPersistentManager::getInstance()->saveProduct($product);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
         exit;
     }
     
     /**
-     * COMPLETATO: Cancella un prodotto dal database.
+     * Cancella un prodotto dal database.
+     * Modificato per accettare l'ID come segmento dell'URL.
      */
-    public static function delete(): void {
+    public static function delete(int $id): void {
         self::checkAdmin();
-        $productId = (int)UHTTPMethods::getQueryValue('id');
-        $product = FPersistentManager::getInstance()->getProductById($productId);
+        // L'ID viene passato come parametro della funzione, non da query GET
+        $product = FPersistentManager::getInstance()->getProductById($id);
         
         if ($product) {
-            // Cancella il prodotto dal database
             FPersistentManager::getInstance()->deleteProduct($product);
         }
         
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
         exit;
     }
 
     /**
-     * COMPLETATO: Cambia lo stato di disponibilità di un prodotto.
+     * Cambia lo stato di disponibilità di un prodotto.
+     * Modificato per accettare l'ID come segmento dell'URL.
      */
-    public static function toggleAvailability(): void {
+    public static function toggleAvailability(int $id): void {
         self::checkAdmin();
-        $productId = (int)UHTTPMethods::getQueryValue('id');
-        $product = FPersistentManager::getInstance()->getProductById($productId);
+        // L'ID viene passato come parametro della funzione, non da query GET
+        $product = FPersistentManager::getInstance()->getProductById($id);
         
         if ($product) {
-            // Inverte lo stato di disponibilità attuale
             $newAvailability = !$product->isAvailable();
-            // Aggiorna il prodotto nel database
             FPersistentManager::getInstance()->updateProductAvailability($product, $newAvailability);
         }
         
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
         exit;
     }
     
-    // Il metodo per mostrare il form di modifica è corretto
-    public static function showEditForm(): void {
+    // Modificato per accettare l'ID come segmento dell'URL.
+    public static function showEditForm(int $id): void {
         self::checkAdmin();
-        $productId = (int)UHTTPMethods::getQueryValue('id');
-        $product = FPersistentManager::getInstance()->getProductById($productId);
+        // L'ID viene passato come parametro della funzione, non da query GET
+        $product = FPersistentManager::getInstance()->getProductById($id);
         if ($product) {
             $categories = FPersistentManager::getInstance()->getAllProductCategories();
             UView::render('edit_product', ['product' => $product, 'categories' => $categories]);
         } else {
-            header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+            header('Location: /Pancia_mia_fatti_capanna/home/menu');
             exit;
         }
     }

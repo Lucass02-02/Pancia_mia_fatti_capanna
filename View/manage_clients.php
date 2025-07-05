@@ -57,7 +57,7 @@
         <?php endif; ?>
         
         <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=admin&a=profile">Torna al Pannello di Controllo</a>
+            <a href="/Pancia_mia_fatti_capanna/admin/profile">Torna al Pannello di Controllo</a>
         </div>
     </div>
 </body>

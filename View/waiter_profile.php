@@ -50,7 +50,7 @@ use AppORM\Services\Utility\USession;
             <div class="dashboard-item">
                 <h3>Le Tue Funzioni</h3>
                 <ul>
-                    <li><a href="/Pancia_mia_fatti_capanna/index.php?c=waiter&a=viewTables">Visualizza Stato Tavoli</a></li>
+                    <li><a href="/Pancia_mia_fatti_capanna/waiter/viewTables">Visualizza Stato Tavoli</a></li>
                     <li><span>Visualizza Prenotazioni</span></li>
                     <li><span>Visualizza Ordini</span></li>
                 </ul>
@@ -58,7 +58,7 @@ use AppORM\Services\Utility\USession;
         </div>
 
         <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=logout">Logout</a>
+            <a href="/Pancia_mia_fatti_capanna/client/logout">Logout</a>
         </div>
     </div>
 </body>

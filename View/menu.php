@@ -1,5 +1,5 @@
 <?php
-// File: View/menu.php (CON STILI COMPLETI)
+// File: View/menu.php (CON STILI COMPLETI E URL AGGIUSTATI)
 use AppORM\Services\Utility\USession;
 
 $isAdmin = USession::getValue('user_role') === 'admin';
@@ -55,14 +55,14 @@ $isAdmin = USession::getValue('user_role') === 'admin';
 
         <?php if ($isAdmin): ?>
             <div class="admin-top-actions">
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=product&a=showCreateForm" class="btn-create">Aggiungi Nuovo Prodotto</a>
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=allergen&a=manage" class="btn-manage">Gestisci Allergeni</a>
+                <a href="/Pancia_mia_fatti_capanna/product/showCreateForm" class="btn-create">Aggiungi Nuovo Prodotto</a>
+                <a href="/Pancia_mia_fatti_capanna/allergen/manage" class="btn-manage">Gestisci Allergeni</a>
             </div>
         <?php endif; ?>
 
         <div class="filter-container">
             <h3>Filtra per allergeni (mostra piatti senza):</h3>
-            <form action="/Pancia_mia_fatti_capanna/index.php" method="GET">
+            <form action="/Pancia_mia_fatti_capanna/" method="GET">
                 <input type="hidden" name="c" value="home">
                 <input type="hidden" name="a" value="menu">
                 <div class="allergen-list">
@@ -77,7 +77,7 @@ $isAdmin = USession::getValue('user_role') === 'admin';
                     <?php endif; ?>
                 </div>
                 <button type="submit">Applica Filtro</button>
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=home&a=menu" style="margin-left: 10px;">Rimuovi Filtro</a>
+                <a href="/Pancia_mia_fatti_capanna/home/menu" style="margin-left: 10px;">Rimuovi Filtro</a>
             </form>
         </div>
 
@@ -94,7 +94,7 @@ $isAdmin = USession::getValue('user_role') === 'admin';
                         
                         <?php if (USession::isSet('user_id') && !$isAdmin): ?>
                             <div class="product-actions">
-                                <form action="/Pancia_mia_fatti_capanna/index.php?c=cart&a=add" method="POST">
+                                <form action="/Pancia_mia_fatti_capanna/cart/add" method="POST">
                                     <input type="hidden" name="product_id" value="<?php echo $product->getId(); ?>">
                                     <input type="number" name="quantity" value="1" min="1" max="99" aria-label="Quantità">
                                     <button type="submit">Aggiungi</button>
@@ -106,13 +106,13 @@ $isAdmin = USession::getValue('user_role') === 'admin';
 
                         <?php if ($isAdmin): ?>
                             <div class="admin-actions">
-                                <a href="/Pancia_mia_fatti_capanna/index.php?c=product&a=showEditForm&id=<?php echo $product->getId(); ?>" class="btn-edit">Modifica</a>
+                                <a href="/Pancia_mia_fatti_capanna/product/showEditForm/<?php echo $product->getId(); ?>" class="btn-edit">Modifica</a>
                                 <?php if ($product->isAvailable()): ?>
-                                    <a href="/Pancia_mia_fatti_capanna/index.php?c=product&a=toggleAvailability&id=<?php echo $product->getId(); ?>" class="btn-toggle-available">Rendi Non Disp.</a>
+                                    <a href="/Pancia_mia_fatti_capanna/product/toggleAvailability/<?php echo $product->getId(); ?>" class="btn-toggle-available">Rendi Non Disp.</a>
                                 <?php else: ?>
-                                    <a href="/Pancia_mia_fatti_capanna/index.php?c=product&a=toggleAvailability&id=<?php echo $product->getId(); ?>" class="btn-toggle-unavailable">Rendi Disp.</a>
+                                    <a href="/Pancia_mia_fatti_capanna/product/toggleAvailability/<?php echo $product->getId(); ?>" class="btn-toggle-unavailable">Rendi Disp.</a>
                                 <?php endif; ?>
-                                <a href="/Pancia_mia_fatti_capanna/index.php?c=product&a=delete&id=<?php echo $product->getId(); ?>" class="btn-delete" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');">Elimina</a>
+                                <a href="/Pancia_mia_fatti_capanna/product/delete/<?php echo $product->getId(); ?>" class="btn-delete" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');">Elimina</a>
                             </div>
                         <?php endif; ?>
                     </div>
@@ -123,7 +123,7 @@ $isAdmin = USession::getValue('user_role') === 'admin';
         <div class="nav-actions">
             <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a>
             <?php if (USession::isSet('user_id') && !$isAdmin): ?>
-                <a href="/Pancia_mia_fatti_capanna/index.php?c=cart&a=view">Vai al Carrello</a>
+                <a href="/Pancia_mia_fatti_capanna/cart/view">Vai al Carrello</a>
             <?php endif; ?>
         </div>
     </div>
