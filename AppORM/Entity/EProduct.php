@@ -1,5 +1,5 @@
 <?php
-// File: AppORM/Entity/EProduct.php (con aggiunta di $availability)
+// File: AppORM/Entity/EProduct.php (AGGIORNATO CON I SETTER)
 
 namespace AppORM\Entity;
 
@@ -18,14 +18,13 @@ class EProduct
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
-    
+
     #[ORM\Column(type: 'text')]
     private string $description;
 
     #[ORM\Column(type: 'float')]
     private float $price;
 
-    
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $availability = true;
 
@@ -36,8 +35,7 @@ class EProduct
     #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'product')]
     #[ORM\JoinTable(name: 'products_allergens')]
     private Collection $allergens;
-    
-    // Il costruttore rimane invariato
+
     public function __construct(string $name, string $description, float $price, EProductCategory $category)
     {
         $this->name = $name;
@@ -45,10 +43,10 @@ class EProduct
         $this->price = $price;
         $this->category = $category;
         $this->allergens = new ArrayCollection();
-        $this->availability = true; // Assicuriamoci che sia disponibile alla creazione
+        $this->availability = true;
     }
 
-    // --- Metodi Getter ---
+    // --- Metodi Getter (esistenti) ---
     
     public function getId(): ?int { return $this->id; }
     public function getName(): string { return $this->name; }
@@ -56,26 +54,69 @@ class EProduct
     public function getPrice(): float { return $this->price; }
     public function getCategory(): EProductCategory { return $this->category; }
     public function getAllergens(): Collection { return $this->allergens; }
-    
-    /**
-     * NUOVO METODO GETTER
-     * Metodo per recuperare lo stato di disponibilità.
-     */
     public function isAvailable(): bool { return $this->availability; }
 
-    // --- Metodi Setter ---
+    
+    // --- NUOVI METODI SETTER ---
+    // Questi metodi permettono al controller di modificare un prodotto esistente.
 
     /**
-     * NUOVO METODO SETTER
-     * Questo metodo è chiamato da FProduct::setAvailability e ora funzionerà correttamente.
+     * Imposta un nuovo nome per il prodotto.
+     * @param string $name
+     * @return self
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
+    }
+
+    /**
+     * Imposta una nuova descrizione per il prodotto.
+     * @param string $description
+     * @return self
+     */
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+        return $this;
+    }
+
+    /**
+     * Imposta un nuovo prezzo per il prodotto.
+     * @param float $price
+     * @return self
+     */
+    public function setPrice(float $price): self
+    {
+        $this->price = $price;
+        return $this;
+    }
+
+    /**
+     * Imposta lo stato di disponibilità del prodotto.
+     * @param bool $available
+     * @return self
      */
     public function setAvailability(bool $available): self
     {
         $this->availability = $available;
         return $this;
     }
-    
-    // Metodi per gestire le relazioni (invariati)
-    public function addAllergen(EAllergens $allergen): void { /* ... */ }
-    public function removeAllergen(EAllergens $allergen): void { /* ... */ }
+
+    // --- Metodi per gestire le relazioni (esistenti) ---
+
+    public function addAllergen(EAllergens $allergen): void
+    {
+        if (!$this->allergens->contains($allergen)) {
+            $this->allergens->add($allergen);
+        }
+    }
+
+    public function removeAllergen(EAllergens $allergen): void
+    {
+        if ($this->allergens->contains($allergen)) {
+            $this->allergens->removeElement($allergen);
+        }
+    }
 }
