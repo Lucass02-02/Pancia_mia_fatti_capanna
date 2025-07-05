@@ -1,7 +1,7 @@
 <?php
 
 namespace AppORM\Services\Foundation;
-
+require_once __DIR__ . '/FTable.php';
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Services\Foundation\FClient;
 use AppORM\Entity\EClient;
@@ -27,6 +27,10 @@ use AppORM\Services\Foundation\FOrder;
 use AppORM\Entity\EOrder;
 use AppORM\Entity\OrderStatus;
 use AppORM\Entity\EProductCategory; 
+use AppORM\Services\Foundation\FProductCategory;
+use AppORM\Entity\EAdmin;
+use AppORM\Services\Foundation\FAdmin;
+use AppORM\Services\Foundation\FTable;
 
 class FPersistentManager {
 
@@ -447,4 +451,73 @@ class FPersistentManager {
         // che è l'unico a dover conoscere l'istanza di Doctrine.
         return FEntityManager::getInstance()->getEntityManager();
     }
+    public static function authenticateAdmin(string $email, string $password): ?EAdmin  {
+        $admin = FAdmin::getAdminByEmail($email);
+        // Se l'admin esiste e la password è corretta, restituisce l'oggetto admin
+        if ($admin && password_verify($password, $admin->getPassword())) {
+            return $admin;
+        }
+        // Altrimenti restituisce null
+        return null;
+    }
+    /**
+     * Recupera solo i prodotti disponibili per la visualizzazione ai clienti.
+     */
+    public static function getAvailableProducts(): array
+    {
+        return FProduct::getAvailableProducts();
+    }
+
+     public static function getAdminById(int $id): ?\AppORM\Entity\EAdmin
+    {
+        return FEntityManager::getInstance()->retriveObject(\AppORM\Entity\EAdmin::class, $id);
+    }
+
+     /**
+     * Salva o aggiorna un tavolo.
+     * Chiama il metodo aggiunto a FTable.
+     */
+    public static function saveTable(ETable $table): bool {
+        // La \ iniziale è necessaria perché FTable non ha un namespace
+        return \FTable::save($table);
+    }
+
+    /**
+     * Recupera un tavolo tramite il suo ID.
+     * Chiama il tuo metodo esistente in FTable.
+     */
+    public static function getTableById(int $id): ?ETable {
+        return \FTable::getTableById($id);
+    }
+
+    /**
+     * Cancella un tavolo.
+     * Chiama il metodo aggiunto a FTable.
+     */
+    public static function deleteTable(ETable $table): bool {
+        return \FTable::delete($table);
+    }
+
+    /**
+     * Recupera tutti i tavoli.
+     * Chiama il metodo aggiunto a FTable.
+     */
+    public static function getAllTables(): array {
+        return \FTable::getAllTables();
+    }
+
+    /**
+     * Recupera tutte le sale del ristorante.
+     */
+    public static function getAllRestaurantHalls(): array {
+        return FEntityManager::getInstance()->selectAll(\AppORM\Entity\ERestaurantHall::class);
+    }
+
+    /**
+     * Recupera una sala tramite ID.
+     */
+    public static function getRestaurantHallById(int $id): ?\AppORM\Entity\ERestaurantHall {
+        return FEntityManager::getInstance()->retriveObject(\AppORM\Entity\ERestaurantHall::class, $id);
+    }
+
 }

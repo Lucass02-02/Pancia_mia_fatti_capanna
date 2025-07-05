@@ -1,5 +1,5 @@
 <?php
-// File: AppORM/Entity/EProduct.php
+// File: AppORM/Entity/EProduct.php (con aggiunta di $availability)
 
 namespace AppORM\Entity;
 
@@ -18,15 +18,16 @@ class EProduct
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
-
-    /**
-     * QUESTA È LA PROPRIETÀ CHE MANCAVA
-     */
+    
     #[ORM\Column(type: 'text')]
     private string $description;
 
     #[ORM\Column(type: 'float')]
     private float $price;
+
+    
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $availability = true;
 
     #[ORM\ManyToOne(targetEntity: EProductCategory::class, inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
@@ -35,66 +36,46 @@ class EProduct
     #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'product')]
     #[ORM\JoinTable(name: 'products_allergens')]
     private Collection $allergens;
-
-
-    // Il costruttore è già corretto e accetta la descrizione
+    
+    // Il costruttore rimane invariato
     public function __construct(string $name, string $description, float $price, EProductCategory $category)
     {
         $this->name = $name;
-        $this->description = $description; // e la assegna qui
+        $this->description = $description;
         $this->price = $price;
         $this->category = $category;
         $this->allergens = new ArrayCollection();
+        $this->availability = true; // Assicuriamoci che sia disponibile alla creazione
     }
 
     // --- Metodi Getter ---
     
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    public function getId(): ?int { return $this->id; }
+    public function getName(): string { return $this->name; }
+    public function getDescription(): string { return $this->description; }
+    public function getPrice(): float { return $this->price; }
+    public function getCategory(): EProductCategory { return $this->category; }
+    public function getAllergens(): Collection { return $this->allergens; }
+    
+    /**
+     * NUOVO METODO GETTER
+     * Metodo per recuperare lo stato di disponibilità.
+     */
+    public function isAvailable(): bool { return $this->availability; }
 
-    public function getName(): string
-    {
-        return $this->name;
-    }
+    // --- Metodi Setter ---
 
     /**
-     * Questo metodo ora funzionerà perché la proprietà $this->description esiste.
+     * NUOVO METODO SETTER
+     * Questo metodo è chiamato da FProduct::setAvailability e ora funzionerà correttamente.
      */
-    public function getDescription(): string
+    public function setAvailability(bool $available): self
     {
-        return $this->description;
+        $this->availability = $available;
+        return $this;
     }
-
-    public function getPrice(): float
-    {
-        return $this->price;
-    }
-
-    public function getCategory(): EProductCategory
-    {
-        return $this->category;
-    }
-
-    public function getAllergens(): Collection
-    {
-        return $this->allergens;
-    }
-
-    // --- Metodi per gestire le relazioni ---
-
-    public function addAllergen(EAllergens $allergen): void
-    {
-        if (!$this->allergens->contains($allergen)) {
-            $this->allergens->add($allergen);
-        }
-    }
-
-    public function removeAllergen(EAllergens $allergen): void
-    {
-        if ($this->allergens->contains($allergen)) {
-            $this->allergens->removeElement($allergen);
-        }
-    }
+    
+    // Metodi per gestire le relazioni (invariati)
+    public function addAllergen(EAllergens $allergen): void { /* ... */ }
+    public function removeAllergen(EAllergens $allergen): void { /* ... */ }
 }

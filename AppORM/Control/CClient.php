@@ -42,7 +42,9 @@ class CClient
         }
     }
 
-    public static function login(): void
+    // In AppORM/Control/CClient.php
+
+ public static function login(): void
     {
         if (UHTTPMethods::isGet()) {
             UView::render('login');
@@ -51,15 +53,27 @@ class CClient
             $password = UHTTPMethods::getPostValue('password');
 
             if ($email && $password) {
-                // Uso il FPersistentManager come richiesto
+                // Tentativo 1: Autenticare come Cliente
                 $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
                 if ($client) {
                     USession::setValue('user_id', $client->getId());
+                    USession::setValue('user_role', 'client');
                     header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
                     exit;
-                } else {
-                    UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
                 }
+
+                // Tentativo 2: Autenticare come Admin/Proprietario
+                $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
+                if ($admin) {
+                    USession::setValue('user_id', $admin->getId());
+                    USession::setValue('user_role', 'admin');
+                    // MODIFICA CRUCIALE: Salviamo l'email dell'admin nella sessione
+                    USession::setValue('user_email', $admin->getEmail());
+                    header('Location: /Pancia_mia_fatti_capanna/');
+                    exit;
+                }
+
+                UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
             } else {
                 UView::render('login', ['error' => 'Email e password sono obbligatori.']);
             }
@@ -157,5 +171,41 @@ class CClient
             exit;
         }
         header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
+    }
+    public static function showCreateForm(): void
+    {
+        self::checkAdmin();
+        
+        // Recupera le categorie da mostrare nella select del form
+        $categories = FPersistentManager::getInstance()->getAllProductCategories();
+        
+        UView::render('create_product', [
+            'categories' => $categories
+        ]);
+    }
+
+    /**
+     * Gestisce la creazione di un nuovo prodotto.
+     */
+    public static function create(): void
+    {
+        self::checkAdmin();
+        if (UHTTPMethods::isPost()) {
+            $name = UHTTPMethods::getPostValue('name');
+            $description = UHTTPMethods::getPostValue('description');
+            $price = (float)UHTTPMethods::getPostValue('price');
+            $categoryId = (int)UHTTPMethods::getPostValue('category_id');
+
+            // Controlli di validazione base
+            if ($name && $description && $price > 0 && $categoryId > 0) {
+                $category = FPersistentManager::getInstance()->getProductCategoryById($categoryId);
+                if ($category) {
+                    $product = new \AppORM\Entity\EProduct($name, $description, $price, $category);
+                    FPersistentManager::getInstance()->saveProduct($product);
+                }
+            }
+        }
+        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        exit;
     }
 }
