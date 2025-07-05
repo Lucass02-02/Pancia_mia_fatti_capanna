@@ -44,42 +44,52 @@ class CClient
 
     // In AppORM/Control/CClient.php
 
- public static function login(): void
-    {
-        if (UHTTPMethods::isGet()) {
-            UView::render('login');
-        } elseif (UHTTPMethods::isPost()) {
-            $email = UHTTPMethods::getPostValue('email');
-            $password = UHTTPMethods::getPostValue('password');
+ // In CClient.php
+public static function login(): void
+{
+    if (UHTTPMethods::isGet()) {
+        UView::render('login');
+    } elseif (UHTTPMethods::isPost()) {
+        $email = UHTTPMethods::getPostValue('email');
+        $password = UHTTPMethods::getPostValue('password');
 
-            if ($email && $password) {
-                // Tentativo 1: Autenticare come Cliente
-                $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
-                if ($client) {
-                    USession::setValue('user_id', $client->getId());
-                    USession::setValue('user_role', 'client');
-                    header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
-                    exit;
-                }
-
-                // Tentativo 2: Autenticare come Admin/Proprietario
-                $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
-                if ($admin) {
-                    USession::setValue('user_id', $admin->getId());
-                    USession::setValue('user_role', 'admin');
-                    // MODIFICA CRUCIALE: Salviamo l'email dell'admin nella sessione
-                    USession::setValue('user_email', $admin->getEmail());
-                    header('Location: /Pancia_mia_fatti_capanna/');
-                    exit;
-                }
-
-                UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
-            } else {
-                UView::render('login', ['error' => 'Email e password sono obbligatori.']);
+        if ($email && $password) {
+            // Tentativo 1: Autenticare come Cliente
+            $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
+            if ($client) {
+                USession::setValue('user_id', $client->getId());
+                USession::setValue('user_role', 'client');
+                USession::setValue('user_email', $client->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
+                exit;
             }
+
+            // Tentativo 2: Autenticare come Cameriere (NUOVO)
+            $waiter = FPersistentManager::getInstance()->authenticateWaiter($email, $password);
+            if ($waiter) {
+                USession::setValue('user_id', $waiter->getId());
+                USession::setValue('user_role', 'waiter');
+                USession::setValue('user_email', $waiter->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/index.php?c=waiter&a=profile');
+                exit;
+            }
+
+            // Tentativo 3: Autenticare come Admin
+            $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
+            if ($admin) {
+                USession::setValue('user_id', $admin->getId());
+                USession::setValue('user_role', 'admin');
+                USession::setValue('user_email', $admin->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/');
+                exit;
+            }
+
+            UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
+        } else {
+            UView::render('login', ['error' => 'Email e password sono obbligatori.']);
         }
     }
-
+}
     public static function profile(): void
     {
         if (!USession::isSet('user_id')) {

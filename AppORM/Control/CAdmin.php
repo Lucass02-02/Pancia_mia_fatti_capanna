@@ -21,4 +21,14 @@ class CAdmin
             CClient::logout();
         }
     }
+     public static function manageClients(): void
+    {
+        if (USession::getValue('user_role') !== 'admin') {
+            header('Location: /Pancia_mia_fatti_capanna/');
+            exit;
+        }
+
+        $clients = FPersistentManager::getInstance()->getAllClients();
+        UView::render('manage_clients', ['clients' => $clients]);
+    }
 }

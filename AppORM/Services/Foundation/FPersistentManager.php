@@ -31,6 +31,8 @@ use AppORM\Services\Foundation\FProductCategory;
 use AppORM\Entity\EAdmin;
 use AppORM\Services\Foundation\FAdmin;
 use AppORM\Services\Foundation\FTable;
+use AppORM\Entity\EWaiter;
+use AppORM\Services\Foundation\FWaiter;
 
 class FPersistentManager {
 
@@ -518,6 +520,64 @@ class FPersistentManager {
      */
     public static function getRestaurantHallById(int $id): ?\AppORM\Entity\ERestaurantHall {
         return FEntityManager::getInstance()->retriveObject(\AppORM\Entity\ERestaurantHall::class, $id);
+    }
+
+
+
+
+    public static function getWaiterById(int $id): ?EWaiter {
+        return FWaiter::getObj($id);
+    }
+
+    public static function getAllWaiters(): array {
+        return FWaiter::selectAll();
+    }
+
+    public static function deleteWaiter(int $id): bool {
+        $waiter = self::getWaiterById($id);
+        if ($waiter) {
+            return FWaiter::deleteObj($waiter);
+        }
+        return false;
+    }
+    public static function getAllClients(): array
+    {
+        return FEntityManager::getInstance()->selectAll(\AppORM\Entity\EClient::class);
+    }
+
+    public static function getWaiterByEmail(string $email): ?EWaiter
+    {
+        return FWaiter::getWaiterByEmail($email);
+    }
+
+    public static function registerWaiter(string $name, string $surname, DateTime $birthDate, string $email, string $password, string $serialNumber, int $hallId): ?EWaiter
+    {
+        // Ora questa chiamata funziona perché il metodo esiste in questa classe
+        if (self::getWaiterByEmail($email)) { return null; }
+        
+        $hall = self::getRestaurantHallById($hallId);
+        if (!$hall) { return null; }
+
+        $waiter = new EWaiter($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT), $serialNumber);
+        $waiter->setRestaurantHall($hall);
+
+        if (FWaiter::saveObj($waiter)) {
+            return $waiter;
+        }
+        return null;
+    }
+
+    public static function authenticateWaiter(string $email, string $password): ?EWaiter
+    {
+        $waiter = FWaiter::getWaiterByEmail($email);
+        if ($waiter && password_verify($password, $waiter->getPassword())) {
+            return $waiter;
+        }
+        return null;
+    }
+      public static function saveWaiter(EWaiter $waiter): bool
+    {
+        return FWaiter::saveObj($waiter);
     }
 
 }

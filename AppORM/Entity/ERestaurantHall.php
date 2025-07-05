@@ -55,4 +55,12 @@ class ERestaurantHall {
     public function setTotalPlaces(int $totalPlaces): void {
         $this->totalPlaces = $totalPlaces;
     }
+    /**
+     * Restituisce la collezione di tavoli presenti in questa sala.
+     * @return Collection
+     */
+    public function getTables(): Collection
+    {
+        return $this->tables;
+    }
 }
