@@ -1,7 +1,4 @@
-<?php
-// File: View/manage_clients.php (NUOVO)
-/** @var \AppORM\Entity\EClient[] $clients */
-?>
+{* File: templates/manage_clients.tpl *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -16,16 +13,16 @@
         th { background-color: #f2f2f2; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         .nav-links { margin-top: 2em; text-align: center; }
-        .nav-links a { color: #007bff; text-decoration: none; font-weight: bold; }
+        .nav-links a { color: #e8491d; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Clienti Registrati</h1>
 
-        <?php if (empty($clients)): ?>
+        {if empty($clients)}
             <p style="text-align:center;">Non ci sono clienti registrati al momento.</p>
-        <?php else: ?>
+        {else}
             <table>
                 <thead>
                     <tr>
@@ -38,26 +35,22 @@
                     </tr>
                 </thead>
                 <tbody>
-                    <?php 
-                    // Il codice assume che EClient abbia questi metodi, ereditati da EUser
-                    // o definiti direttamente.
-                    foreach ($clients as $client): 
-                    ?>
+                    {foreach $clients as $client}
                         <tr>
-                            <td><?php echo $client->getId(); ?></td>
-                            <td><?php echo htmlspecialchars($client->getName() . ' ' . $client->getSurname()); ?></td>
-                            <td><?php echo htmlspecialchars($client->getEmail()); ?></td>
-                            <td><?php echo htmlspecialchars($client->getNickname() ?: '-'); ?></td>
-                            <td><?php echo htmlspecialchars($client->getPhonenumber() ?: '-'); ?></td>
-                            <td><?php echo $client->getBirthDate()->format('d/m/Y'); ?></td>
+                            <td>{$client->getId()}</td>
+                            <td>{$client->getName()|escape} {$client->getSurname()|escape}</td>
+                            <td>{$client->getEmail()|escape}</td>
+                            <td>{$client->getNickname()|default:'-'|escape}</td>
+                            <td>{$client->getPhonenumber()|default:'-'|escape}</td>
+                            <td>{$client->getBirthDate()->format('d/m/Y')}</td>
                         </tr>
-                    <?php endforeach; ?>
+                    {/foreach}
                 </tbody>
             </table>
-        <?php endif; ?>
+        {/if}
         
         <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/admin/profile">Torna al Pannello di Controllo</a>
+            <a href="/Pancia_mia_fatti_capanna/Admin/profile">Torna al Pannello di Controllo</a>
         </div>
     </div>
 </body>

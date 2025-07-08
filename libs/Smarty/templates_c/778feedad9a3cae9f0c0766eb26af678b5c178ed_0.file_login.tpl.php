@@ -1,5 +1,28 @@
-{* File: templates/login.tpl *}
-<!DOCTYPE html>
+<?php
+/* Smarty version 5.5.1, created on 2025-07-08 16:52:17
+  from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/login.tpl' */
+
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.5.1',
+  'unifunc' => 'content_686d30a11a3e93_37675616',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '778feedad9a3cae9f0c0766eb26af678b5c178ed' => 
+    array (
+      0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/login.tpl',
+      1 => 1751986331,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_686d30a11a3e93_37675616 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
+?><!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -35,9 +58,10 @@
     <div class="container">
         <h1>Login</h1>
 
-        {if isset($error)}
-            <div class="error">{$error|escape}</div>
-        {/if}
+        <?php if ((true && ($_smarty_tpl->hasVariable('error') && null !== ($_smarty_tpl->getValue('error') ?? null)))) {?>
+            <div class="error"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('error'), ENT_QUOTES, 'UTF-8', true);?>
+</div>
+        <?php }?>
 
         <form action="/Pancia_mia_fatti_capanna/Client/login" method="POST">
             <div class="form-group">
@@ -55,3 +79,5 @@
     </div>
 </body>
 </html>
+<?php }
+}

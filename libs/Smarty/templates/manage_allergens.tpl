@@ -14,7 +14,7 @@
         .card-item:last-child { border-bottom: none; }
         .delete-form button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
         .nav-links { margin-top: 1.5em; text-align: center; }
-        .nav-links a { margin: 0 10px; color: #007bff; text-decoration: none; }
+        .nav-links a { margin: 0 10px; color: #e8491d; text-decoration: none; }
     </style>
 </head>
 <body>
@@ -39,7 +39,7 @@
                             <strong>{$card->getBrand()|escape}</strong> che termina con **** {$card->getLast4()|escape}
                             (Scade: {$card->getExpMonth()|escape}/{$card->getExpYear()|escape})
                         </span>
-                        <form class="delete-form" action="{url controller='client' action='deleteCreditCard'}" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
+                        <form class="delete-form" action="/Pancia_mia_fatti_capanna/Client/deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
                             <input type="hidden" name="card_id" value="{$card->getId()}">
                             <button type="submit">Elimina</button>
                         </form>
@@ -48,7 +48,7 @@
             {else}
                 <p>Non hai ancora aggiunto nessuna carta di credito.</p>
             {/if}
-            <a href="{url controller='client' action='addCreditCard'}">Aggiungi una nuova carta</a>
+            <a href="/Pancia_mia_fatti_capanna/Client/addCreditCard">Aggiungi una nuova carta</a>
         </div>
 
         <div class="reviews-section">
@@ -66,12 +66,12 @@
             {else}
                 <p>Non hai ancora lasciato nessuna recensione.</p>
             {/if}
-            <a href="{url controller='client' action='addReview'}">Lascia una nuova recensione</a>
+            <a href="/Pancia_mia_fatti_capanna/Client/addReview">Lascia una nuova recensione</a>
         </div>
 
         <div class="nav-links">
-            <a href="{url controller='home' action='home'}">Torna alla Home</a> |
-            <a href="{url controller='client' action='logout'}">Logout</a>
+            <a href="/Pancia_mia_fatti_capanna/Home/home">Torna alla Home</a> |
+            <a href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
         </div>
     </div>
 </body>

@@ -13,14 +13,13 @@
         th { background-color: #f2f2f2; }
         tr:nth-child(even) { background-color: #f9f9f9; }
         .nav-links { margin-top: 2em; text-align: center; }
-        .nav-links a { color: #007bff; text-decoration: none; font-weight: bold; }
+        .nav-links a { color: #e8491d; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Clienti Registrati</h1>
 
-        {* CONVERSIONE DA PHP A SMARTY *}
         {if empty($clients)}
             <p style="text-align:center;">Non ci sono clienti registrati al momento.</p>
         {else}
@@ -51,7 +50,7 @@
         {/if}
         
         <div class="nav-links">
-            <a href="{url controller='admin' action='profile'}">Torna al Pannello di Controllo</a>
+            <a href="/Pancia_mia_fatti_capanna/Admin/profile">Torna al Pannello di Controllo</a>
         </div>
     </div>
 </body>

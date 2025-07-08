@@ -22,7 +22,7 @@
 <body>
     <div class="container">
         <h1>Crea Nuovo Prodotto</h1>
-        <form action="{url controller='product' action='create'}" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/Product/create" method="POST">
             <div class="form-group">
                 <label for="name">Nome Prodotto</label>
                 <input type="text" id="name" name="name" required>
@@ -40,9 +40,7 @@
                 <select id="category_id" name="category_id" required>
                     <option value="">Seleziona una categoria</option>
                     {foreach $categories as $category}
-                        <option value="{$category->getId()}">
-                            {$category->getName()|escape}
-                        </option>
+                        <option value="{$category->getId()}">{$category->getName()|escape}</option>
                     {/foreach}
                 </select>
             </div>
@@ -63,7 +61,7 @@
             
             <button type="submit">Crea Prodotto</button>
         </form>
-        <a href="{url controller='home' action='menu'}" class="nav-link">Annulla</a>
+        <a href="/Pancia_mia_fatti_capanna/Home/menu" class="nav-link">Annulla</a>
     </div>
 </body>
 </html>

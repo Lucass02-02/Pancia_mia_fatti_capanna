@@ -18,20 +18,20 @@
         .message.success { background-color: #d4edda; color: #155724; }
         .message.error { background-color: #f8d7da; color: #721c24; }
         nav { text-align: center; margin-top: 1em; }
+        nav a { color: #e8491d; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Registrati</h1>
 
-        {* CONVERSIONE DA PHP A SMARTY *}
         {if isset($message)}
             <div class="message {if isset($success) && $success}success{else}error{/if}">
                 {$message|escape}
             </div>
         {/if}
 
-        <form action="{url controller='client' action='registration'}" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/Client/registration" method="POST">
             <div class="form-group">
                 <label for="name">Nome</label>
                 <input type="text" id="name" name="name" required>
@@ -63,7 +63,7 @@
             <button type="submit">Registrati</button>
         </form>
         <nav>
-            <a href="{url controller='home' action='home'}">Torna alla Home</a>
+            <a href="/Pancia_mia_fatti_capanna/Home/home">Torna alla Home</a>
         </nav>
     </div>
 </body>

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-06 03:06:29
-  from 'file:registration.tpl' */
+/* Smarty version 5.5.1, created on 2025-07-08 16:47:46
+  from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/registration.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_6869cc1544ea49_51851600',
+  'unifunc' => 'content_686d2f9254ffb1_74626160',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
-    'b2311ddc3b69c4fa56ea6c2f84abc624fc3b6cba' => 
+    '8f96dddc7623067bafc8f0c96c2f318dde31df37' => 
     array (
-      0 => 'registration.tpl',
-      1 => 1751762498,
+      0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/registration.tpl',
+      1 => 1751985975,
       2 => 'file',
     ),
   ),
@@ -20,8 +20,8 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6869cc1544ea49_51851600 (\Smarty\Template $_smarty_tpl) {
-$_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/templates';
+function content_686d2f9254ffb1_74626160 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
 <head>
@@ -41,21 +41,21 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
         .message.success { background-color: #d4edda; color: #155724; }
         .message.error { background-color: #f8d7da; color: #721c24; }
         nav { text-align: center; margin-top: 1em; }
+        nav a { color: #e8491d; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Registrati</h1>
 
-                <?php if ((true && ($_smarty_tpl->hasVariable('message') && null !== ($_smarty_tpl->getValue('message') ?? null)))) {?>
+        <?php if ((true && ($_smarty_tpl->hasVariable('message') && null !== ($_smarty_tpl->getValue('message') ?? null)))) {?>
             <div class="message <?php if ((true && ($_smarty_tpl->hasVariable('success') && null !== ($_smarty_tpl->getValue('success') ?? null))) && $_smarty_tpl->getValue('success')) {?>success<?php } else { ?>error<?php }?>">
                 <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('message'), ENT_QUOTES, 'UTF-8', true);?>
 
             </div>
         <?php }?>
 
-        <form action="<?php echo $_smarty_tpl->getSmarty()->getFunctionHandler('url')->handle(array('controller'=>'client','action'=>'registration'), $_smarty_tpl);?>
-" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/Client/registration" method="POST">
             <div class="form-group">
                 <label for="name">Nome</label>
                 <input type="text" id="name" name="name" required>
@@ -87,10 +87,10 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
             <button type="submit">Registrati</button>
         </form>
         <nav>
-            <a href="<?php echo $_smarty_tpl->getSmarty()->getFunctionHandler('url')->handle(array('controller'=>'home','action'=>'home'), $_smarty_tpl);?>
-">Torna alla Home</a>
+            <a href="/Pancia_mia_fatti_capanna/Home/home">Torna alla Home</a>
         </nav>
     </div>
 </body>
-</html><?php }
+</html>
+<?php }
 }

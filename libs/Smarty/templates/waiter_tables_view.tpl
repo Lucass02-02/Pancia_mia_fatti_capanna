@@ -15,7 +15,7 @@
         .action-form select { padding: 8px; flex-grow: 1; border-radius: 4px; border: 1px solid #ccc; }
         .action-form button { background-color: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
         .nav-links { margin-top: 2.5em; text-align: center; }
-        .nav-links a { color: #007bff; font-weight: bold; text-decoration: none; }
+        .nav-links a { color: #e8491d; font-weight: bold; text-decoration: none; }
         .state-available { color: green; font-weight: bold; }
         .state-reserved { color: orange; font-weight: bold; }
         .state-occupied { color: red; font-weight: bold; }
@@ -25,7 +25,7 @@
     <div class="container">
         <h1>Stato Tavoli - {$hall->getName()|escape}</h1>
 
-        {if $tables->isEmpty()}
+        {if $tables|@count == 0}
             <p style="text-align:center;">Non ci sono tavoli assegnati a questa sala.</p>
         {else}
             <table>
@@ -48,7 +48,7 @@
                                 </span>
                             </td>
                             <td>
-                                <form class="action-form" action="{url controller='waiter' action='updateTableState'}" method="POST">
+                                <form class="action-form" action="/Pancia_mia_fatti_capanna/Waiter/updateTableState" method="POST">
                                     <input type="hidden" name="table_id" value="{$table->getIdTable()}">
                                     <select name="state">
                                         <option value="available" {if $table->getState()->value eq 'available'}selected{/if}>Disponibile</option>
@@ -65,7 +65,7 @@
         {/if}
 
         <div class="nav-links">
-            <a href="{url controller='waiter' action='profile'}">Torna alla Dashboard</a>
+            <a href="/Pancia_mia_fatti_capanna/Waiter/profile">Torna alla Dashboard</a>
         </div>
     </div>
 </body>

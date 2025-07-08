@@ -5,7 +5,6 @@
     <meta charset="UTF-8">
     <title>Modifica Prodotto - {$product->getName()|escape}</title>
     <style>
-        /* Puoi usare uno stile simile a login.php per coerenza */
         body { font-family: sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
         .container { background-color: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
         h1 { text-align: center; color: #e8491d; }
@@ -16,13 +15,13 @@
         }
         textarea { resize: vertical; min-height: 100px; }
         button { width: 100%; padding: 1em; background-color: #e8491d; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 1em; }
-        .nav-link { display: block; text-align: center; margin-top: 1em; }
+        .nav-link { display: block; text-align: center; margin-top: 1em; color: #e8491d; text-decoration: none; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Modifica Prodotto</h1>
-        <form action="{url controller='product' action='update'}" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/Product/update" method="POST">
             <input type="hidden" name="product_id" value="{$product->getId()}">
             
             <div class="form-group">
@@ -42,7 +41,7 @@
             
             <button type="submit">Salva Modifiche</button>
         </form>
-        <a href="{url controller='home' action='menu'}" class="nav-link">Annulla e torna al Menù</a>
+        <a href="/Pancia_mia_fatti_capanna/Home/menu" class="nav-link">Annulla e torna al Menù</a>
     </div>
 </body>
 </html>

@@ -4,7 +4,6 @@
 <head>
     <meta charset="UTF-8">
     <title>{$titolo|default:'Pancia mia fatti capanna'|escape}</title>
-    {* Puoi includere i tuoi file CSS esterni qui, se ne hai *}
     <style>
         body { font-family: sans-serif; text-align: center; margin-top: 50px; }
         h1 { color: #333; }
@@ -17,22 +16,22 @@
     <h1>{$titolo|escape}</h1>
     <p>{$messaggio|escape}</p>
     <nav>
-        <a href="{url controller='home' action='home'}">Home</a> |
-        <a href="{url controller='home' action='menu'}">Visualizza Menù</a> |
-        <a href="{url controller='review' action='showAll'}">Vedi le Recensioni</a> |
+        <a href="/Pancia_mia_fatti_capanna/Home/home">Home</a> |
+        <a href="/Pancia_mia_fatti_capanna/Home/menu">Visualizza Menù</a> |
+        <a href="/Pancia_mia_fatti_capanna/Review/showAll">Vedi le Recensioni</a> |
 
         {if $user_role == 'admin'}
-            <a href="{url controller='admin' action='profile'}">Pannello di Controllo</a> |
-            <a href="{url controller='client' action='logout'}">Logout</a>
+            <a href="/Pancia_mia_fatti_capanna/Admin/profile">Pannello di Controllo</a> |
+            <a href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
         {elseif $user_role == 'client'}
-            <a href="{url controller='client' action='profile'}">Mio Profilo</a> |
-            <a href="{url controller='client' action='logout'}">Logout</a>
+            <a href="/Pancia_mia_fatti_capanna/Client/profile">Mio Profilo</a> |
+            <a href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
         {elseif $user_role == 'waiter'}
-            <a href="{url controller='waiter' action='profile'}">Dashboard Cameriere</a> |
-            <a href="{url controller='client' action='logout'}">Logout</a>
+            <a href="/Pancia_mia_fatti_capanna/Waiter/profile">Dashboard Cameriere</a> |
+            <a href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
         {else}
-            <a href="{url controller='client' action='login'}">Login</a> |
-            <a href="{url controller='client' action='registration'}">Registrati</a>
+            <a href="/Pancia_mia_fatti_capanna/Client/login">Login</a> |
+            <a href="/Pancia_mia_fatti_capanna/Client/registration">Registrati</a>
         {/if}
     </nav>
 </body>

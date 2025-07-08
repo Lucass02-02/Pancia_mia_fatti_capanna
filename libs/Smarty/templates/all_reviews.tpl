@@ -20,33 +20,33 @@
 </head>
 <body>
     <div class="container">
-        <h1>{$titolo|default:'Tutte le Recensioni'|escape}</h1> {* Sostituisce <?php echo htmlspecialchars($titolo ?? 'Tutte le Recensioni'); ?> con {$titolo|default:'Tutte le Recensioni'|escape} *}
+        <h1>{$titolo|default:'Tutte le Recensioni'|escape}</h1>
 
-        {if isset($reviews) && !empty($reviews)} {* Sostituisce <?php if (isset($reviews) && !empty($reviews)): ?> *}
-            {foreach $reviews as $review} {* Sostituisce <?php foreach ($reviews as $review): ?> *}
+        {if isset($reviews) && !empty($reviews)}
+            {foreach $reviews as $review}
                 <div class="review-card">
                     <div class="review-header">
-                        {* Logica PHP spostata o riscritta con Smarty *}
-                        {assign var="author" value=$review->getClient()} {* Assegna l'oggetto Client a una variabile Smarty *}
+                        {assign var="author" value=$review->getClient()}
                         {if $author}
-                            {assign var="author_name" value="{$author->getName()|escape} {$author->getSurname()|escape}"}
+                            <span class="review-author">{$author->getName()|escape} {$author->getSurname()|escape}</span>
                         {else}
-                            {assign var="author_name" value="Utente Anonimo"}
+                            <span class="review-author">Utente Anonimo</span>
                         {/if}
-                        <span class="review-author">{$author_name}</span> {* Sostituisce <?php echo htmlspecialchars($author); ?> *}
-                        <span class="review-date">{$review->getReviewDate()->format('d/m/Y H:i')}</span> {* Sostituisce <?php echo $review->getReviewDate()->format('d/m/Y H:i'); ?> *}
+                        <span class="review-date">{$review->getReviewDate()->format('d/m/Y H:i')}</span>
                     </div>
                     <div class="review-rating">
-                        Voto: {str_repeat('★', $review->getRating())}{str_repeat('☆', 5 - $review->getRating())} {* Sostituisce <?php echo str_repeat('★', $review->getRating()) . str_repeat('☆', 5 - $review->getRating()); ?> *}
+                        Voto:
+                        {section name=star loop=$review->getRating()}★{/section}
+                        {section name=nostar start=$review->getRating() loop=5}☆{/section}
                     </div>
-                    <p class="review-comment">"{nl2br($review->getComment()|escape)}"</p> {* Sostituisce <?php echo nl2br(htmlspecialchars($review->getComment())); ?> *}
+                    <p class="review-comment">"{$review->getComment()|escape|nl2br}"</p>
                 </div>
-            {/foreach} {* Sostituisce <?php endforeach; ?> *}
-        {else} {* Sostituisce <?php else: ?> *}
+            {/foreach}
+        {else}
             <p style="text-align: center;">Non ci sono ancora recensioni da mostrare.</p>
-        {/if} {* Sostituisce <?php endif; ?> *}
+        {/if}
 
-        <a href="{url controller='home' action='home'}" class="nav-link">Torna alla Home</a> {* Sostituisce action="/Pancia_mia_fatti_capanna/" con la funzione Smarty 'url' *}
+        <a href="/Pancia_mia_fatti_capanna/Home/home" class="nav-link">Torna alla Home</a>
     </div>
 </body>
 </html>

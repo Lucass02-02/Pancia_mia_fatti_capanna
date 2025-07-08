@@ -16,20 +16,31 @@
         button { width: 100%; padding: 1em; background-color: #e8491d; color: white; border: none; border-radius: 4px; font-size: 1em; cursor: pointer; margin-top: 1em; }
         .error { padding: 1em; margin-bottom: 1em; border-radius: 4px; text-align: center; background-color: #f8d7da; color: #721c24; }
         nav { text-align: center; margin-top: 1em; }
+        nav a { text-decoration: none; color: #e8491d; }
     </style>
 </head>
 <body>
     <div class="container">
         <h1>Prenota il Tuo Tavolo</h1>
-        {* CONVERSIONE DA PHP A SMARTY *}
+
         {if isset($error)}
             <div class="error">{$error|escape}</div>
         {/if}
-        <form action="{url controller='reservation' action='book'}" method="POST">
+
+        <form action="/Pancia_mia_fatti_capanna/Reservation/book" method="POST">
             <div class="form-grid">
-                <div class="form-group"><label for="date">Data</label><input type="date" id="date" name="date" required></div>
-                <div class="form-group"><label for="time">Ora</label><input type="time" id="time" name="time" required></div>
-                <div class="form-group"><label for="guests">Numero Ospiti</label><input type="number" id="guests" name="guests" min="1" max="10" required></div>
+                <div class="form-group">
+                    <label for="date">Data</label>
+                    <input type="date" id="date" name="date" required>
+                </div>
+                <div class="form-group">
+                    <label for="time">Ora</label>
+                    <input type="time" id="time" name="time" required>
+                </div>
+                <div class="form-group">
+                    <label for="guests">Numero Ospiti</label>
+                    <input type="number" id="guests" name="guests" min="1" max="10" required>
+                </div>
                 <div class="form-group">
                     <label for="table_id">Tavolo</label>
                     <select id="table_id" name="table_id" required>
@@ -39,10 +50,15 @@
                         {/foreach}
                     </select>
                 </div>
-                <div class="form-group full-width"><button type="submit">Conferma Prenotazione</button></div>
+                <div class="form-group full-width">
+                    <button type="submit">Conferma Prenotazione</button>
+                </div>
             </div>
         </form>
-        <nav><a href="{url controller='client' action='profile'}">Torna al Profilo</a></nav>
+
+        <nav>
+            <a href="/Pancia_mia_fatti_capanna/Client/profile">Torna al Profilo</a>
+        </nav>
     </div>
 </body>
 </html>

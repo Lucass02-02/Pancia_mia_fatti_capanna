@@ -22,9 +22,10 @@
         .delete-btn { display: inline-block; background-color: #dc3545; color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px; }
         .hall-update-form { display: flex; align-items: center; gap: 10px; }
         .hall-update-form select { flex-grow: 1; }
-        .hall-update-form button { background-color: #007bff; font-size: 0.9em; padding: 8px 12px; }
+        .hall-update-form button { background-color: #007bff; font-size: 0.9em; padding: 8px 12px; color: white; border: none; border-radius: 4px; cursor: pointer; }
+        .hall-update-form button:hover { background-color: #0056b3; }
         .nav-links { margin-top: 2em; text-align: center; }
-        .nav-links a { color: #007bff; text-decoration: none; font-weight: bold; }
+        .nav-links a { color: #e8491d; text-decoration: none; font-weight: bold; }
     </style>
 </head>
 <body>
@@ -32,7 +33,7 @@
         <h1>Gestione Camerieri</h1>
         <div class="form-section">
             <h2>Registra Nuovo Cameriere</h2>
-            <form action="{url controller='waiter' action='register'}" method="POST" class="registration-form">
+            <form action="/Pancia_mia_fatti_capanna/Waiter/register" method="POST" class="registration-form">
                 <div class="form-group">
                     <label for="name">Nome</label>
                     <input type="text" id="name" name="name" placeholder="Mario" required>
@@ -94,24 +95,20 @@
                             <td>{$waiter->getName()|escape} {$waiter->getSurname()|escape}</td>
                             <td>{$waiter->getSerialNumber()|escape}</td>
                             <td>
-                                {if $waiter->getRestaurantHall()}
-                                    <form class="hall-update-form" action="{url controller='waiter' action='updateHall'}" method="POST">
-                                        <input type="hidden" name="waiter_id" value="{$waiter->getId()}">
-                                        <select name="hall_id">
-                                            {foreach $halls as $hall}
-                                                <option value="{$hall->getIdHall()}" {if $waiter->getRestaurantHall()->getIdHall() == $hall->getIdHall()}selected{/if}>
-                                                    {$hall->getName()|escape}
-                                                </option>
-                                            {/foreach}
-                                        </select>
-                                        <button type="submit">Salva</button>
-                                    </form>
-                                {else}
-                                    <span>N/A</span>
-                                {/if}
+                                <form class="hall-update-form" action="/Pancia_mia_fatti_capanna/Waiter/updateHall" method="POST">
+                                    <input type="hidden" name="waiter_id" value="{$waiter->getId()}">
+                                    <select name="hall_id">
+                                        {foreach $halls as $hall}
+                                            <option value="{$hall->getIdHall()}" {if $waiter->getRestaurantHall() && $waiter->getRestaurantHall()->getIdHall() == $hall->getIdHall()}selected{/if}>
+                                                {$hall->getName()|escape}
+                                            </option>
+                                        {/foreach}
+                                    </select>
+                                    <button type="submit">Salva</button>
+                                </form>
                             </td>
                             <td>
-                                <a href="{url controller='waiter' action='delete' id=$waiter->getId()}" class="delete-btn" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
+                                <a href="/Pancia_mia_fatti_capanna/Waiter/delete/{$waiter->getId()}" class="delete-btn" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
                             </td>
                         </tr>
                         {/foreach}
@@ -120,7 +117,7 @@
             </table>
         </div>
         <div class="nav-links">
-            <a href="{url controller='admin' action='profile'}">Torna al Pannello di Controllo</a>
+            <a href="/Pancia_mia_fatti_capanna/Admin/profile">Torna al Pannello di Controllo</a>
         </div>
     </div>
 </body>
