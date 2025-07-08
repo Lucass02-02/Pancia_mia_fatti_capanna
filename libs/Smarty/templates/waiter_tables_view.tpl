@@ -1,71 +1,60 @@
-{* File: templates/waiter_tables_view.tpl *}
+{* File: templates/waiter_tables_view.tpl (SINTASSI SMARTY COMPLETA E BOOTSTRAP APPLICATO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Stato Tavoli - {$hall->getName()|escape}</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; }
-        .container { max-width: 900px; margin: 2em auto; padding: 2em; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h1 { color: #e8491d; text-align: center; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1.5em; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; vertical-align: middle; }
-        th { background-color: #f2f2f2; }
-        .action-form { display: flex; gap: 10px; align-items: center; }
-        .action-form select { padding: 8px; flex-grow: 1; border-radius: 4px; border: 1px solid #ccc; }
-        .action-form button { background-color: #007bff; color: white; border: none; padding: 8px 12px; border-radius: 4px; cursor: pointer; }
-        .nav-links { margin-top: 2.5em; text-align: center; }
-        .nav-links a { color: #e8491d; font-weight: bold; text-decoration: none; }
-        .state-available { color: green; font-weight: bold; }
-        .state-reserved { color: orange; font-weight: bold; }
-        .state-occupied { color: red; font-weight: bold; }
-    </style>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Stato Tavoli - {$hall->getName()|escape}</h1>
+<body class="bg-light">
+    <div class="container my-5" style="max-width: 900px;">
+        <div class="bg-white p-4 rounded shadow-sm">
+            <h1 class="text-primary text-center mb-4">Stato Tavoli - {$hall->getName()|escape}</h1>
 
-        {if $tables|@count == 0}
-            <p style="text-align:center;">Non ci sono tavoli assegnati a questa sala.</p>
-        {else}
-            <table>
-                <thead>
-                    <tr>
-                        <th>Tavolo</th>
-                        <th>Posti</th>
-                        <th>Stato Attuale</th>
-                        <th>Cambia Stato</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foreach $tables as $table}
-                        <tr>
-                            <td><strong>#{$table->getIdTable()}</strong></td>
-                            <td>{$table->getSeatsNumber()}</td>
-                            <td>
-                                <span class="state-{$table->getState()->value}">
-                                    {$table->getState()->value|upper}
-                                </span>
-                            </td>
-                            <td>
-                                <form class="action-form" action="/Pancia_mia_fatti_capanna/Waiter/updateTableState" method="POST">
-                                    <input type="hidden" name="table_id" value="{$table->getIdTable()}">
-                                    <select name="state">
-                                        <option value="available" {if $table->getState()->value eq 'available'}selected{/if}>Disponibile</option>
-                                        <option value="reserved" {if $table->getState()->value eq 'reserved'}selected{/if}>Prenotato</option>
-                                        <option value="occupied" {if $table->getState()->value eq 'occupied'}selected{/if}>Occupato</option>
-                                    </select>
-                                    <button type="submit">Salva</button>
-                                </form>
-                            </td>
-                        </tr>
-                    {/foreach}
-                </tbody>
-            </table>
-        {/if}
+            {if $tables|@count == 0}
+                <p class="text-center text-muted">Non ci sono tavoli assegnati a questa sala.</p>
+            {else}
+                <div class="table-responsive">
+                    <table class="table table-striped table-bordered align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Tavolo</th>
+                                <th>Posti</th>
+                                <th>Stato Attuale</th>
+                                <th>Cambia Stato</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {foreach $tables as $table}
+                                <tr>
+                                    <td><strong>#{$table->getIdTable()}</strong></td>
+                                    <td>{$table->getSeatsNumber()}</td>
+                                    <td>
+                                        <span class="fw-bold text-{if $table->getState()->value == 'available'}success{elseif $table->getState()->value == 'reserved'}warning{elseif $table->getState()->value == 'occupied'}danger{/if}">
+                                            {$table->getState()->value|upper}
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <form action="/Pancia_mia_fatti_capanna/Waiter/updateTableState" method="POST" class="d-flex align-items-center gap-2">
+                                            <input type="hidden" name="table_id" value="{$table->getIdTable()}">
+                                            <select name="state" class="form-select">
+                                                <option value="available" {if $table->getState()->value eq 'available'}selected{/if}>Disponibile</option>
+                                                <option value="reserved" {if $table->getState()->value eq 'reserved'}selected{/if}>Prenotato</option>
+                                                <option value="occupied" {if $table->getState()->value eq 'occupied'}selected{/if}>Occupato</option>
+                                            </select>
+                                            <button type="submit" class="btn btn-primary btn-sm">Salva</button>
+                                        </form>
+                                    </td>
+                                </tr>
+                            {/foreach}
+                        </tbody>
+                    </table>
+                </div>
+            {/if}
 
-        <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/Waiter/profile">Torna alla Dashboard</a>
+            <div class="text-center mt-4">
+                <a href="/Pancia_mia_fatti_capanna/Waiter/profile" class="btn btn-secondary">Torna alla Dashboard</a>
+            </div>
         </div>
     </div>
 </body>

@@ -1,123 +1,105 @@
-{* File: templates/manage_waiters.tpl *}
+{* File: templates/manage_waiters.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Gestione Camerieri</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; color: #333; }
-        .container { max-width: 1200px; margin: 2em auto; padding: 2em; background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1, h2 { color: #e8491d; text-align: center; }
-        .form-section, .list-section { margin-bottom: 2.5em; padding: 1.5em; border: 1px solid #ddd; border-radius: 8px; }
-        .registration-form { display: grid; grid-template-columns: 1fr 1fr; gap: 15px 20px; }
-        .form-group { display: flex; flex-direction: column; }
-        .form-group.full-width { grid-column: 1 / -1; }
-        .form-group label { margin-bottom: 5px; font-weight: bold; }
-        .form-group input, .form-group select { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
-        .form-group button { padding: 12px 20px; border: none; border-radius: 4px; background-color: #28a745; color: white; cursor: pointer; font-size: 1.1em; transition: background-color 0.2s; margin-top: 10px; }
-        .form-group button:hover { background-color: #218838; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1.5em; }
-        th, td { padding: 12px 15px; border: 1px solid #ddd; text-align: left; vertical-align: middle; }
-        th { background-color: #f2f2f2; }
-        .delete-btn { display: inline-block; background-color: #dc3545; color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px; }
-        .hall-update-form { display: flex; align-items: center; gap: 10px; }
-        .hall-update-form select { flex-grow: 1; }
-        .hall-update-form button { background-color: #007bff; font-size: 0.9em; padding: 8px 12px; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .hall-update-form button:hover { background-color: #0056b3; }
-        .nav-links { margin-top: 2em; text-align: center; }
-        .nav-links a { color: #e8491d; text-decoration: none; font-weight: bold; }
-    </style>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Gestione Camerieri</h1>
-        <div class="form-section">
-            <h2>Registra Nuovo Cameriere</h2>
-            <form action="/Pancia_mia_fatti_capanna/Waiter/register" method="POST" class="registration-form">
-                <div class="form-group">
-                    <label for="name">Nome</label>
-                    <input type="text" id="name" name="name" placeholder="Mario" required>
+<body class="bg-light">
+    <div class="container my-5 p-4 bg-white rounded shadow-sm" style="max-width: 1200px;">
+        <h1 class="text-primary text-center mb-4">Gestione Camerieri</h1>
+
+        <div class="mb-5">
+            <h2 class="h4 text-secondary mb-3">Registra Nuovo Cameriere</h2>
+            <form action="/Pancia_mia_fatti_capanna/Waiter/register" method="POST" class="row g-3">
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Nome</label>
+                    <input type="text" id="name" name="name" placeholder="Mario" class="form-control" required>
                 </div>
-                <div class="form-group">
-                    <label for="surname">Cognome</label>
-                    <input type="text" id="surname" name="surname" placeholder="Rossi" required>
+                <div class="col-md-6">
+                    <label for="surname" class="form-label">Cognome</label>
+                    <input type="text" id="surname" name="surname" placeholder="Rossi" class="form-control" required>
                 </div>
-                <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" id="email" name="email" placeholder="m.rossi@ristorante.it" required>
+                <div class="col-md-6">
+                    <label for="email" class="form-label">Email</label>
+                    <input type="email" id="email" name="email" placeholder="m.rossi@ristorante.it" class="form-control" required>
                 </div>
-                <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" id="password" name="password" placeholder="••••••••" required>
+                <div class="col-md-6">
+                    <label for="password" class="form-label">Password</label>
+                    <input type="password" id="password" name="password" placeholder="••••••••" class="form-control" required>
                 </div>
-                <div class="form-group">
-                    <label for="birthDate">Data di Nascita</label>
-                    <input type="date" id="birthDate" name="birthDate" required>
+                <div class="col-md-6">
+                    <label for="birthDate" class="form-label">Data di Nascita</label>
+                    <input type="date" id="birthDate" name="birthDate" class="form-control" required>
                 </div>
-                <div class="form-group">
-                    <label for="serialNumber">Matricola</label>
-                    <input type="text" id="serialNumber" name="serialNumber" placeholder="ID Univoco" required>
+                <div class="col-md-6">
+                    <label for="serialNumber" class="form-label">Matricola</label>
+                    <input type="text" id="serialNumber" name="serialNumber" placeholder="ID Univoco" class="form-control" required>
                 </div>
-                <div class="form-group full-width">
-                    <label for="hall_id">Assegna a una Sala</label>
-                    <select id="hall_id" name="hall_id" required>
+                <div class="col-12">
+                    <label for="hall_id" class="form-label">Assegna a una Sala</label>
+                    <select id="hall_id" name="hall_id" class="form-select" required>
                         <option value="">Seleziona una sala...</option>
                         {foreach $halls as $hall}
                             <option value="{$hall->getIdHall()}">{$hall->getName()|escape}</option>
                         {/foreach}
                     </select>
                 </div>
-                <div class="form-group full-width">
-                    <button type="submit">Registra Cameriere</button>
+                <div class="col-12">
+                    <button type="submit" class="btn btn-success w-100">Registra Cameriere</button>
                 </div>
             </form>
         </div>
 
-        <div class="list-section">
-            <h2>Camerieri Registrati</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome Completo</th>
-                        <th>Matricola</th>
-                        <th>Sala Assegnata</th>
-                        <th>Azione</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {if empty($waiters)}
-                        <tr><td colspan="5" style="text-align:center;">Non ci sono camerieri registrati.</td></tr>
-                    {else}
-                        {foreach $waiters as $waiter}
+        <div class="mb-5">
+            <h2 class="h4 text-secondary mb-3">Camerieri Registrati</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <td>{$waiter->getId()}</td>
-                            <td>{$waiter->getName()|escape} {$waiter->getSurname()|escape}</td>
-                            <td>{$waiter->getSerialNumber()|escape}</td>
-                            <td>
-                                <form class="hall-update-form" action="/Pancia_mia_fatti_capanna/Waiter/updateHall" method="POST">
-                                    <input type="hidden" name="waiter_id" value="{$waiter->getId()}">
-                                    <select name="hall_id">
-                                        {foreach $halls as $hall}
-                                            <option value="{$hall->getIdHall()}" {if $waiter->getRestaurantHall() && $waiter->getRestaurantHall()->getIdHall() == $hall->getIdHall()}selected{/if}>
-                                                {$hall->getName()|escape}
-                                            </option>
-                                        {/foreach}
-                                    </select>
-                                    <button type="submit">Salva</button>
-                                </form>
-                            </td>
-                            <td>
-                                <a href="/Pancia_mia_fatti_capanna/Waiter/delete/{$waiter->getId()}" class="delete-btn" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
-                            </td>
+                            <th>ID</th>
+                            <th>Nome Completo</th>
+                            <th>Matricola</th>
+                            <th>Sala Assegnata</th>
+                            <th>Azione</th>
                         </tr>
-                        {/foreach}
-                    {/if}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {if empty($waiters)}
+                            <tr><td colspan="5" class="text-center">Non ci sono camerieri registrati.</td></tr>
+                        {else}
+                            {foreach $waiters as $waiter}
+                            <tr>
+                                <td>{$waiter->getId()}</td>
+                                <td>{$waiter->getName()|escape} {$waiter->getSurname()|escape}</td>
+                                <td>{$waiter->getSerialNumber()|escape}</td>
+                                <td>
+                                    <form action="/Pancia_mia_fatti_capanna/Waiter/updateHall" method="POST" class="d-flex align-items-center gap-2">
+                                        <input type="hidden" name="waiter_id" value="{$waiter->getId()}">
+                                        <select name="hall_id" class="form-select">
+                                            {foreach $halls as $hall}
+                                                <option value="{$hall->getIdHall()}" {if $waiter->getRestaurantHall() && $waiter->getRestaurantHall()->getIdHall() == $hall->getIdHall()}selected{/if}>
+                                                    {$hall->getName()|escape}
+                                                </option>
+                                            {/foreach}
+                                        </select>
+                                        <button type="submit" class="btn btn-primary btn-sm">Salva</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="/Pancia_mia_fatti_capanna/Waiter/delete/{$waiter->getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
+                                </td>
+                            </tr>
+                            {/foreach}
+                        {/if}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/Admin/profile">Torna al Pannello di Controllo</a>
+
+        <div class="text-center mt-4">
+            <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-secondary">Torna al Pannello di Controllo</a>
         </div>
     </div>
 </body>
