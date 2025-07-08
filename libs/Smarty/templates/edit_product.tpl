@@ -1,47 +1,37 @@
-{* File: templates/edit_product.tpl *}
+{* File: templates/edit_product.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Modifica Prodotto - {$product->getName()|escape}</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 100%; max-width: 600px; }
-        h1 { text-align: center; color: #e8491d; }
-        .form-group { margin-bottom: 1em; }
-        label { display: block; margin-bottom: 0.5em; }
-        input[type="text"], input[type="number"], textarea, select {
-            width: 100%; padding: 0.8em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box;
-        }
-        textarea { resize: vertical; min-height: 100px; }
-        button { width: 100%; padding: 1em; background-color: #e8491d; color: white; border: none; border-radius: 4px; cursor: pointer; margin-top: 1em; }
-        .nav-link { display: block; text-align: center; margin-top: 1em; color: #e8491d; text-decoration: none; }
-    </style>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Modifica Prodotto</h1>
+<body class="bg-light d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="container p-4 bg-white rounded shadow-sm" style="max-width: 600px;">
+        <h1 class="text-center text-primary mb-4">Modifica Prodotto</h1>
         <form action="/Pancia_mia_fatti_capanna/Product/update" method="POST">
             <input type="hidden" name="product_id" value="{$product->getId()}">
             
-            <div class="form-group">
-                <label for="name">Nome Prodotto</label>
-                <input type="text" id="name" name="name" value="{$product->getName()|escape}" required>
+            <div class="mb-3">
+                <label for="name" class="form-label">Nome Prodotto</label>
+                <input type="text" id="name" name="name" value="{$product->getName()|escape}" class="form-control" required>
             </div>
 
-            <div class="form-group">
-                <label for="description">Descrizione</label>
-                <textarea id="description" name="description" required>{$product->getDescription()|escape}</textarea>
+            <div class="mb-3">
+                <label for="description" class="form-label">Descrizione</label>
+                <textarea id="description" name="description" class="form-control" rows="4" required>{$product->getDescription()|escape}</textarea>
             </div>
             
-            <div class="form-group">
-                <label for="price">Prezzo (€)</label>
-                <input type="number" id="price" name="price" step="0.01" min="0" value="{$product->getPrice()|escape}" required>
+            <div class="mb-3">
+                <label for="price" class="form-label">Prezzo (€)</label>
+                <input type="number" id="price" name="price" step="0.01" min="0" value="{$product->getPrice()|escape}" class="form-control" required>
             </div>
             
-            <button type="submit">Salva Modifiche</button>
+            <button type="submit" class="btn btn-primary w-100">Salva Modifiche</button>
         </form>
-        <a href="/Pancia_mia_fatti_capanna/Home/menu" class="nav-link">Annulla e torna al Menù</a>
+        <div class="text-center mt-3">
+            <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary">Annulla e torna al Menù</a>
+        </div>
     </div>
 </body>
 </html>

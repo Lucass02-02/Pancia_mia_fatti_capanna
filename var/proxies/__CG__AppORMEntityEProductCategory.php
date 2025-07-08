@@ -7,7 +7,7 @@ namespace AppORM\Proxies\__CG__\AppORM\Entity;
  */
 class EProductCategory extends \AppORM\Entity\EProductCategory implements \Doctrine\ORM\Proxy\InternalProxy
 {
-    use \Symfony\Component\VarExporter\LazyGhostTrait {
+     use \Symfony\Component\VarExporter\LazyGhostTrait {
         initializeLazyObject as private;
         setLazyObjectAsInitialized as public __setInitialized;
         isLazyObjectInitialized as private;
@@ -28,7 +28,7 @@ class EProductCategory extends \AppORM\Entity\EProductCategory implements \Doctr
         'id' => [parent::class, 'id', null, 16],
         'name' => [parent::class, 'name', null, 16],
         'products' => [parent::class, 'products', null, 16],
-    ];
+    ];
 
     public function __isInitialized(): bool
     {

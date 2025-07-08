@@ -1,56 +1,48 @@
-{* File: templates/manage_clients.tpl *}
+{* File: templates/manage_clients.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Gestione Clienti</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; }
-        .container { max-width: 1200px; margin: 2em auto; padding: 2em; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h1 { color: #e8491d; text-align: center; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1.5em; }
-        th, td { padding: 12px; border: 1px solid #ddd; text-align: left; }
-        th { background-color: #f2f2f2; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        .nav-links { margin-top: 2em; text-align: center; }
-        .nav-links a { color: #e8491d; text-decoration: none; font-weight: bold; }
-    </style>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Clienti Registrati</h1>
+<body class="bg-light">
+    <div class="container my-5 p-4 bg-white rounded shadow-sm" style="max-width: 1200px;">
+        <h1 class="text-primary text-center mb-4">Clienti Registrati</h1>
 
         {if empty($clients)}
-            <p style="text-align:center;">Non ci sono clienti registrati al momento.</p>
+            <p class="text-center text-muted">Non ci sono clienti registrati al momento.</p>
         {else}
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>Nome Completo</th>
-                        <th>Email</th>
-                        <th>Nickname</th>
-                        <th>Telefono</th>
-                        <th>Data di Nascita</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foreach $clients as $client}
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered">
+                    <thead class="table-light">
                         <tr>
-                            <td>{$client->getId()}</td>
-                            <td>{$client->getName()|escape} {$client->getSurname()|escape}</td>
-                            <td>{$client->getEmail()|escape}</td>
-                            <td>{$client->getNickname()|default:'-'|escape}</td>
-                            <td>{$client->getPhonenumber()|default:'-'|escape}</td>
-                            <td>{$client->getBirthDate()->format('d/m/Y')}</td>
+                            <th>ID</th>
+                            <th>Nome Completo</th>
+                            <th>Email</th>
+                            <th>Nickname</th>
+                            <th>Telefono</th>
+                            <th>Data di Nascita</th>
                         </tr>
-                    {/foreach}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {foreach $clients as $client}
+                            <tr>
+                                <td>{$client->getId()}</td>
+                                <td>{$client->getName()|escape} {$client->getSurname()|escape}</td>
+                                <td>{$client->getEmail()|escape}</td>
+                                <td>{$client->getNickname()|default:'-'|escape}</td>
+                                <td>{$client->getPhonenumber()|default:'-'|escape}</td>
+                                <td>{$client->getBirthDate()->format('d/m/Y')}</td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
         {/if}
         
-        <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/Admin/profile">Torna al Pannello di Controllo</a>
+        <div class="text-center mt-4">
+            <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-secondary">Torna al Pannello di Controllo</a>
         </div>
     </div>
 </body>

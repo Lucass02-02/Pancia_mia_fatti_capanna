@@ -1,30 +1,23 @@
-{* File: templates/add_review.tpl *}
+{* File: templates/add_review.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Lascia una Recensione</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        h1 { text-align: center; color: #e8491d; }
-        textarea, select { width: 100%; padding: 0.8em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; margin-bottom: 1em; }
-        button { width: 100%; padding: 1em; background-color: #e8491d; color: white; border: none; border-radius: 4px; font-size: 1em; cursor: pointer; }
-        .error { color: red; text-align: center; margin-bottom: 1em; }
-    </style>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>La Tua Opinione Conta!</h1>
+<body class="bg-light d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="container p-4 bg-white rounded shadow-sm" style="max-width: 500px;">
+        <h1 class="text-center text-primary mb-4">La Tua Opinione Conta!</h1>
 
         {if isset($error)}
-            <p class="error">{$error|escape}</p>
+            <p class="text-danger text-center mb-3">{$error|escape}</p>
         {/if}
-        
+
         <form action="/Pancia_mia_fatti_capanna/Client/addReview" method="POST">
-            <div>
-                <label for="rating">Voto (da 1 a 5)</label>
-                <select id="rating" name="rating" required>
+            <div class="mb-3">
+                <label for="rating" class="form-label">Voto (da 1 a 5)</label>
+                <select id="rating" name="rating" class="form-select" required>
                     <option value="">Seleziona un voto</option>
                     <option value="5">5 - Eccellente</option>
                     <option value="4">4 - Molto Buono</option>
@@ -33,11 +26,11 @@
                     <option value="1">1 - Insufficiente</option>
                 </select>
             </div>
-            <div>
-                <label for="comment">Commento</label>
-                <textarea id="comment" name="comment" rows="5" required></textarea>
+            <div class="mb-3">
+                <label for="comment" class="form-label">Commento</label>
+                <textarea id="comment" name="comment" rows="5" class="form-control" required></textarea>
             </div>
-            <button type="submit">Invia Recensione</button>
+            <button type="submit" class="btn btn-primary w-100">Invia Recensione</button>
         </form>
     </div>
 </body>

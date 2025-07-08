@@ -1,49 +1,42 @@
-{* File: templates/add_credit_card.tpl *}
+{* File: templates/add_credit_card.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Aggiungi Carta di Credito</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f4f4f4; display: flex; justify-content: center; align-items: center; min-height: 100vh; }
-        .container { background-color: #fff; padding: 2em; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); width: 100%; max-width: 500px; }
-        h1 { text-align: center; color: #e8491d; }
-        input, select { width: 100%; padding: 0.8em; border: 1px solid #ddd; border-radius: 4px; box-sizing: border-box; margin-bottom: 1em; }
-        button { width: 100%; padding: 1em; background-color: #e8491d; color: white; border: none; border-radius: 4px; font-size: 1em; cursor: pointer; }
-        .error { color: red; text-align: center; margin-bottom: 1em; }
-    </style>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Aggiungi Metodo di Pagamento</h1>
-        <p style="text-align:center; font-size:0.8em; color:#777;">Nota: non inserire dati reali. Questa è una simulazione.</p>
+<body class="bg-light d-flex justify-content-center align-items-center" style="min-height: 100vh;">
+    <div class="container p-4 bg-white rounded shadow-sm" style="max-width: 500px;">
+        <h1 class="text-center text-primary mb-3">Aggiungi Metodo di Pagamento</h1>
+        <p class="text-center small text-muted">Nota: non inserire dati reali. Questa è una simulazione.</p>
 
         {if isset($error)}
-            <p class="error">{$error|escape}</p>
+            <p class="text-danger text-center mb-3">{$error|escape}</p>
         {/if}
-        
+
         <form action="/Pancia_mia_fatti_capanna/Client/addCreditCard" method="POST">
-            <div>
-                <label for="cardName">Nome Carta (es. La mia Visa)</label>
-                <input type="text" id="cardName" name="cardName">
+            <div class="mb-3">
+                <label for="cardName" class="form-label">Nome Carta (es. La mia Visa)</label>
+                <input type="text" id="cardName" name="cardName" class="form-control">
             </div>
-            <div>
-                <label for="brand">Circuito (es. Visa, MasterCard)</label>
-                <input type="text" id="brand" name="brand" required>
+            <div class="mb-3">
+                <label for="brand" class="form-label">Circuito (es. Visa, MasterCard)</label>
+                <input type="text" id="brand" name="brand" class="form-control" required>
             </div>
-            <div>
-                <label for="last4">Ultime 4 Cifre</label>
-                <input type="text" id="last4" name="last4" maxlength="4" required>
+            <div class="mb-3">
+                <label for="last4" class="form-label">Ultime 4 Cifre</label>
+                <input type="text" id="last4" name="last4" maxlength="4" class="form-control" required>
             </div>
-            <div>
-                <label for="expMonth">Mese Scadenza</label>
-                <input type="number" id="expMonth" name="expMonth" min="1" max="12" required>
+            <div class="mb-3">
+                <label for="expMonth" class="form-label">Mese Scadenza</label>
+                <input type="number" id="expMonth" name="expMonth" min="1" max="12" class="form-control" required>
             </div>
-            <div>
-                <label for="expYear">Anno Scadenza</label>
-                <input type="number" id="expYear" name="expYear" min="2024" required>
+            <div class="mb-3">
+                <label for="expYear" class="form-label">Anno Scadenza</label>
+                <input type="number" id="expYear" name="expYear" min="2024" class="form-control" required>
             </div>
-            <button type="submit">Aggiungi Carta</button>
+            <button type="submit" class="btn btn-primary w-100">Aggiungi Carta</button>
         </form>
     </div>
 </body>

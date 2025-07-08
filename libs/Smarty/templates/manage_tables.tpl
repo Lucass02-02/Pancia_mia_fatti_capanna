@@ -1,109 +1,93 @@
-{* File: templates/manage_tables.tpl *}
+{* File: templates/manage_tables.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Gestione Tavoli</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; color: #333; }
-        .container { max-width: 1100px; margin: 2em auto; padding: 2em; background: #fff; border-radius: 8px; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
-        h1, h2 { color: #e8491d; text-align: center; }
-        .form-section, .list-section { margin-bottom: 2.5em; padding: 1.5em; border: 1px solid #ddd; border-radius: 8px; }
-        .form-inline { display: flex; flex-wrap: wrap; gap: 15px; align-items: center; justify-content: center; }
-        .form-inline label { font-weight: bold; }
-        .form-inline select, .form-inline input[type="number"] { padding: 10px; border: 1px solid #ccc; border-radius: 4px; font-size: 1em; }
-        .form-inline button { padding: 10px 20px; border: none; border-radius: 4px; background-color: #28a745; color: white; cursor: pointer; font-size: 1em; transition: background-color 0.2s; }
-        .form-inline button:hover { background-color: #218838; }
-        table { width: 100%; border-collapse: collapse; margin-top: 1.5em; }
-        th, td { padding: 12px 15px; border: 1px solid #ddd; text-align: left; vertical-align: middle; }
-        th { background-color: #f2f2f2; font-weight: bold; }
-        tr:nth-child(even) { background-color: #f9f9f9; }
-        .state-available { color: #28a745; font-weight: bold; }
-        .state-reserved { color: #ffc107; font-weight: bold; }
-        .state-occupied { color: #dc3545; font-weight: bold; }
-        .action-form { display: flex; gap: 10px; align-items: center; }
-        .action-form select { padding: 8px; }
-        .action-form button { background-color: #007bff; padding: 8px 12px; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .action-form button:hover { background-color: #0056b3; }
-        .delete-btn { display: inline-block; background-color: #dc3545; color: white; text-decoration: none; padding: 8px 12px; border-radius: 4px; transition: background-color 0.2s; }
-        .delete-btn:hover { background-color: #c82333; }
-        .nav-links { margin-top: 2em; text-align: center; }
-        .nav-links a, .top-link a { color: white; background-color: #17a2b8; padding: 10px 15px; border-radius: 5px; text-decoration: none; font-weight: bold; }
-        .top-link { margin-bottom: 2em; text-align: right; }
-    </style>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Gestione Tavoli</h1>
+<body class="bg-light">
+    <div class="container my-5 p-4 bg-white rounded shadow-sm" style="max-width: 1100px;">
+        <h1 class="text-primary text-center mb-4">Gestione Tavoli</h1>
 
-        <div class="top-link">
-            <a href="/Pancia_mia_fatti_capanna/Hall/manage">Gestisci Sale</a>
+        <div class="text-end mb-4">
+            <a href="/Pancia_mia_fatti_capanna/Hall/manage" class="btn btn-info">Gestisci Sale</a>
         </div>
 
-        <div class="form-section">
-            <h2>Aggiungi Nuovo Tavolo</h2>
-            <form action="/Pancia_mia_fatti_capanna/Table/create" method="POST" class="form-inline">
-                <label for="seatsNumber">Numero Posti:</label>
-                <input type="number" id="seatsNumber" name="seatsNumber" min="1" required>
-                
-                <label for="hall_id">Sala:</label>
-                <select id="hall_id" name="hall_id" required>
-                    <option value="">Seleziona una sala</option>
-                    {foreach $halls as $hall}
-                        <option value="{$hall->getIdHall()}">{$hall->getName()|escape}</option>
-                    {/foreach}
-                </select>
-                
-                <button type="submit">Aggiungi Tavolo</button>
+        <div class="mb-5">
+            <h2 class="h4 text-secondary mb-3">Aggiungi Nuovo Tavolo</h2>
+            <form action="/Pancia_mia_fatti_capanna/Table/create" method="POST" class="row g-3 align-items-center justify-content-center">
+                <div class="col-auto">
+                    <label for="seatsNumber" class="col-form-label">Numero Posti:</label>
+                </div>
+                <div class="col-auto">
+                    <input type="number" id="seatsNumber" name="seatsNumber" min="1" class="form-control" required>
+                </div>
+                <div class="col-auto">
+                    <label for="hall_id" class="col-form-label">Sala:</label>
+                </div>
+                <div class="col-auto">
+                    <select id="hall_id" name="hall_id" class="form-select" required>
+                        <option value="">Seleziona una sala</option>
+                        {foreach $halls as $hall}
+                            <option value="{$hall->getIdHall()}">{$hall->getName()|escape}</option>
+                        {/foreach}
+                    </select>
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-success">Aggiungi Tavolo</button>
+                </div>
             </form>
         </div>
 
-        <div class="list-section">
-            <h2>Tavoli Esistenti</h2>
-            <table>
-                <thead>
-                    <tr>
-                        <th>ID</th>
-                        <th>N. Posti</th>
-                        <th>Sala</th>
-                        <th>Stato Attuale</th>
-                        <th>Cambia Stato</th>
-                        <th>Azioni</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {foreach $tables as $table}
+        <div class="mb-5">
+            <h2 class="h4 text-secondary mb-3">Tavoli Esistenti</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-bordered align-middle">
+                    <thead class="table-light">
                         <tr>
-                            <td>{$table->getIdTable()}</td>
-                            <td>{$table->getSeatsNumber()}</td>
-                            <td>{$table->getRestaurantHall()->getName()|escape}</td>
-                            <td>
-                                <span class="state-{$table->getState()->value}">
-                                    {$table->getState()->value|upper}
-                                </span>
-                            </td>
-                            <td>
-                                <form action="/Pancia_mia_fatti_capanna/Table/updateState" method="POST" class="action-form">
-                                    <input type="hidden" name="table_id" value="{$table->getIdTable()}">
-                                    <select name="state">
-                                        <option value="available" {if $table->getState()->value eq 'available'}selected{/if}>Disponibile</option>
-                                        <option value="reserved" {if $table->getState()->value eq 'reserved'}selected{/if}>Prenotato</option>
-                                        <option value="occupied" {if $table->getState()->value eq 'occupied'}selected{/if}>Occupato</option>
-                                    </select>
-                                    <button type="submit">Salva</button>
-                                </form>
-                            </td>
-                            <td>
-                                <a href="/Pancia_mia_fatti_capanna/Table/delete/{$table->getIdTable()}" class="delete-btn" onclick="return confirm('Sei sicuro di voler eliminare questo tavolo?');">Elimina</a>
-                            </td>
+                            <th>ID</th>
+                            <th>N. Posti</th>
+                            <th>Sala</th>
+                            <th>Stato Attuale</th>
+                            <th>Cambia Stato</th>
+                            <th>Azioni</th>
                         </tr>
-                    {/foreach}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        {foreach $tables as $table}
+                            <tr>
+                                <td>{$table->getIdTable()}</td>
+                                <td>{$table->getSeatsNumber()}</td>
+                                <td>{$table->getRestaurantHall()->getName()|escape}</td>
+                                <td>
+                                    <span class="fw-bold text-{if $table->getState()->value == 'available'}success{elseif $table->getState()->value == 'reserved'}warning{elseif $table->getState()->value == 'occupied'}danger{/if}">
+                                        {$table->getState()->value|upper}
+                                    </span>
+                                </td>
+                                <td>
+                                    <form action="/Pancia_mia_fatti_capanna/Table/updateState" method="POST" class="d-flex align-items-center gap-2">
+                                        <input type="hidden" name="table_id" value="{$table->getIdTable()}">
+                                        <select name="state" class="form-select">
+                                            <option value="available" {if $table->getState()->value eq 'available'}selected{/if}>Disponibile</option>
+                                            <option value="reserved" {if $table->getState()->value eq 'reserved'}selected{/if}>Prenotato</option>
+                                            <option value="occupied" {if $table->getState()->value eq 'occupied'}selected{/if}>Occupato</option>
+                                        </select>
+                                        <button type="submit" class="btn btn-primary btn-sm">Salva</button>
+                                    </form>
+                                </td>
+                                <td>
+                                    <a href="/Pancia_mia_fatti_capanna/Table/delete/{$table->getIdTable()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo tavolo?');">Elimina</a>
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
+            </div>
         </div>
-        
-        <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/Home/home">Torna alla Home</a>
+
+        <div class="text-center mt-4">
+            <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
         </div>
     </div>
 </body>

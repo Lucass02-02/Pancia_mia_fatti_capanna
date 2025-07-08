@@ -1,8 +1,8 @@
 <?php
 
-require __DIR__ . '/vendor/autoload.php';
+require __DIR__ . '/../vendor/autoload.php';
 // Se hai un file bootstrap.php che inizializza Doctrine, includilo qui.
-// require __DIR__ . '/bootstrap.php'; 
+require __DIR__ . '/../bootstrap.php'; 
 
 ob_implicit_flush(true);
 
