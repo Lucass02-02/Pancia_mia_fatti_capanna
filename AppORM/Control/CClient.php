@@ -26,7 +26,6 @@ class CClient
             if ($name && $surname && $email && $password && $birthDateStr) {
                 try {
                     $birthDate = new DateTime($birthDateStr);
-                    // Uso il FPersistentManager come richiesto
                     $client = FPersistentManager::getInstance()->registerClient($name, $surname, $birthDate, $email, $password, $phoneNumber, $nickname);
                     if ($client) {
                         UView::render('registration', ['success' => true, 'message' => 'Registrazione completata! Ora puoi effettuare il login.']);
@@ -42,48 +41,63 @@ class CClient
         }
     }
 
-    public static function login(): void
-    {
-        if (UHTTPMethods::isGet()) {
-            UView::render('login');
-        } elseif (UHTTPMethods::isPost()) {
-            $email = UHTTPMethods::getPostValue('email');
-            $password = UHTTPMethods::getPostValue('password');
+public static function login(): void
+{
+    if (UHTTPMethods::isGet()) {
+        UView::render('login');
+    } elseif (UHTTPMethods::isPost()) {
+        $email = UHTTPMethods::getPostValue('email');
+        $password = UHTTPMethods::getPostValue('password');
 
-            if ($email && $password) {
-                // Uso il FPersistentManager come richiesto
-                $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
-                if ($client) {
-                    USession::setValue('user_id', $client->getId());
-                    header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
-                    exit;
-                } else {
-                    UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
-                }
-            } else {
-                UView::render('login', ['error' => 'Email e password sono obbligatori.']);
+        if ($email && $password) {
+            $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
+            if ($client) {
+                USession::setValue('user_id', $client->getId());
+                USession::setValue('user_role', 'client');
+                USession::setValue('user_email', $client->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/client/profile');
+                exit;
             }
+
+            $waiter = FPersistentManager::getInstance()->authenticateWaiter($email, $password);
+            if ($waiter) {
+                USession::setValue('user_id', $waiter->getId());
+                USession::setValue('user_role', 'waiter');
+                USession::setValue('user_email', $waiter->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/waiter/profile');
+                exit;
+            }
+
+            $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
+            if ($admin) {
+                USession::setValue('user_id', $admin->getId());
+                USession::setValue('user_role', 'admin');
+                USession::setValue('user_email', $admin->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/');
+                exit;
+            }
+
+            UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
+        } else {
+            UView::render('login', ['error' => 'Email e password sono obbligatori.']);
         }
     }
-
+}
     public static function profile(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
 
         $clientId = USession::getValue('user_id');
-        // Uso il FPersistentManager come richiesto
         $client = FPersistentManager::getInstance()->getClientById($clientId);
 
         if ($client) {
-            // Qui il controller passa correttamente l'oggetto Client alla vista.
-            // L'errore si verifica dopo, quando la vista prova a usare le relazioni.
             UView::render('profile', [
                 'client' => $client,
-                'reviews' => $client->getReviews(), // La chiamata che scatena l'errore di mapping
-                'creditCards' => $client->getCreditCards() // Anche questa
+                'reviews' => $client->getReviews(),
+                'creditCards' => $client->getCreditCards()
             ]);
         } else {
             self::logout();
@@ -99,7 +113,7 @@ class CClient
 
     public static function addReview(): void
     {
-        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login'); exit; }
+        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/client/login'); exit; }
 
         if (UHTTPMethods::isGet()) {
             UView::render('add_review');
@@ -110,9 +124,8 @@ class CClient
             $comment = UHTTPMethods::getPostValue('comment');
 
             if ($client && $rating >= 1 && $rating <= 5 && !empty($comment)) {
-                // Uso il FPersistentManager come richiesto
                 FPersistentManager::getInstance()->addReviewToClient($client, $comment, $rating);
-                header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&review=success');
+                header('Location: /Pancia_mia_fatti_capanna/client/profile/success');
             } else {
                 UView::render('add_review', ['error' => 'Per favore, compila tutti i campi correttamente.']);
             }
@@ -121,7 +134,7 @@ class CClient
 
     public static function addCreditCard(): void
     {
-        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login'); exit; }
+        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/client/login'); exit; }
 
         if (UHTTPMethods::isGet()) {
             UView::render('add_credit_card');
@@ -136,26 +149,65 @@ class CClient
             $cardName = UHTTPMethods::getPostValue('cardName');
 
             if ($client && $brand && strlen($last4) === 4 && $expMonth && $expYear) {
-                 // Uso il FPersistentManager come richiesto
                 FPersistentManager::getInstance()->addCreditCardToClient($client, $brand, $last4, $expMonth, $expYear, $cardName);
-                header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&card=success');
+                header('Location: /Pancia_mia_fatti_capanna/client/profile/success');
             } else {
                 UView::render('add_credit_card', ['error' => 'Per favore, compila tutti i campi correttamente.']);
             }
         }
     }
 
-    public static function deleteCreditCard(): void
+    // Modificato per accettare l'ID della carta come segmento dell'URL se si desidera usarlo così
+    // e per reindirizzare a un URL pulito.
+    public static function deleteCreditCard(): void // La form POST invia l'ID con metodo POST
     {
-        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login'); exit; }
+        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/client/login'); exit; }
         
         if (UHTTPMethods::isPost()) {
             $cardId = (int)UHTTPMethods::getPostValue('card_id');
-             // Uso il FPersistentManager come richiesto
             FPersistentManager::getInstance()->deleteCreditCard($cardId);
-            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&card=deleted');
+            // URL pulito
+            header('Location: /Pancia_mia_fatti_capanna/client/profile?card=deleted');
             exit;
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
+        header('Location: /Pancia_mia_fatti_capanna/client/profile');
+    }
+
+    // Questi metodi sembrano appartenere a CProduct, li lascio ma sono un duplicato.
+    private static function checkAdmin(): void { // Aggiunto per evitare errore se chiamati
+        if (USession::getValue('user_role') !== 'admin') {
+            header('Location: /Pancia_mia_fatti_capanna/');
+            exit;
+        }
+    }
+
+    public static function showCreateForm(): void
+    {
+        self::checkAdmin();
+        $categories = FPersistentManager::getInstance()->getAllProductCategories();
+        UView::render('create_product', [
+            'categories' => $categories
+        ]);
+    }
+
+    public static function create(): void
+    {
+        self::checkAdmin();
+        if (UHTTPMethods::isPost()) {
+            $name = UHTTPMethods::getPostValue('name');
+            $description = UHTTPMethods::getPostValue('description');
+            $price = (float)UHTTPMethods::getPostValue('price');
+            $categoryId = (int)UHTTPMethods::getPostValue('category_id');
+
+            if ($name && $description && $price > 0 && $categoryId > 0) {
+                $category = FPersistentManager::getInstance()->getProductCategoryById($categoryId);
+                if ($category) {
+                    $product = new \AppORM\Entity\EProduct($name, $description, $price, $category);
+                    FPersistentManager::getInstance()->saveProduct($product);
+                }
+            }
+        }
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
+        exit;
     }
 }

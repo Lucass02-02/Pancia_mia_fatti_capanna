@@ -1,5 +1,5 @@
 <?php
-// File: AppORM/Entity/EProduct.php
+// File: AppORM/Entity/EProduct.php (AGGIORNATO CON I SETTER)
 
 namespace AppORM\Entity;
 
@@ -19,14 +19,14 @@ class EProduct
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
-    /**
-     * QUESTA È LA PROPRIETÀ CHE MANCAVA
-     */
     #[ORM\Column(type: 'text')]
     private string $description;
 
     #[ORM\Column(type: 'float')]
     private float $price;
+
+    #[ORM\Column(type: 'boolean', options: ['default' => true])]
+    private bool $availability = true;
 
     #[ORM\ManyToOne(targetEntity: EProductCategory::class, inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
@@ -36,53 +36,75 @@ class EProduct
     #[ORM\JoinTable(name: 'products_allergens')]
     private Collection $allergens;
 
-
-    // Il costruttore è già corretto e accetta la descrizione
     public function __construct(string $name, string $description, float $price, EProductCategory $category)
     {
         $this->name = $name;
-        $this->description = $description; // e la assegna qui
+        $this->description = $description;
         $this->price = $price;
         $this->category = $category;
         $this->allergens = new ArrayCollection();
+        $this->availability = true;
     }
 
-    // --- Metodi Getter ---
+    // --- Metodi Getter (esistenti) ---
     
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
+    public function getId(): ?int { return $this->id; }
+    public function getName(): string { return $this->name; }
+    public function getDescription(): string { return $this->description; }
+    public function getPrice(): float { return $this->price; }
+    public function getCategory(): EProductCategory { return $this->category; }
+    public function getAllergens(): Collection { return $this->allergens; }
+    public function isAvailable(): bool { return $this->availability; }
 
-    public function getName(): string
+    
+    // --- NUOVI METODI SETTER ---
+    // Questi metodi permettono al controller di modificare un prodotto esistente.
+
+    /**
+     * Imposta un nuovo nome per il prodotto.
+     * @param string $name
+     * @return self
+     */
+    public function setName(string $name): self
     {
-        return $this->name;
+        $this->name = $name;
+        return $this;
     }
 
     /**
-     * Questo metodo ora funzionerà perché la proprietà $this->description esiste.
+     * Imposta una nuova descrizione per il prodotto.
+     * @param string $description
+     * @return self
      */
-    public function getDescription(): string
+    public function setDescription(string $description): self
     {
-        return $this->description;
+        $this->description = $description;
+        return $this;
     }
 
-    public function getPrice(): float
+    /**
+     * Imposta un nuovo prezzo per il prodotto.
+     * @param float $price
+     * @return self
+     */
+    public function setPrice(float $price): self
     {
-        return $this->price;
+        $this->price = $price;
+        return $this;
     }
 
-    public function getCategory(): EProductCategory
+    /**
+     * Imposta lo stato di disponibilità del prodotto.
+     * @param bool $available
+     * @return self
+     */
+    public function setAvailability(bool $available): self
     {
-        return $this->category;
+        $this->availability = $available;
+        return $this;
     }
 
-    public function getAllergens(): Collection
-    {
-        return $this->allergens;
-    }
-
-    // --- Metodi per gestire le relazioni ---
+    // --- Metodi per gestire le relazioni (esistenti) ---
 
     public function addAllergen(EAllergens $allergen): void
     {

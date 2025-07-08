@@ -1,0 +1,16 @@
+# File: .htaccess (DA CREARE NELLA ROOT DEL PROGETTO)
+
+# Attiva il motore di riscrittura degli URL
+RewriteEngine On
+
+# Imposta la base per le regole di riscrittura
+# Se il tuo progetto non è nella root del dominio, questa riga è fondamentale.
+# Sostituisci '/Pancia_mia_fatti_capanna/' con il percorso corretto se diverso.
+RewriteBase /Pancia_mia_fatti_capanna/
+
+# Se la richiesta NON è per un file esistente...
+RewriteCond %{REQUEST_FILENAME} !-f
+# ...e se la richiesta NON è per una directory esistente...
+RewriteCond %{REQUEST_FILENAME} !-d
+# ...allora reindirizza tutto a index.php
+RewriteRule . index.php [L]

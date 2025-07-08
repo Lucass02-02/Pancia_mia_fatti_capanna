@@ -43,7 +43,7 @@
             <div class="error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
 
-        <form action="/Pancia_mia_fatti_capanna/index.php?c=client&a=login" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/client/login" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" id="email" name="email" required>

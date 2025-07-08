@@ -24,7 +24,7 @@
         <?php if (isset($error)): ?>
             <div class="error"><?php echo htmlspecialchars($error); ?></div>
         <?php endif; ?>
-        <form action="/Pancia_mia_fatti_capanna/index.php?c=reservation&a=book" method="POST">
+        <form action="/Pancia_mia_fatti_capanna/reservation/book" method="POST">
             <div class="form-grid">
                 <div class="form-group"><label for="date">Data</label><input type="date" id="date" name="date" required></div>
                 <div class="form-group"><label for="time">Ora</label><input type="time" id="time" name="time" required></div>
@@ -41,7 +41,7 @@
                 <div class="form-group full-width"><button type="submit">Conferma Prenotazione</button></div>
             </div>
         </form>
-        <nav><a href="/Pancia_mia_fatti_capanna/index.php?c=client&a=profile">Torna al Profilo</a></nav>
+        <nav><a href="/Pancia_mia_fatti_capanna/client/profile">Torna al Profilo</a></nav>
     </div>
 </body>
 </html>

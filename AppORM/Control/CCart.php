@@ -1,4 +1,4 @@
-<?php
+<?php // File: AppORM/Control/CCart.php
 namespace AppORM\Control;
 
 use AppORM\Services\Foundation\FPersistentManager;
@@ -11,7 +11,8 @@ class CCart
     public static function add(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            // URL pulito
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
 
@@ -32,9 +33,7 @@ class CCart
                         $cart[$productId] = [
                             'product_id' => $productId,
                             'name' => $product->getName(),
-                            // ***** CORREZIONE QUI *****
-                            // Il metodo corretto è getPrice(), non getCost()
-                            'price' => $product->getPrice(), //
+                            'price' => $product->getPrice(),
                             'quantity' => $quantity
                         ];
                     }
@@ -42,23 +41,27 @@ class CCart
                     USession::setValue('cart', $cart);
 
                     if ($fromCart) {
-                        header('Location: /Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
+                        // URL pulito
+                        header('Location: /Pancia_mia_fatti_capanna/cart/view');
                     } else {
-                        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+                        // URL pulito
+                        header('Location: /Pancia_mia_fatti_capanna/home/menu');
                     }
                     exit;
                 }
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
         exit;
     }
     
-    // Il resto dei metodi (addAll, view, remove, clear) sono corretti e rimangono invariati.
-    // Li includo per completezza, assicurandomi che anche loro usino getPrice().
-    
     public static function addAll(): void {
-        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login'); exit; }
+        if (!USession::isSet('user_id')) {
+            // URL pulito
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
+            exit;
+        }
         if (UHTTPMethods::isPost()) {
             $productIds = UHTTPMethods::getPostValue('product_ids', []);
             if (!empty($productIds) && is_array($productIds)) {
@@ -77,17 +80,26 @@ class CCart
                 USession::setValue('cart', $cart);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=home&a=menu');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
         exit;
     }
 
     public static function view(): void {
-        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login'); exit; }
+        if (!USession::isSet('user_id')) {
+            // URL pulito
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
+            exit;
+        }
         UView::render('cart', ['cartItems' => USession::getValue('cart', [])]);
     }
 
     public static function remove(): void {
-        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login'); exit; }
+        if (!USession::isSet('user_id')) {
+            // URL pulito
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
+            exit;
+        }
         if (UHTTPMethods::isPost()) {
             $productId = (int) UHTTPMethods::getPostValue('product_id');
             $removeOne = UHTTPMethods::getPostValue('remove_one');
@@ -101,16 +113,22 @@ class CCart
                 USession::setValue('cart', $cart);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/cart/view');
         exit;
     }
     
     public static function clear(): void {
-        if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login'); exit; }
+        if (!USession::isSet('user_id')) {
+            // URL pulito
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
+            exit;
+        }
         if (UHTTPMethods::isPost()) {
             USession::setValue('cart', []);
         }
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=cart&a=view');
+        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/cart/view');
         exit;
     }
 }

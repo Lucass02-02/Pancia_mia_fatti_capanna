@@ -4,6 +4,7 @@ namespace AppORM\Control;
 use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\EProduct;
+use AppORM\Services\Utility\USession;
 
 class CHome
 {
@@ -27,10 +28,17 @@ class CHome
         // 1. Recupera i filtri per allergeni (ID interi)
         $selectedAllergensIds = array_map('intval', $_GET['allergens'] ?? []);
 
-        // 2. Carica tutti i dati necessari dal database
+       // 2. Decide quali prodotti caricare in base al ruolo dell'utente
+    if (USession::getValue('user_role') === 'admin') {
+        // Il proprietario vede tutti i prodotti
         $allProducts = FPersistentManager::getInstance()->getAllProducts();
-        $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
-        
+    } else {
+        // I clienti e i visitatori vedono solo i prodotti disponibili
+        $allProducts = FPersistentManager::getInstance()->getAvailableProducts();
+    }
+    
+    $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
+    
         // 3. Se non ci sono filtri, la lista dei prodotti è quella completa.
         // Altrimenti, applichiamo il filtro.
         if (empty($selectedAllergensIds)) {
@@ -56,11 +64,11 @@ class CHome
             }
         }
 
-        // 4. Passa i dati alla vista
+        // 4. Passa i datzi alla vista
         UView::render('menu', [
-            'products' => $filteredProducts,
-            'allAllergens' => $allAllergens,
-            'selectedAllergens' => $selectedAllergensIds // Passiamo gli ID per mantenere i checkbox selezionati
-        ]);
+        'products' => $filteredProducts,
+        'allAllergens' => $allAllergens,
+        'selectedAllergens' => $selectedAllergensIds
+    ]);
     }
 }
