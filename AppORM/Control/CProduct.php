@@ -6,8 +6,8 @@ use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\EProduct;
-use AppORM\Entity\ECategory; // Assicurati di importare ECategory se non lo è già
-use AppORM\Entity\EAllergen; // Assicurati di importare EAllergen se non lo è già
+use AppORM\Entity\EProductCategory; // Assicurati di importare EProductCategory
+use AppORM\Entity\EAllergens; // Assicurati di importare EAllergen se non lo è già
 
 class CProduct {
 
@@ -129,29 +129,29 @@ class CProduct {
      * @param int $id L'ID del prodotto da modificare.
      */
     public static function showEditForm(int $id): void {
-    self::checkAdmin();
-    $product = FPersistentManager::getInstance()->getProductById($id);
-    
-    if ($product) {
-        $categories = FPersistentManager::getInstance()->getAllProductCategories();
-        $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
+        self::checkAdmin();
+        $product = FPersistentManager::getInstance()->getProductById($id);
+        
+        if ($product) {
+            $categories = FPersistentManager::getInstance()->getAllProductCategories();
+            $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
 
-        // Estrai gli ID degli allergeni già associati al prodotto
-        // Applica ->toArray() alla PersistentCollection prima di array_map()
-        $productAllergenIds = array_map(fn($a) => $a->getId(), $product->getAllergens()->toArray() ?? []); // CAMBIATO QUI
+            // Estrai gli ID degli allergeni già associati al prodotto
+            // Applica ->toArray() alla PersistentCollection prima di array_map()
+            $productAllergenIds = array_map(fn($a) => $a->getId(), $product->getAllergens()->toArray() ?? []); 
 
-        UView::render('edit_product', [
-            'product' => $product,
-            'categories' => $categories,
-            'allAllergens' => $allAllergens,
-            'productAllergenIds' => $productAllergenIds
-        ]);
-    } else {
-        // Prodotto non trovato, reindirizza al menu
-        header('Location: /Pancia_mia_fatti_capanna/home/menu');
-        exit;
+            UView::render('edit_product', [
+                'product' => $product,
+                'categories' => $categories,
+                'allAllergens' => $allAllergens,
+                'productAllergenIds' => $productAllergenIds
+            ]);
+        } else {
+            // Prodotto non trovato, reindirizza al menu
+            header('Location: /Pancia_mia_fatti_capanna/home/menu');
+            exit;
+        }
     }
-}
     
     // Il metodo per mostrare il form di creazione è corretto
     public static function showCreateForm(): void {
@@ -162,5 +162,61 @@ class CProduct {
             'categories' => $categories,
             'allAllergens' => $allergens // Corretto: passato come 'allAllergens' al template
         ]);
+    }
+
+    /**
+     * Mostra la pagina di gestione delle categorie di prodotto.
+     */
+    public static function manageCategories(): void {
+        self::checkAdmin();
+        $categories = FPersistentManager::getInstance()->getAllProductCategories();
+        UView::render('manage_product_categories', ['categories' => $categories]);
+    }
+
+    /**
+     * Gestisce la creazione di una nuova categoria di prodotto.
+     */
+    public static function createCategory(): void {
+        self::checkAdmin();
+        if (UHTTPMethods::isPost()) {
+            $categoryName = UHTTPMethods::getPostValue('name');
+            if ($categoryName) {
+                $newCategory = new EProductCategory($categoryName);
+                FPersistentManager::getInstance()->saveProductCategory($newCategory);
+            }
+        }
+        header('Location: /Pancia_mia_fatti_capanna/Product/manageCategories'); // Reindirizza alla pagina di gestione categorie
+        exit;
+    }
+
+    /**
+     * Gestisce l'aggiornamento del nome di una categoria di prodotto esistente.
+     */
+    public static function updateCategory(): void {
+        self::checkAdmin();
+        if (UHTTPMethods::isPost()) {
+            $categoryId = (int)UHTTPMethods::getPostValue('category_id');
+            $newName = UHTTPMethods::getPostValue('name');
+
+            $category = FPersistentManager::getInstance()->getProductCategoryById($categoryId);
+            if ($category && $newName) {
+                FPersistentManager::getInstance()->updateProductCategoryName($category, $newName);
+            }
+        }
+        header('Location: /Pancia_mia_fatti_capanna/Product/manageCategories');
+        exit;
+    }
+
+    /**
+     * Gestisce la cancellazione di una categoria di prodotto.
+     */
+    public static function deleteCategory(int $id): void {
+        self::checkAdmin();
+        $category = FPersistentManager::getInstance()->getProductCategoryById($id);
+        if ($category) {
+            FPersistentManager::getInstance()->deleteProductCategory($category);
+        }
+        header('Location: /Pancia_mia_fatti_capanna/Product/manageCategories');
+        exit;
     }
 }

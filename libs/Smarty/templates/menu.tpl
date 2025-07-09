@@ -16,6 +16,7 @@
             <div class="d-flex justify-content-center gap-3 mb-4">
                 <a href="/Pancia_mia_fatti_capanna/Product/showCreateForm" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
                 <a href="/Pancia_mia_fatti_capanna/Allergen/manage" class="btn btn-info">Gestisci Allergeni</a>
+                <a href="/Pancia_mia_fatti_capanna/Product/manageCategories" class="btn btn-secondary">Gestisci Categorie Prodotti</a> {* NUOVO LINK *}
             </div>
         {/if}
 

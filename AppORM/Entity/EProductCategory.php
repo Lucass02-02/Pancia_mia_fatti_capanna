@@ -4,6 +4,8 @@ namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use AppORM\Control\FProductCategory;
+
 
 
 #[ORM\Entity]
@@ -37,6 +39,16 @@ class EProductCategory
     public static function saveProductCategory(EProductCategory $category): bool 
     { 
         return FProductCategory::saveObj($category); 
+    }
+    /**
+     * Imposta un nuovo nome per la categoria di prodotto.
+     * @param string $name
+     * @return self
+     */
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+        return $this;
     }
     
     /**
