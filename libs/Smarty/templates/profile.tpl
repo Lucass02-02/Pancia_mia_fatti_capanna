@@ -1,96 +1,77 @@
-{* File: templates/menu.tpl (SINTASSI SMARTY COMPLETA E URL REST PULITI) *}
+{* File: templates/profile.tpl (Convertito da PHP a Smarty) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Il Nostro Menù - Pancia mia fatti capanna</title>
-    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
+    <title>Profilo di {$client->getName()|escape}</title>
+    <style>
+        body { font-family: sans-serif; background-color: #f9f9f9; line-height: 1.6; }
+        .container { max-width: 900px; margin: 2em auto; padding: 1em; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #e8491d; }
+        .profile-details, .reviews-section, .cards-section { margin-bottom: 2em; padding: 1.5em; border: 1px solid #ddd; border-radius: 5px; }
+        .card-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .card-item:last-child { border-bottom: none; }
+        .delete-form button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .nav-links { margin-top: 1.5em; text-align: center; }
+        .nav-links a { margin: 0 10px; color: #007bff; text-decoration: none; }
+    </style>
 </head>
-<body class="bg-light">
-    <div class="container my-5">
-        <h1 class="text-primary text-center mb-4">Il Nostro Menù</h1>
+<body>
+    <div class="container">
+        <h1>Ciao, {$client->getName()|escape}!</h1>
 
-        {if $isAdmin}
-            <div class="d-flex justify-content-center gap-3 mb-4">
-                <a href="/Pancia_mia_fatti_capanna/Product/create" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
-                <a href="/Pancia_mia_fatti_capanna/Allergen/manage" class="btn btn-info">Gestisci Allergeni</a>
-            </div>
-        {/if}
-
-        <div class="bg-white p-4 rounded shadow-sm mb-5">
-            <h3 class="text-secondary">Filtra per allergeni (mostra piatti senza):</h3>
-            <form action="/Pancia_mia_fatti_capanna/Home/menu" method="GET">
-                <div class="row">
-                    {if isset($allAllergens) && !empty($allAllergens)}
-                        {foreach $allAllergens as $allergen}
-                            <div class="col-md-3 col-sm-4 col-6">
-                                <div class="form-check">
-                                    <input class="form-check-input" type="checkbox" name="allergens[]" value="{$allergen->getId()}"
-                                        {if isset($selectedAllergens) && in_array($allergen->getId(), $selectedAllergens)}checked{/if}
-                                        id="allergen{$allergen->getId()}">
-                                    <label class="form-check-label" for="allergen{$allergen->getId()}">
-                                        {$allergen->getAllergenType()|escape}
-                                    </label>
-                                </div>
-                            </div>
-                        {/foreach}
-                    {/if}
-                </div>
-                <div class="mt-3">
-                    <button type="submit" class="btn btn-primary">Applica Filtro</button>
-                    <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
-                </div>
-            </form>
+        <div class="profile-details">
+            <h2>I tuoi dati</h2>
+            <p><strong>Nome Completo:</strong> {$client->getName()|escape} {$client->getSurname()|escape}</p>
+            <p><strong>Email:</strong> {$client->getEmail()|escape}</p>
+            <p><strong>Data di Nascita:</strong> {$client->getBirthDate()->format('d/m/Y')}</p>
+            <p><strong>Nickname:</strong> {$client->getNickname()|default:'Non impostato'|escape}</p>
+            <p><strong>Telefono:</strong> {$client->getPhonenumber()|default:'Non impostato'|escape}</p>
         </div>
 
-        {if empty($products)}
-            <p class="text-center text-muted">Nessun piatto trovato con i filtri selezionati.</p>
-        {else}
-            <div class="row g-4">
-                {foreach $products as $product}
-                    <div class="col-md-4">
-                        <div class="card h-100 {if $isAdmin && !$product->isAvailable()}opacity-50 bg-light{/if}">
-                            <div class="card-body d-flex flex-column">
-                                <h5 class="card-title">{$product->getName()|escape}</h5>
-                                <p class="card-text">{$product->getDescription()|escape}</p>
-                                <p class="fw-bold">€ {$product->getPrice()|number_format:2:',':'.'}</p>
-
-                                {if $isLoggedIn && !$isAdmin}
-                                    <form action="/Pancia_mia_fatti_capanna/Cart/add" method="POST" class="mt-auto">
-                                        <input type="hidden" name="product_id" value="{$product->getId()}">
-                                        <div class="input-group">
-                                            <input type="number" name="quantity" value="1" min="1" max="99" class="form-control" aria-label="Quantità">
-                                            <button type="submit" class="btn btn-primary">Aggiungi</button>
-                                        </div>
-                                    </form>
-                                {elseif !$isLoggedIn}
-                                    <p class="text-end text-muted mt-auto">Accedi per aggiungere al carrello.</p>
-                                {/if}
-
-                                {if $isAdmin}
-                                    <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <a href="/Pancia_mia_fatti_capanna/Product/edit/{$product->getId()}" class="btn btn-warning btn-sm">Modifica</a>
-                                        {if $product->isAvailable()}
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getId()}" class="btn btn-secondary btn-sm">Rendi Non Disp.</a>
-                                        {else}
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getId()}" class="btn btn-success btn-sm">Rendi Disp.</a>
-                                        {/if}
-                                        <a href="/Pancia_mia_fatti_capanna/Product/delete/{$product->getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');">Elimina</a>
-                                    </div>
-                                {/if}
-                            </div>
-                        </div>
+        <div class="cards-section">
+            <h2>Le tue carte di credito</h2>
+            {if count($creditCards) > 0}
+                {foreach $creditCards as $card}
+                    <div class="card-item">
+                        <span>
+                            <strong>{$card->getBrand()|escape}</strong> che termina con **** {$card->getLast4()|escape}
+                            (Scade: {$card->getExpMonth()|escape}/{$card->getExpYear()|escape})
+                        </span>
+                        <form class="delete-form" action="/Pancia_mia_fatti_capanna/client/deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
+                            <input type="hidden" name="card_id" value="{$card->getId()}">
+                            <button type="submit">Elimina</button>
+                        </form>
                     </div>
                 {/foreach}
-            </div>
-        {/if}
-
-        <div class="d-flex justify-content-center gap-3 mt-5">
-            <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
-            {if $isLoggedIn && !$isAdmin}
-                <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-primary">Vai al Carrello</a>
+            {else}
+                <p>Non hai ancora aggiunto nessuna carta di credito.</p>
             {/if}
+            <a href="/Pancia_mia_fatti_capanna/client/addCreditCard">Aggiungi una nuova carta</a>
+        </div>
+
+        <div class="reviews-section">
+            <h2>Le tue recensioni</h2>
+            {if count($reviews) > 0}
+                <ul>
+                    {foreach $reviews as $review}
+                        <li>
+                            <strong>Voto: {$review->getRating()}/5</strong> - 
+                            <em>"{$review->getComment()|escape}"</em>
+                            ({$review->getReviewDate()->format('d/m/Y')})
+                        </li>
+                    {/foreach}
+                </ul>
+            {else}
+                <p>Non hai ancora lasciato nessuna recensione.</p>
+            {/if}
+            <a href="/Pancia_mia_fatti_capanna/client/addReview">Lascia una nuova recensione</a>
+        </div>
+
+        <div class="nav-links">
+            <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a> |
+            <a href="/Pancia_mia_fatti_capanna/client/logout">Logout</a>
         </div>
     </div>
 </body>
