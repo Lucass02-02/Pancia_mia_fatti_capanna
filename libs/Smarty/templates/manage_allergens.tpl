@@ -1,69 +1,67 @@
-{* File: templates/profile.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
+{* File: templates/manage_allergens.tpl *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profilo di {$client->getName()|escape}</title>
-    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
+    <title>Gestione Allergeni</title>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css"> {* Assicurati che questo percorso sia corretto *}
+    <style>
+        /* Stili aggiuntivi o sovrascritture per questa pagina */
+        .container { max-width: 800px; margin: 30px auto; padding: 20px; background-color: #fff; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        .table-responsive { margin-top: 20px; }
+        .table th, .table td { vertical-align: middle; }
+        .btn-group { display: flex; gap: 5px; }
+    </style>
 </head>
 <body class="bg-light">
-    <div class="container my-5 p-4 bg-white rounded shadow-sm" style="max-width: 900px;">
-        <h1 class="text-primary text-center mb-4">Ciao, {$client->getName()|escape}!</h1>
+    <div class="container">
+        <h1 class="text-primary text-center mb-4">Gestione Allergeni</h1>
 
-        <div class="mb-5">
-            <h2 class="h4 text-secondary mb-3">I tuoi dati</h2>
-            <p><strong>Nome Completo:</strong> {$client->getName()|escape} {$client->getSurname()|escape}</p>
-            <p><strong>Email:</strong> {$client->getEmail()|escape}</p>
-            <p><strong>Data di Nascita:</strong> {$client->getBirthDate()->format('d/m/Y')}</p>
-            <p><strong>Nickname:</strong> {$client->getNickname()|default:'Non impostato'|escape}</p>
-            <p><strong>Telefono:</strong> {$client->getPhonenumber()|default:'Non impostato'|escape}</p>
+        <div class="mb-4">
+            <h2 class="h4 text-secondary mb-3">Aggiungi Nuovo Allergene</h2>
+            <form action="/Pancia_mia_fatti_capanna/Allergen/create" method="POST" class="d-flex gap-2">
+                <input type="text" name="name" class="form-control" placeholder="Nome Allergene (es. Glutine)" required>
+                <button type="submit" class="btn btn-primary">Aggiungi</button>
+            </form>
         </div>
 
-        <div class="mb-5">
-            <h2 class="h4 text-secondary mb-3">Le tue carte di credito</h2>
-            {if count($creditCards) > 0}
-                <ul class="list-group mb-3">
-                    {foreach $creditCards as $card}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <span>
-                                <strong>{$card->getBrand()|escape}</strong> termina con **** {$card->getLast4()|escape}
-                                (Scade: {$card->getExpMonth()|escape}/{$card->getExpYear()|escape})
-                            </span>
-                            <form action="/Pancia_mia_fatti_capanna/Client/deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
-                                <input type="hidden" name="card_id" value="{$card->getId()}">
-                                <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
-                            </form>
-                        </li>
-                    {/foreach}
-                </ul>
+        <div class="table-responsive">
+            <h2 class="h4 text-secondary mb-3">Elenco Allergeni Esistenti</h2>
+            {if count($allergens) > 0}
+                <table class="table table-striped table-hover">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nome Allergene</th>
+                            <th>Azioni</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {foreach from=$allergens item=allergen}
+                            <tr>
+                                <td>{$allergen->getId()|escape}</td>
+                                <td>{$allergen->getAllergenType()|escape}</td> {* <--- CORREZIONE QUI! Usa getAllergenType() *}
+                                <td>
+                                    <div class="btn-group">
+                                        {* Se avrai una pagina di modifica per allergeni, aggiungi qui il link *}
+                                        {* <a href="/Pancia_mia_fatti_capanna/Allergen/edit/{$allergen->getId()}" class="btn btn-warning btn-sm">Modifica</a> *}
+                                        <form action="/Pancia_mia_fatti_capanna/Allergen/delete/{$allergen->getId()}" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare l\'allergene {$allergen->getAllergenType()|escape}?');">
+                                            <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {/foreach}
+                    </tbody>
+                </table>
             {else}
-                <p>Non hai ancora aggiunto nessuna carta di credito.</p>
+                <p>Nessun allergene trovato. Aggiungine uno nuovo!</p>
             {/if}
-            <a href="/Pancia_mia_fatti_capanna/Client/addCreditCard" class="btn btn-primary">Aggiungi una nuova carta</a>
-        </div>
-
-        <div class="mb-5">
-            <h2 class="h4 text-secondary mb-3">Le tue recensioni</h2>
-            {if count($reviews) > 0}
-                <ul class="list-group">
-                    {foreach $reviews as $review}
-                        <li class="list-group-item">
-                            <strong>Voto: {$review->getRating()}/5</strong> - 
-                            <em>"{$review->getComment()|escape|nl2br}"</em>
-                            <span class="text-muted">({$review->getReviewDate()->format('d/m/Y')})</span>
-                        </li>
-                    {/foreach}
-                </ul>
-            {else}
-                <p>Non hai ancora lasciato nessuna recensione.</p>
-            {/if}
-            <a href="/Pancia_mia_fatti_capanna/Client/addReview" class="btn btn-primary mt-3">Lascia una nuova recensione</a>
         </div>
 
         <div class="text-center mt-4">
             <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary me-2">Torna alla Home</a>
-            <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-danger">Logout</a>
         </div>
     </div>
 </body>

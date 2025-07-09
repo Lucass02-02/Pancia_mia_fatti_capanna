@@ -9,11 +9,11 @@
 </head>
 <body class="bg-light">
     <div class="container my-5">
-        <h1 class="text-primary text-center mb-4">Il Nostro Menù</h1>
+        <h1 class="text-primary text-center mb-4">Il Nostro Menu</h1>
 
         {if $user_role == 'admin'}
             <div class="d-flex justify-content-center gap-3 mb-4">
-                <a href="/Pancia_mia_fatti_capanna/Product/create" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
+                <a href="/Pancia_mia_fatti_capanna/Product/showCreateForm" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
                 <a href="/Pancia_mia_fatti_capanna/Allergen/manage" class="btn btn-info">Gestisci Allergeni</a>
             </div>
         {/if}
@@ -67,7 +67,7 @@
 
                                 {if $user_role == 'admin'}
                                     <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <a href="/Pancia_mia_fatti_capanna/Product/edit/{$product->getId()}" class="btn btn-warning btn-sm">Modifica</a>
+                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/{$product->getId()}"  class="btn btn-warning btn-sm">Modifica</a>
                                         {if $product->isAvailable()}
                                             <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getId()}" class="btn btn-secondary btn-sm">Rendi Non Disp.</a>
                                         {else}

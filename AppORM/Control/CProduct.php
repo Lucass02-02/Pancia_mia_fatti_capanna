@@ -18,7 +18,6 @@ class CProduct {
         }
     }
 
-    // --- Questo metodo è corretto e non va toccato ---
     public static function create(): void {
         self::checkAdmin();
         if (UHTTPMethods::isPost()) {
@@ -130,29 +129,29 @@ class CProduct {
      * @param int $id L'ID del prodotto da modificare.
      */
     public static function showEditForm(int $id): void {
-        self::checkAdmin();
-        // L'ID viene passato come parametro della funzione, non da query GET
-        $product = FPersistentManager::getInstance()->getProductById($id);
-        
-        if ($product) {
-            $categories = FPersistentManager::getInstance()->getAllProductCategories();
-            $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
-            // Estrai gli ID degli allergeni già associati al prodotto
-            // Assumi che $product->getAllergens() restituisca un array di oggetti EAllergen o null
-            $productAllergenIds = array_map(fn($a) => $a->getId(), $product->getAllergens() ?? []);
+    self::checkAdmin();
+    $product = FPersistentManager::getInstance()->getProductById($id);
+    
+    if ($product) {
+        $categories = FPersistentManager::getInstance()->getAllProductCategories();
+        $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
 
-            UView::render('edit_product', [
-                'product' => $product,
-                'categories' => $categories,
-                'allAllergens' => $allAllergens, // Passa tutti gli allergeni per i checkbox
-                'productAllergenIds' => $productAllergenIds // Passa gli ID degli allergeni del prodotto per pre-selezionare
-            ]);
-        } else {
-            // Prodotto non trovato, reindirizza al menu
-            header('Location: /Pancia_mia_fatti_capanna/home/menu');
-            exit;
-        }
+        // Estrai gli ID degli allergeni già associati al prodotto
+        // Applica ->toArray() alla PersistentCollection prima di array_map()
+        $productAllergenIds = array_map(fn($a) => $a->getId(), $product->getAllergens()->toArray() ?? []); // CAMBIATO QUI
+
+        UView::render('edit_product', [
+            'product' => $product,
+            'categories' => $categories,
+            'allAllergens' => $allAllergens,
+            'productAllergenIds' => $productAllergenIds
+        ]);
+    } else {
+        // Prodotto non trovato, reindirizza al menu
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
+        exit;
     }
+}
     
     // Il metodo per mostrare il form di creazione è corretto
     public static function showCreateForm(): void {

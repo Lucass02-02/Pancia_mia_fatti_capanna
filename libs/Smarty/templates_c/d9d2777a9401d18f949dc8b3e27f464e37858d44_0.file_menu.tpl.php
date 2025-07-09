@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 02:44:18
+/* Smarty version 5.5.1, created on 2025-07-09 03:21:28
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/menu.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686dbb62848d04_89334237',
+  'unifunc' => 'content_686dc418230909_04981596',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd9d2777a9401d18f949dc8b3e27f464e37858d44' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/menu.tpl',
-      1 => 1752021855,
+      1 => 1752024079,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686dbb62848d04_89334237 (\Smarty\Template $_smarty_tpl) {
+function content_686dc418230909_04981596 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -32,11 +32,11 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
 </head>
 <body class="bg-light">
     <div class="container my-5">
-        <h1 class="text-primary text-center mb-4">Il Nostro Menù</h1>
+        <h1 class="text-primary text-center mb-4">Il Nostro Menu</h1>
 
         <?php if ($_smarty_tpl->getValue('user_role') == 'admin') {?>
             <div class="d-flex justify-content-center gap-3 mb-4">
-                <a href="/Pancia_mia_fatti_capanna/Product/create" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
+                <a href="/Pancia_mia_fatti_capanna/Product/showCreateForm" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
                 <a href="/Pancia_mia_fatti_capanna/Allergen/manage" class="btn btn-info">Gestisci Allergeni</a>
             </div>
         <?php }?>
@@ -110,8 +110,8 @@ $foreach1DoElse = false;
 
                                 <?php if ($_smarty_tpl->getValue('user_role') == 'admin') {?>
                                     <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <a href="/Pancia_mia_fatti_capanna/Product/edit/<?php echo $_smarty_tpl->getValue('product')->getId();?>
-" class="btn btn-warning btn-sm">Modifica</a>
+                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/<?php echo $_smarty_tpl->getValue('product')->getId();?>
+"  class="btn btn-warning btn-sm">Modifica</a>
                                         <?php if ($_smarty_tpl->getValue('product')->isAvailable()) {?>
                                             <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/<?php echo $_smarty_tpl->getValue('product')->getId();?>
 " class="btn btn-secondary btn-sm">Rendi Non Disp.</a>

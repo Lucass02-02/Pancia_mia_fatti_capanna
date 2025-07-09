@@ -119,4 +119,13 @@ class EProduct
             $this->allergens->removeElement($allergen);
         }
     }
+    public function clearAllergens(): void
+{
+    $this->allergens->clear();
+}
+
+    public function setCategory(EProductCategory $category): void
+    {
+        $this->category = $category;
+    }
 }
