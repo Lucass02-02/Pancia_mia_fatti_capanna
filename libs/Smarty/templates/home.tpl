@@ -1,35 +1,50 @@
-{* File: templates/home.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
-<!DOCTYPE html>
-<html lang="it">
-<head>
-    <meta charset="UTF-8">
-    <title>{$titolo|default:'Pancia mia fatti capanna'|escape}</title>
-    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
-</head>
-<body>
-    <div class="container mt-5">
-        <h1 class="display-4 text-center mb-4">{$titolo|escape}</h1>
-        <p class="lead text-center">{$messaggio|escape}</p>
+{* File: templates/home.tpl *}
+{extends file="base.tpl"}
 
-        <nav class="nav justify-content-center mt-4">
-            <a class="nav-link" href="/Pancia_mia_fatti_capanna/Home/home">Home</a>
-            <a class="nav-link" href="/Pancia_mia_fatti_capanna/Home/menu">Visualizza Menù</a>
-            <a class="nav-link" href="/Pancia_mia_fatti_capanna/Review/showAll">Vedi le Recensioni</a>
-
-            {if $user_role == 'admin'}
-                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Admin/profile">Pannello di Controllo</a>
-                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
-            {elseif $user_role == 'client'}
-                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/profile">Mio Profilo</a>
-                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
-            {elseif $user_role == 'waiter'}
-                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Waiter/profile">Dashboard Cameriere</a>
-                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
-            {else}
-                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/login">Login</a>
-                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/registration">Registrati</a>
-            {/if}
-        </nav>
+{block name="hero"}
+<!-- ======= Hero Section ======= -->
+<section id="hero" class="hero d-flex align-items-center">
+  <div class="container">
+    <div class="row justify-content-center">
+      <div class="col-lg-8 text-center">
+        <h1>{$titolo|default:'Pancia mia fatti capanna'|escape}</h1>
+        <p>{$messaggio|escape}</p>
+        <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn-get-started">Visualizza Menù</a>
+      </div>
     </div>
-</body>
-</html>
+  </div>
+</section><!-- End Hero Section -->
+{/block}
+
+{block name="content"}
+<!-- ======= About Section Example ======= -->
+<section id="about" class="about">
+  <div class="container" data-aos="fade-up">
+    <div class="section-title">
+      <h2>Benvenuto</h2>
+      <p>Scopri il nostro ristorante</p>
+    </div>
+
+    <div class="row">
+      <div class="col-lg-6">
+        <img src="/Pancia_mia_fatti_capanna/assets/img/about.jpg" class="img-fluid" alt="About">
+      </div>
+      <div class="col-lg-6 pt-4 pt-lg-0 content">
+        <h3>Chi siamo</h3>
+        <p class="fst-italic">
+          Un ristorante accogliente dove il gusto incontra la tradizione.
+        </p>
+        <ul>
+          <li><i class="bi bi-check-circle"></i> Ingredienti freschi ogni giorno</li>
+          <li><i class="bi bi-check-circle"></i> Ambiente familiare e confortevole</li>
+          <li><i class="bi bi-check-circle"></i> Cucina tradizionale rivisitata</li>
+        </ul>
+        <p>
+          Vieni a provare i nostri piatti e lasciati conquistare dal sapore autentico.
+        </p>
+      </div>
+    </div>
+
+  </div>
+</section><!-- End About Section -->
+{/block}

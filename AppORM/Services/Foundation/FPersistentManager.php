@@ -1,6 +1,6 @@
 <?php
-
 namespace AppORM\Services\Foundation;
+require_once __DIR__ . '/../../../bootstrap.php';
 require_once __DIR__ . '/FTable.php';
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Services\Foundation\FClient;

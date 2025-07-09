@@ -23,8 +23,12 @@ class CHome
     /**
      * Mostra il menù e gestisce la logica di filtro per allergeni.
      */
+
+
     public static function menu(): void
     {
+        error_log("DEBUG: user_role = " . USession::getValue('user_role'));
+
         // 1. Recupera i filtri per allergeni (ID interi)
         $selectedAllergensIds = array_map('intval', $_GET['allergens'] ?? []);
 
@@ -63,8 +67,12 @@ class CHome
                 }
             }
         }
+        error_log("DEBUG: numero prodotti = " . count($filteredProducts));
+        foreach ($filteredProducts as $p) {
+            error_log("Prodotto: " . $p->getName());
+        }
 
-        // 4. Passa i datzi alla vista
+        // 4. Passa i dati alla vista
         UView::render('menu', [
         'products' => $filteredProducts,
         'allAllergens' => $allAllergens,
