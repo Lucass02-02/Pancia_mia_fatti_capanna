@@ -32,6 +32,7 @@ class CHome
     $selectedAllergensIds = array_map('intval', $_POST['allergens'] ?? []); 
     
     $userRole = USession::getValue('user_role');
+    $userId = USession::getValue('user_id');
 
    // 2. Decide quali prodotti caricare in base al ruolo dell'utente
     if ($userRole === 'admin') {
@@ -74,7 +75,8 @@ class CHome
         'products' => $filteredProducts,
         'allAllergens' => $allAllergens,
         'selectedAllergens' => $selectedAllergensIds,
-        'user_role' => $userRole
+        'user_role' => $userRole,
+        'user_id' => $userId,
     ]);
 }
 }

@@ -8,7 +8,7 @@ use AppORM\Entity\EUser;
 #[ORM\Table(name: 'waiters')]
 class EWaiter extends EUser {
 
-    #[ORM\Column(type: 'string', length: 50, nullable: false)]
+    #[ORM\Column(type: 'string', length: 50, unique: true, nullable: false)]
     private string $serialNumber;
     
     #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'waiters')]

@@ -1,4 +1,4 @@
-{* File: templates/menu.tpl (SINTASSI SMARTY COMPLETA E URL REST AGGIUSTATI) *}
+{* File: templates/menu.tpl *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -11,6 +11,7 @@
     <div class="container my-5">
         <h1 class="text-primary text-center mb-4">Il Nostro Menu</h1>
 
+        {* Mostra i pulsanti di gestione solo se l'utente è un admin *}
         {if $user_role == 'admin'}
             <div class="d-flex justify-content-center gap-3 mb-4">
                 <a href="/Pancia_mia_fatti_capanna/Product/showCreateForm" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
@@ -18,6 +19,7 @@
             </div>
         {/if}
 
+        {* Sezione filtri allergeni *}
         <div class="bg-white p-4 rounded shadow-sm mb-5">
             <h3 class="text-secondary">Filtra per allergeni (mostra piatti senza):</h3>
             <form action="/Pancia_mia_fatti_capanna/Home/menu" method="POST">
@@ -41,6 +43,7 @@
             </form>
         </div>
 
+        {* Sezione elenco prodotti *}
         {if empty($products)}
             <p class="text-center text-muted">Nessun piatto trovato con i filtri selezionati.</p>
         {else}
@@ -53,7 +56,10 @@
                                 <p class="card-text">{$product->getDescription()|escape}</p>
                                 <p class="fw-bold">€ {$product->getPrice()|number_format:2:",":"."}</p>
 
-                                {if $user_id && $user_role != 'admin'}
+                                {* Logica condizionale per i pulsanti di acquisto/gestione *}
+
+                                {* Se l'utente è un CLIENTE, mostra il form per aggiungere al carrello *}
+                                {if $user_role == 'client'}
                                     <form action="/Pancia_mia_fatti_capanna/Cart/add" method="POST" class="mt-auto">
                                         <input type="hidden" name="product_id" value="{$product->getId()}">
                                         <div class="input-group">
@@ -61,13 +67,15 @@
                                             <button type="submit" class="btn btn-primary">Aggiungi</button>
                                         </div>
                                     </form>
+                                {* Se l'utente NON È LOGGATO, mostra un messaggio *}
                                 {elseif !$user_id}
-                                    <p class="text-end text-muted mt-auto">Accedi per aggiungere al carrello.</p>
+                                    <p class="text-danger mt-auto">Devi accedere per poter ordinare!</p>
                                 {/if}
 
+                                {* Se l'utente è un ADMIN, mostra i pulsanti di gestione del prodotto *}
                                 {if $user_role == 'admin'}
                                     <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/{$product->getId()}"  class="btn btn-warning btn-sm">Modifica</a>
+                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/{$product->getId()}" class="btn btn-warning btn-sm">Modifica</a>
                                         {if $product->isAvailable()}
                                             <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getId()}" class="btn btn-secondary btn-sm">Rendi Non Disp.</a>
                                         {else}
@@ -83,9 +91,11 @@
             </div>
         {/if}
 
+        {* Pulsanti di navigazione in fondo alla pagina *}
         <div class="d-flex justify-content-center gap-3 mt-5">
             <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
-            {if $user_id && $user_role != 'admin'}
+            {* Mostra il pulsante "Vai al Carrello" solo ai clienti *}
+            {if $user_role == 'client'}
                 <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-primary">Vai al Carrello</a>
             {/if}
         </div>
