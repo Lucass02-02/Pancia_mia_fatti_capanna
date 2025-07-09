@@ -4,79 +4,95 @@ namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection; // Importa ArrayCollection
+use DateTime; // Importa DateTime per il tipo di responseDate
 
 #[ORM\Entity]
 #[ORM\Table(name: 'admin_responses')]
-class EAdminResponse {
-    
-    //attributes
+class EAdminResponse
+{
     #[ORM\Id]
     #[ORM\Column(type: 'integer', nullable: false)]
     #[ORM\GeneratedValue]
-    private $id;
+    private ?int $id = null; // Assicurati che sia nullable e di tipo int
 
     #[ORM\Column(type: 'text', nullable: false)]
     private string $responseText;
 
     #[ORM\Column(type: 'datetime', nullable: false)]
-    private $responseDate;
+    private DateTime $responseDate; // Assicurati che sia di tipo DateTime
 
-    #[ORM\ManyToOne(targetEntity: EAdmin::class, inversedBy: 'admin_responses', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: EAdmin::class, inversedBy: 'responses', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'admin_id', referencedColumnName: 'id')]
     private EAdmin $admin;
 
-    #[ORM\ManyToMany(targetEntity: EUserReview::class, mappedBy: 'adminResponses', cascade: ['persist'])]
-    private Collection $userReviews;
+    #[ORM\ManyToOne(targetEntity: EUserReview::class, inversedBy: 'adminResponses')] // 'adminResponses' corrisponde alla proprietà Collection in EUserReview
+    #[ORM\JoinColumn(name: 'review_id', referencedColumnName: 'id', nullable: false)] // Aggiunge la colonna review_id direttamente nella tabella admin_responses
+    private EUserReview $userReview;
 
-    private static $entity = EAdminResponse::class;
-
-    //constructor
-    public function __construct(string $responseText, $responseDate) {
+    public function __construct(string $responseText, DateTime $responseDate) // Usa DateTime per il parametro
+    {
         $this->responseText = $responseText;
         $this->responseDate = $responseDate;
     }
 
-    //methods getters and setters
-
-    public static function getEntity() {
+    public static function getEntity()
+    {
         return self::$entity;
     }
 
-    public function getIdResponse() {
+    public function getId(): ?int // Metodo getter per $id, non getIdResponse
+    {
         return $this->id;
     }
 
-    public function getResponseText() {
+    public function getResponseText(): string
+    {
         return $this->responseText;
     }
 
-    public function setResponseText(string $responseText) {
+    public function setResponseText(string $responseText)
+    {
         $this->responseText = $responseText;
     }
 
-    public function getResponseDate() {
+    public function getResponseDate(): DateTime // Metodo getter per $responseDate
+    {
         return $this->responseDate;
     }
 
-    public function setResponseDate($responseDate) {
+    public function setResponseDate(DateTime $responseDate) // Metodo setter per $responseDate
+    {
         $this->responseDate = $responseDate;
     }
-    
-    public function getAdmin(): EAdmin {
+
+    public function getAdmin(): EAdmin
+    {
         return $this->admin;
     }
 
-    public function setAdmin(EAdmin $admin) {
+    public function setAdmin(EAdmin $admin)
+    {
         $this->admin = $admin;
     }
-
-    public function getUserReviews(): Collection {
-        return $this->userReviews;
+      public function getUserReview(): EUserReview 
+    {
+        return $this->userReview;
     }
 
-    public function setUserReviews(Collection $userReviews) {
-        $this->userReviews = $userReviews;
+    public function setUserReview(EUserReview $userReview): void 
+    {
+        $this->userReview = $userReview;
     }
+
 
     
+    public function addUserReview(EUserReview $userReview): void
+    {
+        if (!$this->userReviews->contains($userReview)) {
+            $this->userReviews->add($userReview);
+            // Non è necessario chiamare $userReview->addAdminResponse($this); qui
+            // perché il mapping è gestito dal lato di EUserReview.
+        }
+    }
 }

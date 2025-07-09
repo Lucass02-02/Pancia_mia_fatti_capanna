@@ -4,30 +4,48 @@ namespace AppORM\Control;
 
 use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UView;
+use AppORM\Services\Utility\USession;
+use AppORM\Services\Utility\UHTTPMethods;
+use DateTime;
+use AppORM\Entity\EUserReview; // Assicurati di importare EUserReview
+use AppORM\Entity\EAdminResponse; // Assicurati di importare EAdminResponse
 
-class CReview 
+class CReview
 {
     /**
      * Recupera tutte le recensioni da tutti gli utenti e le mostra in una pagina.
      */
-    public static function showAll(): void
+    public static function showAll1(): void
     {
-        // 1. Usa il metodo appena aggiunto a FPersistentManager.
-        // In questo modo, il controller rispetta la regola di usare solo il manager.
+        $userRole = USession::getValue('user_role');
         $allReviews = FPersistentManager::getInstance()->getAllReviews();
 
-        // 2. Passa l'array di recensioni alla vista per la visualizzazione.
         UView::render('all_reviews', [
             'reviews' => $allReviews,
-            'titolo' => 'Tutte le Recensioni'
+            'titolo' => 'Tutte le Recensioni',
+            'user_role' => $userRole
         ]);
     }
+
+    public static function showAll(): void
+    {
+        $userRole = USession::getValue('user_role');
+        $allReviews = FPersistentManager::getInstance()->getAllReviews();
+
+        UView::render('all_reviews', [
+            'reviews' => $allReviews,
+            'titolo' => 'Tutte le Recensioni',
+            'user_role' => $userRole
+        ]);
+    }
+
     /**
-     * Elimina una recensione. Accessibile solo agli amministratori.
+     * Elimina una recensione (dell'utente).
+     * Nota: Questo metodo non è attualmente utilizzato nel template all_reviews.tpl,
+     * ma è mantenuto qui per completezza logica se mai servisse.
      */
     public static function delete(): void
     {
-        // Sicurezza: solo gli admin possono eliminare
         if (USession::getValue('user_role') !== 'admin') {
             header('Location: /Pancia_mia_fatti_capanna/');
             exit;
@@ -36,13 +54,138 @@ class CReview
         if (UHTTPMethods::isPost()) {
             $reviewId = (int)UHTTPMethods::getPostValue('review_id');
             if ($reviewId > 0) {
-                // Si assume che esista un metodo deleteReview() nel FPersistentManager
-                FPersistentManager::getInstance()->deleteReview($reviewId);
+                $reviewToDelete = FPersistentManager::getInstance()->getReviewById($reviewId);
+                if ($reviewToDelete) {
+                    FPersistentManager::getInstance()->deleteReview($reviewToDelete);
+                }
             }
         }
-
-        // Reindirizza alla pagina con tutte le recensioni
         header('Location: /Pancia_mia_fatti_capanna/review/showAll');
         exit;
     }
+
+    /**
+     * Gestisce l'invio di una risposta da parte di un amministratore.
+     */
+    public static function respond(): void
+    {
+        if (USession::getValue('user_role') !== 'admin') {
+            header('Location: /Pancia_mia_fatti_capanna/');
+            exit;
+        }
+
+        if (UHTTPMethods::isPost()) {
+            $reviewId = (int)UHTTPMethods::getPostValue('review_id');
+            $responseText = UHTTPMethods::getPostValue('response_text');
+            $adminId = USession::getValue('user_id');
+
+            if ($reviewId > 0 && !empty($responseText) && $adminId > 0) {
+                $review = FPersistentManager::getInstance()->getReviewById($reviewId);
+                $admin = FPersistentManager::getInstance()->getAdminById($adminId);
+
+                if ($review && $admin) {
+                    FPersistentManager::getInstance()->addAdminResponseToReview($admin, $review, $responseText);
+                }
+            }
+        }
+        header('Location: /Pancia_mia_fatti_capanna/review/showAll');
+        exit;
+    }
+
+    /**
+     * Elimina una risposta specifica dell'amministratore.
+     */
+    public static function deleteAdminResponse(int $id): void
+    {
+        if (USession::getValue('user_role') !== 'admin') {
+            header('Location: /Pancia_mia_fatti_capanna/');
+            exit;
+        }
+
+        if ($id > 0) {
+            $adminResponseToDelete = FPersistentManager::getInstance()->getAdminResponseById($id);
+
+            if ($adminResponseToDelete) {
+                FPersistentManager::getInstance()->deleteAdminResponse($adminResponseToDelete);
+            }
+        }
+        header('Location: /Pancia_mia_fatti_capanna/review/showAll');
+        exit;
+    }
+
+    /**
+     * Mostra il form per modificare una recensione (dell'utente) esistente.
+     * Nota: Questo metodo non è attualmente utilizzato dal template all_reviews.tpl,
+     * ma è mantenuto qui per completezza logica.
+     */
+    public static function edit(int $id): void
+    {
+        if (USession::getValue('user_role') !== 'admin') {
+            header('Location: /Pancia_mia_fatti_capanna/');
+            exit;
+        }
+
+        $review = FPersistentManager::getInstance()->getReviewById($id);
+
+        if ($review) {
+            UView::render('edit_review', [
+                'review' => $review,
+                'titolo' => 'Modifica Recensione'
+            ]);
+        } else {
+            header('Location: /Pancia_mia_fatti_capanna/review/showAll');
+            exit;
+        }
+    }
+
+    /**
+     * Mostra il form per modificare una risposta dell'amministratore esistente.
+     */
+    public static function editAdminResponse(int $id): void
+    {
+        if (USession::getValue('user_role') !== 'admin') {
+            header('Location: /Pancia_mia_fatti_capanna/');
+            exit;
+        }
+
+        $adminResponse = FPersistentManager::getInstance()->getAdminResponseById($id);
+
+        if ($adminResponse) {
+            UView::render('edit_admin_response', [
+                'adminResponse' => $adminResponse,
+                'titolo' => 'Modifica Risposta Admin'
+            ]);
+        } else {
+            header('Location: /Pancia_mia_fatti_capanna/review/showAll');
+            exit;
+        }
+    }
+
+    /**
+     * Gestisce l'invio del form di modifica di una risposta dell'amministratore.
+     */
+    public static function updateAdminResponseComment(): void
+    {
+        if (USession::getValue('user_role') !== 'admin') {
+            header('Location: /Pancia_mia_fatti_capanna/');
+            exit;
+        }
+
+        if (UHTTPMethods::isPost()) {
+            $responseId = (int)UHTTPMethods::getPostValue('response_id');
+            $newResponseText = UHTTPMethods::getPostValue('response_text');
+
+            if ($responseId > 0 && $newResponseText !== null) {
+                $adminResponse = FPersistentManager::getInstance()->getAdminResponseById($responseId);
+
+                if ($adminResponse) {
+                    $adminResponse->setResponseText($newResponseText);
+                    FPersistentManager::getInstance()->updateAdminResponse($adminResponse); // QUESTa è la riga che chiama il metodo in FPersistentManager
+                }
+            }
+        }
+        header('Location: /Pancia_mia_fatti_capanna/review/showAll');
+        exit;
+    }
+    
 }

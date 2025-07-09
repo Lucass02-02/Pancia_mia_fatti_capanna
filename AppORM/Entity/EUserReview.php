@@ -1,10 +1,14 @@
 <?php
-// AppORM/Entity/EUserReview.php
 
 namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
+use AppORM\Entity\EClient;
+use AppORM\Entity\EAdminResponse;
+
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user_reviews')]
@@ -15,11 +19,6 @@ class EUserReview
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    /**
-     * CORREZIONE: Questa è la relazione inversa.
-     * 'inversedBy' punta a 'reviews' (la proprietà in EClient).
-     * La colonna nel database si chiamerà 'client_id'.
-     */
     #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews')]
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false)]
     private EClient $client;
@@ -33,6 +32,8 @@ class EUserReview
     #[ORM\Column(type: 'datetime')]
     private DateTime $reviewDate;
 
+    #[ORM\OneToMany(targetEntity: EAdminResponse::class, mappedBy: 'userReview', cascade: ['persist', 'remove'], orphanRemoval: true)] // Aggiungi 'remove' e 'orphanRemoval' per eliminare le risposte con la recensione
+    private Collection $adminResponses;
 
     public function __construct(EClient $client, string $comment, int $rating)
     {
@@ -40,16 +41,30 @@ class EUserReview
         $this->comment = $comment;
         $this->setRating($rating); // Usa il setter per la validazione
         $this->reviewDate = new DateTime();
+        $this->adminResponses = new ArrayCollection(); // Inizializza la collezione
     }
 
-    // --- Getters ---
-    public function getId(): ?int { return $this->id; }
-    public function getClient(): EClient { return $this->client; }
-    public function getComment(): string { return $this->comment; }
-    public function getRating(): int { return $this->rating; }
-    public function getReviewDate(): DateTime { return $this->reviewDate; }
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+    public function getClient(): EClient
+    {
+        return $this->client;
+    }
+    public function getComment(): string
+    {
+        return $this->comment;
+    }
+    public function getRating(): int
+    {
+        return $this->rating;
+    }
+    public function getReviewDate(): DateTime
+    {
+        return $this->reviewDate;
+    }
 
-    // --- Setters con validazione ---
     public function setRating(int $rating): void
     {
         if ($rating < 1 || $rating > 5) {
@@ -57,15 +72,32 @@ class EUserReview
         }
         $this->rating = $rating;
     }
-        /**
-     * Restituisce la data di creazione della recensione.
-     *
-     * @return DateTime
-     */
-        public function getCreationDate(): \DateTime
+
+    public function getCreationDate(): DateTime
     {
-        return $this->reviewDate; // CORRETTO: restituisce la proprietà giusta
+        return $this->reviewDate;
     }
-   
+        public function getAdminResponses(): Collection
+    {
+        return $this->adminResponses;
+    }
+
+    public function addAdminResponse(EAdminResponse $adminResponse): void
+    {
+        if (!$this->adminResponses->contains($adminResponse)) {
+            $this->adminResponses->add($adminResponse);
+            $adminResponse->setUserReview($this);
+        }
+    }
+
+    public function removeAdminResponse(EAdminResponse $adminResponse): void
+    {
+        if ($this->adminResponses->contains($adminResponse)) {
+            $this->adminResponses->removeElement($adminResponse);;
+        }
+    }
+
+
+    
     
 }

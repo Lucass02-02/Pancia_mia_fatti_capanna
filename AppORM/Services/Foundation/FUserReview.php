@@ -1,20 +1,20 @@
 <?php
 namespace AppORM\Services\Foundation;
 
-// La riga 'use' qui sotto è stata corretta da "AppORm" a "AppORM"
-use AppORM\Services\Foundation\FEntityManager; 
+use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Entity\EUserReview;
-use AppORM\Entity\EClient;
-use DateTime;
+use AppORM\Entity\EClient; // Assicurati sia presente se usato altrove
+use DateTime; // Assicurati sia presente se usato altrove
 
 class FUserReview
 {
-    private static string $table = EUserReview::class; 
-    private static string $key = "id";
+    private static string $table = EUserReview::class;
+    private static string $key = "id"; // Questa proprietà non è usata in questo file se non direttamente
 
     public static function getTable(): string { return self::$table; }
-    public static function getKey(): string { return self::class; }
-    public static function getClass(): string { return self::class; }
+    // Rimosse o commentate le righe che sembravano ridondanti/errate
+    // public static function getKey(): string { return self::class; }
+    // public static function getClass(): string { return self::class; }
 
     public static function getObj(int $id): ?EUserReview
     {
@@ -28,17 +28,24 @@ class FUserReview
 
     public static function deleteObj(EUserReview $review): bool
     {
-        return FEntityManager::getInstance()->deleteObject($review); 
+        return FEntityManager::getInstance()->deleteObject($review);
     }
 
     /**
      * Recupera tutte le recensioni presenti nel database.
-     * Questa è la funzione che causava l'errore.
+     * Implementa il JOIN FETCH per le risposte dell'admin.
      * @return array Un array di oggetti EUserReview.
      */
-    public static function fetchAll(): array
+      public static function fetchAll(): array
     {
-        // Ora questa chiamata funzionerà perché il namespace in cima al file è corretto.
-        return FEntityManager::getInstance()->selectAll(self::getTable());
+        $em = FEntityManager::getInstance()->getEntityManager(); // Ottieni l'EntityManager
+        $queryBuilder = $em->createQueryBuilder(); // Crea il QueryBuilder
+
+        $queryBuilder->select('r', 'ar', 'a') // Seleziona recensione ('r'), risposte admin ('ar') e l'admin che risponde ('a')
+                     ->from(self::$table, 'r') // Specifica l'entità principale
+                     ->leftJoin('r.adminResponses', 'ar') // Esegue un JOIN FETCH per caricare le risposte dell'admin
+                     ->leftJoin('ar.admin', 'a'); // Esegue un JOIN FETCH per caricare l'admin associato a ogni risposta
+
+        return $queryBuilder->getQuery()->getResult(); // Esegue la query e restituisce il risultato
     }
 }

@@ -33,6 +33,11 @@ use AppORM\Services\Foundation\FAdmin;
 use AppORM\Services\Foundation\FTable;
 use AppORM\Entity\EWaiter;
 use AppORM\Services\Foundation\FWaiter;
+use AppORM\Entity\EAdminResponse;
+use AppORM\Services\Foundation\FAdminResponse;
+
+
+
 
 class FPersistentManager {
 
@@ -102,8 +107,112 @@ class FPersistentManager {
      */
     public static function getAllReviews(): array
     {
+
         return FUserReview::fetchAll();
     }
+
+   public static function addAdminResponseToReview(EAdmin $admin, EUserReview $review, string $responseText): bool
+    {
+        try {
+            $response = new EAdminResponse($responseText, new DateTime()); // Crea la nuova risposta
+            $response->setAdmin($admin);   
+            $response->setUserReview($review);    
+            $review->addAdminResponse($response); 
+            return FEntityManager::getInstance()->saveObject($response); 
+        } catch (\Exception $e) {
+            error_log("Errore durante il salvataggio della risposta dell'admin: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Elimina una risposta dell'amministratore.
+     * @param EAdminResponse $adminResponse L'oggetto risposta da eliminare.
+     * @return bool True se l'eliminazione è avvenuta con successo, false altrimenti.
+     */
+    public static function deleteAdminResponse(EAdminResponse $adminResponse): bool
+    {
+        try {
+            return FEntityManager::getInstance()->deleteObject($adminResponse); // Usa deleteObject su EAdminResponse
+        } catch (\Exception $e) {
+            error_log("Errore durante l'eliminazione della risposta dell'admin: " . $e->getMessage());
+            return false;
+        }
+    }
+        public static function updateReview(EUserReview $review): bool
+    {
+        try {
+            return FUserReview::saveObj($review);
+        } catch (\Exception $e) {
+            error_log("Errore durante l'aggiornamento della recensione: " . $e->getMessage());
+            return false;
+        }
+    }
+
+       public static function updateAdminResponse(EAdminResponse $adminResponse): bool
+    {
+        try {
+            return FEntityManager::getInstance()->saveObject($adminResponse);
+        } catch (\Exception $e) {
+            error_log("Errore durante l'aggiornamento della risposta dell'admin: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Elimina una recensione di un cliente, verificando che il cliente sia il proprietario della recensione.
+     * @param int $reviewId L'ID della recensione da eliminare.
+     * @param int $clientId L'ID del cliente che tenta l'eliminazione (per verifica di proprietà).
+     * @return bool True se la recensione è stata eliminata con successo, false altrimenti.
+     */
+    public static function deleteClientReview(int $reviewId, int $clientId): bool
+    {
+        try {
+            $review = FUserReview::getObj($reviewId); // Recupera la recensione
+
+            if ($review && $review->getClient()->getId() === $clientId) { // Verifica che il cliente sia il proprietario
+                return FUserReview::deleteObj($review); // Elimina la recensione
+            }
+            return false; // Recensione non trovata o cliente non proprietario
+        } catch (\Exception $e) {
+            error_log("Errore durante l'eliminazione della recensione del cliente: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
+
+    /**
+     * Recupera una singola risposta dell'admin tramite ID.
+     * Necessario per recuperare l'oggetto risposta prima di eliminarlo.
+     * @param int $id L'ID della risposta dell'admin.
+     * @return EAdminResponse|null L'oggetto risposta o null se non trovato.
+     */
+    public static function getAdminResponseById(int $id): ?EAdminResponse
+    {
+        return FEntityManager::getInstance()->retriveObject(EAdminResponse::class, $id);
+    }
+
+
+
+        /**
+     * Recupera una singola recensione tramite ID.
+     */
+    public static function getReviewById(int $id): ?EUserReview
+    {
+        return FUserReview::getObj($id);
+    }
+
+    /**
+     * Elimina una recensione (wrapper per FUserReview).
+     */
+    public static function deleteReview(EUserReview $review): bool
+    {
+        return FUserReview::deleteObj($review);
+    }
+
+
+
 
     public static function addCreditCardToClient(EClient $client, string $brand, string $last4, int $expMonth, int $expYear, ?string $cardName): bool
     {

@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 03:31:14
+/* Smarty version 5.5.1, created on 2025-07-10 01:49:58
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/add_credit_card.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686dc662e1f310_40377454',
+  'unifunc' => 'content_686f0026ea20a5_62674078',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '70449d1309ebe65b4e191eb522a195f1b62ddff6' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/add_credit_card.tpl',
-      1 => 1752012840,
+      1 => 1752095624,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686dc662e1f310_40377454 (\Smarty\Template $_smarty_tpl) {
+function content_686f0026ea20a5_62674078 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -64,6 +64,5 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
         </form>
     </div>
 </body>
-</html>
-<?php }
+</html><?php }
 }
