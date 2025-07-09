@@ -15,11 +15,11 @@ class EReservationTable {
     #[ORM\GeneratedValue]
     private $reservationTableId;
 
-    #[ORM\ManyToOne(targetEntity: EReservation::class, inversedBy: 'reservationTables', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: EReservation::class, inversedBy: 'table', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'reservation_id', referencedColumnName: 'idReservation')]
     private EReservation $reservation;
 
-    #[ORM\ManyToOne(targetEntity: ETable::class, inversedBy: 'reservationTables', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: ETable::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'table_id', referencedColumnName: 'idTable')]
     private ETable $table;
 

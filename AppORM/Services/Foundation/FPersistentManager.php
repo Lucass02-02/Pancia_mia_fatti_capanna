@@ -26,6 +26,10 @@ use AppORM\Entity\TableState;
 use AppORM\Services\Foundation\FOrder;
 use AppORM\Entity\EOrder;
 use AppORM\Entity\OrderStatus;
+use AppORM\Entity\EAdmin;
+use AppORM\Services\Foundation\FAdmin;
+use AppORM\Services\Foundation\FTable;
+use AppORM\Entity\EWaiter;
 
 class FPersistentManager {
 
@@ -48,18 +52,26 @@ class FPersistentManager {
     }
 
     public static function registerClient(string $name, string $surname, DateTime $birthDate, string $email, string $password,  ?string $phoneNumber = null, ?string $nickname = null,): ?EClient {
-        if (FClient::getClientByEmail($email) !== null) { return null; }
-        if ($nickname !== null && FClient::getClientByNickname($nickname) !== null) { return null; }
+        if (FClient::getClientByEmail($email) !== null) {
+             return null;
+             }
+        if ($nickname !== null && FClient::getClientByNickname($nickname) !== null) {
+             return null; 
+            }
         $client = new EClient($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT), $phoneNumber, $nickname);
         $client->setNickname($nickname);
         $client->setPhonenumber($phoneNumber);
-        if (FClient::saveObj($client)) { return $client; }
+        if (FClient::saveObj($client)) {
+             return $client; 
+            }
         return null;
     }
     
     public static function authenticateClient(string $email, string $password): ?EClient {
         $client = FClient::getClientByEmail($email);
-        if ($client && password_verify($password, $client->getPassword())) { return $client; }
+        if ($client && password_verify($password, $client->getPassword())) {
+             return $client; 
+            }
         return null;
     }
     
@@ -392,5 +404,150 @@ class FPersistentManager {
         ];
     }
 
-    public static function boh() {}
+
+    public static function authenticateAdmin(string $email, string $password): ?EAdmin  {
+        $admin = FAdmin::getAdminByEmail($email);
+        // Se l'admin esiste e la password è corretta, restituisce l'oggetto admin
+        if ($admin && password_verify($password, $admin->getPassword())) {
+            return $admin;
+        }
+        // Altrimenti restituisce null
+        return null;
+    }
+    /**
+     * Recupera solo i prodotti disponibili per la visualizzazione ai clienti.
+     */
+    public static function getAvailableProducts(): array
+    {
+        return FProduct::getAvailableProducts();
+    }
+
+     public static function getAdminById(int $id): ?\AppORM\Entity\EAdmin
+    {
+        return FEntityManager::getInstance()->retriveObject(\AppORM\Entity\EAdmin::class, $id);
+    }
+
+     /**
+     * Salva o aggiorna un tavolo.
+     * Chiama il metodo aggiunto a FTable.
+     */
+    public static function saveTable(ETable $table): bool {
+        // La \ iniziale è necessaria perché FTable non ha un namespace
+        return self::uploadObject($table);
+    }
+
+    /**
+     * Recupera un tavolo tramite il suo ID.
+     * Chiama il tuo metodo esistente in FTable.
+     */
+    public static function getTableById(int $id): ?ETable {
+        return FTable::getTableById($id);
+    }
+
+    /**
+     * Cancella un tavolo.
+     * Chiama il metodo aggiunto a FTable.
+     */
+    public static function deleteTable(ETable $table): bool {
+        return FEntityManager::getInstance()->deleteObject($table);
+    }
+
+    /**
+     * Recupera tutti i tavoli.
+     * Chiama il metodo aggiunto a FTable.
+     */
+    public static function getAllTables(): array {
+        return FEntityManager::getInstance()->selectAll(ETable::class);
+    }
+
+    /**
+     * Recupera tutte le sale del ristorante.
+     */
+    public static function getAllRestaurantHalls(): array {
+        return FEntityManager::getInstance()->selectAll(ERestaurantHall::class);
+    }
+
+    /**
+     * Recupera una sala tramite ID.
+     */
+    public static function getRestaurantHallById(int $id): ?ERestaurantHall {
+        return FEntityManager::getInstance()->retriveObject(ERestaurantHall::class, $id);
+    }
+
+        /**
+     * Salva un'entità ERestaurantHall nel database.
+     * @param \AppORM\Entity\ERestaurantHall $hall
+     */
+    public function saveRestaurantHall(ERestaurantHall $hall): void
+    {
+        self::uploadObject($hall);
+    }
+
+    /**
+     * Elimina un'entità ERestaurantHall dal database.
+     * @param \AppORM\Entity\ERestaurantHall $hall
+     */
+    public function deleteRestaurantHall(ERestaurantHall $hall): void
+    {
+        FEntityManager::getInstance()->deleteObject($hall);
+    }
+
+
+
+    public static function getWaiterById(int $id): ?EWaiter {
+        return FWaiter::getObj($id);
+    }
+
+    public static function getAllWaiters(): array {
+        return FWaiter::selectAll();
+    }
+
+    public static function deleteWaiter(int $id): bool {
+        $waiter = self::getWaiterById($id);
+        if ($waiter) {
+            return FWaiter::deleteObj($waiter);
+        }
+        return false;
+    }
+    public static function getAllClients(): array
+    {
+        return FEntityManager::getInstance()->selectAll(EClient::class);
+    }
+
+    public static function getWaiterByEmail(string $email): ?EWaiter
+    {
+        return FWaiter::getWaiterByEmail($email);
+    }
+
+    public static function registerWaiter(string $name, string $surname, DateTime $birthDate, string $email, string $password, string $serialNumber, int $hallId): ?EWaiter
+    {
+        // Ora questa chiamata funziona perché il metodo esiste in questa classe
+        if (self::getWaiterByEmail($email)) { return null; }
+        
+        $hall = self::getRestaurantHallById($hallId);
+        if (!$hall) { return null; }
+
+        $waiter = new EWaiter($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT), $serialNumber);
+        $waiter->setRestaurantHall($hall);
+
+        if (FWaiter::saveObj($waiter)) {
+            return $waiter;
+        }
+        return null;
+    }
+
+    public static function authenticateWaiter(string $email, string $password): ?EWaiter
+    {
+        $waiter = FWaiter::getWaiterByEmail($email);
+        if ($waiter && password_verify($password, $waiter->getPassword())) {
+            return $waiter;
+        }
+        return null;
+    }
+      public static function saveWaiter(EWaiter $waiter): bool
+    {
+        return FWaiter::saveObj($waiter);
+    }
+
+
 }

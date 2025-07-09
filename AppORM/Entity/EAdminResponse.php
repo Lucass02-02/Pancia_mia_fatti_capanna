@@ -21,11 +21,11 @@ class EAdminResponse {
     #[ORM\Column(type: 'datetime', nullable: false)]
     private $responseDate;
 
-    #[ORM\ManyToOne(targetEntity: EAdmin::class, inversedBy: 'admin_responses', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: EAdmin::class, inversedBy: 'responses', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'admin_id', referencedColumnName: 'id')]
     private EAdmin $admin;
 
-    #[ORM\ManyToMany(targetEntity: EUserReview::class, mappedBy: 'adminResponses', cascade: ['persist'])]
+    #[ORM\ManyToMany(targetEntity: EUserReview::class, mappedBy: 'adminResponse', cascade: ['persist'])]
     private Collection $userReviews;
 
     private static $entity = EAdminResponse::class;

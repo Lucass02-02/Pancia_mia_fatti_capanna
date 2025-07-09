@@ -19,4 +19,15 @@ class FProduct
     public static function deleteObj(EProduct $product): bool { return FEntityManager::getInstance()->deleteObject($product); }
     public static function selectAll(): array { return FEntityManager::getInstance()->selectAll(self::getTable()); }
     public static function fetchAll(): array{ return FEntityManager::getInstance()->selectAll(EProduct::class);}
+     public static function getAvailableProducts(): array
+    {
+        $allProducts = self::fetchAll();
+        $availableProducts = [];
+        foreach ($allProducts as $product) {
+            if ($product->isAvailable()) {
+                $availableProducts[] = $product;
+            }
+        }
+        return $availableProducts;
+    }
 }

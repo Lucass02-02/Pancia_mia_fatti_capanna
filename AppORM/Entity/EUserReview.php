@@ -5,6 +5,8 @@ namespace AppORM\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 
 #[ORM\Entity]
 #[ORM\Table(name: 'user_reviews')]
@@ -19,6 +21,10 @@ class EUserReview
     #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reviews', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false)]
     private EClient $user;
+
+    #[ORM\ManyToMany(targetEntity: EAdminResponse::class, inversedBy: 'userReviews')]
+    #[ORM\JoinTable(name: 'admin_user_review')]
+    private Collection $adminResponse;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $comment;
@@ -36,6 +42,7 @@ class EUserReview
         $this->comment = $comment;
         $this->rating = $rating;
         $this->reviewDate = new DateTime();
+        $this->adminResponse = new ArrayCollection();
     }
 
     // Metodi Getter
@@ -87,5 +94,10 @@ class EUserReview
     {
         $this->reviewDate = $reviewDate;
         return $this;
+    }
+
+    public function getAdminResponse(): Collection
+    {
+        return $this->adminResponse;
     }
 }

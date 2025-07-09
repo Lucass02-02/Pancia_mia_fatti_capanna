@@ -5,15 +5,19 @@ namespace AppORM\Control;
 use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\EProduct; // Importiamo EProduct per il type hinting
+use AppORM\Services\Utility\USession;
 
 class CHome
 {
     public static function home(): void
     {
+        $userRole = USession::getValue('user_role');
         $data = [
             'titolo' => 'Benvenuto in Pancia mia fatti capanna!',
-            'messaggio' => 'Il miglior ristorante della zona.'
+            'messaggio' => 'Il miglior ristorante della zona.',
+            'user_role' => $userRole
         ];
+        
         UView::render('home', $data);
     }
 

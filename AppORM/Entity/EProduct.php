@@ -42,7 +42,7 @@ class EProduct
     #[ORM\OneToMany(targetEntity: EOrderItem::class, mappedBy: 'product', cascade: ['persist'])]
     private Collection $orderItems;
 
-    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'products')]
+    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'product')]
     #[ORM\JoinTable(name: 'product_allergens')]
     private Collection $allergens;
 

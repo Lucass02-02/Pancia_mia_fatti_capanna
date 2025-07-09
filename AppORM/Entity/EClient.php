@@ -8,6 +8,8 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use DateTime;
 use AppORM\Entity\EUserReview;
+use AppORM\Entity\EReservation;
+use AppORM\Entity\ECreditCard;
 
 
 #[ORM\Entity]
@@ -20,13 +22,13 @@ class EClient extends EUser {
     #[ORM\Column(type: 'integer', nullable: false)]
     private int $loyaltyPoints;
 
-    #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'clients')]
+    #[ORM\OneToMany(targetEntity: EUserReview::class, mappedBy: 'user')]
     private Collection $reviews;
 
     #[ORM\Column(type: 'boolean', nullable: false)]
     private bool $receivesNotifications;
     
-    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'clients')]
+    #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'client')]
     private Collection $reservations;
 
     #[ORM\OneToMany(targetEntity: ECreditCard::class, mappedBy: 'client', cascade: ['persist', 'remove'])]

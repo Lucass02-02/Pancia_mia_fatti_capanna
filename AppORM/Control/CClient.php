@@ -8,10 +8,20 @@ use AppORM\Services\Utility\UView;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Entity\ECreditCard;
+use AppORM\Services\Utility\UCookie;
 use DateTime;
 
 class CClient
 {
+    public static function isLogged(): bool {
+    if (session_status() == PHP_SESSION_NONE) {
+        USession::start();
+    }
+    return USession::getValue('user') !== null;
+}
+
+
+
      public static function registration(): void
     {
         if (UHTTPMethods::isGet()) {
@@ -22,11 +32,13 @@ class CClient
             $email = UHTTPMethods::getPostValue('email');
             $password = UHTTPMethods::getPostValue('password');
             $birthDateStr = UHTTPMethods::getPostValue('birthDate');
+            $nickname = UHTTPMethods::getPostValue('nickname');
+            $phoneNumber = UHTTPMethods::getPostValue('phoneNumber');
             
-            if ($name && $surname && $email && $password && $birthDateStr) {
+            if ($name && $surname && $email && $password && $birthDateStr && $nickname && $phoneNumber) {
                 try {
                     $birthDate = new DateTime($birthDateStr);
-                    $client = FPersistentManager::getInstance()->registerClient($name, $surname, $birthDate, $email, $password);
+                    $client = FPersistentManager::getInstance()->registerClient($name, $surname, $birthDate, $email, $password, $nickname, $phoneNumber);
                     if ($client) {
                         UView::render('registration', ['success' => true, 'message' => 'Registrazione completata! Ora puoi effettuare il login.']);
                     } else {
@@ -45,33 +57,53 @@ class CClient
      * GET: mostra il form di login.
      * POST: autentica l'utente e crea la sessione.
      */
-    public static function login(): void
-    {
-        if (UHTTPMethods::isGet()) {
-            UView::render('login');
-        } elseif (UHTTPMethods::isPost()) {
-            $email = UHTTPMethods::getPostValue('email');
-            $password = UHTTPMethods::getPostValue('password');
+ public static function login(): void
+{
+    $message = USession::getValue('flash_message');
+        if ($message) {
+            USession::setValue('flash_message', null);
+        }
 
-            if ($email && $password) {
-                // Usiamo il metodo già pronto del PersistentManager
-                $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
+    if (UHTTPMethods::isGet()) {
+        UView::render('login', ['error' => $message]);
+    } elseif (UHTTPMethods::isPost()) {
+        $email = UHTTPMethods::getPostValue('email');
+        $password = UHTTPMethods::getPostValue('password');
 
-                if ($client) {
-                    // Login riuscito! Salviamo l'ID del cliente in sessione.
-                    USession::setValue('user_id', $client->getId());
-                    // Reindirizziamo l'utente alla sua pagina del profilo.
-                    header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
-                    exit;
-                } else {
-                    // Login fallito
-                    UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
-                }
-            } else {
-                UView::render('login', ['error' => 'Email e password sono obbligatori.']);
+        if ($email && $password) {
+            $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
+            if ($client) {
+                USession::setValue('user_id', $client->getId());
+                USession::setValue('user_role', 'client');
+                USession::setValue('user_email', $client->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/client/profile');
+                exit;
             }
+
+            $waiter = FPersistentManager::getInstance()->authenticateWaiter($email, $password);
+            if ($waiter) {
+                USession::setValue('user_id', $waiter->getId());
+                USession::setValue('user_role', 'waiter');
+                USession::setValue('user_email', $waiter->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/waiter/profile');
+                exit;
+            }
+
+            $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
+            if ($admin) {
+                USession::setValue('user_id', $admin->getId());
+                USession::setValue('user_role', 'admin');
+                USession::setValue('user_email', $admin->getEmail());
+                header('Location: /Pancia_mia_fatti_capanna/');
+                exit;
+            }
+
+            UView::render('login', ['error' => 'Credenziali non valide. Riprova']);
+        } else {
+            UView::render('login', ['error' => 'Email e password sono obbligatori.']);
         }
     }
+}
 
 
 
@@ -81,7 +113,7 @@ class CClient
     public static function profile(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/Client/login');
             exit;
         }
 
@@ -119,7 +151,7 @@ class CClient
     public static function addReview(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/Client/login');
             exit;
         }
 
@@ -146,7 +178,7 @@ class CClient
     public static function addCreditCard(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/Client/login');
             exit;
         }
 
@@ -178,7 +210,7 @@ class CClient
     public static function deleteCreditCard(): void
     {
         if (!USession::isSet('user_id')) {
-            header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=login');
+            header('Location: /Pancia_mia_fatti_capanna/Client/login');
             exit;
         }
         
@@ -196,6 +228,23 @@ class CClient
             }
         }
         // Se qualcosa va storto, torna al profilo
-        header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile');
+        header('Location: /Pancia_mia_fatti_capanna/Client/profile');
     }
+
+
+    public static function reserve() {
+    if (!CClient::isLogged()) {
+        // Imposto il messaggio solo qui, prima di fare il redirect
+        if (session_status() == PHP_SESSION_NONE) {
+            USession::start();
+        }
+        USession::setValue('flash_message', 'Per poter effettuare una prenotazione devi essere registrato');
+        header('Location: /Pancia_mia_fatti_capanna/Client/login');
+        exit;
+    }
+
+    // Se loggato, mostra la pagina di prenotazione normalmente
+    UView::render('reservation', ['logged' => true]);
+}
+
 }

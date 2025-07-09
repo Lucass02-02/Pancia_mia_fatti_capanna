@@ -3,7 +3,7 @@
         'name' => '__root__',
         'pretty_version' => 'dev-main',
         'version' => 'dev-main',
-        'reference' => '8c0b1d76f446f6581fba1d9222a41ac9b41e0a0c',
+        'reference' => 'a73692fadbd20ebf6b74157e1ac3352b25aa9e4c',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         '__root__' => array(
             'pretty_version' => 'dev-main',
             'version' => 'dev-main',
-            'reference' => '8c0b1d76f446f6581fba1d9222a41ac9b41e0a0c',
+            'reference' => 'a73692fadbd20ebf6b74157e1ac3352b25aa9e4c',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -144,6 +144,15 @@
             'provided' => array(
                 0 => '1.0|2.0|3.0',
             ),
+        ),
+        'smarty/smarty' => array(
+            'pretty_version' => 'v5.5.1',
+            'version' => '5.5.1.0',
+            'reference' => 'cbcd66e1de017ae3bcbf8b5fa2a34858f5e2adbc',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../smarty/smarty',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'symfony/cache' => array(
             'pretty_version' => 'v7.3.1',

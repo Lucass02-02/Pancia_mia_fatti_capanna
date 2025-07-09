@@ -17,10 +17,10 @@ class ERestaurantHall {
     #[ORM\Column(type: 'integer', length: 100, nullable: false)]
     private $totalPlaces;
 
-    #[ORM\OneToMany(targetEntity: EWaiter::class, mappedBy: 'restaurant_halls', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: EWaiter::class, mappedBy: 'restaurant_hall', cascade: ['persist'])]
     private Collection $waiters;
 
-    #[ORM\OneToMany(targetEntity: ETable::class, mappedBy: 'restaurant_halls', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: ETable::class, mappedBy: 'restaurantHall', cascade: ['persist'])]
     private Collection $tables;
 
     #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'restaurantHall', cascade: ['persist'])]

@@ -40,9 +40,6 @@ class EOrder {
     #[ORM\OneToMany(targetEntity: EOrderItem::class, mappedBy: 'order', cascade: ['persist'])]
     private Collection $orderItems;
 
-    #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'orders', cascade: ['persist'])]
-    private Collection $products;
-
     private static $entity = EOrder::class;
 
     //constructor
@@ -68,14 +65,6 @@ class EOrder {
 
     public function setDate($date) {
         $this->date = $date;
-    }
-
-    public function getProducts(): Collection {
-        return $this->products;
-    }
-
-    public function setProducts(Collection $products) {
-        $this->products = $products;
     }
 
     public function getOrderItems(): Collection {

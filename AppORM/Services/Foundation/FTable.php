@@ -1,5 +1,7 @@
 <?php
 
+namespace AppORM\Services\Foundation;
+
 require_once __DIR__ . '/../../Entity/ETable.php';
 require_once __DIR__ . '/FEntityManager.php';
 use AppORM\Entity\ETable;

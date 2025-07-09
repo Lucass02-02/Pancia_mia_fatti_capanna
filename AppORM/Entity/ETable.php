@@ -28,7 +28,7 @@ class ETable {
     #[ORM\Column(type: 'string', nullable: false, enumType: TableState::class)]
     private TableState $state;
 
-    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'table', cascade: ['persist'])]
+    #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'tables', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'hall_id', referencedColumnName: 'idHall')]
     private ERestaurantHall $restaurantHall;
 

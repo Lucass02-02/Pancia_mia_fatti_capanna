@@ -36,4 +36,9 @@ class EWaiter extends EUser {
     public function setSerialNumber(string $serialNumber): void {
         $this->serialNumber = $serialNumber;
     }
+
+
+    public function setRestaurantHall( $restaurant_hall) {
+        $this->restaurant_hall = $restaurant_hall;
+    }
 }

@@ -10,7 +10,7 @@ use Doctrine\Common\Collections\Collection;
 #[ORM\Table(name: 'admins')]
 class EAdmin extends EUser {
 
-    #[ORM\OneToMany(targetEntity: EAdminResponse::class, mappedBy: 'admins', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: EAdminResponse::class, mappedBy: 'admin', cascade: ['persist'])]
     private Collection $responses;
 
     private static $entity = EAdmin::class;
