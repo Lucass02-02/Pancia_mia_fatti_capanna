@@ -22,4 +22,27 @@ class CReview
             'titolo' => 'Tutte le Recensioni'
         ]);
     }
+    /**
+     * Elimina una recensione. Accessibile solo agli amministratori.
+     */
+    public static function delete(): void
+    {
+        // Sicurezza: solo gli admin possono eliminare
+        if (USession::getValue('user_role') !== 'admin') {
+            header('Location: /Pancia_mia_fatti_capanna/');
+            exit;
+        }
+
+        if (UHTTPMethods::isPost()) {
+            $reviewId = (int)UHTTPMethods::getPostValue('review_id');
+            if ($reviewId > 0) {
+                // Si assume che esista un metodo deleteReview() nel FPersistentManager
+                FPersistentManager::getInstance()->deleteReview($reviewId);
+            }
+        }
+
+        // Reindirizza alla pagina con tutte le recensioni
+        header('Location: /Pancia_mia_fatti_capanna/review/showAll');
+        exit;
+    }
 }

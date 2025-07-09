@@ -210,4 +210,38 @@ public static function login(): void
         header('Location: /Pancia_mia_fatti_capanna/home/menu');
         exit;
     }
+        /**
+     * Gestisce l'eliminazione di una recensione da parte del cliente che l'ha scritta.
+     */
+    public static function deleteReview(): void
+    {
+        // 1. Controlla se l'utente è loggato
+        if (!USession::isSet('user_id')) {
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
+            exit;
+        }
+
+        if (UHTTPMethods::isPost()) {
+            $reviewId = (int)UHTTPMethods::getPostValue('review_id');
+            $clientId = USession::getValue('user_id');
+
+            if ($reviewId > 0) {
+                // 2. Chiama il FPersistentManager per eliminare la recensione,
+                //    passando sia l'ID della recensione che l'ID del cliente per sicurezza.
+                //    Il manager restituirà true se l'eliminazione è andata a buon fine.
+                $deleted = FPersistentManager::getInstance()->deleteClientReview($reviewId, $clientId);
+
+                if ($deleted) {
+                    // Reindirizza al profilo con un messaggio di successo
+                    header('Location: /Pancia_mia_fatti_capanna/client/profile?status=review_deleted');
+                    exit;
+                }
+            }
+        }
+
+        // Se qualcosa va storto (es. richiesta non POST o ID mancante),
+        // reindirizza semplicemente al profilo.
+        header('Location: /Pancia_mia_fatti_capanna/client/profile?status=error');
+        exit;
+    }
 }

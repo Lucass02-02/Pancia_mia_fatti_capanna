@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 03:31:11
+/* Smarty version 5.5.1, created on 2025-07-09 17:34:18
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/profile.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686dc65fea5450_63034593',
+  'unifunc' => 'content_686e8bfacd93e3_05451950',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '1140cf0966e0d5be31ca2504de863375d88c3f57' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/profile.tpl',
-      1 => 1752024667,
+      1 => 1752075256,
       2 => 'file',
     ),
   ),
@@ -20,113 +20,124 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686dc65fea5450_63034593 (\Smarty\Template $_smarty_tpl) {
+function content_686e8bfacd93e3_05451950 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profilo di <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+    <title>Il Mio Profilo - <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getName(), ENT_QUOTES, 'UTF-8', true);?>
 </title>
-    <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; line-height: 1.6; }
-        .container { max-width: 900px; margin: 2em auto; padding: 1em; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h1, h2, h3 { color: #e8491d; }
-        .profile-details, .reviews-section, .cards-section { margin-bottom: 2em; padding: 1.5em; border: 1px solid #ddd; border-radius: 5px; }
-        .card-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
-        .card-item:last-child { border-bottom: none; }
-        .delete-form button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        .nav-links { margin-top: 1.5em; text-align: center; }
-        .nav-links a { margin: 0 10px; color: #007bff; text-decoration: none; }
-    </style>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Ciao, <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getName(), ENT_QUOTES, 'UTF-8', true);?>
-!</h1>
+<body class="bg-light">
 
-        <div class="profile-details">
-            <h2>I tuoi dati</h2>
-            <p><strong>Nome Completo:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+<div class="container my-5">
+    <div class="p-5 bg-white rounded shadow-sm">
+        <h1 class="text-primary">Profilo di <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getName(), ENT_QUOTES, 'UTF-8', true);?>
  <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getSurname(), ENT_QUOTES, 'UTF-8', true);?>
-</p>
-            <p><strong>Email:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getEmail(), ENT_QUOTES, 'UTF-8', true);?>
-</p>
-            <p><strong>Data di Nascita:</strong> <?php echo $_smarty_tpl->getValue('client')->getBirthDate()->format('d/m/Y');?>
-</p>
-            <p><strong>Nickname:</strong> <?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('client')->getNickname() ?? null)===null||$tmp==='' ? 'Non impostato' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
-</p>
-            <p><strong>Telefono:</strong> <?php echo htmlspecialchars((string)(($tmp = $_smarty_tpl->getValue('client')->getPhonenumber() ?? null)===null||$tmp==='' ? 'Non impostato' ?? null : $tmp), ENT_QUOTES, 'UTF-8', true);?>
-</p>
+</h1>
+        <p class="lead">Benvenuto nel tuo pannello di controllo personale.</p>
+        <hr>
+
+        <div class="mb-5">
+            <h3 class="text-secondary">I Tuoi Dati</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Nome Completo:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+ <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getSurname(), ENT_QUOTES, 'UTF-8', true);?>
+</li>
+                <li class="list-group-item"><strong>Nickname:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getNickname(), ENT_QUOTES, 'UTF-8', true);?>
+</li>
+                <li class="list-group-item"><strong>Email:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('client')->getEmail(), ENT_QUOTES, 'UTF-8', true);?>
+</li>
+                <li class="list-group-item"><strong>Numero di Telefono:</strong> <?php echo (($tmp = htmlspecialchars((string)$_smarty_tpl->getValue('client')->getPhoneNumber(), ENT_QUOTES, 'UTF-8', true) ?? null)===null||$tmp==='' ? "Non specificato" ?? null : $tmp);?>
+</li>
+                <li class="list-group-item"><strong>Data di Nascita:</strong> <?php echo $_smarty_tpl->getValue('client')->getBirthDate()->format('d/m/Y');?>
+</li>
+            </ul>
         </div>
 
-        <div class="cards-section">
-            <h2>Le tue carte di credito</h2>
-            <?php if ($_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('creditCards')) > 0) {?>
-                <?php
-$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('creditCards'), 'card');
-$foreach0DoElse = true;
-foreach ($_from ?? [] as $_smarty_tpl->getVariable('card')->value) {
-$foreach0DoElse = false;
-?>
-                    <div class="card-item">
-                        <span>
-                            <strong><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('card')->getBrand(), ENT_QUOTES, 'UTF-8', true);?>
-</strong> che termina con **** <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('card')->getLast4(), ENT_QUOTES, 'UTF-8', true);?>
-
-                            (Scade: <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('card')->getExpMonth(), ENT_QUOTES, 'UTF-8', true);?>
-/<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('card')->getExpYear(), ENT_QUOTES, 'UTF-8', true);?>
-)
-                        </span>
-                        <form class="delete-form" action="/Pancia_mia_fatti_capanna/client/deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
-                            <input type="hidden" name="card_id" value="<?php echo $_smarty_tpl->getValue('card')->getId();?>
-">
-                            <button type="submit">Elimina</button>
-                        </form>
-                    </div>
-                <?php
-}
-$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-            <?php } else { ?>
-                <p>Non hai ancora aggiunto nessuna carta di credito.</p>
-            <?php }?>
-            <a href="/Pancia_mia_fatti_capanna/client/addCreditCard">Aggiungi una nuova carta</a>
-        </div>
-
-        <div class="reviews-section">
-            <h2>Le tue recensioni</h2>
-            <?php if ($_smarty_tpl->getSmarty()->getModifierCallback('count')($_smarty_tpl->getValue('reviews')) > 0) {?>
-                <ul>
+        <div class="mt-5">
+            <h3 class="text-secondary">Le Mie Recensioni</h3>
+            <?php if (!( !$_smarty_tpl->hasVariable('reviews') || empty($_smarty_tpl->getValue('reviews')))) {?>
+                <ul class="list-group">
                     <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('reviews'), 'review');
-$foreach1DoElse = true;
+$foreach0DoElse = true;
 foreach ($_from ?? [] as $_smarty_tpl->getVariable('review')->value) {
-$foreach1DoElse = false;
+$foreach0DoElse = false;
 ?>
-                        <li>
-                            <strong>Voto: <?php echo $_smarty_tpl->getValue('review')->getRating();?>
-/5</strong> - 
-                            <em>"<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('review')->getComment(), ENT_QUOTES, 'UTF-8', true);?>
-"</em>
-                            (<?php echo $_smarty_tpl->getValue('review')->getReviewDate()->format('d/m/Y');?>
-)
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-1"><strong>Voto: <?php echo $_smarty_tpl->getValue('review')->getRating();?>
+/5</strong></p>
+                                <p class="mb-0 fst-italic">"<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('review')->getComment(), ENT_QUOTES, 'UTF-8', true);?>
+"</p>
+                                <small class="text-muted">Scritta il: <?php echo $_smarty_tpl->getValue('review')->getCreationDate()->format('d/m/Y');?>
+</small>
+                            </div>
+                            <form action="/Pancia_mia_fatti_capanna/client/deleteReview" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa recensione?');">
+                                <input type="hidden" name="review_id" value="<?php echo $_smarty_tpl->getValue('review')->getId();?>
+">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Elimina</button>
+                            </form>
                         </li>
                     <?php
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </ul>
             <?php } else { ?>
-                <p>Non hai ancora lasciato nessuna recensione.</p>
+                <p>Non hai ancora scritto nessuna recensione.</p>
             <?php }?>
-            <a href="/Pancia_mia_fatti_capanna/client/addReview">Lascia una nuova recensione</a>
+            <a href="/Pancia_mia_fatti_capanna/client/addReview" class="btn btn-primary mt-3">Scrivi una Recensione</a>
         </div>
+        
+        <hr class="my-5">
+        <div class="mt-4">
+            <h3 class="text-secondary">Le Mie Carte di Credito</h3>
+            <?php if (!( !$_smarty_tpl->hasVariable('creditCards') || empty($_smarty_tpl->getValue('creditCards')))) {?>
+                <ul class="list-group">
+                    <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('creditCards'), 'card');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('card')->value) {
+$foreach1DoElse = false;
+?>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('card')->getBrand(), ENT_QUOTES, 'UTF-8', true);?>
+</strong> che finisce con **** **** **** <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('card')->getLast4(), ENT_QUOTES, 'UTF-8', true);?>
 
-        <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a> |
-            <a href="/Pancia_mia_fatti_capanna/client/logout">Logout</a>
+                                <br>
+                                <small class="text-muted">Intestatario: <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('card')->getCardName(), ENT_QUOTES, 'UTF-8', true);?>
+</small>
+                            </div>
+                            <form action="/Pancia_mia_fatti_capanna/client/deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
+                                <input type="hidden" name="card_id" value="<?php echo $_smarty_tpl->getValue('card')->getId();?>
+">
+                                <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
+                            </form>
+                        </li>
+                    <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                </ul>
+            <?php } else { ?>
+                <p>Non hai ancora aggiunto nessuna carta di credito.</p>
+            <?php }?>
+            <a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-success mt-3">Aggiungi Carta</a>
+        </div>
+        
+        <hr class="my-5">
+
+        <div class="d-flex justify-content-center gap-3">
+             <a href="/Pancia_mia_fatti_capanna/" class="btn btn-secondary">Torna alla Home</a>
+             <a href="/Pancia_mia_fatti_capanna/client/logout" class="btn btn-danger">Logout</a>
         </div>
     </div>
+</div>
+
 </body>
 </html><?php }
 }

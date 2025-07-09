@@ -11,7 +11,7 @@
         <h1 class="text-primary text-center mb-4">Gestione Tavoli</h1>
 
         <div class="text-end mb-4">
-            <a href="/Pancia_mia_fatti_capanna/Hall/manage" class="btn btn-info">Gestisci Sale</a>
+            <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a>
         </div>
 
         <div class="mb-5">

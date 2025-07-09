@@ -522,6 +522,27 @@ class FPersistentManager {
         return FEntityManager::getInstance()->retriveObject(\AppORM\Entity\ERestaurantHall::class, $id);
     }
 
+        /**
+     * Salva un'entità ERestaurantHall nel database.
+     * @param \AppORM\Entity\ERestaurantHall $hall
+     */
+    public function saveRestaurantHall(\AppORM\Entity\ERestaurantHall $hall): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->persist($hall);
+        $entityManager->flush();
+    }
+
+    /**
+     * Elimina un'entità ERestaurantHall dal database.
+     * @param \AppORM\Entity\ERestaurantHall $hall
+     */
+    public function deleteRestaurantHall(\AppORM\Entity\ERestaurantHall $hall): void
+    {
+        $entityManager = $this->getEntityManager();
+        $entityManager->remove($hall);
+        $entityManager->flush();
+    }
 
 
 

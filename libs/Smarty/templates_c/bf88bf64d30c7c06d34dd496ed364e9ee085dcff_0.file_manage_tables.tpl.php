@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 02:25:04
+/* Smarty version 5.5.1, created on 2025-07-09 17:44:58
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_tables.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686db6e0df7ca7_23780422',
+  'unifunc' => 'content_686e8e7a961278_16240891',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'bf88bf64d30c7c06d34dd496ed364e9ee085dcff' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_tables.tpl',
-      1 => 1752012840,
+      1 => 1752075896,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686db6e0df7ca7_23780422 (\Smarty\Template $_smarty_tpl) {
+function content_686e8e7a961278_16240891 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -34,7 +34,7 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
         <h1 class="text-primary text-center mb-4">Gestione Tavoli</h1>
 
         <div class="text-end mb-4">
-            <a href="/Pancia_mia_fatti_capanna/Hall/manage" class="btn btn-info">Gestisci Sale</a>
+            <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Sale</a>
         </div>
 
         <div class="mb-5">

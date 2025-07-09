@@ -57,4 +57,15 @@ class EUserReview
         }
         $this->rating = $rating;
     }
+        /**
+     * Restituisce la data di creazione della recensione.
+     *
+     * @return DateTime
+     */
+        public function getCreationDate(): \DateTime
+    {
+        return $this->reviewDate; // CORRETTO: restituisce la proprietà giusta
+    }
+   
+    
 }

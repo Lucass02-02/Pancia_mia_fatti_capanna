@@ -1,78 +1,88 @@
-{* File: templates/profile.tpl (Convertito da PHP a Smarty) *}
+{* File: templates/profile.tpl (VERSIONE FINALE E COMPLETA CON TUTTI I DATI) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Profilo di {$client->getName()|escape}</title>
-    <style>
-        body { font-family: sans-serif; background-color: #f9f9f9; line-height: 1.6; }
-        .container { max-width: 900px; margin: 2em auto; padding: 1em; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        h1, h2, h3 { color: #e8491d; }
-        .profile-details, .reviews-section, .cards-section { margin-bottom: 2em; padding: 1.5em; border: 1px solid #ddd; border-radius: 5px; }
-        .card-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
-        .card-item:last-child { border-bottom: none; }
-        .delete-form button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
-        .nav-links { margin-top: 1.5em; text-align: center; }
-        .nav-links a { margin: 0 10px; color: #007bff; text-decoration: none; }
-    </style>
+    <title>Il Mio Profilo - {$client->getName()|escape}</title>
+    <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body>
-    <div class="container">
-        <h1>Ciao, {$client->getName()|escape}!</h1>
+<body class="bg-light">
 
-        <div class="profile-details">
-            <h2>I tuoi dati</h2>
-            <p><strong>Nome Completo:</strong> {$client->getName()|escape} {$client->getSurname()|escape}</p>
-            <p><strong>Email:</strong> {$client->getEmail()|escape}</p>
-            <p><strong>Data di Nascita:</strong> {$client->getBirthDate()->format('d/m/Y')}</p>
-            <p><strong>Nickname:</strong> {$client->getNickname()|default:'Non impostato'|escape}</p>
-            <p><strong>Telefono:</strong> {$client->getPhonenumber()|default:'Non impostato'|escape}</p>
+<div class="container my-5">
+    <div class="p-5 bg-white rounded shadow-sm">
+        <h1 class="text-primary">Profilo di {$client->getName()|escape} {$client->getSurname()|escape}</h1>
+        <p class="lead">Benvenuto nel tuo pannello di controllo personale.</p>
+        <hr>
+
+        <div class="mb-5">
+            <h3 class="text-secondary">I Tuoi Dati</h3>
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item"><strong>Nome Completo:</strong> {$client->getName()|escape} {$client->getSurname()|escape}</li>
+                <li class="list-group-item"><strong>Nickname:</strong> {$client->getNickname()|escape}</li>
+                <li class="list-group-item"><strong>Email:</strong> {$client->getEmail()|escape}</li>
+                <li class="list-group-item"><strong>Numero di Telefono:</strong> {$client->getPhoneNumber()|escape|default:"Non specificato"}</li>
+                <li class="list-group-item"><strong>Data di Nascita:</strong> {$client->getBirthDate()->format('d/m/Y')}</li>
+            </ul>
         </div>
 
-        <div class="cards-section">
-            <h2>Le tue carte di credito</h2>
-            {if count($creditCards) > 0}
-                {foreach $creditCards as $card}
-                    <div class="card-item">
-                        <span>
-                            <strong>{$card->getBrand()|escape}</strong> che termina con **** {$card->getLast4()|escape}
-                            (Scade: {$card->getExpMonth()|escape}/{$card->getExpYear()|escape})
-                        </span>
-                        <form class="delete-form" action="/Pancia_mia_fatti_capanna/client/deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
-                            <input type="hidden" name="card_id" value="{$card->getId()}">
-                            <button type="submit">Elimina</button>
-                        </form>
-                    </div>
-                {/foreach}
-            {else}
-                <p>Non hai ancora aggiunto nessuna carta di credito.</p>
-            {/if}
-            <a href="/Pancia_mia_fatti_capanna/client/addCreditCard">Aggiungi una nuova carta</a>
-        </div>
-
-        <div class="reviews-section">
-            <h2>Le tue recensioni</h2>
-            {if count($reviews) > 0}
-                <ul>
-                    {foreach $reviews as $review}
-                        <li>
-                            <strong>Voto: {$review->getRating()}/5</strong> - 
-                            <em>"{$review->getComment()|escape}"</em>
-                            ({$review->getReviewDate()->format('d/m/Y')})
+        <div class="mt-5">
+            <h3 class="text-secondary">Le Mie Recensioni</h3>
+            {if !empty($reviews)}
+                <ul class="list-group">
+                    {foreach from=$reviews item=review}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <p class="mb-1"><strong>Voto: {$review->getRating()}/5</strong></p>
+                                <p class="mb-0 fst-italic">"{$review->getComment()|escape}"</p>
+                                <small class="text-muted">Scritta il: {$review->getCreationDate()->format('d/m/Y')}</small>
+                            </div>
+                            <form action="/Pancia_mia_fatti_capanna/client/deleteReview" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa recensione?');">
+                                <input type="hidden" name="review_id" value="{$review->getId()}">
+                                <button type="submit" class="btn btn-outline-danger btn-sm">Elimina</button>
+                            </form>
                         </li>
                     {/foreach}
                 </ul>
             {else}
-                <p>Non hai ancora lasciato nessuna recensione.</p>
+                <p>Non hai ancora scritto nessuna recensione.</p>
             {/if}
-            <a href="/Pancia_mia_fatti_capanna/client/addReview">Lascia una nuova recensione</a>
+            <a href="/Pancia_mia_fatti_capanna/client/addReview" class="btn btn-primary mt-3">Scrivi una Recensione</a>
         </div>
+        
+        <hr class="my-5">
+        <div class="mt-4">
+            <h3 class="text-secondary">Le Mie Carte di Credito</h3>
+            {if !empty($creditCards)}
+                <ul class="list-group">
+                    {foreach from=$creditCards item=card}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <strong>{$card->getBrand()|escape}</strong> che finisce con **** **** **** {$card->getLast4()|escape}
+                                <br>
+                                <small class="text-muted">Intestatario: {$card->getCardName()|escape}</small>
+                            </div>
+                            <form action="/Pancia_mia_fatti_capanna/client/deleteCreditCard" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare questa carta?');">
+                                <input type="hidden" name="card_id" value="{$card->getId()}">
+                                <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
+                            </form>
+                        </li>
+                    {/foreach}
+                </ul>
+            {else}
+                <p>Non hai ancora aggiunto nessuna carta di credito.</p>
+            {/if}
+            <a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-success mt-3">Aggiungi Carta</a>
+        </div>
+        
+        <hr class="my-5">
 
-        <div class="nav-links">
-            <a href="/Pancia_mia_fatti_capanna/">Torna alla Home</a> |
-            <a href="/Pancia_mia_fatti_capanna/client/logout">Logout</a>
+        <div class="d-flex justify-content-center gap-3">
+             <a href="/Pancia_mia_fatti_capanna/" class="btn btn-secondary">Torna alla Home</a>
+             <a href="/Pancia_mia_fatti_capanna/client/logout" class="btn btn-danger">Logout</a>
         </div>
     </div>
+</div>
+
 </body>
 </html>
