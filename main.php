@@ -3,7 +3,7 @@ require __DIR__."/bootstrap.php";
 use AppORM\Services\Utility\UView;
 
 
-UView::render('menu', [
+UView::render('login', [
     'title' => 'Menu',
     'items' => [
         ['name' => 'Home', 'url' => '/home'],

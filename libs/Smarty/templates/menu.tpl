@@ -20,7 +20,7 @@
 
         <div class="bg-white p-4 rounded shadow-sm mb-5">
             <h3 class="text-secondary">Filtra per allergeni (mostra piatti senza):</h3>
-            <form action="/Pancia_mia_fatti_capanna/Home/menu" method="GET">
+            <form action="/Pancia_mia_fatti_capanna/Home/menu" method="POST">
                 <div class="row">
                     {foreach from=$allAllergens item=allergen}
                         <div class="col-md-3 col-sm-4 col-6">

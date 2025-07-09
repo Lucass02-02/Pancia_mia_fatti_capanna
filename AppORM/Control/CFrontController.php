@@ -1,56 +1,52 @@
 <?php
-namespace AppORM\Control; // Assicurati che questa namespace sia corretta
+
+namespace AppORM\Control;
 
 class CFrontController {
-    public function run(string $requestUri) {
-        // Rimuove la parte della base URL (es. /Pancia_mia_fatti_capanna)
-        $baseUrl = str_replace(basename($_SERVER['SCRIPT_NAME']), '', $_SERVER['SCRIPT_NAME']);
-        $path = str_replace($baseUrl, '', $requestUri);
-        $path = trim($path, '/');
 
-        $queryParams = $_GET; // Mantiene i parametri GET se presenti
+    public function run($requestUri) {
+        
+        $requestUri = trim($requestUri, '/');
+        $uriParts = explode( '/', $requestUri);
 
-        $segments = explode('/', $path);
+        array_shift($uriParts);
 
-        $controllerName = array_shift($segments);
-        $actionName = array_shift($segments);
+        $controllerName = !empty($uriParts[0]) ? ucfirst($uriParts[0]) : 'Home';
+        $methodName = !empty($uriParts[1]) ? $uriParts[1] : 'home'; 
 
-        $controllerName = $controllerName ?: 'home';
-        $actionName = $actionName ?: 'home';
+        $controllerClass = __NAMESPACE__ . '\\C' . $controllerName;
+        
+        // --- INIZIO DEBUG ---
+        echo "<pre>"; // Formatta l'output per renderlo più leggibile
+        echo "Richiesta URI originale (senza slash): " . htmlspecialchars($requestUri) . "\n";
+        echo "Parti URI dopo array_shift: \n";
+        print_r($uriParts);
+        echo "Nome Controller calcolato: " . htmlspecialchars($controllerName) . "\n";
+        echo "Nome Metodo calcolato: " . htmlspecialchars($methodName) . "\n";
+        echo "Classe Controller completa da cercare: " . htmlspecialchars($controllerClass) . "\n";
+        echo "</pre>";
+        // --- FINE DEBUG ---
 
-        $controllerClass = 'AppORM\\Control\\C' . ucfirst($controllerName); // Assicurati che 'C' sia il tuo prefisso
+        if (class_exists($controllerClass)) {
+            // --- DEBUG: Conferma che la classe esiste ---
+            echo "<pre>CLASSE TROVATA: " . htmlspecialchars($controllerClass) . "</pre>";
 
-        // --- DEBUG TEMPORANEO ---
-        echo "DEBUG: Analizzando URL: '$requestUri'<br>";
-        echo "DEBUG: Percorso pulito: '$path'<br>";
-        echo "DEBUG: Controller determinato: '$controllerClass'<br>";
-        echo "DEBUG: Azione determinata: '$actionName'<br>";
-        // --- FINE DEBUG TEMPORANEO ---
+            if (method_exists($controllerClass, $methodName)) {
+                // --- DEBUG: Conferma che il metodo esiste e viene chiamato ---
+                echo "<pre>METODO TROVATO E CHIAMATO: " . htmlspecialchars($controllerClass) . "::" . htmlspecialchars($methodName) . "</pre>";
+                $params = array_slice($uriParts, 2);
+                call_user_func_array([$controllerClass, $methodName], $params);
 
-
-        if (class_exists($controllerClass) && method_exists($controllerClass, $actionName)) {
-            // Prepara gli argomenti per il metodo del controller
-            $reflectionMethod = new \ReflectionMethod($controllerClass, $actionName);
-            $methodParameters = $reflectionMethod->getParameters();
-            $arguments = [];
-
-            foreach ($methodParameters as $param) {
-                if (!empty($segments)) {
-                    $arguments[] = array_shift($segments);
-                } elseif (isset($queryParams[$param->getName()])) {
-                    $arguments[] = $queryParams[$param->getName()];
-                } elseif ($param->isDefaultValueAvailable()) {
-                    $arguments[] = $param->getDefaultValue();
-                } else {
-                    $arguments[] = null;
-                }
+            } else {
+                // --- DEBUG: Messaggio se il metodo non è trovato ---
+                echo "<pre>ERRORE: Metodo '" . htmlspecialchars($methodName) . "' NON trovato nella classe '" . htmlspecialchars($controllerClass) . "'. Reindirizzo alla home.</pre>";
+                header('Location: /Pancia_mia_fatti_capanna/Home/home');
             }
 
-            call_user_func_array([$controllerClass, $actionName], $arguments);
-
         } else {
-            http_response_code(404);
-            echo "<h1>Errore 404</h1><p>Pagina o azione non trovata. Debug: Controller '$controllerClass' o Azione '$actionName' non esiste.</p>";
+            // --- DEBUG: Messaggio se la classe non è trovata ---
+            echo "<pre>ERRORE: Classe controller '" . htmlspecialchars($controllerClass) . "' NON trovata. Reindirizzo alla home.</pre>";
+            header('Location: /Pancia_mia_fatti_capanna/Home/home');
         }
     }
 }

@@ -7,6 +7,7 @@ use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UView;
 
+
 class CAllergen
 {
     private static function checkAdmin(): void {

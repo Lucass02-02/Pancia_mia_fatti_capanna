@@ -15,8 +15,9 @@ class CAdmin
         }
         $adminId = USession::getValue('user_id');
         $admin = FPersistentManager::getInstance()->getAdminById($adminId);
+        $userRole = USession::getValue('user_role');
         if ($admin) {
-            UView::render('admin_profile', ['admin' => $admin]);
+            UView::render('admin_profile', ['admin' => $admin, 'userRole' => $userRole]);
         } else {
             CClient::logout();
         }
@@ -27,8 +28,9 @@ class CAdmin
             header('Location: /Pancia_mia_fatti_capanna/');
             exit;
         }
+        $userRole = USession::getValue('user_role');
 
         $clients = FPersistentManager::getInstance()->getAllClients();
-        UView::render('manage_clients', ['clients' => $clients]);
+        UView::render('manage_clients', ['clients' => $clients, 'userRole' => $userRole]);
     }
 }
