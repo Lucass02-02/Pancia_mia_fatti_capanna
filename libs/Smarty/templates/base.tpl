@@ -28,6 +28,7 @@
   <!-- ======= Hero Section ======= -->
   {block name="hero"}{/block}
 
+  <!-- ======= Main Content ======= -->
   <main id="main">
     {block name="content"}{/block}
   </main>
@@ -35,7 +36,9 @@
   <!-- ======= Footer ======= -->
   {include file="footer.tpl"}
 
-  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
 
   <!-- Vendor JS Files -->
   <script src="/Pancia_mia_fatti_capanna/assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>

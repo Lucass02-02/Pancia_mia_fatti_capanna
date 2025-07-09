@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 03:24:03
+/* Smarty version 5.5.1, created on 2025-07-09 13:37:07
   from 'file:base.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686dc4b3839ad6_28979694',
+  'unifunc' => 'content_686e5463a048b2_82031097',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'dbfb46d789808e3918fe24443d5fd8951128b31e' => 
     array (
       0 => 'base.tpl',
-      1 => 1752023811,
+      1 => 1752061022,
       2 => 'file',
     ),
   ),
@@ -22,7 +22,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
     'file:footer.tpl' => 1,
   ),
 ))) {
-function content_686dc4b3839ad6_28979694 (\Smarty\Template $_smarty_tpl) {
+function content_686e5463a048b2_82031097 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 ?>
@@ -57,13 +57,14 @@ $_smarty_tpl->getInheritance()->init($_smarty_tpl, false);
 
   <!-- ======= Hero Section ======= -->
   <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1446412055686dc4b3833687_32009262', "hero");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_587737004686e5463a03b93_74082514', "hero");
 ?>
 
 
+  <!-- ======= Main Content ======= -->
   <main id="main">
     <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_706632518686dc4b3838893_15197140', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1997280794686e5463a04220_51132689', "content");
 ?>
 
   </main>
@@ -72,7 +73,9 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_706632518686d
   <?php $_smarty_tpl->renderSubTemplate("file:footer.tpl", $_smarty_tpl->cache_id, $_smarty_tpl->compile_id, 0, $_smarty_tpl->cache_lifetime, array(), (int) 0, $_smarty_current_dir);
 ?>
 
-  <a href="#" class="scroll-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+  <a href="#" class="scroll-top d-flex align-items-center justify-content-center">
+    <i class="bi bi-arrow-up-short"></i>
+  </a>
 
   <!-- Vendor JS Files -->
   <?php echo '<script'; ?>
@@ -97,7 +100,7 @@ $_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_706632518686d
 </html>
 <?php }
 /* {block "hero"} */
-class Block_1446412055686dc4b3833687_32009262 extends \Smarty\Runtime\Block
+class Block_587737004686e5463a03b93_74082514 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
@@ -105,7 +108,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
 }
 /* {/block "hero"} */
 /* {block "content"} */
-class Block_706632518686dc4b3838893_15197140 extends \Smarty\Runtime\Block
+class Block_1997280794686e5463a04220_51132689 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';

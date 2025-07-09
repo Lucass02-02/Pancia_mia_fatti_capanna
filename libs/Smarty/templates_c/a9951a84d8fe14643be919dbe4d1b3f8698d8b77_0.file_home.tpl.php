@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 02:30:11
+/* Smarty version 5.5.1, created on 2025-07-09 13:38:04
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686db813af0982_00313101',
+  'unifunc' => 'content_686e549c793e03_98032736',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a9951a84d8fe14643be919dbe4d1b3f8698d8b77' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/home.tpl',
-      1 => 1752021008,
+      1 => 1752060668,
       2 => 'file',
     ),
   ),
@@ -20,25 +20,25 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686db813af0982_00313101 (\Smarty\Template $_smarty_tpl) {
+function content_686e549c793e03_98032736 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 $_smarty_tpl->getInheritance()->init($_smarty_tpl, true);
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_360061582686db813a7e8b1_69986045', "hero");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1000257811686e549c7888b8_61946575', "hero");
 ?>
 
 
 <?php 
-$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_532786082686db813aefe77_14768244', "content");
+$_smarty_tpl->getInheritance()->instanceBlock($_smarty_tpl, 'Block_1624870694686e549c793613_36399156', "content");
 ?>
 
 <?php $_smarty_tpl->getInheritance()->endChild($_smarty_tpl, "base.tpl", $_smarty_current_dir);
 }
 /* {block "hero"} */
-class Block_360061582686db813a7e8b1_69986045 extends \Smarty\Runtime\Block
+class Block_1000257811686e549c7888b8_61946575 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
@@ -63,7 +63,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
 }
 /* {/block "hero"} */
 /* {block "content"} */
-class Block_532786082686db813aefe77_14768244 extends \Smarty\Runtime\Block
+class Block_1624870694686e549c793613_36399156 extends \Smarty\Runtime\Block
 {
 public function callBlock(\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
