@@ -74,9 +74,9 @@
                     </div>
 
                     <div class="col-12">
-                        <label for="hall_id" class="form-label">Assegna a una Sala</label>
+                        <label for="hall_id" class="form-label">Assegna a un Banchetto</label>
                         <select id="hall_id" name="hall_id" class="form-select" required>
-                            <option value="">Seleziona una sala...</option>
+                            <option value="">Seleziona un Banchetto...</option>
                             {foreach $halls as $hall}
                                 <option value="{$hall->getIdHall()}" {if $waiter->getRestaurantHall() && $waiter->getRestaurantHall()->getIdHall() == $hall->getIdHall()}selected{/if}>
                                     {$hall->getName()|escape}

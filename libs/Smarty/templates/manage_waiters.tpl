@@ -34,9 +34,7 @@
     <section class="contact">
         <div class="container" style="max-width: 1200px;">
 
-            <div class="text-end mb-4">
-                <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a>
-            </div>
+            
 
             <!-- Registra nuovo cameriere -->
             <div class="php-email-form bg-white p-4 shadow-sm mb-5">
@@ -67,9 +65,9 @@
                         <input type="text" id="serialNumber" name="serialNumber" placeholder="ID Univoco" class="form-control" required>
                     </div>
                     <div class="col-12">
-                        <label for="hall_id" class="form-label">Assegna a una Sala</label>
+                        <label for="hall_id" class="form-label">Assegna a un banchetto</label>
                         <select id="hall_id" name="hall_id" class="form-select" required>
-                            <option value="">Seleziona una sala...</option>
+                            <option value="">Seleziona un banchetto...</option>
                             {foreach $halls as $hall}
                                 <option value="{$hall->getIdHall()}">{$hall->getName()|escape}</option>
                             {/foreach}
@@ -90,7 +88,7 @@
                             <tr>
                                 <th>Nome Completo</th>
                                 <th>Matricola</th>
-                                <th>Sala Assegnata</th>
+                                <th>Banchetto Assegnato</th>
                                 <th>Azioni</th>
                             </tr>
                         </thead>

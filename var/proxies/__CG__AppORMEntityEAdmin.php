@@ -7,7 +7,7 @@ namespace AppORM\Proxies\__CG__\AppORM\Entity;
  */
 class EAdmin extends \AppORM\Entity\EAdmin implements \Doctrine\ORM\Proxy\InternalProxy
 {
-    use \Symfony\Component\VarExporter\LazyGhostTrait {
+     use \Symfony\Component\VarExporter\LazyGhostTrait {
         initializeLazyObject as private;
         setLazyObjectAsInitialized as public __setInitialized;
         isLazyObjectInitialized as private;
@@ -38,7 +38,7 @@ class EAdmin extends \AppORM\Entity\EAdmin implements \Doctrine\ORM\Proxy\Intern
         'phonenumber' => [parent::class, 'phonenumber', null, 8],
         'responses' => [parent::class, 'responses', null, 16],
         'surname' => [parent::class, 'surname', null, 8],
-    ];
+    ];
 
     public function __isInitialized(): bool
     {

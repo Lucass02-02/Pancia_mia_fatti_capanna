@@ -22,6 +22,7 @@
         </div>
     </header><!-- End Header -->
 
+
     <!-- ======= Hero Section ======= -->
     <section class="hero d-flex align-items-center">
         <div class="container text-center">
@@ -48,6 +49,12 @@
             </div>
         </div>
     </section><!-- End Hero Section -->
+<section class="my-5" style="background: url('/Pancia_mia_fatti_capanna/images/ristorantino.jpg') center center / cover no-repeat; height: 400px;">
+  <div class="text-center text-white d-flex flex-column justify-content-center align-items-center h-100" style="background-color: rgba(0,0,0,0.4);">
+    <h1 style="color:bisque">Benvenuto al Ristorante</h1>
+    <p>Tradizione e gusto dal 1980</p>
+  </div>
+</section>
 
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">

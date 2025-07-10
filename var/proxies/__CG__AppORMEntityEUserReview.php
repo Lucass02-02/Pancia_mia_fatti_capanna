@@ -7,7 +7,7 @@ namespace AppORM\Proxies\__CG__\AppORM\Entity;
  */
 class EUserReview extends \AppORM\Entity\EUserReview implements \Doctrine\ORM\Proxy\InternalProxy
 {
-    use \Symfony\Component\VarExporter\LazyGhostTrait {
+     use \Symfony\Component\VarExporter\LazyGhostTrait {
         initializeLazyObject as private;
         setLazyObjectAsInitialized as public __setInitialized;
         isLazyObjectInitialized as private;
@@ -34,7 +34,7 @@ class EUserReview extends \AppORM\Entity\EUserReview implements \Doctrine\ORM\Pr
         'id' => [parent::class, 'id', null, 16],
         'rating' => [parent::class, 'rating', null, 16],
         'reviewDate' => [parent::class, 'reviewDate', null, 16],
-    ];
+    ];
 
     public function __isInitialized(): bool
     {

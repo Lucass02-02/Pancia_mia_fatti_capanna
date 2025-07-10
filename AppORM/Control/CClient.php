@@ -167,7 +167,7 @@ public static function login(): void
             $cardId = (int)UHTTPMethods::getPostValue('card_id');
             FPersistentManager::getInstance()->deleteCreditCard($cardId);
             // URL pulito
-            header('Location: /Pancia_mia_fatti_capanna/client/profile?card=deleted');
+            header('Location: /Pancia_mia_fatti_capanna/client/profile');
             exit;
         }
         header('Location: /Pancia_mia_fatti_capanna/client/profile');
@@ -233,7 +233,7 @@ public static function login(): void
 
                 if ($deleted) {
                     // Reindirizza al profilo con un messaggio di successo
-                    header('Location: /Pancia_mia_fatti_capanna/client/profile?status=review_deleted');
+                    header('Location: /Pancia_mia_fatti_capanna/client/profile');
                     exit;
                 }
             }
@@ -241,7 +241,7 @@ public static function login(): void
 
         // Se qualcosa va storto (es. richiesta non POST o ID mancante),
         // reindirizza semplicemente al profilo.
-        header('Location: /Pancia_mia_fatti_capanna/client/profile?status=error');
+        header('Location: /Pancia_mia_fatti_capanna/client/profile');
         exit;
     }
     

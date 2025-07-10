@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 17:51:06
+/* Smarty version 5.5.1, created on 2025-07-10 19:39:00
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe16a6011a2_80893057',
+  'unifunc' => 'content_686ffab40ab272_59276053',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a9951a84d8fe14643be919dbe4d1b3f8698d8b77' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/home.tpl',
-      1 => 1752162659,
+      1 => 1752169137,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe16a6011a2_80893057 (\Smarty\Template $_smarty_tpl) {
+function content_686ffab40ab272_59276053 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -45,6 +45,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
             </div>
         </div>
     </header><!-- End Header -->
+
 
     <!-- ======= Hero Section ======= -->
     <section class="hero d-flex align-items-center">
@@ -74,6 +75,12 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
             </div>
         </div>
     </section><!-- End Hero Section -->
+<section class="my-5" style="background: url('/Pancia_mia_fatti_capanna/images/ristorantino.jpg') center center / cover no-repeat; height: 400px;">
+  <div class="text-center text-white d-flex flex-column justify-content-center align-items-center h-100" style="background-color: rgba(0,0,0,0.4);">
+    <h1 style="color:bisque">Benvenuto al Ristorante</h1>
+    <p>Tradizione e gusto dal 1980</p>
+  </div>
+</section>
 
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">

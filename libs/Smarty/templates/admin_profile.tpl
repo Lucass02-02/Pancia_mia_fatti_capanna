@@ -48,8 +48,9 @@
                             <i class="bi bi-shop"></i>
                             <h4>Gestione Ristorante</h4>
                             <ul class="list-unstyled">
-                                <li><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="link-primary">Gestisci Tavoli e Sale</a></li>
-                                <li><a href="/Pancia_mia_fatti_capanna/Home/menu" class="link-primary">Gestisci Menù e Prodotti</a></li>
+                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="btn btn-info">Gestisci Tavoli</a></div>
+                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a></div>
+                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-info">Gestisci Menù e Prodotti</a></div></div>
                             </ul>
                         </div>
                     </div>
@@ -59,8 +60,8 @@
                             <i class="bi bi-people"></i>
                             <h4>Gestione Utenti</h4>
                             <ul class="list-unstyled">
-                                <li><a href="/Pancia_mia_fatti_capanna/Admin/manageClients" class="link-primary">Gestisci Clienti</a></li>
-                                <li><a href="/Pancia_mia_fatti_capanna/Waiter/manage" class="link-primary">Gestisci Camerieri</a></li>
+                                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/manageClients" class="btn btn-info">Gestisci Clienti</a></div>
+                                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Waiter/manage" class="btn btn-info">Gestisci Camerieri</a></div>
                             </ul>
                         </div>
                     </div>
@@ -68,7 +69,6 @@
 
                 <div class="text-center mt-4">
                     <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary me-2">Torna alla Home</a>
-                    <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-danger">Logout</a>
                 </div>
             </div>
 

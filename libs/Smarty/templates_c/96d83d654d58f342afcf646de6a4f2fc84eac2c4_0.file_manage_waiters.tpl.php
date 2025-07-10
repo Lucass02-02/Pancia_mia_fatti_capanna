@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:04:42
+/* Smarty version 5.5.1, created on 2025-07-10 18:38:50
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/manage_waiters.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe49a934306_63977781',
+  'unifunc' => 'content_686fec9a6aedb3_65814555',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '96d83d654d58f342afcf646de6a4f2fc84eac2c4' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/manage_waiters.tpl',
-      1 => 1752163210,
+      1 => 1752165529,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe49a934306_63977781 (\Smarty\Template $_smarty_tpl) {
+function content_686fec9a6aedb3_65814555 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -90,9 +90,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
                         <input type="text" id="serialNumber" name="serialNumber" placeholder="ID Univoco" class="form-control" required>
                     </div>
                     <div class="col-12">
-                        <label for="hall_id" class="form-label">Assegna a una Sala</label>
+                        <label for="hall_id" class="form-label">Assegna a un banchetto</label>
                         <select id="hall_id" name="hall_id" class="form-select" required>
-                            <option value="">Seleziona una sala...</option>
+                            <option value="">Seleziona un banchetto...</option>
                             <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('halls'), 'hall');
 $foreach0DoElse = true;
@@ -122,7 +122,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                             <tr>
                                 <th>Nome Completo</th>
                                 <th>Matricola</th>
-                                <th>Sala Assegnata</th>
+                                <th>Banchetto Assegnato</th>
                                 <th>Azioni</th>
                             </tr>
                         </thead>

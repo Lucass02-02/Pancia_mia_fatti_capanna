@@ -67,7 +67,7 @@
                 {else}
                     <p>Non hai ancora scritto nessuna recensione.</p>
                 {/if}
-                <a href="/Pancia_mia_fatti_capanna/client/addReview" class="btn btn-get-started mb-4">Scrivi una Recensione</a>
+                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-info">Scrivi una recensione</a></div>
 
                 <h3 class="text-secondary">Le Mie Carte di Credito</h3>
                 {if !empty($creditCards)}
@@ -89,7 +89,7 @@
                 {else}
                     <p>Non hai ancora aggiunto nessuna carta di credito.</p>
                 {/if}
-                <a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-get-started">Aggiungi Carta</a>
+                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-info">Aggiungi Carta</a></div>
 
             </div>
 

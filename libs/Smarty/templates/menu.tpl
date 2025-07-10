@@ -30,7 +30,11 @@
             <h1>Il Nostro Menù</h1>
         </div>
     </section><!-- End Page Title Section -->
-
+<section class="my-5" style="background: url('/Pancia_mia_fatti_capanna/images/menu.avif') center center / cover no-repeat; height: 400px;">
+  <div class="text-center text-white d-flex flex-column justify-content-center align-items-center h-100" style="background-color: rgba(0,0,0,0.4);">
+    <h1 style="color:bisque">Esplora il nostro menù</h1>
+  </div>
+</section>
     <!-- ======= Menu Section ======= -->
     <section class="menu">
         <div class="container">
@@ -62,7 +66,7 @@
                         {/foreach}
                     </div>
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-get-started">Applica Filtro</button>
+                        <button type="submit" class="btn btn-secondary ms-2">Applica Filtro</button>
                         <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
                     </div>
                 </form>
@@ -117,7 +121,7 @@
             <div class="text-center mt-5">
                 <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
                 {if $user_role == 'client'}
-                    <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-get-started ms-2">Vai al Carrello</a>
+                    <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-secondary">Vai al Carrello</a>
                 {elseif $user_role == 'admin'}
                     <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-secondary ms-2">Torna al Pannello di Controllo</a>
                 {/if}

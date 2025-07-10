@@ -45,11 +45,11 @@
                     <div class="error-message mb-3">Non puoi eliminare questa sala perché contiene dei camerieri. Sposta i camerieri in un'altra sala e riprova.</div>
                 {/if}
 
-                <h2 class="h5 mb-3">Aggiungi Nuova Sala</h2>
+                <h2 class="h5 mb-3">Aggiungi Nuovo Banchetto</h2>
                 <form action="/Pancia_mia_fatti_capanna/RestaurantHall/create" method="POST" class="mb-4 p-3 border rounded">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="name" class="form-label">Nome Sala:</label>
+                            <label for="name" class="form-label">Nome Banchetto:</label>
                             <input type="text" id="name" name="name" class="form-control" required>
                         </div>
                         <div class="col-md-4">
@@ -57,14 +57,14 @@
                             <input type="number" id="totalPlaces" name="totalPlaces" class="form-control" min="1" required>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-get-started w-100">Crea Sala</button>
+                            <button type="submit" class="btn btn-get-started w-100">Crea Banchetto</button>
                         </div>
                     </div>
                 </form>
 
-                <h2 class="h5 mb-3">Sale Esistenti</h2>
+                <h2 class="h5 mb-3">Banchetti Esistenti</h2>
                 {if empty($halls)}
-                    <p class="text-center text-muted">Nessuna sala ristorante presente.</p>
+                    <p class="text-center text-muted">Nessun Banchetto ristorante presente.</p>
                 {else}
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">
