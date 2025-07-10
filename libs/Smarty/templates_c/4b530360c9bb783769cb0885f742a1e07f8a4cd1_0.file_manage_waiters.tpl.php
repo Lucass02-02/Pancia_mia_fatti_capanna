@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 02:23:39
+/* Smarty version 5.5.1, created on 2025-07-10 13:02:24
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_waiters.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686db68b284011_53993356',
+  'unifunc' => 'content_686f9dc0180365_18049438',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4b530360c9bb783769cb0885f742a1e07f8a4cd1' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_waiters.tpl',
-      1 => 1752012840,
+      1 => 1752145341,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686db68b284011_53993356 (\Smarty\Template $_smarty_tpl) {
+function content_686f9dc0180365_18049438 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -32,6 +32,10 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
 <body class="bg-light">
     <div class="container my-5 p-4 bg-white rounded shadow-sm" style="max-width: 1200px;">
         <h1 class="text-primary text-center mb-4">Gestione Camerieri</h1>
+         <div class="text-end mb-4">
+            <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a>
+        </div>
+        
 
         <div class="mb-5">
             <h2 class="h4 text-secondary mb-3">Registra Nuovo Cameriere</h2>
@@ -90,16 +94,14 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <table class="table table-striped table-bordered align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
                             <th>Nome Completo</th>
                             <th>Matricola</th>
                             <th>Sala Assegnata</th>
-                            <th>Azione</th>
-                        </tr>
+                            <th>Azioni</th>                         </tr>
                     </thead>
                     <tbody>
                         <?php if (( !$_smarty_tpl->hasVariable('waiters') || empty($_smarty_tpl->getValue('waiters')))) {?>
-                            <tr><td colspan="5" class="text-center">Non ci sono camerieri registrati.</td></tr>
+                            <tr><td colspan="4" class="text-center">Non ci sono camerieri registrati.</td></tr>
                         <?php } else { ?>
                             <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('waiters'), 'waiter');
@@ -108,8 +110,6 @@ foreach ($_from ?? [] as $_smarty_tpl->getVariable('waiter')->value) {
 $foreach1DoElse = false;
 ?>
                             <tr>
-                                <td><?php echo $_smarty_tpl->getValue('waiter')->getId();?>
-</td>
                                 <td><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('waiter')->getName(), ENT_QUOTES, 'UTF-8', true);?>
  <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('waiter')->getSurname(), ENT_QUOTES, 'UTF-8', true);?>
 </td>
@@ -139,8 +139,10 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                     </form>
                                 </td>
                                 <td>
-                                    <a href="/Pancia_mia_fatti_capanna/Waiter/delete/<?php echo $_smarty_tpl->getValue('waiter')->getId();?>
+                                    <div class="d-flex gap-2">                                         <a href="/Pancia_mia_fatti_capanna/Waiter/edit/<?php echo $_smarty_tpl->getValue('waiter')->getId();?>
+" class="btn btn-warning btn-sm">Modifica</a>                                         <a href="/Pancia_mia_fatti_capanna/Waiter/delete/<?php echo $_smarty_tpl->getValue('waiter')->getId();?>
 " class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
+                                    </div>
                                 </td>
                             </tr>
                             <?php
@@ -157,6 +159,5 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
         </div>
     </div>
 </body>
-</html>
-<?php }
+</html><?php }
 }

@@ -10,9 +10,6 @@
     <div class="container my-5 p-4 bg-white rounded shadow-sm" style="max-width: 1100px;">
         <h1 class="text-primary text-center mb-4">Gestione Tavoli</h1>
 
-        <div class="text-end mb-4">
-            <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a>
-        </div>
 
         <div class="mb-5">
             <h2 class="h4 text-secondary mb-3">Aggiungi Nuovo Tavolo</h2>
@@ -46,7 +43,6 @@
                 <table class="table table-striped table-bordered align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
                             <th>N. Posti</th>
                             <th>Sala</th>
                             <th>Stato Attuale</th>
@@ -57,7 +53,6 @@
                     <tbody>
                         {foreach $tables as $table}
                             <tr>
-                                <td>{$table->getIdTable()}</td>
                                 <td>{$table->getSeatsNumber()}</td>
                                 <td>{$table->getRestaurantHall()->getName()|escape}</td>
                                 <td>
@@ -86,8 +81,11 @@
             </div>
         </div>
 
+       
         <div class="text-center mt-4">
+            <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-secondary">Torna al Panello di Controllo</a>
             <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
+
         </div>
     </div>
 </body>

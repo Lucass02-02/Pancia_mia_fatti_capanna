@@ -1,5 +1,5 @@
 <?php
-// File: AppORM/Control/CWaiter.php 
+// File: AppORM/Control/CWaiter.php
 namespace AppORM\Control;
 
 use AppORM\Services\Foundation\FPersistentManager;
@@ -7,13 +7,11 @@ use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\TableState;
+use AppORM\Entity\EWaiter; // Assicurati di importare l'entità EWaiter
 use DateTime;
 
 class CWaiter
 {
-    /**
-     * Controlla se l'utente è un admin, altrimenti lo reindirizza.
-     */
     private static function checkAdmin(): void {
         if (USession::getValue('user_role') !== 'admin') {
             header('Location: /Pancia_mia_fatti_capanna/');
@@ -23,10 +21,6 @@ class CWaiter
 
     // --- FUNZIONI RISERVATE AL PROPRIETARIO (ADMIN) ---
 
-    /**
-     * Mostra la pagina di gestione dei camerieri.
-     * Carica tutti i camerieri e tutte le sale dal database.
-     */
     public static function manage(): void
     {
         self::checkAdmin();
@@ -37,9 +31,6 @@ class CWaiter
         UView::render('manage_waiters', ['waiters' => $waiters, 'halls' => $halls]);
     }
 
-    /**
-     * Gestisce la registrazione di un nuovo cameriere.
-     */
     public static function register(): void
     {
         self::checkAdmin();
@@ -53,33 +44,29 @@ class CWaiter
             $serialNumber = UHTTPMethods::getPostValue('serialNumber');
             $hallId = (int)UHTTPMethods::getPostValue('hall_id');
 
-            FPersistentManager::getInstance()->registerWaiter($name, $surname, $birthDate, $email, $password, $serialNumber, $hallId);
+            // FPersistentManager::getInstance()->registerWaiter ritorna ?EWaiter o null
+            $waiter = FPersistentManager::getInstance()->registerWaiter($name, $surname, $birthDate, $email, $password, $serialNumber, $hallId);
+            // Qui potresti voler aggiungere una gestione per il successo/fallimento della registrazione
+            // ad esempio, un flash message nella sessione
+            if (!$waiter) {
+                USession::setValue('waiter_management_error', 'Errore durante la registrazione del cameriere. Email o Matricola potrebbero essere già in uso.');
+            }
         }
-        // URL pulito
         header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
         exit;
     }
 
-    /**
-     * Cancella un cameriere.
-     * Modificato per accettare l'ID come segmento dell'URL.
-     */
     public static function delete(int $id): void
     {
         self::checkAdmin();
-        // L'ID viene passato come parametro della funzione, non da query GET
         if ($id > 0) {
             FPersistentManager::getInstance()->deleteWaiter($id);
+            // Potresti aggiungere un flash message di successo qui
         }
-        
-        // URL pulito
         header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
         exit;
     }
 
-    /**
-     * Aggiorna la sala assegnata a un cameriere.
-     */
     public static function updateHall(): void
     {
         self::checkAdmin();
@@ -93,10 +80,84 @@ class CWaiter
 
             if ($waiter && $hall) {
                 $waiter->setRestaurantHall($hall);
-                FPersistentManager::getInstance()->saveWaiter($waiter);
+                FPersistentManager::getInstance()->saveWaiter($waiter); // saveWaiter aggiorna il cameriere esistente
             }
         }
-        // URL pulito
+        header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
+        exit;
+    }
+
+    /**
+     * Mostra il form per modificare i dati di un cameriere esistente.
+     * @param int $id L'ID del cameriere da modificare (passato nell'URL).
+     */
+    public static function edit(int $id): void
+    {
+        self::checkAdmin();
+
+        $waiter = FPersistentManager::getInstance()->getWaiterById($id);
+        $halls = FPersistentManager::getInstance()->getAllRestaurantHalls();
+
+        if (!$waiter) {
+            // Cameriere non trovato, reindirizza con errore o messaggio
+            USession::setValue('waiter_management_error', 'Cameriere non trovato per la modifica.');
+            header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
+            exit;
+        }
+
+        UView::render('edit_waiter', [
+            'waiter' => $waiter,
+            'halls' => $halls
+        ]);
+    }
+
+    /**
+     * Gestisce l'invio del form di modifica dei dati del cameriere.
+     * Aggiorna i dati del cameriere nel database.
+     */
+    public static function update(): void
+    {
+        self::checkAdmin();
+
+        if (UHTTPMethods::isPost()) {
+            $id = (int)UHTTPMethods::getPostValue('id'); // ID del cameriere dal form
+            $name = UHTTPMethods::getPostValue('name');
+            $surname = UHTTPMethods::getPostValue('surname');
+            $email = UHTTPMethods::getPostValue('email');
+            $serialNumber = UHTTPMethods::getPostValue('serialNumber');
+            $hallId = (int)UHTTPMethods::getPostValue('hall_id');
+            $birthDateStr = UHTTPMethods::getPostValue('birthDate');
+
+            $waiter = FPersistentManager::getInstance()->getWaiterById($id);
+            $hall = FPersistentManager::getInstance()->getRestaurantHallById($hallId);
+
+            if ($waiter && $hall && $name && $surname && $email && $serialNumber && $birthDateStr) {
+                try {
+                    $birthDate = new DateTime($birthDateStr);
+                    
+                    $waiter->setName($name);
+                    $waiter->setSurname($surname);
+                    $waiter->setEmail($email);
+                    $waiter->setSerialNumber($serialNumber);
+                    $waiter->setRestaurantHall($hall);
+                    $waiter->setBirthDate($birthDate); // Aggiorna la data di nascita
+
+                    // Se viene fornita una nuova password, hashala e impostala
+                    $newPassword = UHTTPMethods::getPostValue('password');
+                    if (!empty($newPassword)) {
+                        $waiter->setPassword(password_hash($newPassword, PASSWORD_DEFAULT));
+                    }
+
+                    FPersistentManager::getInstance()->saveWaiter($waiter); // saveWaiter gestisce l'aggiornamento
+                    USession::setValue('waiter_management_success', 'Dati cameriere aggiornati con successo!');
+                } catch (\Exception $e) {
+                    USession::setValue('waiter_management_error', 'Errore durante l\'aggiornamento del cameriere: ' . $e->getMessage());
+                    error_log("Error updating waiter: " . $e->getMessage());
+                }
+            } else {
+                USession::setValue('waiter_management_error', 'Tutti i campi obbligatori devono essere compilati.');
+            }
+        }
         header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
         exit;
     }
@@ -104,9 +165,6 @@ class CWaiter
 
     // --- FUNZIONI RISERVATE AL CAMERIERE LOGGATO ---
 
-    /**
-     * Mostra la pagina del profilo/dashboard del cameriere.
-     */
     public static function profile(): void
     {
         if (USession::getValue('user_role') !== 'waiter') {
@@ -124,9 +182,6 @@ class CWaiter
         }
     }
 
-    /**
-     * Mostra lo stato dei tavoli della sala del cameriere.
-     */
     public static function viewTables(): void
     {
         if (USession::getValue('user_role') !== 'waiter') { header('Location: /Pancia_mia_fatti_capanna/'); exit; }
@@ -136,7 +191,6 @@ class CWaiter
 
         if ($waiter) {
             $hall = $waiter->getRestaurantHall();
-            // Assicurati che getTables() sia lazy-loaded o recuperi i tavoli correttamente
             $tablesInHall = $hall->getTables(); 
             
             UView::render('waiter_tables_view', ['tables' => $tablesInHall, 'hall' => $hall]);
@@ -145,9 +199,6 @@ class CWaiter
         }
     }
 
-    /**
-     * Permette a un cameriere di aggiornare lo stato di un tavolo.
-     */
     public static function updateTableState(): void
     {
         if (USession::getValue('user_role') !== 'waiter') { header('Location: /Pancia_mia_fatti_capanna/'); exit; }

@@ -98,7 +98,11 @@
             {* Mostra il pulsante "Vai al Carrello" solo ai clienti *}
             {if $user_role == 'client'}
                 <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-primary">Vai al Carrello</a>
+            {elseif $user_role == 'admin'}
+                <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-secondary">Torna al Panello di Controllo</a>
             {/if}
+
+
         </div>
     </div>
 </body>

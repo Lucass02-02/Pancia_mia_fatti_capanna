@@ -244,4 +244,5 @@ public static function login(): void
         header('Location: /Pancia_mia_fatti_capanna/client/profile?status=error');
         exit;
     }
+    
 }

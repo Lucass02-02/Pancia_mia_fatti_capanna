@@ -12,7 +12,6 @@
         <p class="lead text-center">{$messaggio|escape}</p>
 
         <nav class="nav justify-content-center mt-4">
-            <a class="nav-link" href="/Pancia_mia_fatti_capanna/Home/home">Home</a>
             <a class="nav-link" href="/Pancia_mia_fatti_capanna/Home/menu">Visualizza Menù</a>
             <a class="nav-link" href="/Pancia_mia_fatti_capanna/Review/showAll">Vedi le Recensioni</a>
 

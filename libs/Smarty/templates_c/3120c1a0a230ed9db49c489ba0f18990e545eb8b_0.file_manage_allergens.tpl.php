@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 03:27:26
+/* Smarty version 5.5.1, created on 2025-07-10 12:31:30
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_allergens.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686dc57ea39e09_53890874',
+  'unifunc' => 'content_686f9682a68920_33908579',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3120c1a0a230ed9db49c489ba0f18990e545eb8b' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_allergens.tpl',
-      1 => 1752024441,
+      1 => 1752143489,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686dc57ea39e09_53890874 (\Smarty\Template $_smarty_tpl) {
+function content_686f9682a68920_33908579 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -91,7 +91,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
         </div>
 
         <div class="text-center mt-4">
-            <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary me-2">Torna alla Home</a>
+            <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary me-2">Torna al Menu</a>
         </div>
     </div>
 </body>

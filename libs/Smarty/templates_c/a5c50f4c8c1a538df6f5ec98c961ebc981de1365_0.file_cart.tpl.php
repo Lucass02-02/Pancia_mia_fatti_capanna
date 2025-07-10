@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 16:22:36
+/* Smarty version 5.5.1, created on 2025-07-10 12:41:35
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/cart.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686e7b2c8426c9_87000765',
+  'unifunc' => 'content_686f98df0218a1_18626218',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a5c50f4c8c1a538df6f5ec98c961ebc981de1365' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/cart.tpl',
-      1 => 1752012840,
+      1 => 1752140950,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686e7b2c8426c9_87000765 (\Smarty\Template $_smarty_tpl) {
+function content_686f98df0218a1_18626218 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -79,7 +79,6 @@ $foreach0DoElse = false;
             <?php
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
-
             <div class="text-end mt-4 fs-5 fw-bold">
                 Totale Carrello: € <?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('total'),2,',','.');?>
 

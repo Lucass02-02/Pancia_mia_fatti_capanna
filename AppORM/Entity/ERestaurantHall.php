@@ -32,6 +32,7 @@ class ERestaurantHall {
     private Collection $reservations;
     #[ORM\OneToMany(targetEntity: ETurn::class, mappedBy: 'restaurantHall', cascade: ['persist'])]
     private Collection $turns;
+    
 
 
     public function __construct(string $name, int $totalPlaces) {

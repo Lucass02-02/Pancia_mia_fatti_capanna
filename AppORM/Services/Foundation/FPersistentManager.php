@@ -619,23 +619,72 @@ class FPersistentManager {
      * Salva un'entità ERestaurantHall nel database.
      * @param \AppORM\Entity\ERestaurantHall $hall
      */
-    public function saveRestaurantHall(\AppORM\Entity\ERestaurantHall $hall): void
+        public static function saveRestaurantHall(string $name, int $totalPlaces): bool
     {
-        $entityManager = $this->getEntityManager();
-        $entityManager->persist($hall);
-        $entityManager->flush();
+        try {
+            $entityManager = self::getInstance()->getEntityManager(); // Usa self::getInstance() per accedere all'istanza
+            $hall = new ERestaurantHall($name, $totalPlaces); // Crea una nuova entità
+            $entityManager->persist($hall);
+            $entityManager->flush();
+            return true;
+        } catch (\Exception $e) {
+            error_log("Errore durante il salvataggio della sala ristorante: " . $e->getMessage());
+            return false;
+        }
+    }
+     public static function deleteRestaurantHall(\AppORM\Entity\ERestaurantHall $hall): bool
+    {
+        try {
+            $entityManager = self::getInstance()->getEntityManager();
+
+            // NUOVO CONTROLLO: Verifica se ci sono camerieri associati a questa sala
+            $waitersInHall = self::getWaitersByRestaurantHall($hall->getIdHall());
+            if (!empty($waitersInHall)) {
+                // Se ci sono camerieri, lancia un'eccezione con il messaggio esatto
+                throw new \Exception("Ci sono camerieri in questa sala ({$hall->getName()}). Spostali in un'altra sala prima di eliminarla.");
+            }
+
+            // Logica per eliminare i tavoli associati (se non ci sono camerieri)
+            $tables = self::getTablesByRestaurantHall($hall->getIdHall());
+            foreach ($tables as $table) {
+                \FTable::delete($table);
+            }
+
+            // Rimuovi la sala ristorante
+            $entityManager->remove($hall);
+            $entityManager->flush();
+            return true; // Operazione di successo
+        } catch (\Exception $e) {
+            throw $e;
+        }
+    }
+
+
+     /**
+     * Recupera tutti i camerieri associati a una specifica sala ristorante.
+     * @param int $hallId L'ID della sala ristorante.
+     * @return array Un array di oggetti EWaiter.
+     */
+    public static function getWaitersByRestaurantHall(int $hallId): array
+    {
+        // Assumendo che EWaiter abbia una relazione con ERestaurantHall chiamata 'restaurantHall'
+        return FEntityManager::getInstance()->retriveObjectList(EWaiter::class, 'restaurantHall', $hallId);
     }
 
     /**
-     * Elimina un'entità ERestaurantHall dal database.
-     * @param \AppORM\Entity\ERestaurantHall $hall
+     * Recupera tutti i tavoli associati a una specifica sala ristorante.
+     * @param int $hallId L'ID della sala ristorante.
+     * @return array Un array di oggetti ETable.
      */
-    public function deleteRestaurantHall(\AppORM\Entity\ERestaurantHall $hall): void
+    public static function getTablesByRestaurantHall(int $hallId): array
     {
-        $entityManager = $this->getEntityManager();
-        $entityManager->remove($hall);
-        $entityManager->flush();
+        // Assumendo che ETable abbia una relazione con ERestaurantHall chiamata 'restaurantHall'
+        return FEntityManager::getInstance()->retriveObjectList(ETable::class, 'restaurantHall', $hallId);
     }
+
+
+    
+
 
 
 

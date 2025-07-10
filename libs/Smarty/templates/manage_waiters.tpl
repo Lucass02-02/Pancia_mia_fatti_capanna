@@ -9,6 +9,10 @@
 <body class="bg-light">
     <div class="container my-5 p-4 bg-white rounded shadow-sm" style="max-width: 1200px;">
         <h1 class="text-primary text-center mb-4">Gestione Camerieri</h1>
+         <div class="text-end mb-4">
+            <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a>
+        </div>
+        
 
         <div class="mb-5">
             <h2 class="h4 text-secondary mb-3">Registra Nuovo Cameriere</h2>
@@ -58,20 +62,18 @@
                 <table class="table table-striped table-bordered align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
                             <th>Nome Completo</th>
                             <th>Matricola</th>
                             <th>Sala Assegnata</th>
-                            <th>Azione</th>
+                            <th>Azioni</th> {* Nuova colonna per i pulsanti Modifica/Elimina *}
                         </tr>
                     </thead>
                     <tbody>
                         {if empty($waiters)}
-                            <tr><td colspan="5" class="text-center">Non ci sono camerieri registrati.</td></tr>
+                            <tr><td colspan="4" class="text-center">Non ci sono camerieri registrati.</td></tr>
                         {else}
                             {foreach $waiters as $waiter}
                             <tr>
-                                <td>{$waiter->getId()}</td>
                                 <td>{$waiter->getName()|escape} {$waiter->getSurname()|escape}</td>
                                 <td>{$waiter->getSerialNumber()|escape}</td>
                                 <td>
@@ -88,7 +90,10 @@
                                     </form>
                                 </td>
                                 <td>
-                                    <a href="/Pancia_mia_fatti_capanna/Waiter/delete/{$waiter->getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
+                                    <div class="d-flex gap-2"> {* Contenitore per allineare i pulsanti *}
+                                        <a href="/Pancia_mia_fatti_capanna/Waiter/edit/{$waiter->getId()}" class="btn btn-warning btn-sm">Modifica</a> {* Nuovo pulsante Modifica *}
+                                        <a href="/Pancia_mia_fatti_capanna/Waiter/delete/{$waiter->getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
+                                    </div>
                                 </td>
                             </tr>
                             {/foreach}

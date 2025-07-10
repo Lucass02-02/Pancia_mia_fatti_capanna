@@ -61,7 +61,7 @@
         </div>
 
         <div class="text-center mt-4">
-            <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary me-2">Torna alla Home</a>
+            <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary me-2">Torna al Menu</a>
         </div>
     </div>
 </body>

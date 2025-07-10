@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 17:44:58
+/* Smarty version 5.5.1, created on 2025-07-10 12:43:32
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_tables.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686e8e7a961278_16240891',
+  'unifunc' => 'content_686f9954686653_54586679',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'bf88bf64d30c7c06d34dd496ed364e9ee085dcff' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_tables.tpl',
-      1 => 1752075896,
+      1 => 1752144209,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686e8e7a961278_16240891 (\Smarty\Template $_smarty_tpl) {
+function content_686f9954686653_54586679 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -33,9 +33,6 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
     <div class="container my-5 p-4 bg-white rounded shadow-sm" style="max-width: 1100px;">
         <h1 class="text-primary text-center mb-4">Gestione Tavoli</h1>
 
-        <div class="text-end mb-4">
-            <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Sale</a>
-        </div>
 
         <div class="mb-5">
             <h2 class="h4 text-secondary mb-3">Aggiungi Nuovo Tavolo</h2>
@@ -78,7 +75,6 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <table class="table table-striped table-bordered align-middle">
                     <thead class="table-light">
                         <tr>
-                            <th>ID</th>
                             <th>N. Posti</th>
                             <th>Sala</th>
                             <th>Stato Attuale</th>
@@ -94,8 +90,6 @@ foreach ($_from ?? [] as $_smarty_tpl->getVariable('table')->value) {
 $foreach1DoElse = false;
 ?>
                             <tr>
-                                <td><?php echo $_smarty_tpl->getValue('table')->getIdTable();?>
-</td>
                                 <td><?php echo $_smarty_tpl->getValue('table')->getSeatsNumber();?>
 </td>
                                 <td><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('table')->getRestaurantHall()->getName(), ENT_QUOTES, 'UTF-8', true);?>
@@ -131,11 +125,13 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
             </div>
         </div>
 
+       
         <div class="text-center mt-4">
+            <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-secondary">Torna al Panello di Controllo</a>
             <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
+
         </div>
     </div>
 </body>
-</html>
-<?php }
+</html><?php }
 }

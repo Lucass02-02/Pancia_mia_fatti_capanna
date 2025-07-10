@@ -42,7 +42,6 @@
                     </div>
                 </div>
             {/foreach}
-
             <div class="text-end mt-4 fs-5 fw-bold">
                 Totale Carrello: € {$total|number_format:2:',':'.'}
             </div>
