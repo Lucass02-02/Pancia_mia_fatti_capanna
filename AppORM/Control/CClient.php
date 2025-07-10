@@ -104,6 +104,57 @@ class CClient
         }
     }
 
+      /**
+     * Controlla se esiste un cookie "Ricordami" e, in caso affermativo,
+     * effettua il login automatico creando la sessione per l'utente.
+     * QUESTA È LA FUNZIONE CHE CERCAVI.
+     */
+    public static function checkRememberMeLogin(): void
+    {
+        // 1. Se l'utente è GIÀ loggato nella sessione, non fare nulla.
+        if (USession::isSet('user_id')) {
+            return;
+        }
+
+        // 2. Controlla se il cookie 'remember_user' esiste.
+        $rememberCookie = UCookie::get('remember_user');
+        if ($rememberCookie) {
+            // 3. Decodifica i dati dal cookie.
+            $userData = json_decode(base64_decode($rememberCookie), true);
+
+            // 4. Se i dati sono validi (contengono un ID e un ruolo)
+            if (isset($userData['id']) && isset($userData['role'])) {
+                $userId = (int)$userData['id'];
+                $userRole = $userData['role'];
+                $user = null;
+
+                // 5. Recupera l'utente dal database in base al suo ruolo.
+                // Questo è un controllo di sicurezza per assicurarsi che l'utente esista ancora.
+                switch ($userRole) {
+                    case 'client':
+                        $user = FPersistentManager::getInstance()->getClientById($userId);
+                        break;
+                    case 'waiter':
+                        $user = FPersistentManager::getInstance()->getWaiterById($userId);
+                        break;
+                    case 'admin':
+                        $user = FPersistentManager::getInstance()->getAdminById($userId);
+                        break;
+                }
+
+                // 6. Se l'utente è stato trovato, crea la sessione per lui.
+                if ($user) {
+                    USession::setValue('user_id', $user->getId());
+                    USession::setValue('user_role', $userRole);
+                    USession::setValue('user_email', $user->getEmail());
+                } else {
+                    // Se l'utente non esiste più nel DB, cancella il cookie non valido.
+                    UCookie::delete('remember_user');
+                }
+            }
+        }
+    }
+
     /**
      * Imposta il cookie per la funzionalità "Ricordami".
      * @param string $role Il ruolo dell'utente (es. 'client', 'admin')
