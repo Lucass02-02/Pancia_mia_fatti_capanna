@@ -139,16 +139,7 @@ class FPersistentManager {
             return false;
         }
     }
-        public static function updateReview(EUserReview $review): bool
-    {
-        try {
-            return FUserReview::saveObj($review);
-        } catch (\Exception $e) {
-            error_log("Errore durante l'aggiornamento della recensione: " . $e->getMessage());
-            return false;
-        }
-    }
-
+   
        public static function updateAdminResponse(EAdminResponse $adminResponse): bool
     {
         try {
@@ -203,13 +194,6 @@ class FPersistentManager {
         return FUserReview::getObj($id);
     }
 
-    /**
-     * Elimina una recensione (wrapper per FUserReview).
-     */
-    public static function deleteReview(EUserReview $review): bool
-    {
-        return FUserReview::deleteObj($review);
-    }
 
 
 

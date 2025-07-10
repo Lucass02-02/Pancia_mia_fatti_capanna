@@ -58,7 +58,8 @@
         <div class="row g-4">
             {foreach from=$reviews item=review}
                 <div class="col-md-6">
-                    <div class="card"> <div class="card-body">
+                    <div class="card">
+                        <div class="card-body">
                             <p class="card-text fst-italic">"{$review->getComment()|escape}"</p>
                             <p class="card-text"><strong>Voto: {$review->getRating()}/5</strong></p>
                         </div>
@@ -68,13 +69,11 @@
                                 Scritta il: {$review->getCreationDate()->format('d/m/Y')}
                            </small>
                            
-                           {* PULSANTI AZIONE SULLA RECENSIONE UTENTE (SOLO MODIFICA) *}
-                           {if $user_role == 'admin'}
-                               <div class="d-flex align-items-center ms-auto">
-                                   {* Pulsante Modifica Commento Proprietario - PRESENTE *}
-                                   <a href="/Pancia_mia_fatti_capanna/review/edit/{$review->getId()}" class="btn btn-info btn-sm">Modifica Commento</a>
-                               </div>
-                           {/if}
+                           {* PULSANTI AZIONE SULLA RECENSIONE UTENTE - COMPLETAMENTE RIMOSSI *}
+                           {*
+                               Questo blocco è stato rimosso per garantire che l'admin non possa modificare le recensioni degli utenti.
+                               La modifica delle recensioni da parte del cliente è gestita tramite CClient::editReview.
+                           *}
                         </div>
                         
                         {* Sezione delle risposte dell'admin *}

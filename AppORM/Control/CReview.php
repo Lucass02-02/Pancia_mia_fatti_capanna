@@ -39,30 +39,7 @@ class CReview
         ]);
     }
 
-    /**
-     * Elimina una recensione (dell'utente).
-     * Nota: Questo metodo non è attualmente utilizzato nel template all_reviews.tpl,
-     * ma è mantenuto qui per completezza logica se mai servisse.
-     */
-    public static function delete(): void
-    {
-        if (USession::getValue('user_role') !== 'admin') {
-            header('Location: /Pancia_mia_fatti_capanna/');
-            exit;
-        }
 
-        if (UHTTPMethods::isPost()) {
-            $reviewId = (int)UHTTPMethods::getPostValue('review_id');
-            if ($reviewId > 0) {
-                $reviewToDelete = FPersistentManager::getInstance()->getReviewById($reviewId);
-                if ($reviewToDelete) {
-                    FPersistentManager::getInstance()->deleteReview($reviewToDelete);
-                }
-            }
-        }
-        header('Location: /Pancia_mia_fatti_capanna/review/showAll');
-        exit;
-    }
 
     /**
      * Gestisce l'invio di una risposta da parte di un amministratore.
@@ -113,30 +90,8 @@ class CReview
         exit;
     }
 
-    /**
-     * Mostra il form per modificare una recensione (dell'utente) esistente.
-     * Nota: Questo metodo non è attualmente utilizzato dal template all_reviews.tpl,
-     * ma è mantenuto qui per completezza logica.
-     */
-    public static function edit(int $id): void
-    {
-        if (USession::getValue('user_role') !== 'admin') {
-            header('Location: /Pancia_mia_fatti_capanna/');
-            exit;
-        }
-
-        $review = FPersistentManager::getInstance()->getReviewById($id);
-
-        if ($review) {
-            UView::render('edit_review', [
-                'review' => $review,
-                'titolo' => 'Modifica Recensione'
-            ]);
-        } else {
-            header('Location: /Pancia_mia_fatti_capanna/review/showAll');
-            exit;
-        }
-    }
+   
+    
 
     /**
      * Mostra il form per modificare una risposta dell'amministratore esistente.

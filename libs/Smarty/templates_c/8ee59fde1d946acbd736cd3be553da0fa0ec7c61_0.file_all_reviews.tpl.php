@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 01:56:21
+/* Smarty version 5.5.1, created on 2025-07-10 02:07:47
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/all_reviews.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686f01a5161b98_83159084',
+  'unifunc' => 'content_686f045300b6a6_58559145',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '8ee59fde1d946acbd736cd3be553da0fa0ec7c61' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/all_reviews.tpl',
-      1 => 1752105378,
+      1 => 1752106025,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686f01a5161b98_83159084 (\Smarty\Template $_smarty_tpl) {
+function content_686f045300b6a6_58559145 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -89,7 +89,8 @@ foreach ($_from ?? [] as $_smarty_tpl->getVariable('review')->value) {
 $foreach0DoElse = false;
 ?>
                 <div class="col-md-6">
-                    <div class="card"> <div class="card-body">
+                    <div class="card">
+                        <div class="card-body">
                             <p class="card-text fst-italic">"<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('review')->getComment(), ENT_QUOTES, 'UTF-8', true);?>
 "</p>
                             <p class="card-text"><strong>Voto: <?php echo $_smarty_tpl->getValue('review')->getRating();?>
@@ -104,13 +105,7 @@ $foreach0DoElse = false;
 
                            </small>
                            
-                                                      <?php if ($_smarty_tpl->getValue('user_role') == 'admin') {?>
-                               <div class="d-flex align-items-center ms-auto">
-                                                                      <a href="/Pancia_mia_fatti_capanna/review/edit/<?php echo $_smarty_tpl->getValue('review')->getId();?>
-" class="btn btn-info btn-sm">Modifica Commento</a>
-                               </div>
-                           <?php }?>
-                        </div>
+                                                                              </div>
                         
                                                 <?php if (!$_smarty_tpl->getValue('review')->getAdminResponses()->isEmpty()) {?>
                             <div class="card-body pt-0">
