@@ -23,9 +23,15 @@ class CTable
         self::checkAdmin();
         $tables = FPersistentManager::getInstance()->getAllTables();
         $halls = FPersistentManager::getInstance()->getAllRestaurantHalls();
+
+        // Recupera il messaggio di errore dalla sessione e poi lo cancella
+        $error_message = USession::getValue('table_creation_error', null);
+        USession::unsetValue('table_creation_error');
+
         UView::render('manage_tables', [
             'tables' => $tables,
-            'halls' => $halls
+            'halls' => $halls,
+            'error' => $error_message // Passa il messaggio di errore al template
         ]);
     }
 
@@ -39,10 +45,27 @@ class CTable
             if ($seats > 0 && $hallId > 0) {
                 $hall = FPersistentManager::getInstance()->getRestaurantHallById($hallId);
                 if ($hall) {
-                    $table = new ETable($seats);
-                    $table->setRestaurantHall($hall);
-                    FPersistentManager::getInstance()->saveTable($table);
+                    // *** NUOVO CONTROLLO: Verifica la capienza massima della sala ***
+                    $currentTablesInHall = FPersistentManager::getInstance()->getTablesByRestaurantHall($hallId);
+                    $currentSeats = 0;
+                    foreach ($currentTablesInHall as $table) {
+                        $currentSeats += $table->getSeatsNumber();
+                    }
+
+                    if (($currentSeats + $seats) > $hall->getTotalPlaces()) {
+                        // Imposta il messaggio di errore nella sessione
+                        USession::setValue('table_creation_error', 'Hai raggiunto o superato la capienza massima della sala selezionata.');
+                    } else {
+                        $table = new ETable($seats);
+                        $table->setRestaurantHall($hall);
+                        FPersistentManager::getInstance()->saveTable($table);
+                        // Se la creazione ha successo, non impostare nessun errore
+                    }
+                } else {
+                    USession::setValue('table_creation_error', 'Sala ristorante non trovata.');
                 }
+            } else {
+                USession::setValue('table_creation_error', 'Il numero di posti e la sala sono obbligatori.');
             }
         }
         header('Location: /Pancia_mia_fatti_capanna/table/listAll');

@@ -5,36 +5,32 @@
     <meta charset="UTF-8">
     <title>Gestione Tavoli</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom Yummy style -->
     <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
 
 <body>
 
-    <!-- ======= Header ======= -->
     <header id="header" class="header d-flex align-items-center">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="logo">
                 <h1><a href="/Pancia_mia_fatti_capanna/Home/index">Pancia mia <span>fatti capanna</span></a></h1>
             </div>
         </div>
-    </header><!-- End Header -->
-
-    <!-- ======= Page Title Section ======= -->
-    <section class="page-title">
+    </header><section class="page-title">
         <div class="container">
             <h1>Gestione Tavoli</h1>
         </div>
-    </section><!-- End Page Title Section -->
-
-    <!-- ======= Manage Tables Section ======= -->
-    <section class="contact">
+    </section><section class="contact">
         <div class="container" style="max-width: 1100px;">
 
-            <!-- Aggiungi nuovo tavolo -->
+            {if isset($error) && $error}
+                <div class="alert alert-danger" role="alert">
+                    {$error|escape}
+                </div>
+            {/if}
+
             <div class="php-email-form bg-white p-4 shadow-sm mb-5">
                 <h2 class="h4 text-secondary mb-3">Aggiungi Nuovo Tavolo</h2>
                 <form action="/Pancia_mia_fatti_capanna/Table/create" method="POST" class="row g-3 align-items-center justify-content-center">
@@ -61,7 +57,6 @@
                 </form>
             </div>
 
-            <!-- Tavoli esistenti -->
             <div class="php-email-form bg-white p-4 shadow-sm mb-5">
                 <h2 class="h4 text-secondary mb-3">Tavoli Esistenti</h2>
                 <div class="table-responsive">
@@ -106,24 +101,17 @@
                 </div>
             </div>
 
-            <!-- Pulsanti di navigazione -->
             <div class="text-center mt-4">
                 <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-secondary">Torna al Pannello di Controllo</a>
                 <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
             </div>
 
         </div>
-    </section><!-- End Manage Tables Section -->
-
-    <!-- ======= Footer ======= -->
-    <footer id="footer" class="footer">
+    </section><footer id="footer" class="footer">
         <div class="container text-center">
             <p>&copy; Copyright <strong>Pancia mia fatti capanna</strong>. All Rights Reserved</p>
         </div>
-    </footer><!-- End Footer -->
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </footer><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
