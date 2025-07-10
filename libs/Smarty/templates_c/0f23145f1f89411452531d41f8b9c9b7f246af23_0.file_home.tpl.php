@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:19:50
+/* Smarty version 5.5.1, created on 2025-07-10 20:22:18
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe8263895b8_74274256',
+  'unifunc' => 'content_687004da39e0e6_14394477',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '0f23145f1f89411452531d41f8b9c9b7f246af23' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/home.tpl',
-      1 => 1752164308,
+      1 => 1752171595,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe8263895b8_74274256 (\Smarty\Template $_smarty_tpl) {
+function content_687004da39e0e6_14394477 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -45,6 +45,7 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
             </div>
         </div>
     </header><!-- End Header -->
+
 
     <!-- ======= Hero Section ======= -->
     <section class="hero d-flex align-items-center">
@@ -74,6 +75,12 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
             </div>
         </div>
     </section><!-- End Hero Section -->
+<section class="my-5" style="background: url('/Pancia_mia_fatti_capanna/images/ristorantino.jpg') center center / cover no-repeat; height: 400px;">
+  <div class="text-center text-white d-flex flex-column justify-content-center align-items-center h-100" style="background-color: rgba(0,0,0,0.4);">
+    <h1 style="color:bisque">Benvenuto al Ristorante</h1>
+    <p>Tradizione e gusto dal 1980</p>
+  </div>
+</section>
 
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer">

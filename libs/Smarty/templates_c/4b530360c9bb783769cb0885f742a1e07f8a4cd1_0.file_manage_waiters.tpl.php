@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:24:21
+/* Smarty version 5.5.1, created on 2025-07-10 20:34:45
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_waiters.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe935280de3_20195274',
+  'unifunc' => 'content_687007c57c5fa0_26529040',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4b530360c9bb783769cb0885f742a1e07f8a4cd1' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_waiters.tpl',
-      1 => 1752164308,
+      1 => 1752171595,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe935280de3_20195274 (\Smarty\Template $_smarty_tpl) {
+function content_687007c57c5fa0_26529040 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -57,9 +57,7 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
     <section class="contact">
         <div class="container" style="max-width: 1200px;">
 
-            <div class="text-end mb-4">
-                <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a>
-            </div>
+            
 
             <!-- Registra nuovo cameriere -->
             <div class="php-email-form bg-white p-4 shadow-sm mb-5">
@@ -90,9 +88,9 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
                         <input type="text" id="serialNumber" name="serialNumber" placeholder="ID Univoco" class="form-control" required>
                     </div>
                     <div class="col-12">
-                        <label for="hall_id" class="form-label">Assegna a una Sala</label>
+                        <label for="hall_id" class="form-label">Assegna a un banchetto</label>
                         <select id="hall_id" name="hall_id" class="form-select" required>
-                            <option value="">Seleziona una sala...</option>
+                            <option value="">Seleziona un banchetto...</option>
                             <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('halls'), 'hall');
 $foreach0DoElse = true;
@@ -122,7 +120,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                             <tr>
                                 <th>Nome Completo</th>
                                 <th>Matricola</th>
-                                <th>Sala Assegnata</th>
+                                <th>Banchetto Assegnato</th>
                                 <th>Azioni</th>
                             </tr>
                         </thead>

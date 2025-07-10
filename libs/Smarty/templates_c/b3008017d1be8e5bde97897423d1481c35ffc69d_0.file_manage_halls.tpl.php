@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:24:22
+/* Smarty version 5.5.1, created on 2025-07-10 20:34:43
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_halls.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe936490b37_27305442',
+  'unifunc' => 'content_687007c3140435_84802657',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'b3008017d1be8e5bde97897423d1481c35ffc69d' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/manage_halls.tpl',
-      1 => 1752164308,
+      1 => 1752171595,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe936490b37_27305442 (\Smarty\Template $_smarty_tpl) {
+function content_687007c3140435_84802657 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -68,11 +68,11 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
                     <div class="error-message mb-3">Non puoi eliminare questa sala perché contiene dei camerieri. Sposta i camerieri in un'altra sala e riprova.</div>
                 <?php }?>
 
-                <h2 class="h5 mb-3">Aggiungi Nuova Sala</h2>
+                <h2 class="h5 mb-3">Aggiungi Nuovo Banchetto</h2>
                 <form action="/Pancia_mia_fatti_capanna/RestaurantHall/create" method="POST" class="mb-4 p-3 border rounded">
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label for="name" class="form-label">Nome Sala:</label>
+                            <label for="name" class="form-label">Nome Banchetto:</label>
                             <input type="text" id="name" name="name" class="form-control" required>
                         </div>
                         <div class="col-md-4">
@@ -80,14 +80,14 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
                             <input type="number" id="totalPlaces" name="totalPlaces" class="form-control" min="1" required>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-get-started w-100">Crea Sala</button>
+                            <button type="submit" class="btn btn-get-started w-100">Crea Banchetto</button>
                         </div>
                     </div>
                 </form>
 
-                <h2 class="h5 mb-3">Sale Esistenti</h2>
+                <h2 class="h5 mb-3">Banchetti Esistenti</h2>
                 <?php if (( !$_smarty_tpl->hasVariable('halls') || empty($_smarty_tpl->getValue('halls')))) {?>
-                    <p class="text-center text-muted">Nessuna sala ristorante presente.</p>
+                    <p class="text-center text-muted">Nessun Banchetto ristorante presente.</p>
                 <?php } else { ?>
                     <div class="table-responsive">
                         <table class="table table-striped table-hover">

@@ -6,6 +6,7 @@ use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\UView;
 use AppORM\Services\Utility\USession;
+use AppORM\Services\Utility\UCookie; // <-- Aggiunto per usare i cookie
 use DateTime;
 
 class CClient
@@ -41,48 +42,84 @@ class CClient
         }
     }
 
-public static function login(): void
-{
-    if (UHTTPMethods::isGet()) {
-        UView::render('login');
-    } elseif (UHTTPMethods::isPost()) {
-        $email = UHTTPMethods::getPostValue('email');
-        $password = UHTTPMethods::getPostValue('password');
+    public static function login(): void
+    {
+        if (UHTTPMethods::isGet()) {
+            UView::render('login');
+        } elseif (UHTTPMethods::isPost()) {
+            $email = UHTTPMethods::getPostValue('email');
+            $password = UHTTPMethods::getPostValue('password');
+            $rememberMe = UHTTPMethods::getPostValue('remember_me'); // Legge il valore della checkbox
 
-        if ($email && $password) {
-            $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
-            if ($client) {
-                USession::setValue('user_id', $client->getId());
-                USession::setValue('user_role', 'client');
-                USession::setValue('user_email', $client->getEmail());
-                header('Location: /Pancia_mia_fatti_capanna/client/profile');
-                exit;
+            if ($email && $password) {
+                // Autenticazione Client
+                $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
+                if ($client) {
+                    USession::setValue('user_id', $client->getId());
+                    USession::setValue('user_role', 'client');
+                    USession::setValue('user_email', $client->getEmail());
+                    
+                    if ($rememberMe) {
+                        self::setRememberMeCookie('client', $client->getId());
+                    }
+
+                    header('Location: /Pancia_mia_fatti_capanna/client/profile');
+                    exit;
+                }
+
+                // Autenticazione Waiter
+                $waiter = FPersistentManager::getInstance()->authenticateWaiter($email, $password);
+                if ($waiter) {
+                    USession::setValue('user_id', $waiter->getId());
+                    USession::setValue('user_role', 'waiter');
+                    USession::setValue('user_email', $waiter->getEmail());
+                    
+                    if ($rememberMe) {
+                        self::setRememberMeCookie('waiter', $waiter->getId());
+                    }
+
+                    header('Location: /Pancia_mia_fatti_capanna/waiter/profile');
+                    exit;
+                }
+
+                // Autenticazione Admin
+                $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
+                if ($admin) {
+                    USession::setValue('user_id', $admin->getId());
+                    USession::setValue('user_role', 'admin');
+                    USession::setValue('user_email', $admin->getEmail());
+
+                    if ($rememberMe) {
+                        self::setRememberMeCookie('admin', $admin->getId());
+                    }
+                    
+                    header('Location: /Pancia_mia_fatti_capanna/');
+                    exit;
+                }
+
+                UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
+            } else {
+                UView::render('login', ['error' => 'Email e password sono obbligatori.']);
             }
-
-            $waiter = FPersistentManager::getInstance()->authenticateWaiter($email, $password);
-            if ($waiter) {
-                USession::setValue('user_id', $waiter->getId());
-                USession::setValue('user_role', 'waiter');
-                USession::setValue('user_email', $waiter->getEmail());
-                header('Location: /Pancia_mia_fatti_capanna/waiter/profile');
-                exit;
-            }
-
-            $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
-            if ($admin) {
-                USession::setValue('user_id', $admin->getId());
-                USession::setValue('user_role', 'admin');
-                USession::setValue('user_email', $admin->getEmail());
-                header('Location: /Pancia_mia_fatti_capanna/');
-                exit;
-            }
-
-            UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
-        } else {
-            UView::render('login', ['error' => 'Email e password sono obbligatori.']);
         }
     }
-}
+
+    /**
+     * Imposta il cookie per la funzionalità "Ricordami".
+     * @param string $role Il ruolo dell'utente (es. 'client', 'admin')
+     * @param int $userId L'ID dell'utente
+     */
+    private static function setRememberMeCookie(string $role, int $userId): void
+    {
+        // NOTA: Questa è una logica semplificata. Per una sicurezza maggiore,
+        // si dovrebbe generare un token casuale, salvarlo nel cookie e salvare
+        // il suo HASH nel database associato all'utente.
+        
+        $value = base64_encode(json_encode(['role' => $role, 'id' => $userId]));
+        // Imposta il cookie per 30 giorni (2592000 secondi)
+        UCookie::set('remember_user', $value, 2592000);
+    }
+
     public static function profile(): void
     {
         if (!USession::isSet('user_id')) {
@@ -107,6 +144,8 @@ public static function login(): void
     public static function logout(): void
     {
         USession::destroy();
+        // Al logout, cancella anche il cookie "Ricordami"
+        UCookie::delete('remember_user');
         header('Location: /Pancia_mia_fatti_capanna/');
         exit;
     }
@@ -157,24 +196,20 @@ public static function login(): void
         }
     }
 
-    // Modificato per accettare l'ID della carta come segmento dell'URL se si desidera usarlo così
-    // e per reindirizzare a un URL pulito.
-    public static function deleteCreditCard(): void // La form POST invia l'ID con metodo POST
+    public static function deleteCreditCard(): void
     {
         if (!USession::isSet('user_id')) { header('Location: /Pancia_mia_fatti_capanna/client/login'); exit; }
         
         if (UHTTPMethods::isPost()) {
             $cardId = (int)UHTTPMethods::getPostValue('card_id');
             FPersistentManager::getInstance()->deleteCreditCard($cardId);
-            // URL pulito
             header('Location: /Pancia_mia_fatti_capanna/client/profile');
             exit;
         }
         header('Location: /Pancia_mia_fatti_capanna/client/profile');
     }
 
-    // Questi metodi sembrano appartenere a CProduct, li lascio ma sono un duplicato.
-    private static function checkAdmin(): void { // Aggiunto per evitare errore se chiamati
+    private static function checkAdmin(): void {
         if (USession::getValue('user_role') !== 'admin') {
             header('Location: /Pancia_mia_fatti_capanna/');
             exit;
@@ -210,12 +245,9 @@ public static function login(): void
         header('Location: /Pancia_mia_fatti_capanna/home/menu');
         exit;
     }
-        /**
-     * Gestisce l'eliminazione di una recensione da parte del cliente che l'ha scritta.
-     */
+
     public static function deleteReview(): void
     {
-        // 1. Controlla se l'utente è loggato
         if (!USession::isSet('user_id')) {
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
@@ -226,23 +258,14 @@ public static function login(): void
             $clientId = USession::getValue('user_id');
 
             if ($reviewId > 0) {
-                // 2. Chiama il FPersistentManager per eliminare la recensione,
-                //    passando sia l'ID della recensione che l'ID del cliente per sicurezza.
-                //    Il manager restituirà true se l'eliminazione è andata a buon fine.
                 $deleted = FPersistentManager::getInstance()->deleteClientReview($reviewId, $clientId);
-
                 if ($deleted) {
-                    // Reindirizza al profilo con un messaggio di successo
                     header('Location: /Pancia_mia_fatti_capanna/client/profile');
                     exit;
                 }
             }
         }
-
-        // Se qualcosa va storto (es. richiesta non POST o ID mancante),
-        // reindirizza semplicemente al profilo.
         header('Location: /Pancia_mia_fatti_capanna/client/profile');
         exit;
     }
-    
 }

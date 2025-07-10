@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:23:57
+/* Smarty version 5.5.1, created on 2025-07-10 20:34:57
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/menu.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe91dc95380_67708107',
+  'unifunc' => 'content_687007d1db1763_47288133',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'd9d2777a9401d18f949dc8b3e27f464e37858d44' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/menu.tpl',
-      1 => 1752164308,
+      1 => 1752172448,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe91dc95380_67708107 (\Smarty\Template $_smarty_tpl) {
+function content_687007d1db1763_47288133 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -53,7 +53,11 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
             <h1>Il Nostro Menù</h1>
         </div>
     </section><!-- End Page Title Section -->
-
+<section class="my-5" style="background: url('/Pancia_mia_fatti_capanna/images/menu.avif') center center / cover no-repeat; height: 400px;">
+  <div class="text-center text-white d-flex flex-column justify-content-center align-items-center h-100" style="background-color: rgba(0,0,0,0.4);">
+    <h1 style="color:bisque">Esplora il nostro menù</h1>
+  </div>
+</section>
     <!-- ======= Menu Section ======= -->
     <section class="menu">
         <div class="container">
@@ -94,7 +98,7 @@ $foreach0DoElse = false;
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </div>
                     <div class="mt-3">
-                        <button type="submit" class="btn btn-get-started">Applica Filtro</button>
+                        <button type="submit" class="btn btn-secondary ms-2">Applica Filtro</button>
                         <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
                     </div>
                 </form>
@@ -160,7 +164,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         <div class="text-center mt-5">
                 <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
                 <?php if ($_smarty_tpl->getValue('user_role') == 'client') {?>
-                    <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-get-started ms-2">Vai al Carrello</a>
+                    <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-secondary">Vai al Carrello</a>
                 <?php } elseif ($_smarty_tpl->getValue('user_role') == 'admin') {?>
                     <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-secondary ms-2">Torna al Pannello di Controllo</a>
                 <?php }?>

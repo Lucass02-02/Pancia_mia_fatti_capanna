@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:23:54
+/* Smarty version 5.5.1, created on 2025-07-10 20:34:27
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/admin_profile.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe91a6fb805_81293528',
+  'unifunc' => 'content_687007b3c422f8_43619867',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '80cb44b7110152a7536fc3ef1df1ff4d5f57305b' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/admin_profile.tpl',
-      1 => 1752164308,
+      1 => 1752171595,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe91a6fb805_81293528 (\Smarty\Template $_smarty_tpl) {
+function content_687007b3c422f8_43619867 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -74,8 +74,9 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
                             <i class="bi bi-shop"></i>
                             <h4>Gestione Ristorante</h4>
                             <ul class="list-unstyled">
-                                <li><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="link-primary">Gestisci Tavoli e Sale</a></li>
-                                <li><a href="/Pancia_mia_fatti_capanna/Home/menu" class="link-primary">Gestisci Menù e Prodotti</a></li>
+                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="btn btn-info">Gestisci Tavoli</a></div>
+                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a></div>
+                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-info">Gestisci Menù e Prodotti</a></div></div>
                             </ul>
                         </div>
                     </div>
@@ -85,8 +86,8 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
                             <i class="bi bi-people"></i>
                             <h4>Gestione Utenti</h4>
                             <ul class="list-unstyled">
-                                <li><a href="/Pancia_mia_fatti_capanna/Admin/manageClients" class="link-primary">Gestisci Clienti</a></li>
-                                <li><a href="/Pancia_mia_fatti_capanna/Waiter/manage" class="link-primary">Gestisci Camerieri</a></li>
+                                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/manageClients" class="btn btn-info">Gestisci Clienti</a></div>
+                                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Waiter/manage" class="btn btn-info">Gestisci Camerieri</a></div>
                             </ul>
                         </div>
                     </div>
@@ -94,7 +95,6 @@ $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_c
 
                 <div class="text-center mt-4">
                     <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary me-2">Torna alla Home</a>
-                    <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-danger">Logout</a>
                 </div>
             </div>
 

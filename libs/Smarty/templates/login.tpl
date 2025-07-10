@@ -37,7 +37,7 @@
 
             <div class="php-email-form bg-white p-4 shadow-sm mx-auto" style="max-width: 400px;">
                 {if isset($error)}
-                    <div class="error-message text-center">{$error|escape}</div>
+                    <div class="alert alert-danger text-center">{$error|escape}</div>
                 {/if}
 
                 <form action="/Pancia_mia_fatti_capanna/Client/login" method="POST">
@@ -51,10 +51,20 @@
                         <input type="password" id="password" name="password" class="form-control" required>
                     </div>
 
+                    <!-- MODIFICA: Aggiunta Checkbox "Ricordami" -->
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="remember_me" value="1" id="rememberMeCheckbox">
+                        <label class="form-check-label" for="rememberMeCheckbox">
+                            Ricordami
+                        </label>
+                    </div>
+                    <!-- FINE MODIFICA -->
+
                     <button type="submit" class="btn btn-get-started w-100">Accedi</button>
                 </form>
 
                 <div class="text-center mt-4">
+                     <p>Non hai un account? <a href="/Pancia_mia_fatti_capanna/Client/registration">Registrati ora</a>.</p>
                     <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
                 </div>
             </div>

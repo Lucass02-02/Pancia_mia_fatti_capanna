@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:23:41
+/* Smarty version 5.5.1, created on 2025-07-10 20:35:29
   from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/profile.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe90de087c5_56921071',
+  'unifunc' => 'content_687007f1c50342_08666490',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '1140cf0966e0d5be31ca2504de863375d88c3f57' => 
     array (
       0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/profile.tpl',
-      1 => 1752164308,
+      1 => 1752171595,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe90de087c5_56921071 (\Smarty\Template $_smarty_tpl) {
+function content_687007f1c50342_08666490 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -110,7 +110,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <?php } else { ?>
                     <p>Non hai ancora scritto nessuna recensione.</p>
                 <?php }?>
-                <a href="/Pancia_mia_fatti_capanna/client/addReview" class="btn btn-get-started mb-4">Scrivi una Recensione</a>
+                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-info">Scrivi una recensione</a></div>
 
                 <h3 class="text-secondary">Le Mie Carte di Credito</h3>
                 <?php if (!( !$_smarty_tpl->hasVariable('creditCards') || empty($_smarty_tpl->getValue('creditCards')))) {?>
@@ -143,7 +143,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <?php } else { ?>
                     <p>Non hai ancora aggiunto nessuna carta di credito.</p>
                 <?php }?>
-                <a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-get-started">Aggiungi Carta</a>
+                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-info">Aggiungi Carta</a></div>
 
             </div>
 
