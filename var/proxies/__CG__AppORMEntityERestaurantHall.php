@@ -7,7 +7,7 @@ namespace AppORM\Proxies\__CG__\AppORM\Entity;
  */
 class ERestaurantHall extends \AppORM\Entity\ERestaurantHall implements \Doctrine\ORM\Proxy\InternalProxy
 {
-    use \Symfony\Component\VarExporter\LazyGhostTrait {
+     use \Symfony\Component\VarExporter\LazyGhostTrait {
         initializeLazyObject as private;
         setLazyObjectAsInitialized as public __setInitialized;
         isLazyObjectInitialized as private;
@@ -36,7 +36,7 @@ class ERestaurantHall extends \AppORM\Entity\ERestaurantHall implements \Doctrin
         'totalPlaces' => [parent::class, 'totalPlaces', null, 16],
         'turns' => [parent::class, 'turns', null, 16],
         'waiters' => [parent::class, 'waiters', null, 16],
-    ];
+    ];
 
     public function __isInitialized(): bool
     {

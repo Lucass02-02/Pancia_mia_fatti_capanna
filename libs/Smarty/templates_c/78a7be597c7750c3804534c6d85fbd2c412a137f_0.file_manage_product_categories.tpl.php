@@ -1,5 +1,28 @@
-{* File: templates/manage_categories.tpl (RIADATTATO CON NUOVO style.css Yummy) *}
-<!DOCTYPE html>
+<?php
+/* Smarty version 5.5.1, created on 2025-07-10 18:04:23
+  from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/manage_product_categories.tpl' */
+
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.5.1',
+  'unifunc' => 'content_686fe487a85ec2_33045292',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '78a7be597c7750c3804534c6d85fbd2c412a137f' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/manage_product_categories.tpl',
+      1 => 1752163108,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_686fe487a85ec2_33045292 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
+?><!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -47,27 +70,37 @@
             <!-- Elenco categorie esistenti -->
             <div class="php-email-form bg-white p-4 shadow-sm">
                 <h3 class="text-secondary mb-3">Categorie Esistenti</h3>
-                {if empty($categories)}
+                <?php if (( !$_smarty_tpl->hasVariable('categories') || empty($_smarty_tpl->getValue('categories')))) {?>
                     <p class="text-center text-muted">Nessuna categoria trovata.</p>
-                {else}
+                <?php } else { ?>
                     <ul class="list-group">
-                        {foreach from=$categories item=category}
+                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('categories'), 'category');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('category')->value) {
+$foreach0DoElse = false;
+?>
                             <li class="list-group-item d-flex justify-content-between align-items-center flex-wrap">
                                 <!-- Form modifica categoria -->
                                 <form action="/Pancia_mia_fatti_capanna/Product/updateCategory" method="POST" class="d-flex flex-grow-1 gap-2 align-items-center">
-                                    <input type="hidden" name="category_id" value="{$category->getId()}">
-                                    <input type="text" class="form-control" name="name" value="{$category->getName()|escape}" required>
+                                    <input type="hidden" name="category_id" value="<?php echo $_smarty_tpl->getValue('category')->getId();?>
+">
+                                    <input type="text" class="form-control" name="name" value="<?php echo htmlspecialchars((string)$_smarty_tpl->getValue('category')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+" required>
                                     <button class="btn btn-warning btn-sm" type="submit">Modifica</button>
                                 </form>
 
                                 <!-- Form elimina categoria -->
-                                <form action="/Pancia_mia_fatti_capanna/Product/deleteCategory/{$category->getId()}" method="POST" class="ms-2">
+                                <form action="/Pancia_mia_fatti_capanna/Product/deleteCategory/<?php echo $_smarty_tpl->getValue('category')->getId();?>
+" method="POST" class="ms-2">
                                     <button class="btn btn-danger btn-sm" type="submit" onclick="return confirm('Sei sicuro di voler eliminare questa categoria? Tutti i prodotti associati a questa categoria potrebbero perdere il loro riferimento alla categoria.');">Elimina</button>
                                 </form>
                             </li>
-                        {/foreach}
+                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </ul>
-                {/if}
+                <?php }?>
             </div>
 
             <!-- Pulsante torna al menu -->
@@ -86,7 +119,11 @@
     </footer><!-- End Footer -->
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php echo '<script'; ?>
+ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"><?php echo '</script'; ?>
+>
 
 </body>
 </html>
+<?php }
+}

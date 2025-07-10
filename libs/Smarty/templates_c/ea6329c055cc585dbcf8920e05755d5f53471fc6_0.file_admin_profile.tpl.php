@@ -1,5 +1,28 @@
-{* File: templates/admin_profile.tpl (RIADATTATO CON NUOVO style.css Yummy) *}
-<!DOCTYPE html>
+<?php
+/* Smarty version 5.5.1, created on 2025-07-10 18:03:38
+  from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/admin_profile.tpl' */
+
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.5.1',
+  'unifunc' => 'content_686fe45a71be19_32222232',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    'ea6329c055cc585dbcf8920e05755d5f53471fc6' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/admin_profile.tpl',
+      1 => 1752162758,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_686fe45a71be19_32222232 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
+?><!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -38,8 +61,11 @@
             <div class="php-email-form bg-white p-4 shadow-sm mx-auto" style="max-width: 800px;">
                 <div class="mb-4">
                     <h2 class="h4">Dati del Proprietario</h2>
-                    <p><strong>Nome Completo:</strong> {$admin->getName()|escape} {$admin->getSurname()|escape}</p>
-                    <p><strong>Email:</strong> {$admin->getEmail()|escape}</p>
+                    <p><strong>Nome Completo:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('admin')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+ <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('admin')->getSurname(), ENT_QUOTES, 'UTF-8', true);?>
+</p>
+                    <p><strong>Email:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('admin')->getEmail(), ENT_QUOTES, 'UTF-8', true);?>
+</p>
                 </div>
 
                 <div class="row g-4">
@@ -83,7 +109,11 @@
     </footer><!-- End Footer -->
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php echo '<script'; ?>
+ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"><?php echo '</script'; ?>
+>
 
 </body>
 </html>
+<?php }
+}
