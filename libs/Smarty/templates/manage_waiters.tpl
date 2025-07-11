@@ -29,7 +29,7 @@
             <h1>Gestione Camerieri</h1>
         </div>
     </section><!-- End Page Title Section -->
-
+<section class="container" style="background: url('/Pancia_mia_fatti_capanna/images/cameriere.jpg') center center / cover no-repeat; height: 200px; width: 400px"></section>
     <!-- ======= Manage Waiters Section ======= -->
     <section class="contact">
         <div class="container" style="max-width: 1200px;">

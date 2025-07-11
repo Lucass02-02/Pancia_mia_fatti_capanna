@@ -67,7 +67,7 @@
             <h1>{$titolo|escape}</h1>
         </div>
     </section><!-- End Page Title Section -->
-
+<section class="container" style="background: url('/Pancia_mia_fatti_capanna/images/recensioni.png') center center / cover no-repeat; height: 300px; width: 600px"></section>
     <!-- ======= Reviews Section ======= -->
     <section class="section">
         <div class="container">

@@ -41,11 +41,11 @@
                         <input type="number" id="seatsNumber" name="seatsNumber" min="1" class="form-control" required>
                     </div>
                     <div class="col-auto">
-                        <label for="hall_id" class="col-form-label">Sala:</label>
+                        <label for="hall_id" class="col-form-label">Banchetto:</label>
                     </div>
                     <div class="col-auto">
                         <select id="hall_id" name="hall_id" class="form-select" required>
-                            <option value="">Seleziona una sala</option>
+                            <option value="">Seleziona un banchetto</option>
                             {foreach $halls as $hall}
                                 <option value="{$hall->getIdHall()}">{$hall->getName()|escape}</option>
                             {/foreach}
@@ -63,6 +63,7 @@
                     <table class="table table-striped table-bordered align-middle">
                         <thead class="table-light">
                             <tr>
+                                <th>Id</th>
                                 <th>N. Posti</th>
                                 <th>Sala</th>
                                 <th>Stato Attuale</th>
@@ -73,6 +74,7 @@
                         <tbody>
                             {foreach $tables as $table}
                                 <tr>
+                                    <td>{$table->getIdTable()}</td>
                                     <td>{$table->getSeatsNumber()}</td>
                                     <td>{$table->getRestaurantHall()->getName()|escape}</td>
                                     <td>

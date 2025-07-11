@@ -139,3 +139,29 @@ a:hover {
 .dashboard-buttons div {
   margin-bottom: 10px;
 }
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+.element {
+  background-size: contain; /* o cover, a seconda del layout */
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.container {
+  display: flex;
+  justify-content: center; /* centra orizzontalmente */
+  align-items: center;     /* centra verticalmente se ha altezza definita */
+  height: 200px;           /* solo se vuoi centrarla verticalmente */
+}
+
+.product-image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px; /* opzionale per bordi arrotondati */
+  margin-bottom: 10px;
+}

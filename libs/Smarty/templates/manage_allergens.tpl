@@ -30,7 +30,7 @@
             <h1>Gestione Allergeni</h1>
         </div>
     </section><!-- End Page Title Section -->
-
+    <section class="container" style="background: url('/Pancia_mia_fatti_capanna/images/allergeni.jpg') center center / cover no-repeat; height: 400px; width: 800px"></section>
     <!-- ======= Manage Allergens Section ======= -->
     <section class="contact">
         <div class="container" style="max-width: 800px;">

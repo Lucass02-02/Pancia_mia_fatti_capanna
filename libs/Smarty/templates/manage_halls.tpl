@@ -27,10 +27,10 @@
     <!-- ======= Page Title Section ======= -->
     <section class="page-title">
         <div class="container">
-            <h1>Gestione Sale Ristorante</h1>
+            <h1>Gestione Banchetti Ristorante</h1>
         </div>
     </section><!-- End Page Title Section -->
-
+<section class="container" style="background: url('/Pancia_mia_fatti_capanna/images/sala-ristorante.png') center center / cover no-repeat; height: 300px; width: 600px"></section>
     <!-- ======= Manage Halls Section ======= -->
     <section class="contact">
         <div class="container" style="max-width: 900px;">
@@ -42,7 +42,7 @@
                 </div>
 
                 {if isset($error) && $error}
-                    <div class="error-message mb-3">Non puoi eliminare questa sala perché contiene dei camerieri. Sposta i camerieri in un'altra sala e riprova.</div>
+                    <div class="error-message mb-3">Non puoi eliminare questo banchetto perché contiene dei camerieri. Sposta i camerieri in un'altra sala e riprova.</div>
                 {/if}
 
                 <h2 class="h5 mb-3">Aggiungi Nuovo Banchetto</h2>

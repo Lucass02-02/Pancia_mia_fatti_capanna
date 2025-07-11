@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:55:00
+/* Smarty version 5.5.1, created on 2025-07-11 12:43:54
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/profile.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686ff064ca62d7_04742990',
+  'unifunc' => 'content_6870eaea2e01d5_08564655',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'cadd5c07d3cb040bd0ea3b0936b9db743beb7249' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/profile.tpl',
-      1 => 1752166499,
+      1 => 1752230631,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686ff064ca62d7_04742990 (\Smarty\Template $_smarty_tpl) {
+function content_6870eaea2e01d5_08564655 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -110,7 +110,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 <?php } else { ?>
                     <p>Non hai ancora scritto nessuna recensione.</p>
                 <?php }?>
-                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-info">Scrivi una recensione</a></div>
+                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/client/addReview" class="btn btn-info">Scrivi una recensione</a></div>
 
                 <h3 class="text-secondary">Le Mie Carte di Credito</h3>
                 <?php if (!( !$_smarty_tpl->hasVariable('creditCards') || empty($_smarty_tpl->getValue('creditCards')))) {?>

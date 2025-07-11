@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:03:32
+/* Smarty version 5.5.1, created on 2025-07-11 11:18:10
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/login.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe4548a0a39_22991785',
+  'unifunc' => 'content_6870d6d229f3a4_20799808',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '4bba6e83d31c8d0d7202ec5748b2db9d372a0368' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/login.tpl',
-      1 => 1752163008,
+      1 => 1752225457,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe4548a0a39_22991785 (\Smarty\Template $_smarty_tpl) {
+function content_6870d6d229f3a4_20799808 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -60,7 +60,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
 
             <div class="php-email-form bg-white p-4 shadow-sm mx-auto" style="max-width: 400px;">
                 <?php if ((true && ($_smarty_tpl->hasVariable('error') && null !== ($_smarty_tpl->getValue('error') ?? null)))) {?>
-                    <div class="error-message text-center"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('error'), ENT_QUOTES, 'UTF-8', true);?>
+                    <div class="alert alert-danger text-center"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('error'), ENT_QUOTES, 'UTF-8', true);?>
 </div>
                 <?php }?>
 
@@ -75,10 +75,20 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
                         <input type="password" id="password" name="password" class="form-control" required>
                     </div>
 
+                    <!-- MODIFICA: Aggiunta Checkbox "Ricordami" -->
+                    <div class="form-check mb-3">
+                        <input class="form-check-input" type="checkbox" name="remember_me" value="1" id="rememberMeCheckbox">
+                        <label class="form-check-label" for="rememberMeCheckbox">
+                            Ricordami
+                        </label>
+                    </div>
+                    <!-- FINE MODIFICA -->
+
                     <button type="submit" class="btn btn-get-started w-100">Accedi</button>
                 </form>
 
                 <div class="text-center mt-4">
+                     <p>Non hai un account? <a href="/Pancia_mia_fatti_capanna/Client/registration">Registrati ora</a>.</p>
                     <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
                 </div>
             </div>

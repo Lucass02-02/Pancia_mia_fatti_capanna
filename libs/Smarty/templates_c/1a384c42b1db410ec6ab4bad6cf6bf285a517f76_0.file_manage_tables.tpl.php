@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:27:10
+/* Smarty version 5.5.1, created on 2025-07-11 12:26:10
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/manage_tables.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe9de5d9f85_71343121',
+  'unifunc' => 'content_6870e6c22630b4_76617670',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '1a384c42b1db410ec6ab4bad6cf6bf285a517f76' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/manage_tables.tpl',
-      1 => 1752164825,
+      1 => 1752229558,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe9de5d9f85_71343121 (\Smarty\Template $_smarty_tpl) {
+function content_6870e6c22630b4_76617670 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -65,11 +65,11 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
                         <input type="number" id="seatsNumber" name="seatsNumber" min="1" class="form-control" required>
                     </div>
                     <div class="col-auto">
-                        <label for="hall_id" class="col-form-label">Sala:</label>
+                        <label for="hall_id" class="col-form-label">Banchetto:</label>
                     </div>
                     <div class="col-auto">
                         <select id="hall_id" name="hall_id" class="form-select" required>
-                            <option value="">Seleziona una sala</option>
+                            <option value="">Seleziona un banchetto</option>
                             <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('halls'), 'hall');
 $foreach0DoElse = true;
@@ -96,6 +96,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     <table class="table table-striped table-bordered align-middle">
                         <thead class="table-light">
                             <tr>
+                                <th>Id</th>
                                 <th>N. Posti</th>
                                 <th>Sala</th>
                                 <th>Stato Attuale</th>
@@ -111,6 +112,8 @@ foreach ($_from ?? [] as $_smarty_tpl->getVariable('table')->value) {
 $foreach1DoElse = false;
 ?>
                                 <tr>
+                                    <td><?php echo $_smarty_tpl->getValue('table')->getIdTable();?>
+</td>
                                     <td><?php echo $_smarty_tpl->getValue('table')->getSeatsNumber();?>
 </td>
                                     <td><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('table')->getRestaurantHall()->getName(), ENT_QUOTES, 'UTF-8', true);?>
