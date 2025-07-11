@@ -12,12 +12,11 @@ $order = FOrder::getOrderById(1);
 
 $reservation = $order->getReservation();
 
-$product1 = FProduct::getProductById(1);
-$product2 = FProduct::getProductById(2);
+$product1 = FProduct::getObj(1);
+$product2 = FProduct::getObj(2);
 
-/*FOrderItem::addItemToOrder($order, $product1, 2);
+FOrderItem::addItemToOrder($order, $product1, 2);
 FOrderItem::addItemToOrder($order, $product2, 3);
 
-$endOrder = FPersistentManager::confirmOrder($order);*/
 
-$viewReview = FPersistentManager::getOrderSummaryForReservation($reservation);
+

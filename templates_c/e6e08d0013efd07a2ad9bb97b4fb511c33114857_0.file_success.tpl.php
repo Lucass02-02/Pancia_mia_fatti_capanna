@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:31:38
+/* Smarty version 5.5.1, created on 2025-07-11 20:17:11
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/success.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686feaea4c0265_42988093',
+  'unifunc' => 'content_687155278e9453_70634090',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e6e08d0013efd07a2ad9bb97b4fb511c33114857' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/success.tpl',
-      1 => 1752165079,
+      1 => 1752165904,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686feaea4c0265_42988093 (\Smarty\Template $_smarty_tpl) {
+function content_687155278e9453_70634090 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -35,12 +35,8 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
         <div class="bg-white p-4 rounded shadow-sm">
             <h1 class="text-center text-primary mb-4">Prenotazione Effettuata Con Successo</h1>
             <img src="https://media1.tenor.com/m/HGwktFx-y0wAAAAC/stickman-fire.gif" alt="Successo" class="img-fluid mx-auto d-block mb-4" style="max-width: 300px;">
-        </div>
-
-        <div class="text-center mt-4">
             <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
         </div>
-
     </div>
 </body>
 </html>

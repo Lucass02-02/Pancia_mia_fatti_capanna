@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-11 19:28:58
-  from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/menu.tpl' */
+/* Smarty version 5.5.1, created on 2025-07-11 19:33:02
+  from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/menu_ordine.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_687149dac13e16_19322518',
+  'unifunc' => 'content_68714ace608ab9_95832520',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
-    '3b7c2aa2e762bab2ec17f0c8515d213b4b2c5a28' => 
+    'bb64f324b022528e18885a722fbd4ddf65b2f52f' => 
     array (
-      0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/menu.tpl',
-      1 => 1752254934,
+      0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/menu_ordine.tpl',
+      1 => 1752255179,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_687149dac13e16_19322518 (\Smarty\Template $_smarty_tpl) {
+function content_68714ace608ab9_95832520 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -34,16 +34,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
     <div class="container my-5">
         <h1 class="text-primary text-center mb-4">Il Nostro Menu</h1>
 
-                <?php if ($_smarty_tpl->getValue('user_role') == 'admin') {?>
-            <div class="d-flex justify-content-center gap-3 mb-4">
-                <a href="/Pancia_mia_fatti_capanna/Product/showCreateForm" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
-                <a href="/Pancia_mia_fatti_capanna/Allergen/manage" class="btn btn-info">Gestisci Allergeni</a>
-            </div>
-        <?php }?>
-
                 <div class="bg-white p-4 rounded shadow-sm mb-5">
             <h3 class="text-secondary">Filtra per allergeni (mostra piatti senza):</h3>
-            <form action="/Pancia_mia_fatti_capanna/Home/menu" method="POST">
+            <form action="/Pancia_mia_fatti_capanna/Client/order" method="POST">
                 <div class="row">
                     <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('allAllergens'), 'allergen');
@@ -70,7 +63,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                 </div>
                 <div class="mt-3">
                     <button type="submit" class="btn btn-primary">Applica Filtro</button>
-                    <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
+                    <a href="/Pancia_mia_fatti_capanna/Client/order" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
                 </div>
             </form>
         </div>
@@ -96,24 +89,15 @@ $foreach1DoElse = false;
 </p>
 
                                 
-                                                                <?php if (!$_smarty_tpl->getValue('user_id')) {?>
-                                    <p class="text-danger mt-auto">Devi accedere per poter ordinare!</p>
-                                <?php }?>
-
-                                                                <?php if ($_smarty_tpl->getValue('user_role') == 'admin') {?>
-                                    <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
-" class="btn btn-warning btn-sm">Modifica</a>
-                                        <?php if ($_smarty_tpl->getValue('product')->isAvailable()) {?>
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
-" class="btn btn-secondary btn-sm">Rendi Non Disp.</a>
-                                        <?php } else { ?>
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
-" class="btn btn-success btn-sm">Rendi Disp.</a>
-                                        <?php }?>
-                                        <a href="/Pancia_mia_fatti_capanna/Product/delete/<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
-" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');">Elimina</a>
-                                    </div>
+                                                                <?php if ($_smarty_tpl->getValue('user_role') == 'client') {?>
+                                    <form action="/Pancia_mia_fatti_capanna/Cart/add" method="POST" class="mt-auto">
+                                        <input type="hidden" name="product_id" value="<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
+">
+                                        <div class="input-group">
+                                            <input type="number" name="quantity" value="1" min="1" max="99" class="form-control" aria-label="Quantità">
+                                            <button type="submit" class="btn btn-primary">Aggiungi</button>
+                                        </div>
+                                    </form>
                                 <?php }?>
                             </div>
                         </div>
@@ -126,6 +110,9 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                 <div class="d-flex justify-content-center gap-3 mt-5">
             <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
+                        <?php if ($_smarty_tpl->getValue('user_role') == 'client') {?>
+                <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-primary">Vai al Carrello</a>
+            <?php }?>
         </div>
     </div>
 </body>

@@ -24,7 +24,7 @@ class EOrder {
     #[ORM\GeneratedValue]
     private $id;
 
-    #[ORM\Column(type: 'datetime', nullable: false)]
+    #[ORM\Column(type: 'date', nullable: false)]
     private $date;
 
     #[ORM\Column(type: 'string', length: 20, nullable: false, enumType: OrderStatus::class)]

@@ -30,8 +30,8 @@
                             <li class="mb-2">
                                 <a href="/Pancia_mia_fatti_capanna/Waiter/viewReservation" class="btn btn-primary w-100">Visualizza Prenotazioni</a>
                             </li>
-                            <li>
-                                <button class="btn btn-secondary w-100" disabled>Visualizza Ordini</button>
+                            <li class="mb-2">
+                                <a href="/Pancia_mia_fatti_capanna/Waiter/viewOrder" class="btn btn-primary w-100">Visualizza Ordini</a>
                             </li>
                         </ul>
                     </div>

@@ -2,6 +2,8 @@
 // File: AppORM/Control/CWaiter.php
 namespace AppORM\Control;
 
+use AppORM\Entity\EOrder;
+use AppORM\Entity\EOrderItem;
 use AppORM\Entity\EReservation;
 use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UHTTPMethods;
@@ -9,8 +11,10 @@ use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\TableState;
 use AppORM\Entity\EWaiter; // Assicurati di importare l'entità EWaiter
+use AppORM\Entity\OrderStatus;
 use AppORM\Services\Foundation\FEntityManager;
 use DateTime;
+
 
 class CWaiter
 {
@@ -238,6 +242,9 @@ class CWaiter
         }
 
         $filterDate = UHTTPMethods::getPostValue('filter_date');
+        if ($filterDate) {
+            UHTTPMethods::setPostValue('filter_date', null);
+        }
 
         if ($filterDate) {
 
@@ -250,4 +257,74 @@ class CWaiter
         UView::render('waiter_reservation_view', ['reservations' => $reservations, 'filter_date' => $filterDate]);
     }
 
+    public static function viewOrder() {
+        if (USession::getValue('user_role') !== 'waiter') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        $userRole = USession::getValue('user_role');
+
+        $message = USession::getValue('flash_message');
+        if ($message) {
+            USession::setValue('flash_message', null);
+        }
+            
+        
+        $filterDate = UHTTPMethods::getPostValue('filter_date');
+        if ($filterDate) {
+            UHTTPMethods::setPostValue('filter_date', null);
+        }
+
+        if ($filterDate) {
+            $orders = FEntityManager::getInstance()->retriveObjectList(EOrder::class, 'date', $filterDate);
+        } else {
+            $orders = FEntityManager::getInstance()->selectAll(EOrder::class);
+        }
+
+        UView::render('waiter_manage_order', ['orders' => $orders, 'filter_date' => $filterDate, 'error' => $message, 'user_role' => $userRole]);
+    }
+
+    public static function enableOrder() {
+        if (USession::getValue('user_role') !== 'waiter') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        if (UHTTPMethods::isPost()) {
+            $orderId = (int)UHTTPMethods::getPostValue('order_id');
+            //$newState = UHTTPMethods::getPostValue('status');
+
+            $order = FEntityManager::getInstance()->retriveObject(EOrder::class, $orderId);
+            if($order ) {
+                //$stateEnum = OrderStatus::from($newState);
+                $result = FPersistentManager::getInstance()->unlockOrder($order);
+            }
+        }
+
+        if ($result === true) {
+            header('Location: /Pancia_mia_fatti_capanna/Waiter/viewOrder');
+            exit;
+        }else{
+            USession::setValue('flash_message', $result);
+            header('Location: /Pancia_mia_fatti_capanna/Waiter/viewOrder');
+        }
+
+        
+    }
+
+    public static function detailOrder() {
+        if (USession::getValue('user_role') !== 'waiter') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        $userRole = USession::getValue('user_role');
+
+        $orderId = UHTTPMethods::getPostValue('order_id');
+
+        $order_items = FEntityManager::getInstance()->retriveObjectList(EOrderItem::class, 'order', $orderId);
+
+        UView::render('waiter_order_detail', ['order_items' => $order_items, 'user_role' => $userRole]);
+    }
 }

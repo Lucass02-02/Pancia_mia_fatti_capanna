@@ -11,18 +11,10 @@
     <div class="container my-5">
         <h1 class="text-primary text-center mb-4">Il Nostro Menu</h1>
 
-        {* Mostra i pulsanti di gestione solo se l'utente è un admin *}
-        {if $user_role == 'admin'}
-            <div class="d-flex justify-content-center gap-3 mb-4">
-                <a href="/Pancia_mia_fatti_capanna/Product/showCreateForm" class="btn btn-success">Aggiungi Nuovo Prodotto</a>
-                <a href="/Pancia_mia_fatti_capanna/Allergen/manage" class="btn btn-info">Gestisci Allergeni</a>
-            </div>
-        {/if}
-
         {* Sezione filtri allergeni *}
         <div class="bg-white p-4 rounded shadow-sm mb-5">
             <h3 class="text-secondary">Filtra per allergeni (mostra piatti senza):</h3>
-            <form action="/Pancia_mia_fatti_capanna/Home/menu" method="POST">
+            <form action="/Pancia_mia_fatti_capanna/Client/order" method="POST">
                 <div class="row">
                     {foreach from=$allAllergens item=allergen}
                         <div class="col-md-3 col-sm-4 col-6">
@@ -38,7 +30,7 @@
                 </div>
                 <div class="mt-3">
                     <button type="submit" class="btn btn-primary">Applica Filtro</button>
-                    <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
+                    <a href="/Pancia_mia_fatti_capanna/Client/order" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
                 </div>
             </form>
         </div>
@@ -58,22 +50,15 @@
 
                                 {* Logica condizionale per i pulsanti di acquisto/gestione *}
 
-                                {* Se l'utente NON È LOGGATO, mostra un messaggio *}
-                                {if !$user_id}
-                                    <p class="text-danger mt-auto">Devi accedere per poter ordinare!</p>
-                                {/if}
-
-                                {* Se l'utente è un ADMIN, mostra i pulsanti di gestione del prodotto *}
-                                {if $user_role == 'admin'}
-                                    <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/{$product->getIdProduct()}" class="btn btn-warning btn-sm">Modifica</a>
-                                        {if $product->isAvailable()}
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getIdProduct()}" class="btn btn-secondary btn-sm">Rendi Non Disp.</a>
-                                        {else}
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getIdProduct()}" class="btn btn-success btn-sm">Rendi Disp.</a>
-                                        {/if}
-                                        <a href="/Pancia_mia_fatti_capanna/Product/delete/{$product->getIdProduct()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');">Elimina</a>
-                                    </div>
+                                {* Se l'utente è un CLIENTE, mostra il form per aggiungere al carrello *}
+                                {if $user_role == 'client'}
+                                    <form action="/Pancia_mia_fatti_capanna/Cart/add" method="POST" class="mt-auto">
+                                        <input type="hidden" name="product_id" value="{$product->getIdProduct()}">
+                                        <div class="input-group">
+                                            <input type="number" name="quantity" value="1" min="1" max="99" class="form-control" aria-label="Quantità">
+                                            <button type="submit" class="btn btn-primary">Aggiungi</button>
+                                        </div>
+                                    </form>
                                 {/if}
                             </div>
                         </div>
@@ -85,6 +70,10 @@
         {* Pulsanti di navigazione in fondo alla pagina *}
         <div class="d-flex justify-content-center gap-3 mt-5">
             <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
+            {* Mostra il pulsante "Vai al Carrello" solo ai clienti *}
+            {if $user_role == 'client'}
+                <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-primary">Vai al Carrello</a>
+            {/if}
         </div>
     </div>
 </body>

@@ -392,7 +392,7 @@ class FPersistentManager {
             return "La prenotazione non può essere cancellata perché non è nello stato 'CREATED'.";
         }
     }
-
+    
     public static function unlockOrder(EOrder $order) {
        $reservation = $order->getReservation();
        
@@ -400,17 +400,14 @@ class FPersistentManager {
             $reservation->setStatus(ReservationStatus::ORDER_IN_PROGRESS);
             self::uploadObject($reservation);
             $order->setStatus(OrderStatus::IN_PROGRESS);
-            $results = self::uploadObject($order);
-            return $results;
+            self::uploadObject($order);
+            return true;
         } else {
-            return [
-                'status' => 'error',
-                'message' => "L'ordine non può essere sbloccato perché la prenotazione non è nello stato 'APPROVED'."
-            ];
+            return "L'ordine non può essere sbloccato perché la prenotazione non è nello stato 'APPROVED'.";
         }
 
     }
-
+    
     public static function confirmOrder(EOrder $order) {
         $reservation = $order->getReservation();
         

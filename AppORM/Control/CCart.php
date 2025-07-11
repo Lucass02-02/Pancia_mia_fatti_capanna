@@ -1,6 +1,10 @@
 <?php // File: AppORM/Control/CCart.php
 namespace AppORM\Control;
 
+use AppORM\Entity\EClient;
+use AppORM\Entity\EOrderItem;
+use AppORM\Entity\ReservationStatus;
+use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\USession;
@@ -16,6 +20,17 @@ class CCart
             exit;
         }
 
+        $clientId = USession::getValue('user_id');
+        $client = FEntityManager::getInstance()->retriveObject(EClient::class, $clientId);
+        $reservations = $client->getReservations();
+        
+        foreach($reservations as $reservation) {
+            if($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
+                $order = $reservation->getOrders()->first();
+                $orderId = $order->getIdOrder();
+            }
+        }
+
         if (UHTTPMethods::isPost()) {
             $productId = (int) UHTTPMethods::getPostValue('product_id');
             $quantity = (int) UHTTPMethods::getPostValue('quantity', 1);
@@ -25,34 +40,31 @@ class CCart
                 $product = FPersistentManager::getInstance()->getProductById($productId);
 
                 if ($product) {
-                    $cart = USession::getValue('cart', []);
-
-                    if (isset($cart[$productId])) {
-                        $cart[$productId]['quantity'] += $quantity;
+                        
+                    $orderItem = FEntityManager::getInstance()->retriveObjectOnTwoAttributes(EOrderItem::class, 'order_id', $orderId, 'product_id', $productId);
+                    if($orderItem) {
+                        $orderItem->setQuantity($orderItem->getQuantity + $quantity);
                     } else {
-                        $cart[$productId] = [
-                            'product_id' => $productId,
-                            'name' => $product->getName(),
-                            'price' => $product->getCost(),
-                            'quantity' => $quantity
-                        ];
+                        $orderItem = new EOrderItem($quantity);
+                        $orderItem->setOrder($order);
+                        $orderItem->setProduct($product);
+                        $orderItem->setPrice($product->getCost());
+                        FPersistentManager::getInstance()->uploadObject($orderItem);
                     }
-
-                    USession::setValue('cart', $cart);
 
                     if ($fromCart) {
                         // URL pulito
                         header('Location: /Pancia_mia_fatti_capanna/cart/view');
                     } else {
                         // URL pulito
-                        header('Location: /Pancia_mia_fatti_capanna/home/menu');
+                        header('Location: /Pancia_mia_fatti_capanna/Client/order');
                     }
                     exit;
                 }
             }
         }
         // URL pulito
-        header('Location: /Pancia_mia_fatti_capanna/home/menu');
+        header('Location: /Pancia_mia_fatti_capanna/Client/order');
         exit;
     }
     
@@ -91,7 +103,21 @@ class CCart
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
-        UView::render('cart', ['cartItems' => USession::getValue('cart', [])]);
+
+        $clientId = USession::getValue('user_id');
+        $client = FEntityManager::getInstance()->retriveObject(EClient::class, $clientId);
+        $reservations = $client->getReservations();
+
+        foreach($reservations as $reservation) {
+            if($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
+                $order = $reservation->getOrders()->first();
+                $orderId = $order->getIdOrder();
+            }
+        }
+
+        $orderItems = FEntityManager::getInstance()->retriveObjectList(EOrderItem::class, 'order', $orderId);
+
+        UView::render('cart', ['cartItems' => $orderItems]);
     }
 
     public static function remove(): void {

@@ -26,6 +26,7 @@
                             <li><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="link-primary">Gestisci Tavoli e Sale</a></li>
                             <li><a href="/Pancia_mia_fatti_capanna/Home/menu" class="link-primary">Gestisci Menù e Prodotti</a></li>
                             <li><a href="/Pancia_mia_fatti_capanna/Admin/showReservations" class="link-primary">Gestisci Prenotazioni</a></li>
+                            <li><a href="/Pancia_mia_fatti_capanna/Admin/showOrders" class="link-primary">Gestisci Ordini</a></li>
                         </ul>
                     </div>
                 </div>

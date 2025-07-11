@@ -292,26 +292,89 @@ class CClient
 
         if ($reservations->isEmpty()) {
             UView::render('client_no_reservation');
+            exit;
         }
 
-        $allNotApproved = true;
+        $allNotApproved = 'nessuna prenotazione';
 
         foreach ($reservations as $reservation) {
-            if ($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS || 
+            if ($reservation->getStatus() === ReservationStatus::APPROVED) {
+                $allNotApproved = 'ordine non abilitato';
+                break;
+            }
+            if ( 
                 $reservation->getStatus() === ReservationStatus::CANCELED ||
                 $reservation->getStatus() === ReservationStatus::CREATED || 
                 $reservation->getStatus() === ReservationStatus::ORDER_COMPLETED) {
-                $allNotApproved = false;
+                break;
+            }
+            if ($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
+                $allNotApproved = 'ordine approvato';
                 break;
             }
         }
 
-        if ($allNotApproved === false) {
+        if ($allNotApproved === 'nessuna prenotazione') {
             UView::render('client_no_reservation');
+            exit;
         }
 
-        if ($allNotApproved) {
+        if ($allNotApproved === 'ordine non abilitato') {
             UView::render('order_not_approved');
+        }
+
+        $selectedAllergensIds = [];
+
+        // Se l'utente invia un nuovo filtro, usalo e salva il cookie
+        if (isset($_POST['allergens'])) {
+            $selectedAllergensIds = array_map('intval', $_POST['allergens']);
+            // Salva gli ID come stringa JSON nel cookie per 1 settimana (604800 secondi)
+            UCookie::set('allergen_filter', json_encode($selectedAllergensIds), 604800);
+        }
+        // Altrimenti, se non c'è un invio POST, prova a leggere dal cookie
+        elseif (UCookie::get('allergen_filter')) {
+            // Decodifica la stringa JSON salvata nel cookie
+            $selectedAllergensIds = json_decode(UCookie::get('allergen_filter'), true);
+        }
+
+        $userRole = USession::getValue('user_role');
+        $userId = USession::getValue('user_id');
+
+        if ($userRole === 'admin') {
+            $allProducts = FPersistentManager::getInstance()->getAllProducts();
+        } else {
+            $allProducts = FPersistentManager::getInstance()->getAvailableProducts();
+        }
+
+        $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
+
+        if (empty($selectedAllergensIds)) {
+            $filteredProducts = $allProducts;
+        } else {
+            $filteredProducts = [];
+            foreach ($allProducts as $product) {
+                $hasExcludedAllergen = false;
+                foreach ($product->getAllergens() as $allergen) {
+                    if (in_array($allergen->getId(), $selectedAllergensIds)) {
+                        $hasExcludedAllergen = true;
+                        break;
+                    }
+                }
+                if (!$hasExcludedAllergen) {
+                    $filteredProducts[] = $product;
+                }
+            }
+        }
+
+
+        if ($allNotApproved === 'ordine approvato') {
+            UView::render('menu_ordine',  [
+            'products' => $filteredProducts,
+            'allAllergens' => $allAllergens,
+            'selectedAllergens' => $selectedAllergensIds,
+            'user_role' => $userRole,
+            'user_id' => $userId,
+        ]);
         }
     }
 

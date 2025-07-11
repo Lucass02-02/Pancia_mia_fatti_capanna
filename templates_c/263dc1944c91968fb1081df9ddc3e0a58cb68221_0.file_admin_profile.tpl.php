@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 19:51:16
+/* Smarty version 5.5.1, created on 2025-07-11 17:58:24
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/admin_profile.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686ffd9431cb55_73236485',
+  'unifunc' => 'content_687134a03995a3_18027000',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '263dc1944c91968fb1081df9ddc3e0a58cb68221' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/admin_profile.tpl',
-      1 => 1752169870,
+      1 => 1752249497,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686ffd9431cb55_73236485 (\Smarty\Template $_smarty_tpl) {
+function content_687134a03995a3_18027000 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -52,6 +52,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
                             <li><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="link-primary">Gestisci Tavoli e Sale</a></li>
                             <li><a href="/Pancia_mia_fatti_capanna/Home/menu" class="link-primary">Gestisci Menù e Prodotti</a></li>
                             <li><a href="/Pancia_mia_fatti_capanna/Admin/showReservations" class="link-primary">Gestisci Prenotazioni</a></li>
+                            <li><a href="/Pancia_mia_fatti_capanna/Admin/showOrders" class="link-primary">Gestisci Ordini</a></li>
                         </ul>
                     </div>
                 </div>

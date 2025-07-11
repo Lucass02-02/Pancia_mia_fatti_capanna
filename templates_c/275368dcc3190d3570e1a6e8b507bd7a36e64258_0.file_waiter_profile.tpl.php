@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 20:41:21
+/* Smarty version 5.5.1, created on 2025-07-11 15:38:37
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/waiter_profile.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_6870095122dd95_95473729',
+  'unifunc' => 'content_687113dd5672b2_42619967',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '275368dcc3190d3570e1a6e8b507bd7a36e64258' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/waiter_profile.tpl',
-      1 => 1752172878,
+      1 => 1752241107,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6870095122dd95_95473729 (\Smarty\Template $_smarty_tpl) {
+function content_687113dd5672b2_42619967 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -57,8 +57,8 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
                             <li class="mb-2">
                                 <a href="/Pancia_mia_fatti_capanna/Waiter/viewReservation" class="btn btn-primary w-100">Visualizza Prenotazioni</a>
                             </li>
-                            <li>
-                                <button class="btn btn-secondary w-100" disabled>Visualizza Ordini</button>
+                            <li class="mb-2">
+                                <a href="/Pancia_mia_fatti_capanna/Waiter/viewOrder" class="btn btn-primary w-100">Visualizza Ordini</a>
                             </li>
                         </ul>
                     </div>
