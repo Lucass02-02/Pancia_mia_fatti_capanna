@@ -1,7 +1,7 @@
 <?php
 namespace AppORM\Services\Foundation;
 
-use AppORm\Services\Foundation\FEntityManager;
+use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Entity\EUserReview;
 use AppORM\Entity\EClient;
 use DateTime;

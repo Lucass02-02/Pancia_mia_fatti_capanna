@@ -246,7 +246,7 @@ class FPersistentManager {
             $existingReservations = FReservation::getReservationsForTableOnDate($table, $reservation->getDate());
 
             foreach ($existingReservations as $existing) {
-                if (!in_array($existing->getStatus(), [ReservationStatus::CREATED, ReservationStatus::APPROVED, ReservationStatus::ORDER_IN_PROGRESS, ReservationStatus::ORDER_COMPLETED])) {
+                if (!in_array($existing->getStatus(), [ReservationStatus::CREATED, ReservationStatus::APPROVED, ReservationStatus::ORDER_IN_PROGRESS])) {
                     continue; 
                 }
                 $existingStart = $existing->getHours();
@@ -408,6 +408,7 @@ class FPersistentManager {
 
     }
     
+    /*
     public static function confirmOrder(EOrder $order) {
         $reservation = $order->getReservation();
         
@@ -434,7 +435,7 @@ class FPersistentManager {
             'total' => FOrder::calculateTotalPrice($order),
         ];
     }
-
+    */
 
     public static function authenticateAdmin(string $email, string $password): ?EAdmin  {
         $admin = FAdmin::getAdminByEmail($email);

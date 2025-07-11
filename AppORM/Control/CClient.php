@@ -304,8 +304,8 @@ class CClient
             }
             if ( 
                 $reservation->getStatus() === ReservationStatus::CANCELED ||
-                $reservation->getStatus() === ReservationStatus::CREATED || 
-                $reservation->getStatus() === ReservationStatus::ORDER_COMPLETED) {
+                $reservation->getStatus() === ReservationStatus::CREATED 
+                ) {
                 break;
             }
             if ($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {

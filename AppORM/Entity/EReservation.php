@@ -10,7 +10,6 @@ enum ReservationStatus: string {
     case CREATED = 'created';
     case APPROVED = 'approved';
     case ORDER_IN_PROGRESS = 'order_in_progress';
-    case ORDER_COMPLETED = 'order_completed';
     case ENDED = 'ended';
     case CANCELED = 'canceled';
 }

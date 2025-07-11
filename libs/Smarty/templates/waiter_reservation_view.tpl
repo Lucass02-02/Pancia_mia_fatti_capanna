@@ -58,7 +58,7 @@
                                     <td>{$reservation->getNameReservation()}</td>
                                     <td>
                                         <span class="fw-bold text-{if $reservation->getStatus()->value == 'created'}success{elseif $reservation->getStatus()->value == 'appoved'}success{elseif $reservation->getStatus()->value == 'order_in_progress'}warning
-                                            {elseif $reservation->getStatus()->value == 'order_completed'}warning{elseif $reservation->getStatus()->value == 'ended'}success{elseif $reservation->getStatus()->value == 'canceled'}danger{/if}">
+                                            {elseif $reservation->getStatus()->value == 'ended'}success{elseif $reservation->getStatus()->value == 'canceled'}danger{/if}">
                                             {$reservation->getStatus()->value|upper}
                                         </span>
                                     </td>
