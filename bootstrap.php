@@ -12,7 +12,7 @@ function getEntityManager(): EntityManager
         $isDevMode = true;
         $config = ORMSetup::createAttributeMetadataConfiguration($paths,true);  # 2. Configurazione per attributi o annotazioni 
         $dbParams = [
-                    'dbname'   => 'testdb',
+                    'dbname'   => 'test',
                     'user'     => 'root',
                     'password' => '',
                     'host'     => 'localhost',

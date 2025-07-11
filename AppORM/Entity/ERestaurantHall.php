@@ -14,6 +14,9 @@ class ERestaurantHall {
     #[ORM\GeneratedValue]
     private $idHall;
 
+    #[ORM\Column(type: 'string', length: 255, nullable: false)]
+    private string $name;
+
     #[ORM\Column(type: 'integer', length: 100, nullable: false)]
     private $totalPlaces;
 
@@ -45,8 +48,20 @@ class ERestaurantHall {
         return self::$entity;
     }
 
+    public function getName() {
+        return $this->name;
+    }
+
+    public function setName($name) {
+        $this->name = $name;
+    }
+
     public function getTotalPlaces() {
         return $this->totalPlaces;
+    }
+
+    public function getTables() {
+        return $this->tables;
     }
 
     public function setTotalPlaces($totalPlaces) {

@@ -22,9 +22,8 @@ class EUserReview
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id', nullable: false)]
     private EClient $user;
 
-    #[ORM\ManyToMany(targetEntity: EAdminResponse::class, inversedBy: 'userReviews')]
-    #[ORM\JoinTable(name: 'admin_user_review')]
-    private Collection $adminResponse;
+    #[ORM\OneToMany(targetEntity: EAdminResponse::class, mappedBy: 'userReview', cascade: ['persist', 'remove'], orphanRemoval: true)] // Aggiungi 'remove' e 'orphanRemoval' per eliminare le risposte con la recensione
+    private Collection $adminResponses;
 
     #[ORM\Column(type: 'string', length: 255)]
     private string $comment;
@@ -42,7 +41,7 @@ class EUserReview
         $this->comment = $comment;
         $this->rating = $rating;
         $this->reviewDate = new DateTime();
-        $this->adminResponse = new ArrayCollection();
+        $this->adminResponses = new ArrayCollection();
     }
 
     // Metodi Getter
@@ -96,8 +95,16 @@ class EUserReview
         return $this;
     }
 
-    public function getAdminResponse(): Collection
+    public function getAdminResponses(): Collection
     {
-        return $this->adminResponse;
+        return $this->adminResponses;
+    }
+
+    public function addAdminResponse(EAdminResponse $adminResponse): void
+    {
+        if (!$this->adminResponses->contains($adminResponse)) {
+            $this->adminResponses->add($adminResponse);
+            $adminResponse->setUserReview($this);
+        }
     }
 }

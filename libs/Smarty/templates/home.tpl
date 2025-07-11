@@ -16,6 +16,7 @@
             <a class="nav-link" href="/Pancia_mia_fatti_capanna/Home/menu">Visualizza Menù</a>
             <a class="nav-link" href="/Pancia_mia_fatti_capanna/Review/showAll">Vedi le Recensioni</a>
             <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/reserve">Prenota</a>
+            
 
             {if $user_role == 'admin'}
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Admin/profile">Pannello di Controllo</a>
@@ -23,6 +24,7 @@
             {elseif $user_role == 'client'}
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/profile">Mio Profilo</a>
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
+                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/order">Ordina</a>
             {elseif $user_role == 'waiter'}
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Waiter/profile">Dashboard Cameriere</a>
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>

@@ -20,8 +20,8 @@ class EWaiter extends EUser {
 
 
     //constructor
-    public function __construct($name, $surname, $email, $password, $serialNumber) {
-        parent::__construct($name, $surname, $email, $password);
+    public function __construct($name, $surname, $bithDate, $email, $password, $phoneNumber, $serialNumber) {
+        parent::__construct($name, $surname, $bithDate, $email, $password, $phoneNumber);
         $this->serialNumber = $serialNumber;
     }
 
@@ -37,6 +37,9 @@ class EWaiter extends EUser {
         $this->serialNumber = $serialNumber;
     }
 
+    public function getRestaurantHall() {
+        return $this->restaurant_hall;
+    }
 
     public function setRestaurantHall( $restaurant_hall) {
         $this->restaurant_hall = $restaurant_hall;

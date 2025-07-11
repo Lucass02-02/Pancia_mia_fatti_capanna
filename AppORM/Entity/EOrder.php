@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\Collection;
 enum OrderStatus: string {
     case CREATED = 'created';
     case IN_PROGRESS = 'in_progress';
-    case READY = 'ready'; //questi due puoi usarli per delle statistiche che magari può vedere l'admin, ma vanno implementate
-    case SERVED = 'served'; //credo vadano cambiate delle foundation per asseganre lo stato ad ogni fase dell'ordine
     case PAID = 'paid';
     case CANCELED = 'canceled';
 }

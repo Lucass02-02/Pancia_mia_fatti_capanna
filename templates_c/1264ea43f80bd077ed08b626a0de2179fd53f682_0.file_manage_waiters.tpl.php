@@ -1,5 +1,28 @@
-{* File: templates/manage_waiters.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
-<!DOCTYPE html>
+<?php
+/* Smarty version 5.5.1, created on 2025-07-10 20:16:17
+  from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/manage_waiters.tpl' */
+
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.5.1',
+  'unifunc' => 'content_6870037100b217_82602517',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '1264ea43f80bd077ed08b626a0de2179fd53f682' => 
+    array (
+      0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/manage_waiters.tpl',
+      1 => 1752171375,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_6870037100b217_82602517 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
+?><!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
@@ -45,9 +68,18 @@
                     <label for="hall_id" class="form-label">Assegna a una Sala</label>
                     <select id="hall_id" name="hall_id" class="form-select" required>
                         <option value="">Seleziona una sala...</option>
-                        {foreach $halls as $hall}
-                            <option value="{$hall->getIdHall()}">{$hall->getName()|escape}</option>
-                        {/foreach}
+                        <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('halls'), 'hall');
+$foreach0DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('hall')->value) {
+$foreach0DoElse = false;
+?>
+                            <option value="<?php echo $_smarty_tpl->getValue('hall')->getIdHall();?>
+"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('hall')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+</option>
+                        <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     </select>
                 </div>
                 <div class="col-12">
@@ -70,33 +102,55 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {if empty($waiters)}
+                        <?php if (( !$_smarty_tpl->hasVariable('waiters') || empty($_smarty_tpl->getValue('waiters')))) {?>
                             <tr><td colspan="5" class="text-center">Non ci sono camerieri registrati.</td></tr>
-                        {else}
-                            {foreach $waiters as $waiter}
+                        <?php } else { ?>
+                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('waiters'), 'waiter');
+$foreach1DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('waiter')->value) {
+$foreach1DoElse = false;
+?>
                             <tr>
-                                <td>{$waiter->getId()}</td>
-                                <td>{$waiter->getName()|escape} {$waiter->getSurname()|escape}</td>
-                                <td>{$waiter->getSerialNumber()|escape}</td>
+                                <td><?php echo $_smarty_tpl->getValue('waiter')->getId();?>
+</td>
+                                <td><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('waiter')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+ <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('waiter')->getSurname(), ENT_QUOTES, 'UTF-8', true);?>
+</td>
+                                <td><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('waiter')->getSerialNumber(), ENT_QUOTES, 'UTF-8', true);?>
+</td>
                                 <td>
                                     <form action="/Pancia_mia_fatti_capanna/Waiter/updateHall" method="POST" class="d-flex align-items-center gap-2">
-                                        <input type="hidden" name="waiter_id" value="{$waiter->getId()}">
+                                        <input type="hidden" name="waiter_id" value="<?php echo $_smarty_tpl->getValue('waiter')->getId();?>
+">
                                         <select name="hall_id" class="form-select">
-                                            {foreach $halls as $hall}
-                                                <option value="{$hall->getIdHall()}" {if $waiter->getRestaurantHall() && $waiter->getRestaurantHall()->getIdHall() == $hall->getIdHall()}selected{/if}>
-                                                    {$hall->getName()|escape}
+                                            <?php
+$_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('halls'), 'hall');
+$foreach2DoElse = true;
+foreach ($_from ?? [] as $_smarty_tpl->getVariable('hall')->value) {
+$foreach2DoElse = false;
+?>
+                                                <option value="<?php echo $_smarty_tpl->getValue('hall')->getIdHall();?>
+" <?php if ($_smarty_tpl->getValue('waiter')->getRestaurantHall() && $_smarty_tpl->getValue('waiter')->getRestaurantHall()->getIdHall() == $_smarty_tpl->getValue('hall')->getIdHall()) {?>selected<?php }?>>
+                                                    <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('hall')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+
                                                 </option>
-                                            {/foreach}
+                                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                                         </select>
                                         <button type="submit" class="btn btn-primary btn-sm">Salva</button>
                                     </form>
                                 </td>
                                 <td>
-                                    <a href="/Pancia_mia_fatti_capanna/Waiter/delete/{$waiter->getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
+                                    <a href="/Pancia_mia_fatti_capanna/Waiter/delete/<?php echo $_smarty_tpl->getValue('waiter')->getId();?>
+" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo cameriere?');">Elimina</a>
                                 </td>
                             </tr>
-                            {/foreach}
-                        {/if}
+                            <?php
+}
+$_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
+                        <?php }?>
                     </tbody>
                 </table>
             </div>
@@ -108,3 +162,5 @@
     </div>
 </body>
 </html>
+<?php }
+}

@@ -2,26 +2,21 @@
 
 namespace AppORM\Control;
 
+use AppORM\Entity\EClient;
 use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\UView;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Entity\ECreditCard;
+use AppORM\Entity\EReservation;
+use AppORM\Entity\ReservationStatus;
 use AppORM\Services\Utility\UCookie;
 use DateTime;
 
 class CClient
 {
-    public static function isLogged(): bool {
-    if (session_status() == PHP_SESSION_NONE) {
-        USession::start();
-    }
-    return USession::getValue('user') !== null;
-}
-
-
-
+   
      public static function registration(): void
     {
         if (UHTTPMethods::isGet()) {
@@ -76,8 +71,18 @@ class CClient
                 USession::setValue('user_id', $client->getId());
                 USession::setValue('user_role', 'client');
                 USession::setValue('user_email', $client->getEmail());
-                header('Location: /Pancia_mia_fatti_capanna/client/profile');
-                exit;
+                $redirect = Usession::getValue('redirect_page');
+                if($message) {
+                    USession::setValue('redirect_page', null);
+                }
+                if ($redirect !== null) {
+                    header('Location: /Pancia_mia_fatti_capanna/Client/reserve');
+                    exit;
+                }else {
+                    header('Location: /Pancia_mia_fatti_capanna/client/profile');
+                    exit;
+                }
+                     
             }
 
             $waiter = FPersistentManager::getInstance()->authenticateWaiter($email, $password);
@@ -232,19 +237,82 @@ class CClient
     }
 
 
+    //problema della prenotazione per tavoli diversi nella stessa data e orario, se riesci risolvi senno amen
+    
     public static function reserve() {
-    if (!CClient::isLogged()) {
-        // Imposto il messaggio solo qui, prima di fare il redirect
-        if (session_status() == PHP_SESSION_NONE) {
-            USession::start();
+        if (!USession::isset('user_id')) {
+            // Imposto il messaggio solo qui, prima di fare il redirect
+            USession::setValue('flash_message', 'Per poter effettuare una prenotazione devi essere registrato');
+            Usession::setValue('redirect_page', 'Viene da reserve');
+            header('Location: /Pancia_mia_fatti_capanna/Client/login');
+            exit;
         }
-        USession::setValue('flash_message', 'Per poter effettuare una prenotazione devi essere registrato');
-        header('Location: /Pancia_mia_fatti_capanna/Client/login');
-        exit;
+
+        if (UHTTPMethods::isGet()) {
+            UView::render('reservation');
+        } elseif (UHTTPMethods::isPost()) {
+            $dateStr = UHTTPMethods::getPostValue('date');
+            $date = new DateTime($dateStr);
+
+            $hoursStr = UHTTPMethods::getPostValue('hours');
+            $hours = new DateTime($hoursStr);
+
+            $duration = UHTTPMethods::getPostValue('duration');
+            $peopleNum = UHTTPMethods::getPostValue('numPeople');
+            $note = UHTTPMethods::getPostValue('note');
+            $nameReservation = UHTTPMethods::getPostValue('nameReservation');
+
+            if ($date && $hours && $peopleNum && $nameReservation) {
+                $clientId = USession::getValue('user_id');
+                $client = FPersistentManager::getInstance()->getClientById($clientId);
+
+                $reservation = new EReservation($date, $hours, $peopleNum, $note, $nameReservation);
+                $reservation->setClient($client);
+
+                $result = FPersistentManager::getInstance()->createReservation($reservation);
+                if ($result === true) {
+                    UView::render('success');
+                } else {
+                    UView::render('reservation', ['error'=> $result]);
+                }
+            } else {
+                UView::render('reservation', ['error'=> 'Inserisci i dati nei campi obbligatori']);
+            }
+        }    
     }
 
-    // Se loggato, mostra la pagina di prenotazione normalmente
-    UView::render('reservation', ['logged' => true]);
-}
+    public static function order() {
+        
+
+        $clientId = USession::getValue('user_id');
+        $client = FEntityManager::getInstance()->retriveObject(EClient::class, $clientId);
+        
+        $reservations = $client->getReservations();
+        
+
+        if ($reservations->isEmpty()) {
+            UView::render('client_no_reservation');
+        }
+
+        $allNotApproved = true;
+
+        foreach ($reservations as $reservation) {
+            if ($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS || 
+                $reservation->getStatus() === ReservationStatus::CANCELED ||
+                $reservation->getStatus() === ReservationStatus::CREATED || 
+                $reservation->getStatus() === ReservationStatus::ORDER_COMPLETED) {
+                $allNotApproved = false;
+                break;
+            }
+        }
+
+        if ($allNotApproved === false) {
+            UView::render('client_no_reservation');
+        }
+
+        if ($allNotApproved) {
+            UView::render('order_not_approved');
+        }
+    }
 
 }

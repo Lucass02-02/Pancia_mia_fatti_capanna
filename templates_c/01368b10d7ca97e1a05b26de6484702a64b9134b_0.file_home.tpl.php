@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 18:14:53
+/* Smarty version 5.5.1, created on 2025-07-10 23:16:53
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686e957d96ace1_58809309',
+  'unifunc' => 'content_68702dc53f9bc7_86917529',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '01368b10d7ca97e1a05b26de6484702a64b9134b' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/home.tpl',
-      1 => 1752077688,
+      1 => 1752181918,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686e957d96ace1_58809309 (\Smarty\Template $_smarty_tpl) {
+function content_68702dc53f9bc7_86917529 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -42,6 +42,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
             <a class="nav-link" href="/Pancia_mia_fatti_capanna/Home/menu">Visualizza Menù</a>
             <a class="nav-link" href="/Pancia_mia_fatti_capanna/Review/showAll">Vedi le Recensioni</a>
             <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/reserve">Prenota</a>
+            
 
             <?php if ($_smarty_tpl->getValue('user_role') == 'admin') {?>
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Admin/profile">Pannello di Controllo</a>
@@ -49,6 +50,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
             <?php } elseif ($_smarty_tpl->getValue('user_role') == 'client') {?>
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/profile">Mio Profilo</a>
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>
+                <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/order">Ordina</a>
             <?php } elseif ($_smarty_tpl->getValue('user_role') == 'waiter') {?>
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Waiter/profile">Dashboard Cameriere</a>
                 <a class="nav-link" href="/Pancia_mia_fatti_capanna/Client/logout">Logout</a>

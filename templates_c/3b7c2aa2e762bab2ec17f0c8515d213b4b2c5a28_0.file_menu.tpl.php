@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-09 19:20:19
+/* Smarty version 5.5.1, created on 2025-07-10 23:24:10
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/menu.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686ea4d38f7f87_68409625',
+  'unifunc' => 'content_68702f7a2fb4e1_72726392',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '3b7c2aa2e762bab2ec17f0c8515d213b4b2c5a28' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/menu.tpl',
-      1 => 1752071119,
+      1 => 1752182648,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686ea4d38f7f87_68409625 (\Smarty\Template $_smarty_tpl) {
+function content_68702f7a2fb4e1_72726392 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -92,13 +92,13 @@ $foreach1DoElse = false;
 </h5>
                                 <p class="card-text"><?php echo htmlspecialchars((string)$_smarty_tpl->getValue('product')->getDescription(), ENT_QUOTES, 'UTF-8', true);?>
 </p>
-                                <p class="fw-bold">€ <?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('product')->getPrice(),2,",",".");?>
+                                <p class="fw-bold">€ <?php echo $_smarty_tpl->getSmarty()->getModifierCallback('number_format')($_smarty_tpl->getValue('product')->getCost(),2,",",".");?>
 </p>
 
                                 
                                                                 <?php if ($_smarty_tpl->getValue('user_role') == 'client') {?>
                                     <form action="/Pancia_mia_fatti_capanna/Cart/add" method="POST" class="mt-auto">
-                                        <input type="hidden" name="product_id" value="<?php echo $_smarty_tpl->getValue('product')->getId();?>
+                                        <input type="hidden" name="product_id" value="<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
 ">
                                         <div class="input-group">
                                             <input type="number" name="quantity" value="1" min="1" max="99" class="form-control" aria-label="Quantità">
@@ -111,16 +111,16 @@ $foreach1DoElse = false;
 
                                                                 <?php if ($_smarty_tpl->getValue('user_role') == 'admin') {?>
                                     <div class="d-flex flex-wrap gap-2 mt-3">
-                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/<?php echo $_smarty_tpl->getValue('product')->getId();?>
+                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
 " class="btn btn-warning btn-sm">Modifica</a>
                                         <?php if ($_smarty_tpl->getValue('product')->isAvailable()) {?>
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/<?php echo $_smarty_tpl->getValue('product')->getId();?>
+                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
 " class="btn btn-secondary btn-sm">Rendi Non Disp.</a>
                                         <?php } else { ?>
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/<?php echo $_smarty_tpl->getValue('product')->getId();?>
+                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
 " class="btn btn-success btn-sm">Rendi Disp.</a>
                                         <?php }?>
-                                        <a href="/Pancia_mia_fatti_capanna/Product/delete/<?php echo $_smarty_tpl->getValue('product')->getId();?>
+                                        <a href="/Pancia_mia_fatti_capanna/Product/delete/<?php echo $_smarty_tpl->getValue('product')->getIdProduct();?>
 " class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');">Elimina</a>
                                     </div>
                                 <?php }?>

@@ -6,11 +6,15 @@ use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\EProduct; // Importiamo EProduct per il type hinting
 use AppORM\Services\Utility\USession;
+use AppORM\Services\Utility\UCookie;
 
 class CHome
 {
     public static function home(): void
     {
+        if (USession::getValue('redirect_page') !== null) {
+            USession::setValue('redirect_page', null);
+        }
         $userRole = USession::getValue('user_role');
         $data = [
             'titolo' => 'Benvenuto in Pancia mia fatti capanna!',
@@ -22,49 +26,59 @@ class CHome
     }
 
     /**
-     * Mostra il menù e gestisce la logica di filtro per allergeni in PHP.
+     * Mostra il menù e gestisce la logica di filtro per allergeni usando i cookie.
      */
     public static function menu(): void
     {
-        // 1. Recuperiamo i filtri scelti dall'utente (se ci sono)
-        $selectedAllergens = array_map('intval', $_GET['allergens'] ?? []);
-        
-        // 2. Carichiamo SEMPRE tutti i prodotti dal database
-        $allProducts = FPersistentManager::getInstance()->getAllProducts();
-        $filteredProducts = [];
+        $selectedAllergensIds = [];
 
-        // 3. Se l'utente ha scelto dei filtri, filtriamo la lista in PHP
-        if (!empty($selectedAllergens)) {
-            /** @var EProduct $product */
+        // Se l'utente invia un nuovo filtro, usalo e salva il cookie
+        if (isset($_POST['allergens'])) {
+            $selectedAllergensIds = array_map('intval', $_POST['allergens']);
+            // Salva gli ID come stringa JSON nel cookie per 1 settimana (604800 secondi)
+            UCookie::set('allergen_filter', json_encode($selectedAllergensIds), 604800);
+        }
+        // Altrimenti, se non c'è un invio POST, prova a leggere dal cookie
+        elseif (UCookie::get('allergen_filter')) {
+            // Decodifica la stringa JSON salvata nel cookie
+            $selectedAllergensIds = json_decode(UCookie::get('allergen_filter'), true);
+        }
+
+        $userRole = USession::getValue('user_role');
+        $userId = USession::getValue('user_id');
+
+        if ($userRole === 'admin') {
+            $allProducts = FPersistentManager::getInstance()->getAllProducts();
+        } else {
+            $allProducts = FPersistentManager::getInstance()->getAvailableProducts();
+        }
+
+        $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
+
+        if (empty($selectedAllergensIds)) {
+            $filteredProducts = $allProducts;
+        } else {
+            $filteredProducts = [];
             foreach ($allProducts as $product) {
-                $productHasAllergen = false;
-                // Controlliamo ogni allergene del prodotto
+                $hasExcludedAllergen = false;
                 foreach ($product->getAllergens() as $allergen) {
-                    // Se l'ID dell'allergene del prodotto è nella lista di quelli da escludere...
-                    if (in_array($allergen->getId(), $selectedAllergens)) {
-                        $productHasAllergen = true; // ...marchiamo questo prodotto come "da non mostrare"
-                        break; // Non serve controllare gli altri allergeni di questo prodotto
+                    if (in_array($allergen->getId(), $selectedAllergensIds)) {
+                        $hasExcludedAllergen = true;
+                        break;
                     }
                 }
-
-                // Se il prodotto NON ha nessuno degli allergeni da escludere, lo aggiungiamo alla lista finale.
-                if (!$productHasAllergen) {
+                if (!$hasExcludedAllergen) {
                     $filteredProducts[] = $product;
                 }
             }
-        } else {
-            // Se non ci sono filtri, la lista finale è semplicemente la lista completa
-            $filteredProducts = $allProducts;
         }
 
-        // 4. Recuperiamo tutti gli allergeni da mostrare come checkbox
-        $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
-
-        // 5. Passiamo i dati (la lista filtrata) alla vista
         UView::render('menu', [
             'products' => $filteredProducts,
             'allAllergens' => $allAllergens,
-            'selectedAllergens' => $selectedAllergens
+            'selectedAllergens' => $selectedAllergensIds,
+            'user_role' => $userRole,
+            'user_id' => $userId,
         ]);
     }
 }

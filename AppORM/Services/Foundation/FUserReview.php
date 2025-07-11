@@ -33,10 +33,19 @@ class FUserReview
 
     /**
      * Recupera tutte le recensioni presenti nel database.
+     * Implementa il JOIN FETCH per le risposte dell'admin.
      * @return array Un array di oggetti EUserReview.
      */
-    public static function fetchAll(): array
+      public static function fetchAll(): array
     {
-        return FEntityManager::getInstance()->selectAll(self::getTable());
+        $em = FEntityManager::getInstance()->getEntityManager(); // Ottieni l'EntityManager
+        $queryBuilder = $em->createQueryBuilder(); // Crea il QueryBuilder
+
+        $queryBuilder->select('r', 'ar', 'a') // Seleziona recensione ('r'), risposte admin ('ar') e l'admin che risponde ('a')
+                     ->from(self::$table, 'r') // Specifica l'entità principale
+                     ->leftJoin('r.adminResponses', 'ar') // Esegue un JOIN FETCH per caricare le risposte dell'admin
+                     ->leftJoin('ar.admin', 'a'); // Esegue un JOIN FETCH per caricare l'admin associato a ogni risposta
+
+        return $queryBuilder->getQuery()->getResult(); // Esegue la query e restituisce il risultato
     }
 }

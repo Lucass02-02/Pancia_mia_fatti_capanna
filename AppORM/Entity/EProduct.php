@@ -5,15 +5,6 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
-enum ProductCategory: string {
-    case ANTIPASTO = 'antipasto';
-    case PRIMO = 'primo';
-    case SECONDO = 'secondo';
-    case CONTORNO = 'contorno';
-    case DOLCE = 'dolce';
-    case BEVANDA = 'bevanda';
-}
-
 #[ORM\Entity]
 #[ORM\Table(name: 'products')]
 class EProduct
@@ -35,9 +26,9 @@ class EProduct
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $availability;
 
-    // Nota come ora usiamo l'enum che è definito nel suo file.
-    #[ORM\Column(type: 'string',nullable:false, enumType: ProductCategory::class)]
-    private ProductCategory $category;
+    #[ORM\ManyToOne(targetEntity: EProductCategory::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
+    private EProductCategory $category;
 
     #[ORM\OneToMany(targetEntity: EOrderItem::class, mappedBy: 'product', cascade: ['persist'])]
     private Collection $orderItems;
@@ -48,7 +39,7 @@ class EProduct
 
     private static $entity = EProduct::class;
 
-    public function __construct(string $name, string $description, float $cost, ProductCategory $category)
+    public function __construct(string $name, string $description, float $cost, EProductCategory $category)
     {
         $this->category = $category;
         $this->name = $name;
@@ -100,11 +91,11 @@ class EProduct
         $this->availability = $availability;
     }
 
-    public function getCategory(): ProductCategory {
+    public function getCategory(): EProductCategory {
         return $this->category;
     }
 
-    public function setCategory(ProductCategory $category) {
+    public function setCategory(EProductCategory $category) {
         $this->category = $category;
     }
 
@@ -135,5 +126,9 @@ class EProduct
             $this->allergens->removeElement($allergen);
             $allergen->removeProduct($this);
         }
+    }
+
+    public function clearAllergens(): void {
+        $this->allergens->clear();
     }
 }

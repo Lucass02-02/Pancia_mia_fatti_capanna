@@ -25,8 +25,9 @@ class EAdminResponse {
     #[ORM\JoinColumn(name: 'admin_id', referencedColumnName: 'id')]
     private EAdmin $admin;
 
-    #[ORM\ManyToMany(targetEntity: EUserReview::class, mappedBy: 'adminResponse', cascade: ['persist'])]
-    private Collection $userReviews;
+    #[ORM\ManyToOne(targetEntity: EUserReview::class, inversedBy: 'adminResponses')] 
+    #[ORM\JoinColumn(name: 'review_id', referencedColumnName: 'id', nullable: false)] 
+    private EUserReview $userReview;
 
     private static $entity = EAdminResponse::class;
 
@@ -70,12 +71,12 @@ class EAdminResponse {
         $this->admin = $admin;
     }
 
-    public function getUserReviews(): Collection {
-        return $this->userReviews;
+    public function getUserReview() {
+        return $this->userReview;
     }
 
-    public function setUserReviews(Collection $userReviews) {
-        $this->userReviews = $userReviews;
+    public function setUserReview($userReview) {
+        $this->userReview = $userReview;
     }
 
     

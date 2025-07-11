@@ -7,7 +7,7 @@ use AppORM\Entity\EProduct;
 use AppORM\Entity\ERestaurantHall;
 use AppORM\Entity\ETable;
 use AppORM\Entity\ETurn;
-use AppORM\Entity\ProductCategory;
+use AppORM\Entity\EProductCategory;
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Entity\TableState;
 use AppORM\Entity\TurnName;
@@ -160,17 +160,22 @@ FEntityManager::getInstance()->saveObject($hall);
 
 // 4. Crea un tavolo
 $table = new ETable(
-    4,                                 // seatsNumber             // enum stato
+    4                                 
 );               // se hai un numero identificativo
 $table->setRestaurantHall($hall);     // assegna la sala
 FEntityManager::getInstance()->saveObject($table);
 
+$productCategory = new EProductCategory(
+    'Primo'
+);
+
+FEntityManager::getInstance()->saveObject($productCategory);
 
 $product = new EProduct(
     'Pizza Margherita',
     'Una classica pizza con pomodoro e mozzarella',
-    8.50,                             
-    ProductCategory::PRIMO
+    8.50 ,
+    $productCategory                           
 );
 FEntityManager::getInstance()->saveObject($product);
 
@@ -178,7 +183,7 @@ $product2 = new EProduct(
     'Filetto di Manzo',
     'Succulento filetto di manzo',
     20.00,
-    ProductCategory::SECONDO
+    $productCategory
 );
 FEntityManager::getInstance()->saveObject($product2);
 

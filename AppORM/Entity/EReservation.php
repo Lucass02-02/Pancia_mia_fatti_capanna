@@ -49,7 +49,7 @@ class EReservation {
 
     #[ORM\ManyToOne(targetEntity: EClient::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'client_id', referencedColumnName: 'id')]        
-    private EClient $client;
+    private ?EClient $client = null;
 
     #[ORM\OneToMany(targetEntity: EOrder::class, mappedBy: 'reservation', cascade: ['persist'])]
     private Collection $orders;
@@ -57,21 +57,22 @@ class EReservation {
     #[ORM\OneToMany(targetEntity: EReservationTable::class, mappedBy: 'reservation', cascade: ['persist'])]
     private Collection $table;
 
+    //questa la puoi togliere
     #[ORM\ManyToOne(targetEntity: ERestaurantHall::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'restaurant_hall_id', referencedColumnName: 'idHall')]
-    private ERestaurantHall $restaurantHall;
+    private ?ERestaurantHall $restaurantHall = null;
 
     #[ORM\ManyToOne(targetEntity: ETurn::class, inversedBy: 'reservations', cascade: ['persist'])]
     #[ORM\JoinColumn(name: 'turn_id', referencedColumnName: 'idTurn')]
-    private ETurn $turn;
+    private ?ETurn $turn = null;
 
     private static $entity = EReservation::class;
 
     //constructor
-    public function __construct( $date, $hours, $duration, $peopleNum, $note, $nameReservation) {
+    public function __construct( $date, $hours, $peopleNum, $note = null,  $nameReservation) {
         $this->date = $date;
         $this->hours = $hours;
-        $this->duration = $duration;
+        $this->duration;
         $this->peopleNum = $peopleNum;
         $this->note = $note;
         $this->nameReservation = $nameReservation;
@@ -145,7 +146,7 @@ class EReservation {
         $this->status = $status;
     }
 
-    public function getClient(): EClient {
+    public function getClient() {
         return $this->client;
     }
 
@@ -161,7 +162,7 @@ class EReservation {
         return $this->orders;
     }
 
-    public function getRestaurantHall(): ERestaurantHall {
+    public function getRestaurantHall() {
         return $this->restaurantHall;
     }
 
@@ -169,7 +170,7 @@ class EReservation {
         $this->restaurantHall = $restaurantHall;
     }
 
-    public function getTurn(): ETurn {
+    public function getTurn() {
         return $this->turn;
     }
 

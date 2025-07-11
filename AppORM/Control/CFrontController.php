@@ -6,23 +6,16 @@ class CFrontController {
 
     public function run($requestUri) {
 
-        echo "$requestUri ";
-
         $requestUri = trim($requestUri, '/');
         $uriParts = explode( '/', $requestUri);
 
         array_shift($uriParts);
-
-        var_dump($uriParts);
 
         $controllerName = !empty($uriParts[0]) ? ucfirst($uriParts[0]) : 'Home';
 
         $methodName = !empty($uriParts[1]) ? $uriParts[1] : 'home'; 
 
         $controllerClass = __NAMESPACE__ . '\\C' . $controllerName;
-
-        
-        var_dump($methodName);
         
         if (class_exists($controllerClass)) {
             
