@@ -1,4 +1,4 @@
-{* File: templates/manage_halls.tpl (RIADATTATO CON NUOVO style.css Yummy) *}
+{* File: templates/manage_halls.tpl (RIADATTATO CON NUOVO style.css Yummy CORRETTO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -23,30 +23,34 @@
             </div>
         </div>
     </header><!-- End Header -->
-
+<section class="my-5 text-center">
+  <img src="/Pancia_mia_fatti_capanna/images/sala-ristorante.png" alt="Recensioni" class="img-fluid" style="width: 600px; height: 300px; margin-top: 20px;">
+</section>
     <!-- ======= Page Title Section ======= -->
-    <section class="page-title">
+    <section class="page-title py-3">
         <div class="container">
-            <h1>Gestione Sale Ristorante</h1>
+            <h1 class="text-center">Gestione Banchetti Ristorante</h1>
         </div>
     </section><!-- End Page Title Section -->
 
     <!-- ======= Manage Halls Section ======= -->
-    <section class="contact">
+    <section class="contact py-4">
         <div class="container" style="max-width: 900px;">
 
-            <div class="php-email-form bg-white p-4 shadow-sm">
+            <div class="php-email-form bg-white p-4 shadow-sm rounded">
 
                 <div class="text-end mb-4">
                     <a href="/Pancia_mia_fatti_capanna/Waiter/manage" class="btn btn-info">Gestisci Camerieri</a>
                 </div>
 
                 {if isset($error) && $error}
-                    <div class="error-message mb-3">Non puoi eliminare questa sala perché contiene dei camerieri. Sposta i camerieri in un'altra sala e riprova.</div>
+                    <div class="alert alert-danger mb-3">
+                        Non puoi eliminare questo banchetto perché contiene dei camerieri. Sposta i camerieri in un altro banchetto e riprova.
+                    </div>
                 {/if}
 
                 <h2 class="h5 mb-3">Aggiungi Nuovo Banchetto</h2>
-                <form action="/Pancia_mia_fatti_capanna/RestaurantHall/create" method="POST" class="mb-4 p-3 border rounded">
+                <form action="/Pancia_mia_fatti_capanna/RestaurantHall/create" method="POST" class="mb-4 p-3 border rounded bg-light">
                     <div class="row g-3">
                         <div class="col-md-6">
                             <label for="name" class="form-label">Nome Banchetto:</label>
@@ -57,18 +61,18 @@
                             <input type="number" id="totalPlaces" name="totalPlaces" class="form-control" min="1" required>
                         </div>
                         <div class="col-md-2 d-flex align-items-end">
-                            <button type="submit" class="btn btn-get-started w-100">Crea Banchetto</button>
+                            <button type="submit" class="btn btn-get-started w-100">Crea</button>
                         </div>
                     </div>
                 </form>
 
                 <h2 class="h5 mb-3">Banchetti Esistenti</h2>
                 {if empty($halls)}
-                    <p class="text-center text-muted">Nessun Banchetto ristorante presente.</p>
+                    <p class="text-center text-muted">Nessun banchetto ristorante presente.</p>
                 {else}
                     <div class="table-responsive">
-                        <table class="table table-striped table-hover">
-                            <thead>
+                        <table class="table table-striped table-hover align-middle">
+                            <thead class="table-light">
                                 <tr>
                                     <th>ID</th>
                                     <th>Nome</th>
@@ -83,7 +87,7 @@
                                         <td>{$hall->getName()|escape}</td>
                                         <td>{$hall->getTotalPlaces()}</td>
                                         <td class="text-center">
-                                            <form action="/Pancia_mia_fatti_capanna/RestaurantHall/delete" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare la sala {$hall->getName()|escape}?');">
+                                            <form action="/Pancia_mia_fatti_capanna/RestaurantHall/delete" method="POST" onsubmit="return confirm('Sei sicuro di voler eliminare la sala {$hall->getName()|escape}?');" class="d-inline">
                                                 <input type="hidden" name="hall_id" value="{$hall->getIdHall()}">
                                                 <button type="submit" class="btn btn-danger btn-sm">Elimina</button>
                                             </form>
@@ -105,7 +109,7 @@
     </section><!-- End Manage Halls Section -->
 
     <!-- ======= Footer ======= -->
-    <footer id="footer" class="footer">
+    <footer id="footer" class="footer mt-5">
         <div class="container text-center">
             <p>&copy; Copyright <strong>Pancia mia fatti capanna</strong>. All Rights Reserved</p>
         </div>

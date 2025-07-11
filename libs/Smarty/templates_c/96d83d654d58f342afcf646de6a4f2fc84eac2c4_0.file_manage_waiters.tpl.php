@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:38:50
+/* Smarty version 5.5.1, created on 2025-07-11 13:29:42
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/manage_waiters.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fec9a6aedb3_65814555',
+  'unifunc' => 'content_6870f5a6d21b18_33123943',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '96d83d654d58f342afcf646de6a4f2fc84eac2c4' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/manage_waiters.tpl',
-      1 => 1752165529,
+      1 => 1752233379,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fec9a6aedb3_65814555 (\Smarty\Template $_smarty_tpl) {
+function content_6870f5a6d21b18_33123943 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -45,6 +45,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
             </div>
         </div>
     </header><!-- End Header -->
+<section class="my-5 text-center">
+  <img src="/Pancia_mia_fatti_capanna/images/cameriere.jpg" alt="Recensioni" class="img-fluid" style="max-width: 400px; height: auto; margin-top: 20px;">
+</section>
 
     <!-- ======= Page Title Section ======= -->
     <section class="page-title">
@@ -57,9 +60,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
     <section class="contact">
         <div class="container" style="max-width: 1200px;">
 
-            <div class="text-end mb-4">
-                <a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a>
-            </div>
+            
 
             <!-- Registra nuovo cameriere -->
             <div class="php-email-form bg-white p-4 shadow-sm mb-5">

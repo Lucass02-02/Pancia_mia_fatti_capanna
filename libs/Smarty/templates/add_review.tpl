@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <title>Lascia una Recensione</title>
 
+    <section class="my-5" style="background: url('/Pancia_mia_fatti_capanna/images/recensioni.png') center center / cover no-repeat; height: 200px; width: 400px;"></section>
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 

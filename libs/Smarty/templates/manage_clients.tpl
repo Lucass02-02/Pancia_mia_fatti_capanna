@@ -22,6 +22,9 @@
             </div>
         </div>
     </header><!-- End Header -->
+<section class="my-5 text-center">
+  <img src="/Pancia_mia_fatti_capanna/images/clienti.webp" alt="Recensioni" class="img-fluid" style="max-width: 400px; height: auto; margin-top: 20px;">
+</section>
 
     <!-- ======= Page Title Section ======= -->
     <section class="page-title">

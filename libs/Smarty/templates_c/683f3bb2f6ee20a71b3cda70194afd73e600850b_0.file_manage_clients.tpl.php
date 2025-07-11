@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 18:04:37
+/* Smarty version 5.5.1, created on 2025-07-11 13:30:45
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/manage_clients.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686fe4957dca59_70305264',
+  'unifunc' => 'content_6870f5e5531654_45430336',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '683f3bb2f6ee20a71b3cda70194afd73e600850b' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/manage_clients.tpl',
-      1 => 1752163056,
+      1 => 1752233441,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686fe4957dca59_70305264 (\Smarty\Template $_smarty_tpl) {
+function content_6870f5e5531654_45430336 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -45,6 +45,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
             </div>
         </div>
     </header><!-- End Header -->
+<section class="my-5 text-center">
+  <img src="/Pancia_mia_fatti_capanna/images/clienti.webp" alt="Recensioni" class="img-fluid" style="max-width: 400px; height: auto; margin-top: 20px;">
+</section>
 
     <!-- ======= Page Title Section ======= -->
     <section class="page-title">

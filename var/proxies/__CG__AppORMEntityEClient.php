@@ -7,7 +7,7 @@ namespace AppORM\Proxies\__CG__\AppORM\Entity;
  */
 class EClient extends \AppORM\Entity\EClient implements \Doctrine\ORM\Proxy\InternalProxy
 {
-    use \Symfony\Component\VarExporter\LazyGhostTrait {
+     use \Symfony\Component\VarExporter\LazyGhostTrait {
         initializeLazyObject as private;
         setLazyObjectAsInitialized as public __setInitialized;
         isLazyObjectInitialized as private;
@@ -48,7 +48,7 @@ class EClient extends \AppORM\Entity\EClient implements \Doctrine\ORM\Proxy\Inte
         'reservations' => [parent::class, 'reservations', null, 16],
         'reviews' => [parent::class, 'reviews', null, 16],
         'surname' => [parent::class, 'surname', null, 8],
-    ];
+    ];
 
     public function __isInitialized(): bool
     {
