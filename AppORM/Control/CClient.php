@@ -17,7 +17,7 @@ use DateTime;
 class CClient
 {
    
-     public static function registration(): void
+   public static function registration(): void
     {
         if (UHTTPMethods::isGet()) {
             UView::render('registration');
@@ -29,21 +29,51 @@ class CClient
             $birthDateStr = UHTTPMethods::getPostValue('birthDate');
             $nickname = UHTTPMethods::getPostValue('nickname');
             $phoneNumber = UHTTPMethods::getPostValue('phoneNumber');
-            
-            if ($name && $surname && $email && $password && $birthDateStr && $nickname && $phoneNumber) {
-                try {
-                    $birthDate = new DateTime($birthDateStr);
-                    $client = FPersistentManager::getInstance()->registerClient($name, $surname, $birthDate, $email, $password, $phoneNumber, $nickname);
-                    if ($client) {
-                        UView::render('registration', ['success' => true, 'message' => 'Registrazione completata! Ora puoi effettuare il login.']);
-                    } else {
-                        UView::render('registration', ['success' => false, 'message' => 'Errore: Email già in uso. Prova con un\'altra email.']);
-                    }
-                } catch (\Exception $e) {
-                    UView::render('registration', ['success' => false, 'message' => 'Si è verificato un errore tecnico. Dettagli: ' . $e->getMessage()]);
+
+            // --- VALIDAZIONE NUMERO DI TELEFONO ---
+            // Se il numero di telefono è stato inserito e non contiene solo cifre, mostra un errore.
+            if (!empty($phoneNumber) && !ctype_digit($phoneNumber)) {
+                UView::render('registration', ['success' => false, 'message' => 'Errore: Il numero di telefono può contenere solo cifre numeriche (0-9).']);
+                return;
+            }
+            // --- FINE VALIDAZIONE ---
+
+            if (!$name || !$surname || !$email || !$password || !$birthDateStr) {
+                UView::render('registration', ['success' => false, 'message' => 'I campi Nome, Cognome, Email, Password e Data di Nascita sono obbligatori.']);
+                return;
+            }
+
+            $pm = FPersistentManager::getInstance();
+            $errorMessage = null;
+
+            if ($pm->getAdminByEmail($email)) {
+                $errorMessage = 'Errore: L\'email fornita è già in uso da un amministratore.';
+            } elseif ($pm->getWaiterByEmail($email)) {
+                $errorMessage = 'Errore: L\'email fornita è già in uso da un cameriere.';
+            } elseif ($pm->getClientByEmail($email)) {
+                $errorMessage = 'Errore: L\'email fornita è già stata registrata.';
+            }
+
+            if (!$errorMessage && !empty($nickname) && $pm->getClientByNickname($nickname)) {
+                $errorMessage = 'Errore: Il nickname scelto è già in uso. Prova con un altro.';
+            }
+
+            if ($errorMessage) {
+                UView::render('registration', ['success' => false, 'message' => $errorMessage]);
+                return;
+            }
+
+            try {
+                $birthDate = new DateTime($birthDateStr);
+                $client = $pm->registerClient($name, $surname, $birthDate, $email, $password, $phoneNumber, $nickname);
+                
+                if ($client) {
+                    UView::render('registration', ['success' => true, 'message' => 'Registrazione completata! Ora puoi effettuare il login.']);
+                } else {
+                    UView::render('registration', ['success' => false, 'message' => 'Si è verificato un errore imprevisto durante la registrazione.']);
                 }
-            } else {
-                UView::render('registration', ['success' => false, 'message' => 'Tutti i campi sono obbligatori.']);
+            } catch (\Exception $e) {
+                UView::render('registration', ['success' => false, 'message' => 'Errore tecnico: ' . $e->getMessage()]);
             }
         }
     }
@@ -408,7 +438,6 @@ class CClient
         if (USession::isSet('user_id')) {
             return; // utente già loggato
         }
-
         if (isset($_COOKIE['remember_me'])) {
             $token = $_COOKIE['remember_me'];
             $client = FPersistentManager::getInstance()->getClientByRememberToken($token);

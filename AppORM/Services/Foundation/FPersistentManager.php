@@ -718,7 +718,35 @@ class FPersistentManager {
         }
     }
 
+    /**
+     * Recupera un admin tramite il suo indirizzo email.
+     * @param string $email
+     * @return EAdmin|null
+     */
+    public static function getAdminByEmail(string $email): ?EAdmin
+    {
+        return FAdmin::getAdminByEmail($email);
+    }
 
+    /**
+     * Recupera un cameriere tramite il suo numero di matricola.
+     * @param string $serialNumber
+     * @return EWaiter|null
+     */
+    public static function getWaiterBySerialNumber(string $serialNumber): ?EWaiter
+    {
+        return FEntityManager::getInstance()->retriveObject(EWaiter::class, $serialNumber, 'serialNumber');
+    }  /**
+     * Recupera un cliente tramite il suo nickname.
+     * @param string $nickname
+     * @return EClient|null
+     */
+    public static function getClientByNickname(string $nickname): ?EClient
+    {
+        // Si assume che FClient abbia un metodo getClientByNickname,
+        // come implicato dalla logica esistente in registerClient.
+        return FClient::getClientByNickname($nickname);
+    }
 
 
 }

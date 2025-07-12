@@ -27,17 +27,33 @@ class CWaiter
 
     // --- FUNZIONI RISERVATE AL PROPRIETARIO (ADMIN) ---
 
-    public static function manage(): void
+   public static function manage(): void
     {
         self::checkAdmin();
         
         $waiters = FPersistentManager::getInstance()->getAllWaiters();
         $halls = FPersistentManager::getInstance()->getAllRestaurantHalls();
         
-        UView::render('manage_waiters', ['waiters' => $waiters, 'halls' => $halls]);
+        // Gestione dei messaggi di feedback per la vista
+        $error = USession::getValue('waiter_management_error');
+        if ($error) {
+            USession::unsetValue('waiter_management_error');
+        }
+
+        $success = USession::getValue('waiter_management_success');
+        if ($success) {
+            USession::unsetValue('waiter_management_success');
+        }
+        
+        UView::render('manage_waiters', [
+            'waiters' => $waiters, 
+            'halls' => $halls,
+            'error' => $error,
+            'success' => $success
+        ]);
     }
 
-    public static function register(): void
+   public static function register(): void
     {
         self::checkAdmin();
         
@@ -51,12 +67,41 @@ class CWaiter
             $phoneNumber = UHTTPMethods::getPostValue('phoneNumber');
             $hallId = (int)UHTTPMethods::getPostValue('hall_id');
 
-            // FPersistentManager::getInstance()->registerWaiter ritorna ?EWaiter o null
-            $waiter = FPersistentManager::getInstance()->registerWaiter($name, $surname, $birthDate, $email, $password,  $phoneNumber, $serialNumber, $hallId);
-            // Qui potresti voler aggiungere una gestione per il successo/fallimento della registrazione
-            // ad esempio, un flash message nella sessione
-            if (!$waiter) {
-                USession::setValue('waiter_management_error', 'Errore durante la registrazione del cameriere. Email o Matricola potrebbero essere già in uso.');
+            // --- VALIDAZIONE NUMERO DI TELEFONO ---
+            if (!empty($phoneNumber) && !ctype_digit($phoneNumber)) {
+                USession::setValue('waiter_management_error', 'Errore: Il numero di telefono può contenere solo cifre numeriche (0-9).');
+                header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
+                exit;
+            }
+            // --- FINE VALIDAZIONE ---
+
+            $pm = FPersistentManager::getInstance();
+            $errorFound = false;
+
+            if ($pm->getAdminByEmail($email)) {
+                USession::setValue('waiter_management_error', 'Errore: L\'email fornita è già in uso da un amministratore.');
+                $errorFound = true;
+            } elseif ($pm->getClientByEmail($email)) {
+                USession::setValue('waiter_management_error', 'Errore: L\'email fornita è già in uso da un cliente.');
+                $errorFound = true;
+            } elseif ($pm->getWaiterByEmail($email)) {
+                USession::setValue('waiter_management_error', 'Errore: L\'email fornita è già in uso da un altro cameriere.');
+                $errorFound = true;
+            }
+
+            if (!$errorFound && $pm->getWaiterBySerialNumber($serialNumber)) {
+                USession::setValue('waiter_management_error', 'Errore: La matricola fornita è già in uso da un altro cameriere.');
+                $errorFound = true;
+            }
+
+            if (!$errorFound) {
+                $waiter = $pm->registerWaiter($name, $surname, $birthDate, $email, $password,  $phoneNumber, $serialNumber, $hallId);
+                
+                if ($waiter) {
+                    USession::setValue('waiter_management_success', 'Cameriere registrato con successo!');
+                } else {
+                    USession::setValue('waiter_management_error', 'Errore imprevisto durante la registrazione del cameriere.');
+                }
             }
         }
         header('Location: /Pancia_mia_fatti_capanna/waiter/manage');

@@ -6,25 +6,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrazione - Pancia mia fatti capanna</title>
 
-    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 
-    <!-- Custom Yummy style -->
     <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
 
 <body class="bg-light">
 
-    <!-- ======= Header ======= -->
     <header id="header" class="header d-flex align-items-center mb-4">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="logo">
                 <h1><a href="/Pancia_mia_fatti_capanna/Home/home">Pancia mia <span>fatti capanna</span></a></h1>
             </div>
         </div>
-    </header><!-- End Header -->
-
-    <main>
+    </header><main>
         <div class="container" style="max-width: 500px;">
             <div class="surface p-4 rounded shadow-sm">
                 <h1 class="text-center mb-4" style="font-family: var(--heading-font); color: var(--heading-color);">Registrati</h1>
@@ -58,7 +53,7 @@
                     </div>
                     <div class="mb-3">
                         <label for="phoneNumber" class="form-label">Numero di Telefono</label>
-                        <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control">
+                        <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control" pattern="[0-9]+" title="Il numero può contenere solo cifre." inputmode="numeric">
                     </div>
                     <div class="mb-3">
                         <label for="nickname" class="form-label">Nickname</label>
@@ -74,15 +69,11 @@
         </div>
     </main>
 
-    <!-- ======= Footer ======= -->
     <footer id="footer" class="footer mt-5">
         <div class="container text-center">
             <p>&copy; Copyright <strong>Pancia mia fatti capanna</strong>. All Rights Reserved</p>
         </div>
-    </footer><!-- End Footer -->
-
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    </footer><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>
 </html>
