@@ -34,8 +34,8 @@ class CHome
         $selectedAllergensIds = [];
 
         // Se l'utente invia un nuovo filtro, usalo e salva il cookie
-        if (UHTTPMethods::getPostValue('allergens') === null) {
-            $selectedAllergensIds = array_map('intval', UHTTPMethods::getPostValue('allergens'));
+        if (isset($_POST['allergens'])) {
+            $selectedAllergensIds = array_map('intval', $_POST['allergens']);
             // Salva gli ID come stringa JSON nel cookie per 1 settimana (604800 secondi)
             UCookie::set('allergen_filter', json_encode($selectedAllergensIds), 604800);
         }
