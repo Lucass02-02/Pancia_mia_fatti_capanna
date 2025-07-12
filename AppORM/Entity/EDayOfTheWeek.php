@@ -6,27 +6,27 @@ use DateTime;
 
 
 enum DayOfWeek: int {
-    case MONDAY = 0;
-    case TUESDAY = 1;
-    case WEDNESDAY = 2;
-    case THURSDAY = 3;
-    case FRIDAY = 4;
-    case SATURDAY = 5;
-    case SUNDAY = 6;
+    case MONDAY = 1;
+    case TUESDAY = 2;
+    case WEDNESDAY = 3;
+    case THURSDAY = 4;
+    case FRIDAY = 5;
+    case SATURDAY = 6;
+    case SUNDAY = 7;
 
     
     public static function fromDate(DateTime $date): self {
-        $w = (int) $date->format('w'); 
+        $w = (int) $date->format('N'); 
         return match ($w) {
         //return match ((int) $date->format('W')) {
             
-            0 => self::MONDAY,
-            1 => self::TUESDAY,
-            2 => self::WEDNESDAY,
-            3 => self::THURSDAY,
-            4 => self::FRIDAY,
-            5 => self::SATURDAY,
-            6 => self::SUNDAY,
+            1 => self::MONDAY,
+            2 => self::TUESDAY,
+            3 => self::WEDNESDAY,
+            4 => self::THURSDAY,
+            5 => self::FRIDAY,
+            6 => self::SATURDAY,
+            7 => self::SUNDAY,
             default => throw new \InvalidArgumentException("Invalid day of the week"),
         };
     }

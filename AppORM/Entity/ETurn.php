@@ -20,21 +20,21 @@ enum DayOfWeek: int {
     case SUNDAY = 7;
 
     
-    public static function fromDate(\DateTimeInterface $date): self {
-        $w = (int) $date->format('w'); 
-        return match ($w) {
-        //return match ((int) $date->format('W')) {
-            
-            1 => self::MONDAY,
-            2 => self::TUESDAY,
-            3 => self::WEDNESDAY,
-            4 => self::THURSDAY,
-            5 => self::FRIDAY,
-            6 => self::SATURDAY,
-            7 => self::SUNDAY,
-            default => throw new \InvalidArgumentException("Invalid day of the week"),
+    public static function fromDate(\DateTime $date): self {
+    $day = (int) $date->format('N'); // 'N' restituisce da 1 (lun) a 7 (dom)
+
+    return match($day) {
+        1 => self::MONDAY,
+        2 => self::TUESDAY,
+        3 => self::WEDNESDAY,
+        4 => self::THURSDAY,
+        5 => self::FRIDAY,
+        6 => self::SATURDAY,
+        7 => self::SUNDAY,
+        default => throw new \InvalidArgumentException("Invalid day of the week: $day")
         };
     }
+
 }
 
 #[ORM\Entity]
