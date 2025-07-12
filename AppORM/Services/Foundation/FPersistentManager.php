@@ -181,9 +181,9 @@ class FPersistentManager {
         
         $dayOfWeek = DayOfWeek::fromDate($date);
 
-        $turn = FTurn::getTurnByDayOfTheWeek($dayOfWeek);
+        $turns = FTurn::getTurnByDayOfTheWeek($dayOfWeek);
 
-        $turn = FTurn::determineTurnByTime($reservation->getHours());
+        $turn = FTurn::determineTurnByTime($turns, $reservation->getHours());
 
         if (!$turn) {
             return "Orario non valido per nessun turno.";
@@ -272,98 +272,67 @@ class FPersistentManager {
 
         $assignedTables = [];
         $seatsAccumulated = 0;
-
-        foreach ($availableTables as $table) {
-            $assignedTables[] = $table;
-            $seatsAccumulated += $table->getSeatsNumber();
-            if ($seatsAccumulated >= $people) {
-                break;
-            }
-        }
-
-        if ($seatsAccumulated < $people) {
-            return "Non ci sono abbastanza posti disponibili per $people persone";
-        }
-
-        
-            /*foreach ($assignedTables as $table) {
-                $reservationTable = new EReservationTable();
-                $reservationTable->setReservation($reservation);
-                $reservationTable->setDate($date);
-                $reservationTable->setStartTime($timeStart);
-                $reservationTable->setEndTime($endTime);
-                $reservationTable->setTable($table);
-
-                $allReservationTable = FEntityManager::getInstance()->selectAll(EReservationTable::class);
-
-                foreach ($allReservationTable as $singleReservationTable) {
-                    
-                    $startTimeMatch = $singleReservationTable->getStartTime()->format('H:i:s') === $timeStart->format('H:i:s');
-                    $endTimeMatch = $singleReservationTable->getEndTime()->format('H:i:s') === $endTime->format('H:i:s');
-                    $dateMatch = $singleReservationTable->getDate()->format('Y-m-d') === $date->format('Y-m-d');
-                    $tableMatch = $singleReservationTable->getTable()->getIdTable() === $table->getIdTable();
-
-                    if ($tableMatch && $dateMatch && $startTimeMatch && $endTimeMatch) {
-                        return "Non ci sono tavoli liberi per quest'orario";
-                    }
-
-                } 
-                self::uploadObject($reservationTable);
-                
-                $reservation->addTableReservation($reservationTable);
-                //$reservation->addTable($table);
-                $table->setState(TableState::RESERVED);
-                self::uploadObject($table);
-            } */
-        
         $atLeastOneAssigned = false;
 
-        foreach ($assignedTables as $table) {
+        foreach ($availableTables as $table) {
             $conflictFound = false;
+
+            echo "Controllo tavolo " . $table->getIdTable() . "\n";
 
             $allReservationTable = FEntityManager::getInstance()->selectAll(EReservationTable::class);
 
             foreach ($allReservationTable as $singleReservationTable) {
-                $startTimeMatch = $singleReservationTable->getStartTime()->format('H:i:s') === $timeStart->format('H:i:s');
-                $endTimeMatch = $singleReservationTable->getEndTime()->format('H:i:s') === $endTime->format('H:i:s');
                 $dateMatch = $singleReservationTable->getDate()->format('Y-m-d') === $date->format('Y-m-d');
                 $tableMatch = $singleReservationTable->getTable()->getIdTable() === $table->getIdTable();
 
-                if ($tableMatch && $dateMatch && $startTimeMatch && $endTimeMatch) {
+                $existingStart = $singleReservationTable->getStartTime()->format('H:i:s');
+                $existingEnd = $singleReservationTable->getEndTime()->format('H:i:s');
+
+                if (
+                    $tableMatch && $dateMatch &&
+                    ($timeStart->format('H:i:s') < $existingEnd && $endTime->format('H:i:s') > $existingStart)
+                ) {
                     $conflictFound = true;
+                    echo "Conflitto trovato per tavolo " . $table->getIdTable() . "\n";
                     break;
                 }
             }
 
-            if (!$conflictFound) {
-                $reservationTable = new EReservationTable();
-                $reservationTable->setReservation($reservation);
-                $reservationTable->setDate($date);
-                $reservationTable->setStartTime($timeStart);
-                $reservationTable->setEndTime($endTime);
-                $reservationTable->setTable($table);
+            if ($conflictFound) {
+                continue; // Salta al prossimo tavolo
+            }
 
-                self::uploadObject($reservationTable);
-                $reservation->addTableReservation($reservationTable);
+            // Se qui, il tavolo è libero
+            $reservationTable = new EReservationTable();
+            $reservationTable->setReservation($reservation);
+            $reservationTable->setDate($date);
+            $reservationTable->setStartTime($timeStart);
+            $reservationTable->setEndTime($endTime);
+            $reservationTable->setTable($table);
 
-                $table->setState(TableState::RESERVED);
-                self::uploadObject($table);
+            self::uploadObject($reservationTable);
+            $reservation->addTableReservation($reservationTable);
 
-                $atLeastOneAssigned = true;
+            $table->setState(TableState::RESERVED);
+            self::uploadObject($table);
+
+            echo "Assegno tavolo " . $table->getIdTable() . "\n";
+
+            $assignedTables[] = $table;
+            $seatsAccumulated += $table->getSeatsNumber();
+            $atLeastOneAssigned = true;
+
+            if ($seatsAccumulated >= $reservation->getPeopleNum()) {
+                break;
             }
         }
 
-        // Se nessun tavolo è stato assegnato
-        if (!$atLeastOneAssigned) {
-            return "Non ci sono tavoli liberi per quest'orario";
+        if (!$atLeastOneAssigned || $seatsAccumulated < $reservation->getPeopleNum()) {
+            return "Non ci sono tavoli liberi per quest'orario o non bastano i posti.";
         }
 
-        
-
         self::uploadObject($reservation);
-        
         return true;
-
     }
 
 
@@ -378,19 +347,24 @@ class FPersistentManager {
 
 
     public static function deleteReservation(EReservation $reservation) {
-        if ($reservation->getStatus() == ReservationStatus::CANCELED) {
+        if ($reservation->getStatus() === ReservationStatus::CANCELED || $reservation->getStatus() === ReservationStatus::ENDED) {
             
             $reservationTables = $reservation->getTable();
            
             foreach ($reservationTables as $reservationTable) {
-                $reservationTable->getTable()->setState(TableState::AVAILABLE);
-                self::uploadObject($reservationTable);
+                $table = $reservationTable->getTable();
+                $table->setState(TableState::AVAILABLE);
+                self::uploadObject($table);
+
+                
+                
+                
             }
 
             return true;
 
         } else {
-            return "La prenotazione non può essere cancellata perché non è nello stato 'CREATED'.";
+            return "La prenotazione non può essere cancellata perché non è nello stato 'CANCELED'.";
         }
     }
     

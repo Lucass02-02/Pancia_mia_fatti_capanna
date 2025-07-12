@@ -28,8 +28,10 @@ class ERestaurantHall {
     // ... le altre tue collection ...
     #[ORM\OneToMany(targetEntity: EWaiter::class, mappedBy: 'restaurant_halls', cascade: ['persist'])]
     private Collection $waiters;
+
     #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'restaurantHall', cascade: ['persist'])]
     private Collection $reservations;
+
     #[ORM\OneToMany(targetEntity: ETurn::class, mappedBy: 'restaurantHall', cascade: ['persist'])]
     private Collection $turns;
     
@@ -39,6 +41,10 @@ class ERestaurantHall {
         $this->name = $name;
         $this->totalPlaces = $totalPlaces;
         $this->tables = new ArrayCollection();
+    }
+
+    public static function getEntity() {
+        return self::class;
     }
 
     public function getIdHall(): ?int {

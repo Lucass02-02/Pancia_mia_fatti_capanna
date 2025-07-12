@@ -94,7 +94,7 @@ class CAdmin {
                             FPersistentManager::getInstance()->createOrderFromReservation($reservation);
                         }
                         
-                    } elseif ($reservation->getStatus() === ReservationStatus::CANCELED) {
+                    } elseif ($reservation->getStatus() === ReservationStatus::CANCELED || $reservation->getStatus() === ReservationStatus::ENDED) {
                         FPersistentManager::getInstance()->deleteReservation($reservation);
                     }
                 } catch (\ValueError $e) {

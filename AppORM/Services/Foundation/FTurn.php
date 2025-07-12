@@ -12,8 +12,8 @@ class FTurn {
     // ho dovuto mettere i time->format perche essendo solo data hanno un anno di default e quindi la data di $time cioe della
     // prenotazione non corrisponde a quella del turno, quindi non si confrontano correttamente, quindi ho uguagliato le date
     // e ho potuto fare un confronto solo sugli orari corretto
-    public static function determineTurnByTime($time) {
-        $turns = FEntityManager::getInstance()->selectAll(ETurn::getEntity());
+    public static function determineTurnByTime(array $turns, $time) {
+        
 
         $inputTimeStr = $time->format('H:i:s');
         
