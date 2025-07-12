@@ -382,36 +382,6 @@ class FPersistentManager {
         }
 
     }
-    
-    /*
-    public static function confirmOrder(EOrder $order) {
-        $reservation = $order->getReservation();
-        
-        if ($reservation->getStatus() == ReservationStatus::ORDER_IN_PROGRESS) {
-            $reservation->setStatus(ReservationStatus::ORDER_COMPLETED);
-            self::uploadObject($reservation);
-            $order->setStatus(OrderStatus::PAID);
-            $results = self::uploadObject($order);
-            return $results;
-        } else {
-            return [
-                'status' => 'error',
-                'message' => "L'ordine non può essere confermato perché la prenotazione non è nello stato 'ORDER_IN_PROGRESS'."
-            ];
-        }
-    }
-
-    public static function getOrderSummaryForReservation(EReservation $reservation) {
-        $order = FReservation::getOrderByReservation($reservation);
-        $reservation->setStatus(ReservationStatus::ENDED);
-        self::uploadObject($reservation);
-        return [
-            'items' => $order->getOrderItems(),
-            'total' => FOrder::calculateTotalPrice($order),
-        ];
-    }
-
-    */
 
     public static function authenticateAdmin(string $email, string $password): ?EAdmin  {
         $admin = FAdmin::getAdminByEmail($email);
