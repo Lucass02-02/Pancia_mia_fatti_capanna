@@ -77,68 +77,69 @@ class CClient
             }
         }
     }
-    /**
-     * Gestisce il login di un cliente.
-     * GET: mostra il form di login.
-     * POST: autentica l'utente e crea la sessione.
-     */
- public static function login(): void
-{
-    $message = USession::getValue('flash_message');
-        if ($message) {
-            USession::setValue('flash_message', null);
-        }
 
-    if (UHTTPMethods::isGet()) {
-        UView::render('login', ['error' => $message]);
-    } elseif (UHTTPMethods::isPost()) {
-        $email = UHTTPMethods::getPostValue('email');
-        $password = UHTTPMethods::getPostValue('password');
+    
+    public static function login(): void
+    {
+        if (UHTTPMethods::isGet()) {
+            UView::render('login');
+        } elseif (UHTTPMethods::isPost()) {
+            $email = UHTTPMethods::getPostValue('email');
+            $password = UHTTPMethods::getPostValue('password');
+            $rememberMe = UHTTPMethods::getPostValue('remember_me'); // Legge il valore della checkbox
 
-        if ($email && $password) {
-            $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
-            if ($client) {
-                USession::setValue('user_id', $client->getId());
-                USession::setValue('user_role', 'client');
-                USession::setValue('user_email', $client->getEmail());
-                $redirect = Usession::getValue('redirect_page');
-                if($message) {
-                    USession::setValue('redirect_page', null);
-                }
-                if ($redirect !== null) {
-                    header('Location: /Pancia_mia_fatti_capanna/Client/reserve');
-                    exit;
-                }else {
+            if ($email && $password) {
+                // Autenticazione Client
+                $client = FPersistentManager::getInstance()->authenticateClient($email, $password);
+                if ($client) {
+                    USession::setValue('user_id', $client->getId());
+                    USession::setValue('user_role', 'client');
+                    USession::setValue('user_email', $client->getEmail());
+                    
+                    if ($rememberMe) {
+                        self::setRememberMeCookie('client', $client->getId());
+                    }
+
                     header('Location: /Pancia_mia_fatti_capanna/client/profile');
                     exit;
                 }
-                     
-            }
 
-            $waiter = FPersistentManager::getInstance()->authenticateWaiter($email, $password);
-            if ($waiter) {
-                USession::setValue('user_id', $waiter->getId());
-                USession::setValue('user_role', 'waiter');
-                USession::setValue('user_email', $waiter->getEmail());
-                header('Location: /Pancia_mia_fatti_capanna/waiter/profile');
-                exit;
-            }
+                // Autenticazione Waiter
+                $waiter = FPersistentManager::getInstance()->authenticateWaiter($email, $password);
+                if ($waiter) {
+                    USession::setValue('user_id', $waiter->getId());
+                    USession::setValue('user_role', 'waiter');
+                    USession::setValue('user_email', $waiter->getEmail());
+                    
+                    if ($rememberMe) {
+                        self::setRememberMeCookie('waiter', $waiter->getId());
+                    }
 
-            $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
-            if ($admin) {
-                USession::setValue('user_id', $admin->getId());
-                USession::setValue('user_role', 'admin');
-                USession::setValue('user_email', $admin->getEmail());
-                header('Location: /Pancia_mia_fatti_capanna/');
-                exit;
-            }
+                    header('Location: /Pancia_mia_fatti_capanna/waiter/profile');
+                    exit;
+                }
 
-            UView::render('login', ['error' => 'Credenziali non valide. Riprova']);
-        } else {
-            UView::render('login', ['error' => 'Email e password sono obbligatori.']);
+                // Autenticazione Admin
+                $admin = FPersistentManager::getInstance()->authenticateAdmin($email, $password);
+                if ($admin) {
+                    USession::setValue('user_id', $admin->getId());
+                    USession::setValue('user_role', 'admin');
+                    USession::setValue('user_email', $admin->getEmail());
+
+                    if ($rememberMe) {
+                        self::setRememberMeCookie('admin', $admin->getId());
+                    }
+                    
+                    header('Location: /Pancia_mia_fatti_capanna/');
+                    exit;
+                }
+
+                UView::render('login', ['error' => 'Credenziali non valide. Riprova.']);
+            } else {
+                UView::render('login', ['error' => 'Email e password sono obbligatori.']);
+            }
         }
     }
-}
 
 
 
@@ -166,18 +167,16 @@ class CClient
             self::logout();
         }
     }
-    
-     /**
-     * Esegue il logout distruggendo la sessione.
-     */
+
+
     public static function logout(): void
     {
         USession::destroy();
-        // Reindirizziamo l'utente alla homepage.
+        // Al logout, cancella anche il cookie "Ricordami"
+        UCookie::delete('remember_user');
         header('Location: /Pancia_mia_fatti_capanna/');
         exit;
     }
-
 
 
     /**
@@ -433,21 +432,73 @@ class CClient
         }
     }
 
-    /*
-    public static function checkRememberMeLogin() {
+    /**
+     * Imposta il cookie per la funzionalità "Ricordami".
+     * @param string $role Il ruolo dell'utente (es. 'client', 'admin')
+     * @param int $userId L'ID dell'utente
+     */
+    private static function setRememberMeCookie(string $role, int $userId): void
+    {
+        // NOTA: Questa è una logica semplificata. Per una sicurezza maggiore,
+        // si dovrebbe generare un token casuale, salvarlo nel cookie e salvare
+        // il suo HASH nel database associato all'utente.
+        
+        $value = base64_encode(json_encode(['role' => $role, 'id' => $userId]));
+        // Imposta il cookie per 30 giorni (2592000 secondi)
+        UCookie::set('remember_user', $value, 2592000);
+    }
+
+
+
+    /**
+     * Controlla se esiste un cookie "Ricordami" e, in caso affermativo,
+     * effettua il login automatico creando la sessione per l'utente.
+     * QUESTA È LA FUNZIONE CHE CERCAVI.
+     */
+    public static function checkRememberMeLogin(): void
+    {
+        // 1. Se l'utente è GIÀ loggato nella sessione, non fare nulla.
         if (USession::isSet('user_id')) {
-            return; // utente già loggato
+            return;
         }
-        if (isset($_COOKIE['remember_me'])) {
-            $token = $_COOKIE['remember_me'];
-            $client = FPersistentManager::getInstance()->getClientByRememberToken($token);
-            if ($client) {
-                USession::setValue('user_id', $client->getId());
-                USession::setValue('user_role', 'client');
-                USession::setValue('user_email', $client->getEmail());
+
+        // 2. Controlla se il cookie 'remember_user' esiste.
+        $rememberCookie = UCookie::get('remember_user');
+        if ($rememberCookie) {
+            // 3. Decodifica i dati dal cookie.
+            $userData = json_decode(base64_decode($rememberCookie), true);
+
+            // 4. Se i dati sono validi (contengono un ID e un ruolo)
+            if (isset($userData['id']) && isset($userData['role'])) {
+                $userId = (int)$userData['id'];
+                $userRole = $userData['role'];
+                $user = null;
+
+                // 5. Recupera l'utente dal database in base al suo ruolo.
+                // Questo è un controllo di sicurezza per assicurarsi che l'utente esista ancora.
+                switch ($userRole) {
+                    case 'client':
+                        $user = FPersistentManager::getInstance()->getClientById($userId);
+                        break;
+                    case 'waiter':
+                        $user = FPersistentManager::getInstance()->getWaiterById($userId);
+                        break;
+                    case 'admin':
+                        $user = FPersistentManager::getInstance()->getAdminById($userId);
+                        break;
+                }
+
+                // 6. Se l'utente è stato trovato, crea la sessione per lui.
+                if ($user) {
+                    USession::setValue('user_id', $user->getId());
+                    USession::setValue('user_role', $userRole);
+                    USession::setValue('user_email', $user->getEmail());
+                } else {
+                    // Se l'utente non esiste più nel DB, cancella il cookie non valido.
+                    UCookie::delete('remember_user');
+                }
             }
         }
-    }   
-    */
+    }
 
 }

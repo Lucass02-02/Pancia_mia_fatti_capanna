@@ -12,6 +12,7 @@ use AppORM\Services\Utility\UView;
 use DateTime;
 use AppORM\Entity\EOrder;
 use AppORM\Entity\EOrderItem;
+use AppORM\Entity\ERestaurantHall;
 use AppORM\Entity\ETurn;
 use AppORM\Entity\TurnName;
 
@@ -189,6 +190,8 @@ class CAdmin {
              exit;
         }
 
+        $halls = FEntityManager::getInstance()->selectAll(ERestaurantHall::class);
+
         $turns = FEntityManager::getInstance()->selectAll(ETurn::class);
 
         $enumCases = DayOfWeek::cases();
@@ -208,10 +211,10 @@ class CAdmin {
         $error_message = USession::getValue('turn_management_error', null);
         USession::unsetValue('turn_management_error');
 
-        UView::render('manage_turns', ['turns' => $turns, 'enumValues' => $enumValues, 'enumValues2' => $enumValues2, 'error' => $error_message]);
-   }
+        UView::render('manage_turns', ['turns' => $turns, 'enumValues' => $enumValues, 'enumValues2' => $enumValues2, 'error' => $error_message, 'halls' => $halls]);
+    }
 
-   public static function deleteTurn() {
+    public static function deleteTurn() {
         if (USession::getValue('user_role') !== 'admin') {
              header('Location: /Pancia_mia_fatti_capanna/'); 
              exit;
@@ -220,10 +223,10 @@ class CAdmin {
         if (UHTTPMethods::isPost()) {
             $id = (int)UHTTPMethods::getPostValue('turn_id');
             if ($id > 0) {
-                $turn = FEntityManager::getInstance()->retriveObjectById(ETurn::class, $id);
+                $turn = FEntityManager::getInstance()->retriveObject(ETurn::class, $id);
                 if ($turn) {
                     try {
-                        FPersistentManager::getInstance()->deleteRestaurantHall($turn);
+                        FEntityManager::getInstance()->deleteObject($turn);
                         // Successo: nessun errore da impostare in sessione
                     } catch (\Exception $e) {
                         // Cattura l'eccezione e memorizza il suo messaggio direttamente nella sessione
@@ -237,7 +240,36 @@ class CAdmin {
             }
         }
         // Reindirizza sempre alla pagina di gestione
-        header('Location: /Pancia_mia_fatti_capanna/Admin/manageTurns');
+        header('Location: /Pancia_mia_fatti_capanna/Admin/manageTurns/');
         exit;
-   }
+    }
+
+    public static function createTurn() {
+        if (USession::getValue('user_role') !== 'admin') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        if(UHTTPMethods::isPost()) {
+            $dayOfWeekStr = UHTTPMethods::getPostValue('dayOfWeek');
+            $turnNameStr = UHTTPMethods::getPostValue('turno');
+            $startTimeStr = UHTTPMethods::getPostValue('start_time');
+            $endTimeStr = UHTTPMethods::getPostValue('end_time');
+            $hallId = UHTTPMethods::getPostValue('hall_id');
+
+            $startTime = new DateTime($startTimeStr);
+            $endTime = new DateTime($endTimeStr);
+
+            $turnName = TurnName::from($turnNameStr);
+            $dayOfWeek = DayOfWeek::from($dayOfWeekStr);
+
+            $hall = FEntityManager::getInstance()->retriveObject(ERestaurantHall::class, $hallId);
+
+            if ($dayOfWeek && $turnName && $startTime && $endTime && $hallId) {
+                $turn = new ETurn($turnName, $dayOfWeek, $startTime, $endTime);
+                $turn->setRestaurantHall($hall);
+                FPersistentManager::getInstance()->uploadObject($turn);
+            } 
+        }
+    }
 } 

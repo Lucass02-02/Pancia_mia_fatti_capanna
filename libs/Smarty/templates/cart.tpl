@@ -53,13 +53,13 @@
                                     <input type="hidden" name="remove_one" value="1">
                                     <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
                                 </form>
-                                <form action="/Pancia_mia_fatti_capanna/Cart/add" method="POST">
+                                <form action="/Pancia_mia_fatti_capanna/Cart/addSingleQuantity" method="POST">
                                     <input type="hidden" name="product_id" value="{$item->getProduct()->getIdProduct()}">
                                     <input type="hidden" name="quantity" value="1">
                                     <input type="hidden" name="from_cart" value="true">
                                     <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
                                 </form>
-                                <form action="/Pancia_mia_fatti_capanna/Cart/remove" method="POST">
+                                <form action="/Pancia_mia_fatti_capanna/Cart/removeAll" method="POST">
                                     <input type="hidden" name="product_id" value="{$item->getProduct()->getIdProduct()}">
                                     <button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
                                 </form>
@@ -73,7 +73,7 @@
 
                     <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
                         <a href="/Pancia_mia_fatti_capanna/Client/order" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Torna al Menù</a>
-                        <form action="/Pancia_mia_fatti_capanna/Cart/clear" method="POST">
+                        <form action="/Pancia_mia_fatti_capanna/Cart/emptyCart" method="POST">
                             <button type="submit" class="btn btn-secondary">Svuota Carrello</button>
                         </form>
                         <a href="/Pancia_mia_fatti_capanna/Cart/checkout" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Procedi al Checkout</a>

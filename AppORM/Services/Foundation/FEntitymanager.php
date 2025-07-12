@@ -218,6 +218,8 @@ class FEntityManager{
             self::$entityManager->rollback();
             // Stampa un errore per il debug
             error_log("ERRORE IN TRANSAZIONE (saveObject): " . $e->getMessage());
+            error_log($e->getTraceAsString());
+            echo "Errore nel salvataggio: " . $e->getMessage();
             return false;
         }
     }
@@ -262,6 +264,39 @@ class FEntityManager{
         }catch(\Exception $e){
             echo "ERROR " . $e->getMessage();
             return [];
+        }
+    }
+
+    /**
+     * Rimuove una lista di oggetti dal DB usando una transazione per garantire l'integrità.
+     * @param array $objects Lista di oggetti da rimuovere.
+     * @return bool True se l'operazione ha successo, false altrimenti.
+     */
+    public static function deleteObjects(array $objects): bool
+    {
+        if (empty($objects)) {
+            return true; // niente da cancellare, considerato successo
+        }
+
+        self::$entityManager->beginTransaction();
+
+        try {
+            foreach ($objects as $obj) {
+                if (is_object($obj)) {
+                    self::$entityManager->remove($obj);
+                } else {
+                    throw new \InvalidArgumentException("Elemento non valido nella lista (non è un oggetto).");
+                }
+            }
+
+            self::$entityManager->flush();
+            self::$entityManager->commit();
+
+            return true;
+        } catch (\Exception $e) {
+            self::$entityManager->rollback();
+            error_log("ERRORE IN TRANSAZIONE (deleteObjects): " . $e->getMessage());
+            return false;
         }
     }
 }

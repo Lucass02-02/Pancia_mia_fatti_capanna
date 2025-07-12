@@ -67,11 +67,11 @@
 
                         <div class="col-md-6">
                             <label for="startTime" class="form-label">Ora Inizio</label>
-                            <input type="time" id="startTime" name="startTime" class="form-control" required>
+                            <input type="time" id="startTime" name="start_time" class="form-control" required>
                         </div>
                         <div class="col-md-6">
                             <label for="endTime" class="form-label">Ora Fine</label>
-                            <input type="time" id="endTime" name="endTime" class="form-control" required>
+                            <input type="time" id="endTime" name="end_time" class="form-control" required>
                         </div>
 
                         <div class="col-md-6">

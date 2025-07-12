@@ -5,39 +5,6 @@ namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 
-enum TurnName: string {
-    case LUNCH = 'lunch';
-    case DINNER = 'dinner';
-}
-
-/*
-enum DayOfWeek: int {
-    case MONDAY = 0;
-    case TUESDAY = 1;
-    case WEDNESDAY = 2;
-    case THURSDAY = 3;
-    case FRIDAY = 4;
-    case SATURDAY = 5;
-    case SUNDAY = 6;
-
-    
-    public static function fromDate(\DateTimeInterface $date): self {
-        $w = (int) $date->format('w'); 
-        return match ($w) {
-        //return match ((int) $date->format('W')) {
-            
-            0 => self::MONDAY,
-            1 => self::TUESDAY,
-            2 => self::WEDNESDAY,
-            3 => self::THURSDAY,
-            4 => self::FRIDAY,
-            5 => self::SATURDAY,
-            6 => self::SUNDAY,
-            default => throw new \InvalidArgumentException("Invalid day of the week"),
-        };
-    }
-}
-*/
 #[ORM\Entity]
 #[ORM\Table(name: 'turns')]
 class ETurn {
@@ -48,7 +15,7 @@ class ETurn {
     #[ORM\GeneratedValue]
     private $idTurn;
 
-    #[ORM\Column(type: 'string', length: 50, nullable: false, enumType: TurnName::class)]
+    #[ORM\Column(enumType: TurnName::class, nullable: false)]
     private TurnName $name;
 
     #[ORM\Column(enumType: DayOfWeek::class, nullable: false)]

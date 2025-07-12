@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-12 20:06:42
+/* Smarty version 5.5.1, created on 2025-07-12 22:05:37
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/manage_turns.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_6872a43290f1c0_03277679',
+  'unifunc' => 'content_6872c0115fda96_65863630',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'ddfda0e0b98717fff80ebb81abbfbd6eb7509ae5' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/manage_turns.tpl',
-      1 => 1752343597,
+      1 => 1752350572,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_6872a43290f1c0_03277679 (\Smarty\Template $_smarty_tpl) {
+function content_6872c0115fda96_65863630 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -109,11 +109,11 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                         <div class="col-md-6">
                             <label for="startTime" class="form-label">Ora Inizio</label>
-                            <input type="time" id="startTime" name="startTime" class="form-control" required>
+                            <input type="time" id="startTime" name="start_time" class="form-control" required>
                         </div>
                         <div class="col-md-6">
                             <label for="endTime" class="form-label">Ora Fine</label>
-                            <input type="time" id="endTime" name="endTime" class="form-control" required>
+                            <input type="time" id="endTime" name="end_time" class="form-control" required>
                         </div>
 
                         <div class="col-md-6">

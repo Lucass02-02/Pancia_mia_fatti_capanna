@@ -10,6 +10,6 @@ use AppORM\Control\CClient;
 
 
 USession::start();
-//CClient::checkRememberMeLogin();
+CClient::checkRememberMeLogin();
 $fc = new CFrontController();
 $fc->run($_SERVER['REQUEST_URI']);

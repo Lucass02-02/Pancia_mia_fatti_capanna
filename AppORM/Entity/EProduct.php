@@ -3,6 +3,7 @@
 
 namespace AppORM\Entity;
 
+use Collator;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -35,6 +36,9 @@ class EProduct
     #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'product')]
     #[ORM\JoinTable(name: 'products_allergens')]
     private Collection $allergens;
+
+    #[ORM\OneToMany(targetEntity: EOrderItem::class, mappedBy: 'product')]
+    private Collection $orderItems;
 
     public function __construct(string $name, string $description, float $price, EProductCategory $category)
     {
@@ -120,12 +124,16 @@ class EProduct
         }
     }
     public function clearAllergens(): void
-{
+    {
     $this->allergens->clear();
-}
+    }
 
     public function setCategory(EProductCategory $category): void
     {
         $this->category = $category;
+    }
+
+    public function getOrderItems() {
+        return $this->orderItems;
     }
 }

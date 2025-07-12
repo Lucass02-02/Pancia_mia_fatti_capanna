@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-12 12:13:40
+/* Smarty version 5.5.1, created on 2025-07-12 23:59:25
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/cart.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_687235541c4fa3_71853942',
+  'unifunc' => 'content_6872dabd877bc9_11909871',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '19e239bce7b0d26f1c0a3623375ac19da332dba2' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/cart.tpl',
-      1 => 1752313802,
+      1 => 1752357562,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_687235541c4fa3_71853942 (\Smarty\Template $_smarty_tpl) {
+function content_6872dabd877bc9_11909871 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?>
 <!DOCTYPE html>
@@ -86,14 +86,14 @@ $foreach0DoElse = false;
                                     <input type="hidden" name="remove_one" value="1">
                                     <button type="submit" class="btn btn-outline-secondary btn-sm">-</button>
                                 </form>
-                                <form action="/Pancia_mia_fatti_capanna/Cart/add" method="POST">
+                                <form action="/Pancia_mia_fatti_capanna/Cart/addSingleQuantity" method="POST">
                                     <input type="hidden" name="product_id" value="<?php echo $_smarty_tpl->getValue('item')->getProduct()->getIdProduct();?>
 ">
                                     <input type="hidden" name="quantity" value="1">
                                     <input type="hidden" name="from_cart" value="true">
                                     <button type="submit" class="btn btn-outline-secondary btn-sm">+</button>
                                 </form>
-                                <form action="/Pancia_mia_fatti_capanna/Cart/remove" method="POST">
+                                <form action="/Pancia_mia_fatti_capanna/Cart/removeAll" method="POST">
                                     <input type="hidden" name="product_id" value="<?php echo $_smarty_tpl->getValue('item')->getProduct()->getIdProduct();?>
 ">
                                     <button type="submit" class="btn btn-danger btn-sm">Rimuovi</button>
@@ -111,7 +111,7 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
 
                     <div class="d-flex justify-content-center gap-3 mt-4 flex-wrap">
                         <a href="/Pancia_mia_fatti_capanna/Client/order" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Torna al Menù</a>
-                        <form action="/Pancia_mia_fatti_capanna/Cart/clear" method="POST">
+                        <form action="/Pancia_mia_fatti_capanna/Cart/emptyCart" method="POST">
                             <button type="submit" class="btn btn-secondary">Svuota Carrello</button>
                         </form>
                         <a href="/Pancia_mia_fatti_capanna/Cart/checkout" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Procedi al Checkout</a>

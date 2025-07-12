@@ -28,6 +28,7 @@ class EProduct extends \AppORM\Entity\EProduct implements \Doctrine\ORM\Proxy\In
         "\0".parent::class."\0".'description' => [parent::class, 'description', null, 16],
         "\0".parent::class."\0".'id' => [parent::class, 'id', null, 16],
         "\0".parent::class."\0".'name' => [parent::class, 'name', null, 16],
+        "\0".parent::class."\0".'orderItems' => [parent::class, 'orderItems', null, 16],
         "\0".parent::class."\0".'price' => [parent::class, 'price', null, 16],
         'allergens' => [parent::class, 'allergens', null, 16],
         'availability' => [parent::class, 'availability', null, 16],
@@ -35,6 +36,7 @@ class EProduct extends \AppORM\Entity\EProduct implements \Doctrine\ORM\Proxy\In
         'description' => [parent::class, 'description', null, 16],
         'id' => [parent::class, 'id', null, 16],
         'name' => [parent::class, 'name', null, 16],
+        'orderItems' => [parent::class, 'orderItems', null, 16],
         'price' => [parent::class, 'price', null, 16],
     ];
 
