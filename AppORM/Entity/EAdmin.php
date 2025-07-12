@@ -40,7 +40,7 @@ class EAdmin extends EUser
     {
         if (!$this->responses->contains($response)) {
             $this->responses->add($response);
-            $response->setAdmin($this); // Assicura il collegamento bidirezionale
+            $response->setAdmin($this); 
         }
     }
 }

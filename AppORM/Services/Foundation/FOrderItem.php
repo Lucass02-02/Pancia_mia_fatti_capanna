@@ -13,7 +13,7 @@ class FOrderItem {
         $orderItem = new EOrderItem($quantity);
         $orderItem->setOrder($order);
         $orderItem->setProduct($product);
-        $orderItem->setPrice($product->getCost());
+        $orderItem->setPrice($product->getPrice());
 
         $orderItems = FEntityManager::getInstance()->selectAll(EOrderItem::getEntity());
 

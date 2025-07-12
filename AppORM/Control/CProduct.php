@@ -6,14 +6,15 @@ use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\EProduct;
-use AppORM\Entity\EProductCategory; // Assicurati di importare EProductCategory
-use AppORM\Entity\EAllergens; // Assicurati di importare EAllergen se non lo è già
+use AppORM\Entity\EProductCategory;
+use AppORM\Entity\EAllergens; 
+
 
 class CProduct {
 
     private static function checkAdmin(): void {
         if (USession::getValue('user_role') !== 'admin') {
-            header('Location: /Pancia_mia_fatti_capanna/Home/home'); // Reindirizza a home per non admin
+            header('Location: /Pancia_mia_fatti_capanna/Home/home'); 
             exit;
         }
     }
@@ -25,7 +26,7 @@ class CProduct {
             $description = UHTTPMethods::getPostValue('description');
             $price = (float)UHTTPMethods::getPostValue('price');
             $categoryId = (int)UHTTPMethods::getPostValue('category_id');
-            $allergenIds = UHTTPMethods::getPostValue('allergens', []); // Il secondo parametro [] è utile se non ci sono allergeni
+            $allergenIds = UHTTPMethods::getPostValue('allergens', []); 
 
             if ($name && $description && $price > 0 && $categoryId > 0) {
                 $category = FPersistentManager::getInstance()->getProductCategoryById($categoryId);
@@ -59,24 +60,20 @@ class CProduct {
                 $product->setDescription(UHTTPMethods::getPostValue('description'));
                 $product->setPrice((float)UHTTPMethods::getPostValue('price'));
                 
-                // --- Gestione della categoria ---
                 $categoryId = (int)UHTTPMethods::getPostValue('category_id');
                 $category = FPersistentManager::getInstance()->getProductCategoryById($categoryId);
                 if ($category) {
                     $product->setCategory($category);
                 }
 
-                // --- Gestione degli allergeni ---
-                $allergenIds = UHTTPMethods::getPostValue('allergens', []); // Ottieni gli ID degli allergeni selezionati
+                $allergenIds = UHTTPMethods::getPostValue('allergens', []); 
 
-                // Assumi che EProduct abbia un metodo clearAllergens() e addAllergen()
-                // Se non ce l'ha, dovrai implementarlo nella tua entità EProduct
-                $product->clearAllergens(); // Rimuovi tutti gli allergeni attuali
+                $product->clearAllergens(); 
                 if (is_array($allergenIds)) {
                     foreach ($allergenIds as $allergenId) {
                         $allergen = FPersistentManager::getInstance()->getAllergenById((int)$allergenId);
                         if ($allergen) {
-                            $product->addAllergen($allergen); // Aggiungi solo quelli selezionati
+                            $product->addAllergen($allergen); 
                         }
                     }
                 }
@@ -94,11 +91,11 @@ class CProduct {
      */
     public static function delete(int $id): void {
         self::checkAdmin();
-        // L'ID viene passato come parametro della funzione, non da query GET
+        
         $product = FPersistentManager::getInstance()->getProductById($id);
         
         if ($product) {
-            FPersistentManager::getInstance()->deleteProduct($product); // Presumo che questo elimini l'oggetto EProduct
+            FPersistentManager::getInstance()->deleteProduct($product); 
         }
         
         header('Location: /Pancia_mia_fatti_capanna/home/menu');
@@ -111,12 +108,11 @@ class CProduct {
      */
     public static function toggleAvailability(int $id): void {
         self::checkAdmin();
-        // L'ID viene passato come parametro della funzione, non da query GET
+        
         $product = FPersistentManager::getInstance()->getProductById($id);
         
         if ($product) {
             $newAvailability = !$product->isAvailable();
-            // Assumo che FPersistentManager::updateProductAvailability() esista e salvi lo stato
             FPersistentManager::getInstance()->updateProductAvailability($product, $newAvailability); 
         }
         
@@ -136,8 +132,6 @@ class CProduct {
             $categories = FPersistentManager::getInstance()->getAllProductCategories();
             $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
 
-            // Estrai gli ID degli allergeni già associati al prodotto
-            // Applica ->toArray() alla PersistentCollection prima di array_map()
             $productAllergenIds = array_map(fn($a) => $a->getId(), $product->getAllergens()->toArray() ?? []); 
 
             UView::render('edit_product', [
@@ -147,7 +141,6 @@ class CProduct {
                 'productAllergenIds' => $productAllergenIds
             ]);
         } else {
-            // Prodotto non trovato, reindirizza al menu
             header('Location: /Pancia_mia_fatti_capanna/home/menu');
             exit;
         }
@@ -185,7 +178,7 @@ class CProduct {
                 FPersistentManager::getInstance()->saveProductCategory($newCategory);
             }
         }
-        header('Location: /Pancia_mia_fatti_capanna/Product/manageCategories'); // Reindirizza alla pagina di gestione categorie
+        header('Location: /Pancia_mia_fatti_capanna/Product/manageCategories'); 
         exit;
     }
 

@@ -11,9 +11,17 @@ class FUserReview
     private static string $table = EUserReview::class; 
     private static string $key = "id";
 
-    public static function getTable(): string { return self::$table; }
-    public static function getKey(): string { return self::class; }
-    public static function getClass(): string { return self::class; }
+    public static function getTable(): string {
+         return self::$table; 
+    }
+
+    public static function getKey(): string {
+         return self::class;
+    }
+
+    public static function getClass(): string {
+         return self::class;
+    }
 
     public static function getObj(int $id): ?EUserReview
     {

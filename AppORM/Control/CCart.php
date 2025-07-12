@@ -19,7 +19,7 @@ class CCart
     public static function add(): void
     {
         if (!USession::isSet('user_id')) {
-            // URL pulito
+            
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
@@ -58,17 +58,17 @@ class CCart
                     }
 
                     if ($fromCart) {
-                        // URL pulito
+                        
                         header('Location: /Pancia_mia_fatti_capanna/cart/view');
                     } else {
-                        // URL pulito
+                        
                         header('Location: /Pancia_mia_fatti_capanna/Client/order');
                     }
                     exit;
                 }
             }
         }
-        // URL pulito
+       
         header('Location: /Pancia_mia_fatti_capanna/Client/order');
         exit;
     }
@@ -76,7 +76,7 @@ class CCart
 
     public static function addSingleQuantity() {
         if (!USession::isSet('user_id')) {
-            // URL pulito
+            
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
@@ -119,7 +119,7 @@ class CCart
 
     public static function view(): void {
         if (!USession::isSet('user_id')) {
-            // URL pulito
+            
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
@@ -140,9 +140,11 @@ class CCart
         UView::render('cart', ['cartItems' => $orderItems]);
     }
 
+
+
     public static function remove(): void {
         if (!USession::isSet('user_id')) {
-            // URL pulito
+            
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
@@ -172,7 +174,7 @@ class CCart
                 }
             }  
         }
-        // URL pulito
+        
         header('Location: /Pancia_mia_fatti_capanna/cart/view');
         exit;
     }
@@ -180,7 +182,7 @@ class CCart
 
     public static function removeAll() {
         if (!USession::isSet('user_id')) {
-            // URL pulito
+            
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
@@ -215,7 +217,7 @@ class CCart
 
     public static function emptyCart() {
         if (!USession::isSet('user_id')) {
-            // URL pulito
+            
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
@@ -244,14 +246,14 @@ class CCart
     
     public static function clear(): void {
         if (!USession::isSet('user_id')) {
-            // URL pulito
+            
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
         if (UHTTPMethods::isPost()) {
             USession::setValue('cart', []);
         }
-        // URL pulito
+        
         header('Location: /Pancia_mia_fatti_capanna/cart/view');
         exit;
     }
@@ -260,12 +262,10 @@ class CCart
 
     public static function checkout() {
         if (!USession::isSet('user_id')) {
-            // URL pulito
+            
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
-
-        //implementa la funzione per pagare
 
         $clientId = USession::getValue('user_id');
         $client = FEntityManager::getInstance()->retriveObject(EClient::class, $clientId);

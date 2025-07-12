@@ -29,10 +29,22 @@ class EProductCategory
         $this->products = new ArrayCollection();
     }
 
-    // --- Metodi Getter ---
-    public function getId(): ?int { return $this->id; }
-    public function getName(): string { return $this->name; }
-    public function getProducts(): Collection { return $this->products; }
+    
+    public function getId(): ?int {
+         return $this->id; 
+    }
+
+
+    public function getName(): string {
+         return $this->name; 
+    }
+
+
+    public function getProducts(): Collection {
+         return $this->products; 
+    }
+
+
      /**
      * Salva o aggiorna una categoria di prodotti.
      */
@@ -40,6 +52,8 @@ class EProductCategory
     { 
         return FProductCategory::saveObj($category); 
     }
+
+    
     /**
      * Imposta un nuovo nome per la categoria di prodotto.
      * @param string $name

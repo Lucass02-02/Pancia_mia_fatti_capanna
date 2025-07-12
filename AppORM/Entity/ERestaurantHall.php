@@ -15,7 +15,6 @@ class ERestaurantHall {
     #[ORM\GeneratedValue]
     private ?int $idHall = null;
 
-    // --- NUOVA PROPRIETÀ ---
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private string $name;
 
@@ -25,7 +24,6 @@ class ERestaurantHall {
     #[ORM\OneToMany(targetEntity: ETable::class, mappedBy: 'restaurantHall')]
     private Collection $tables;
 
-    // ... le altre tue collection ...
     #[ORM\OneToMany(targetEntity: EWaiter::class, mappedBy: 'restaurant_halls', cascade: ['persist'])]
     private Collection $waiters;
 
@@ -62,6 +60,8 @@ class ERestaurantHall {
     public function setTotalPlaces(int $totalPlaces): void {
         $this->totalPlaces = $totalPlaces;
     }
+
+    
     /**
      * Restituisce la collezione di tavoli presenti in questa sala.
      * @return Collection

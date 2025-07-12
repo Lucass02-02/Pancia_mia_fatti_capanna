@@ -1,5 +1,4 @@
 <?php
-// PHP Version: 8.1+
 
 namespace AppORM\Services\Foundation;
 
@@ -14,7 +13,7 @@ class FAllergens
     private static string $table = EAllergens::class;
     private static string $key = "id";
 
-    // Abbiamo implementato i metodi che prima erano vuoti.
+    
 
     /**
      * Restituisce il nome della classe dell'entità gestita.
@@ -92,6 +91,8 @@ class FAllergens
     {
         return FEntityManager::getInstance()->selectAll(self::getTable());
     }
+
+    
      public static function fetchAll(): array
     {
         return FEntityManager::getInstance()->selectAll(EAllergens::class);

@@ -7,6 +7,7 @@ use AppORM\Services\Utility\UView;
 use AppORM\Entity\EProduct; // Importiamo EProduct per il type hinting
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UCookie;
+use AppORM\Services\Utility\UHTTPMethods;
 
 class CHome
 {
@@ -33,8 +34,8 @@ class CHome
         $selectedAllergensIds = [];
 
         // Se l'utente invia un nuovo filtro, usalo e salva il cookie
-        if (isset($_POST['allergens'])) {
-            $selectedAllergensIds = array_map('intval', $_POST['allergens']);
+        if (UHTTPMethods::getPostValue('allergens') === null) {
+            $selectedAllergensIds = array_map('intval', UHTTPMethods::getPostValue('allergens'));
             // Salva gli ID come stringa JSON nel cookie per 1 settimana (604800 secondi)
             UCookie::set('allergen_filter', json_encode($selectedAllergensIds), 604800);
         }

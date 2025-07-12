@@ -40,12 +40,10 @@ class ETable {
     
     public function __construct($seatsNumber) {
         $this->seatsNumber = $seatsNumber;
-        $this->state = TableState::AVAILABLE; // Default state when a table is created
+        $this->state = TableState::AVAILABLE; 
         $this->reservations = new ArrayCollection();
     }
     
-
-    //methods getters and setters
 
     public static function getEntity() {
         return self::$entity;
@@ -89,14 +87,5 @@ class ETable {
     public function getRestaurantHall(): ERestaurantHall {
         return $this->restaurantHall;
     }
-
-    /*public function addReservation(EReservation $reservation) {
-        if (!$this->reservations->contains($reservation)) {
-            $this->reservations->add($reservation);
-            if (!$reservation->getTable()->contains($this)) { //messo per evitare errori silenziosi nel caso $reservation->getTable non sia inizializzata
-                 $reservation->addTable($this);
-            }           
-        }
-    }*/
     
 }

@@ -17,9 +17,6 @@ class EAllergens
     #[ORM\Column(type: 'string', length: 50, unique: true)]
     private string $allergenType;
 
-    /**
-     * @var Collection<int, EProduct>
-     */
     #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'allergens')]
     private Collection $product;
 
@@ -29,16 +26,11 @@ class EAllergens
         $this->product = new ArrayCollection();
     }
 
-    // --- METODO GETTER MANCANTE ---
-    /**
-     * Restituisce l'ID dell'allergene.
-     * Questo è il metodo che mancava e che causava l'errore.
-     */
+    
     public function getId(): ?int
     {
         return $this->id;
     }
-    // -----------------------------
 
     public function getAllergenType(): string
     {

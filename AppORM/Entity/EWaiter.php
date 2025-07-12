@@ -39,7 +39,6 @@ class EWaiter extends EUser {
         return $this->restaurant_hall;
     }
 
-    // --- METODO AGGIUNTO ---
     public function setRestaurantHall(ERestaurantHall $hall): void {
         $this->restaurant_hall = $hall;
     }

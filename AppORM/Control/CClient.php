@@ -30,13 +30,11 @@ class CClient
             $nickname = UHTTPMethods::getPostValue('nickname');
             $phoneNumber = UHTTPMethods::getPostValue('phoneNumber');
 
-            // --- VALIDAZIONE NUMERO DI TELEFONO ---
-            // Se il numero di telefono è stato inserito e non contiene solo cifre, mostra un errore.
+            
             if (!empty($phoneNumber) && !ctype_digit($phoneNumber)) {
                 UView::render('registration', ['success' => false, 'message' => 'Errore: Il numero di telefono può contenere solo cifre numeriche (0-9).']);
                 return;
             }
-            // --- FINE VALIDAZIONE ---
 
             if (!$name || !$surname || !$email || !$password || !$birthDateStr) {
                 UView::render('registration', ['success' => false, 'message' => 'I campi Nome, Cognome, Email, Password e Data di Nascita sono obbligatori.']);
@@ -199,7 +197,7 @@ class CClient
 
             if ($client && $rating >= 1 && $rating <= 5 && !empty($comment)) {
                 FPersistentManager::getInstance()->addReviewToClient($client, $comment, $rating);
-                header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&review=success');
+                header('Location: /Pancia_mia_fatti_capanna/Client/profile');
             } else {
                 UView::render('add_review', ['error' => 'Per favore, compila tutti i campi correttamente.']);
             }
@@ -257,7 +255,7 @@ class CClient
 
             if ($client && $brand && strlen($last4) === 4 && $expMonth && $expYear) {
                 FPersistentManager::getInstance()->addCreditCardToClient($client, $brand, $last4, $expMonth, $expYear, $cardName);
-                header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&card=success');
+                header('Location: /Pancia_mia_fatti_capanna/Client/profile');
             } else {
                 UView::render('add_credit_card', ['error' => 'Per favore, compila tutti i campi correttamente.']);
             }
@@ -380,8 +378,8 @@ class CClient
         $selectedAllergensIds = [];
 
         // Se l'utente invia un nuovo filtro, usalo e salva il cookie
-        if (isset($_POST['allergens'])) {
-            $selectedAllergensIds = array_map('intval', $_POST['allergens']);
+        if (UHTTPMethods::getPostValue('allergens') === null) {
+            $selectedAllergensIds = array_map('intval', UHTTPMethods::getPostValue('allergens'));
             // Salva gli ID come stringa JSON nel cookie per 1 settimana (604800 secondi)
             UCookie::set('allergen_filter', json_encode($selectedAllergensIds), 604800);
         }
@@ -439,9 +437,7 @@ class CClient
      */
     private static function setRememberMeCookie(string $role, int $userId): void
     {
-        // NOTA: Questa è una logica semplificata. Per una sicurezza maggiore,
-        // si dovrebbe generare un token casuale, salvarlo nel cookie e salvare
-        // il suo HASH nel database associato all'utente.
+       
         
         $value = base64_encode(json_encode(['role' => $role, 'id' => $userId]));
         // Imposta il cookie per 30 giorni (2592000 secondi)
@@ -453,7 +449,7 @@ class CClient
     /**
      * Controlla se esiste un cookie "Ricordami" e, in caso affermativo,
      * effettua il login automatico creando la sessione per l'utente.
-     * QUESTA È LA FUNZIONE CHE CERCAVI.
+     * 
      */
     public static function checkRememberMeLogin(): void
     {

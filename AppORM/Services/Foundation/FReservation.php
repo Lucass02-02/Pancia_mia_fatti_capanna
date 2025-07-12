@@ -33,13 +33,6 @@ class FReservation {
         return FEntityManager::getInstance()->retriveObjectList(EReservation::class, 'date', $date);
     }
 
-    // Trova le prenotazioni per un tavolo specifico in una data specifica
-    /*public static function getReservationsForTableOnDate(ETable $table, \DateTime $date) {
-        return $table->getReservations()->filter(function($reservation) use ($date) {
-            return $reservation->getDate()->format('Y-m-d') === $date->format('Y-m-d');
-        })->toArray();
-    }*/
-
     public static function getReservationsForTableOnDate(ETable $table, \DateTime $date) {
         $reservationTables = $table->getReservationTables();
 

@@ -50,25 +50,36 @@ class EProduct
         $this->availability = true;
     }
 
-    // --- Metodi Getter (esistenti) ---
     
-    public function getIdProduct(): ?int { return $this->id; }
-    public function getName(): string { return $this->name; }
-    public function getDescription(): string { return $this->description; }
-    public function getPrice(): float { return $this->price; }
-    public function getCategory(): EProductCategory { return $this->category; }
-    public function getAllergens(): Collection { return $this->allergens; }
-    public function isAvailable(): bool { return $this->availability; }
+    public function getIdProduct(): ?int {
+         return $this->id; 
+    }
+
+    public function getName(): string {
+         return $this->name; 
+    }
+
+    public function getDescription(): string {
+         return $this->description; 
+    }
+
+    public function getPrice(): float {
+         return $this->price; 
+    }
+
+    public function getCategory(): EProductCategory {
+         return $this->category; 
+    }
+
+    public function getAllergens(): Collection {
+         return $this->allergens; 
+    }
+
+    public function isAvailable(): bool {
+         return $this->availability; 
+    }
 
     
-    // --- NUOVI METODI SETTER ---
-    // Questi metodi permettono al controller di modificare un prodotto esistente.
-
-    /**
-     * Imposta un nuovo nome per il prodotto.
-     * @param string $name
-     * @return self
-     */
     public function setName(string $name): self
     {
         $this->name = $name;
@@ -108,7 +119,6 @@ class EProduct
         return $this;
     }
 
-    // --- Metodi per gestire le relazioni (esistenti) ---
 
     public function addAllergen(EAllergens $allergen): void
     {

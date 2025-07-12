@@ -10,7 +10,7 @@ use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\TableState;
-use AppORM\Entity\EWaiter; // Assicurati di importare l'entità EWaiter
+use AppORM\Entity\EWaiter; 
 use AppORM\Entity\OrderStatus;
 use AppORM\Services\Foundation\FEntityManager;
 use DateTime;
@@ -34,7 +34,6 @@ class CWaiter
         $waiters = FPersistentManager::getInstance()->getAllWaiters();
         $halls = FPersistentManager::getInstance()->getAllRestaurantHalls();
         
-        // Gestione dei messaggi di feedback per la vista
         $error = USession::getValue('waiter_management_error');
         if ($error) {
             USession::unsetValue('waiter_management_error');
@@ -67,13 +66,13 @@ class CWaiter
             $phoneNumber = UHTTPMethods::getPostValue('phoneNumber');
             $hallId = (int)UHTTPMethods::getPostValue('hall_id');
 
-            // --- VALIDAZIONE NUMERO DI TELEFONO ---
+            
             if (!empty($phoneNumber) && !ctype_digit($phoneNumber)) {
                 USession::setValue('waiter_management_error', 'Errore: Il numero di telefono può contenere solo cifre numeriche (0-9).');
                 header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
                 exit;
             }
-            // --- FINE VALIDAZIONE ---
+           
 
             $pm = FPersistentManager::getInstance();
             $errorFound = false;
@@ -113,7 +112,6 @@ class CWaiter
         self::checkAdmin();
         if ($id > 0) {
             FPersistentManager::getInstance()->deleteWaiter($id);
-            // Potresti aggiungere un flash message di successo qui
         }
         header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
         exit;
@@ -132,7 +130,7 @@ class CWaiter
 
             if ($waiter && $hall) {
                 $waiter->setRestaurantHall($hall);
-                FPersistentManager::getInstance()->saveWaiter($waiter); // saveWaiter aggiorna il cameriere esistente
+                FPersistentManager::getInstance()->saveWaiter($waiter); 
             }
         }
         header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
@@ -151,7 +149,7 @@ class CWaiter
         $halls = FPersistentManager::getInstance()->getAllRestaurantHalls();
 
         if (!$waiter) {
-            // Cameriere non trovato, reindirizza con errore o messaggio
+            
             USession::setValue('waiter_management_error', 'Cameriere non trovato per la modifica.');
             header('Location: /Pancia_mia_fatti_capanna/waiter/manage');
             exit;
@@ -172,7 +170,7 @@ class CWaiter
         self::checkAdmin();
 
         if (UHTTPMethods::isPost()) {
-            $id = (int)UHTTPMethods::getPostValue('id'); // ID del cameriere dal form
+            $id = (int)UHTTPMethods::getPostValue('id'); 
             $name = UHTTPMethods::getPostValue('name');
             $surname = UHTTPMethods::getPostValue('surname');
             $email = UHTTPMethods::getPostValue('email');
@@ -192,15 +190,15 @@ class CWaiter
                     $waiter->setEmail($email);
                     $waiter->setSerialNumber($serialNumber);
                     $waiter->setRestaurantHall($hall);
-                    $waiter->setBirthDate($birthDate); // Aggiorna la data di nascita
+                    $waiter->setBirthDate($birthDate); 
 
-                    // Se viene fornita una nuova password, hashala e impostala
+                    
                     $newPassword = UHTTPMethods::getPostValue('password');
                     if (!empty($newPassword)) {
                         $waiter->setPassword(password_hash($newPassword, PASSWORD_DEFAULT));
                     }
 
-                    FPersistentManager::getInstance()->saveWaiter($waiter); // saveWaiter gestisce l'aggiornamento
+                    FPersistentManager::getInstance()->saveWaiter($waiter); 
                     USession::setValue('waiter_management_success', 'Dati cameriere aggiornati con successo!');
                 } catch (\Exception $e) {
                     USession::setValue('waiter_management_error', 'Errore durante l\'aggiornamento del cameriere: ' . $e->getMessage());
@@ -264,7 +262,6 @@ class CWaiter
             $table = FPersistentManager::getInstance()->getTableById($tableId);
 
             if ($waiter && $table && $newState) {
-                // Controllo di sicurezza: il cameriere può modificare solo tavoli della sua sala.
                 if ($table->getRestaurantHall()->getIdHall() == $waiter->getRestaurantHall()->getIdHall()) {
                     try {
                         $stateEnum = TableState::from($newState);
@@ -338,11 +335,11 @@ class CWaiter
 
         if (UHTTPMethods::isPost()) {
             $orderId = (int)UHTTPMethods::getPostValue('order_id');
-            //$newState = UHTTPMethods::getPostValue('status');
+            
 
             $order = FEntityManager::getInstance()->retriveObject(EOrder::class, $orderId);
             if($order ) {
-                //$stateEnum = OrderStatus::from($newState);
+                
                 $result = FPersistentManager::getInstance()->unlockOrder($order);
             }
         }

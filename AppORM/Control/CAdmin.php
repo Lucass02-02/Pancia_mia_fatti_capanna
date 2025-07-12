@@ -63,9 +63,7 @@ class CAdmin {
             $reservations = FEntityManager::getInstance()->retriveObjectList(EReservation::class, 'date', $filterDate);
         } else {
             $reservations = FEntityManager::getInstance()->selectAll(EReservation::class);
-        }
-        
-        
+        }  
         
         UView::render('manage_reservation', ['reservations' => $reservations, 'filter_date' => $filterDate]);
         
@@ -91,7 +89,7 @@ class CAdmin {
                     FPersistentManager::getInstance()->uploadObject($reservation);
 
                     if ($reservation->getStatus() === ReservationStatus::APPROVED) {
-                        //$existingOrder = FEntityManager::getInstance()->findOneBy(EOrder::class, 'reservation', $reservation);
+                        
                         $existingOrder = $reservation->getOrders();
 
                         if ($existingOrder->isEmpty()) {
@@ -148,11 +146,9 @@ class CAdmin {
 
         if (UHTTPMethods::isPost()) {
             $orderId = (int)UHTTPMethods::getPostValue('order_id');
-            //$newState = UHTTPMethods::getPostValue('status');
-
+            
             $order = FEntityManager::getInstance()->retriveObject(EOrder::class, $orderId);
             if($order ) {
-                //$stateEnum = OrderStatus::from($newState);
                 $result = FPersistentManager::getInstance()->unlockOrder($order);
             }
         }
@@ -227,9 +223,9 @@ class CAdmin {
                 if ($turn) {
                     try {
                         FEntityManager::getInstance()->deleteObject($turn);
-                        // Successo: nessun errore da impostare in sessione
+                        
                     } catch (\Exception $e) {
-                        // Cattura l'eccezione e memorizza il suo messaggio direttamente nella sessione
+                        
                         USession::setValue('turn_management_error', $e->getMessage());
                     }
                 } else {
@@ -239,7 +235,7 @@ class CAdmin {
                 USession::setValue('turn_management_error', 'ID turno non valido.');
             }
         }
-        // Reindirizza sempre alla pagina di gestione
+        
         header('Location: /Pancia_mia_fatti_capanna/Admin/manageTurns/');
         exit;
     }

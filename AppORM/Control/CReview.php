@@ -7,8 +7,8 @@ use AppORM\Services\Utility\UView;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UHTTPMethods;
 use DateTime;
-use AppORM\Entity\EUserReview; // Assicurati di importare EUserReview
-use AppORM\Entity\EAdminResponse; // Assicurati di importare EAdminResponse
+use AppORM\Entity\EUserReview; 
+use AppORM\Entity\EAdminResponse; 
 
 class CReview
 {
@@ -135,7 +135,7 @@ class CReview
 
                 if ($adminResponse) {
                     $adminResponse->setResponseText($newResponseText);
-                    FPersistentManager::getInstance()->updateAdminResponse($adminResponse); // QUESTa è la riga che chiama il metodo in FPersistentManager
+                    FPersistentManager::getInstance()->updateAdminResponse($adminResponse); 
                 }
             }
         }

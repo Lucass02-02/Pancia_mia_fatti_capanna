@@ -30,6 +30,8 @@ class EAdminResponse
     #[ORM\JoinColumn(name: 'review_id', referencedColumnName: 'id', nullable: false)] // Aggiunge la colonna review_id direttamente nella tabella admin_responses
     private EUserReview $userReview;
 
+    private static $entity = EAdminResponse::class;
+
     public function __construct(string $responseText, DateTime $responseDate) // Usa DateTime per il parametro
     {
         $this->responseText = $responseText;
@@ -85,14 +87,4 @@ class EAdminResponse
         $this->userReview = $userReview;
     }
 
-
-    
-    public function addUserReview(EUserReview $userReview): void
-    {
-        if (!$this->userReviews->contains($userReview)) {
-            $this->userReviews->add($userReview);
-            // Non è necessario chiamare $userReview->addAdminResponse($this); qui
-            // perché il mapping è gestito dal lato di EUserReview.
-        }
-    }
 }

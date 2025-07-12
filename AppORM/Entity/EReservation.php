@@ -181,7 +181,7 @@ class EReservation {
     public function addTableReservation(EReservationTable $reservationTable): void {
         if (!$this->table->contains($reservationTable)) {
             $this->table->add($reservationTable);
-            $reservationTable->setReservation($this); // Ensure the reservation is set in the table reservation
+            $reservationTable->setReservation($this); 
         }
     }
 

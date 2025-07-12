@@ -1,6 +1,7 @@
 <?php
 namespace AppORM\Install; // O la tua namespace per le classi di installazione/configurazione
 
+use Smarty\Smarty;
 // Assicurati che Smarty sia caricato via Composer (vendor/autoload.php)
 // Se per qualche motivo non lo fosse, dovresti includere Smarty.class.php qui:
 // require_once 'path/to/Smarty/Smarty.class.php';
@@ -11,7 +12,7 @@ class StartSmarty {
     public static function configuration() {
         if (self::$smartyInstance === null) {
             // Istanzia la classe Smarty
-            $smarty = new \Smarty(); // La backslash assicura che trovi la classe globale Smarty
+            $smarty = new Smarty(); // La backslash assicura che trovi la classe globale Smarty
 
             // --- PERCORSI DELLE CARTELLE DI SMARTY ---
             // Questi percorsi sono cruciali. Modificali in base alla tua struttura.
