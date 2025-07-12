@@ -91,6 +91,9 @@
                 {/if}
                 <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-info">Aggiungi Carta</a></div>
 
+                <h3 class="text-secondary mt-5">Le Mie Prenotazioni</h3>
+                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Client/viewReservations/" class="btn btn-info">Prenotazioni</a></div>
+
             </div>
 
             <div class="text-center mt-4">

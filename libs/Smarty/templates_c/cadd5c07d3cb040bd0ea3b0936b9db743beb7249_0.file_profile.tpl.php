@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-12 13:41:06
+/* Smarty version 5.5.1, created on 2025-07-13 00:10:15
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/profile.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_687249d202cbb0_01208087',
+  'unifunc' => 'content_6872dd47cfa041_46439436',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'cadd5c07d3cb040bd0ea3b0936b9db743beb7249' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/profile.tpl',
-      1 => 1752320459,
+      1 => 1752358213,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_687249d202cbb0_01208087 (\Smarty\Template $_smarty_tpl) {
+function content_6872dd47cfa041_46439436 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -144,6 +144,9 @@ $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                     <p>Non hai ancora aggiunto nessuna carta di credito.</p>
                 <?php }?>
                 <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/client/addCreditCard" class="btn btn-info">Aggiungi Carta</a></div>
+
+                <h3 class="text-secondary mt-5">Le Mie Prenotazioni</h3>
+                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Client/viewReservations/" class="btn btn-info">Prenotazioni</a></div>
 
             </div>
 

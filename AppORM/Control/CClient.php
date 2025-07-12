@@ -78,7 +78,7 @@ class CClient
         }
     }
 
-    
+
     public static function login(): void
     {
         if (UHTTPMethods::isGet()) {
@@ -498,6 +498,24 @@ class CClient
                     UCookie::delete('remember_user');
                 }
             }
+        }
+    }
+
+    public static function viewReservations(): void
+    {
+        if (!USession::isSet('user_id')) {
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
+            exit;
+        }
+
+        $clientId = USession::getValue('user_id');
+        $client = FEntityManager::getInstance()->retriveObject(EClient::class, $clientId);
+        $reservations = $client->getReservations();
+
+        if ($reservations === null || $reservations->isEmpty()) {
+            UView::render('client_no_reservation');
+        } else {
+            UView::render('client_view_reservation', ['reservations' => $reservations]);
         }
     }
 
