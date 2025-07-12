@@ -2,13 +2,19 @@
 // File: AppORM/Control/CWaiter.php
 namespace AppORM\Control;
 
+use AppORM\Entity\EOrder;
+use AppORM\Entity\EOrderItem;
+use AppORM\Entity\EReservation;
 use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UView;
 use AppORM\Entity\TableState;
 use AppORM\Entity\EWaiter; // Assicurati di importare l'entità EWaiter
+use AppORM\Entity\OrderStatus;
+use AppORM\Services\Foundation\FEntityManager;
 use DateTime;
+
 
 class CWaiter
 {
@@ -42,10 +48,11 @@ class CWaiter
             $password = UHTTPMethods::getPostValue('password');
             $birthDate = new DateTime(UHTTPMethods::getPostValue('birthDate'));
             $serialNumber = UHTTPMethods::getPostValue('serialNumber');
+            $phoneNumber = UHTTPMethods::getPostValue('phoneNumber');
             $hallId = (int)UHTTPMethods::getPostValue('hall_id');
 
             // FPersistentManager::getInstance()->registerWaiter ritorna ?EWaiter o null
-            $waiter = FPersistentManager::getInstance()->registerWaiter($name, $surname, $birthDate, $email, $password, $serialNumber, $hallId);
+            $waiter = FPersistentManager::getInstance()->registerWaiter($name, $surname, $birthDate, $email, $password, $serialNumber, $phoneNumber, $hallId);
             // Qui potresti voler aggiungere una gestione per il successo/fallimento della registrazione
             // ad esempio, un flash message nella sessione
             if (!$waiter) {
@@ -226,5 +233,98 @@ class CWaiter
         }
         header('Location: /Pancia_mia_fatti_capanna/waiter/viewTables');
         exit;
+    }
+
+    public static function viewReservation() {
+        if (USession::getValue('user_role') !== 'waiter') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        $filterDate = UHTTPMethods::getPostValue('filter_date');
+        if ($filterDate) {
+            UHTTPMethods::setPostValue('filter_date', null);
+        }
+
+        if ($filterDate) {
+
+            $reservations = FEntityManager::getInstance()->retriveObjectList(EReservation::class, 'date', $filterDate);
+        } else {
+            $reservations = FEntityManager::getInstance()->selectAll(EReservation::class);
+        }
+        
+
+        UView::render('waiter_reservation_view', ['reservations' => $reservations, 'filter_date' => $filterDate]);
+    }
+
+    public static function viewOrder() {
+        if (USession::getValue('user_role') !== 'waiter') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        $userRole = USession::getValue('user_role');
+
+        $message = USession::getValue('flash_message');
+        if ($message) {
+            USession::setValue('flash_message', null);
+        }
+            
+        
+        $filterDate = UHTTPMethods::getPostValue('filter_date');
+        if ($filterDate) {
+            UHTTPMethods::setPostValue('filter_date', null);
+        }
+
+        if ($filterDate) {
+            $orders = FEntityManager::getInstance()->retriveObjectList(EOrder::class, 'date', $filterDate);
+        } else {
+            $orders = FEntityManager::getInstance()->selectAll(EOrder::class);
+        }
+
+        UView::render('waiter_manage_order', ['orders' => $orders, 'filter_date' => $filterDate, 'error' => $message, 'user_role' => $userRole]);
+    }
+
+    public static function enableOrder() {
+        if (USession::getValue('user_role') !== 'waiter') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        if (UHTTPMethods::isPost()) {
+            $orderId = (int)UHTTPMethods::getPostValue('order_id');
+            //$newState = UHTTPMethods::getPostValue('status');
+
+            $order = FEntityManager::getInstance()->retriveObject(EOrder::class, $orderId);
+            if($order ) {
+                //$stateEnum = OrderStatus::from($newState);
+                $result = FPersistentManager::getInstance()->unlockOrder($order);
+            }
+        }
+
+        if ($result === true) {
+            header('Location: /Pancia_mia_fatti_capanna/Waiter/viewOrder');
+            exit;
+        }else{
+            USession::setValue('flash_message', $result);
+            header('Location: /Pancia_mia_fatti_capanna/Waiter/viewOrder');
+        }
+
+        
+    }
+
+    public static function detailOrder() {
+        if (USession::getValue('user_role') !== 'waiter') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        $userRole = USession::getValue('user_role');
+
+        $orderId = UHTTPMethods::getPostValue('order_id');
+
+        $order_items = FEntityManager::getInstance()->retriveObjectList(EOrderItem::class, 'order', $orderId);
+
+        UView::render('waiter_order_detail', ['order_items' => $order_items, 'user_role' => $userRole]);
     }
 }

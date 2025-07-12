@@ -1,4 +1,4 @@
-{* File: templates/registration.tpl (RIADATTATA CON YUMMY TEMPLATE) *}
+{* File: templates/registration.tpl (YUMMY STYLE COMPLETO) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
 
-<body>
+<body class="bg-light">
 
     <!-- ======= Header ======= -->
-    <header id="header" class="header d-flex align-items-center">
+    <header id="header" class="header d-flex align-items-center mb-4">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="logo">
                 <h1><a href="/Pancia_mia_fatti_capanna/Home/home">Pancia mia <span>fatti capanna</span></a></h1>
@@ -24,11 +24,10 @@
         </div>
     </header><!-- End Header -->
 
-    <!-- ======= Registration Section ======= -->
-    <section class="registration">
-        <div class="container my-5" style="max-width: 500px;">
-            <div class="php-email-form bg-white p-4 rounded shadow-sm">
-                <h1 class="text-center text-primary mb-4">Registrati</h1>
+    <main>
+        <div class="container" style="max-width: 500px;">
+            <div class="surface p-4 rounded shadow-sm">
+                <h1 class="text-center mb-4" style="font-family: var(--heading-font); color: var(--heading-color);">Registrati</h1>
 
                 {if isset($message)}
                     <div class="alert {if isset($success) && $success}alert-success{else}alert-danger{/if}" role="alert">
@@ -65,7 +64,7 @@
                         <label for="nickname" class="form-label">Nickname (Opzionale)</label>
                         <input type="text" id="nickname" name="nickname" class="form-control">
                     </div>
-                    <button type="submit" class="btn btn-get-started w-100">Registrati</button>
+                    <button type="submit" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Registrati</button>
                 </form>
 
                 <div class="text-center mt-3">
@@ -73,7 +72,7 @@
                 </div>
             </div>
         </div>
-    </section><!-- End Registration Section -->
+    </main>
 
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer mt-5">

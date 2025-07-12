@@ -1,9 +1,9 @@
-{* File: templates/waiter_profile.tpl (RIADATTATA CON YUMMY TEMPLATE) *}
+{* File: templates/waiter_profile.tpl (RIADATTATA CON YUMMY STYLE COMPLETO) *}
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Dashboard Cameriere - {$waiter->getName()|escape}</title>
 
     <!-- Bootstrap CSS -->
@@ -13,10 +13,10 @@
     <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
 
-<body>
+<body class="bg-light">
 
     <!-- ======= Header ======= -->
-    <header id="header" class="header d-flex align-items-center">
+    <header id="header" class="header d-flex align-items-center mb-4">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="logo">
                 <h1><a href="/Pancia_mia_fatti_capanna/Home/home">Pancia mia <span>fatti capanna</span></a></h1>
@@ -24,11 +24,10 @@
         </div>
     </header><!-- End Header -->
 
-    <!-- ======= Waiter Dashboard Section ======= -->
-    <section class="waiter-dashboard">
-        <div class="container my-5" style="max-width: 900px;">
-            <div class="php-email-form bg-white p-4 rounded shadow-sm">
-                <h1 class="text-primary text-center mb-4">Ciao, {$waiter->getName()|escape}!</h1>
+    <main>
+        <div class="container" style="max-width: 900px;">
+            <div class="surface p-4 rounded shadow-sm">
+                <h1 class="text-center mb-4" style="font-family: var(--heading-font); color: var(--heading-color);">Ciao, {$waiter->getName()|escape}!</h1>
 
                 <div class="row g-4">
                     <div class="col-md-6">
@@ -47,10 +46,10 @@
                                     <a href="/Pancia_mia_fatti_capanna/Waiter/viewTables" class="btn btn-primary w-100">Visualizza Stato Tavoli</a>
                                 </li>
                                 <li class="mb-2">
-                                    <button class="btn btn-secondary w-100" disabled>Visualizza Prenotazioni</button>
+                                    <a href="/Pancia_mia_fatti_capanna/Waiter/viewReservation" class="btn btn-primary w-100">Visualizza Prenotazioni</a>
                                 </li>
-                                <li>
-                                    <button class="btn btn-secondary w-100" disabled>Visualizza Ordini</button>
+                                <li class="mb-2">
+                                    <a href="/Pancia_mia_fatti_capanna/Waiter/viewOrder" class="btn btn-primary w-100">Visualizza Ordini</a>
                                 </li>
                             </ul>
                         </div>
@@ -62,7 +61,7 @@
                 </div>
             </div>
         </div>
-    </section><!-- End Waiter Dashboard Section -->
+    </main>
 
     <!-- ======= Footer ======= -->
     <footer id="footer" class="footer mt-5">

@@ -39,6 +39,17 @@ class UHTTPMethods
     }
 
     /**
+     * Setta un valore dell'array $_POST
+     * 
+     * @param string $key La chiave del valore da settare
+     * @param mixed $value Il valore da salvare.
+     */
+    public static function setPostValue(string $key, mixed $value ) {
+        $_POST[$key] = $value;
+    }
+
+
+    /**
      * Recupera un valore dall'array $_GET (query string).
      *
      * @param string $key La chiave del valore da recuperare.

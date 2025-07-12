@@ -1,4 +1,5 @@
-{* File: templates/waiter_tables_view.tpl (RIADATTATA CON YUMMY TEMPLATE) *}
+{* File: templates/waiter_tables_view.tpl *}
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -25,17 +26,19 @@
     </header><!-- End Header -->
 
     <!-- ======= Tables View Section ======= -->
-    <section class="tables-view">
-        <div class="container my-5" style="max-width: 900px;">
-            <div class="php-email-form bg-white p-4 rounded shadow-sm">
-                <h1 class="text-primary text-center mb-4">Stato Tavoli - {$hall->getName()|escape}</h1>
+    <section class="tables-view my-5">
+        <div class="container" style="max-width: 900px;">
+            <div class="surface p-4 rounded shadow-sm">
+                <h1 class="text-center mb-4" style="font-family: var(--heading-font); color: var(--heading-color);">
+                    Stato Tavoli - {$hall->getName()|escape}
+                </h1>
 
                 {if $tables|@count == 0}
                     <p class="text-center text-muted">Non ci sono tavoli assegnati a questa sala.</p>
                 {else}
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered align-middle">
-                            <thead class="table-light">
+                            <thead style="background-color: var(--surface-color); color: var(--default-color);">
                                 <tr>
                                     <th>Tavolo</th>
                                     <th>Posti</th>
@@ -61,7 +64,7 @@
                                                     <option value="reserved" {if $table->getState()->value eq 'reserved'}selected{/if}>Prenotato</option>
                                                     <option value="occupied" {if $table->getState()->value eq 'occupied'}selected{/if}>Occupato</option>
                                                 </select>
-                                                <button type="submit" class="btn btn-primary btn-sm">Salva</button>
+                                                <button type="submit" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Salva</button>
                                             </form>
                                         </td>
                                     </tr>
@@ -72,7 +75,7 @@
                 {/if}
 
                 <div class="text-center mt-4">
-                    <a href="/Pancia_mia_fatti_capanna/Waiter/profile" class="btn btn-secondary">Torna alla Dashboard</a>
+                    <a href="/Pancia_mia_fatti_capanna/Waiter/profile" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Torna alla Dashboard</a>
                 </div>
             </div>
         </div>

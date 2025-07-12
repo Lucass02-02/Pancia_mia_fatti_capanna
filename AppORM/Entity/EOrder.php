@@ -8,8 +8,6 @@ use Doctrine\Common\Collections\Collection;
 enum OrderStatus: string {
     case CREATED = 'created';
     case IN_PROGRESS = 'in_progress';
-    case READY = 'ready'; //questi due puoi usarli per delle statistiche che magari può vedere l'admin, ma vanno implementate
-    case SERVED = 'served'; //credo vadano cambiate delle foundation per asseganre lo stato ad ogni fase dell'ordine
     case PAID = 'paid';
     case CANCELED = 'canceled';
 }
@@ -26,7 +24,7 @@ class EOrder {
     #[ORM\GeneratedValue]
     private $id;
 
-    #[ORM\Column(type: 'datetime', nullable: false)]
+    #[ORM\Column(type: 'date', nullable: false)]
     private $date;
 
     #[ORM\Column(type: 'string', length: 20, nullable: false, enumType: OrderStatus::class)]
@@ -39,9 +37,6 @@ class EOrder {
 
     #[ORM\OneToMany(targetEntity: EOrderItem::class, mappedBy: 'order', cascade: ['persist'])]
     private Collection $orderItems;
-
-    #[ORM\ManyToMany(targetEntity: EProduct::class, mappedBy: 'orders', cascade: ['persist'])]
-    private Collection $products;
 
     private static $entity = EOrder::class;
 
@@ -68,14 +63,6 @@ class EOrder {
 
     public function setDate($date) {
         $this->date = $date;
-    }
-
-    public function getProducts(): Collection {
-        return $this->products;
-    }
-
-    public function setProducts(Collection $products) {
-        $this->products = $products;
     }
 
     public function getOrderItems(): Collection {

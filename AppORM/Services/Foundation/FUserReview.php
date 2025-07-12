@@ -3,18 +3,17 @@ namespace AppORM\Services\Foundation;
 
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Entity\EUserReview;
-use AppORM\Entity\EClient; // Assicurati sia presente se usato altrove
-use DateTime; // Assicurati sia presente se usato altrove
+use AppORM\Entity\EClient;
+use DateTime;
 
 class FUserReview
 {
-    private static string $table = EUserReview::class;
-    private static string $key = "id"; // Questa proprietà non è usata in questo file se non direttamente
+    private static string $table = EUserReview::class; 
+    private static string $key = "id";
 
     public static function getTable(): string { return self::$table; }
-    // Rimosse o commentate le righe che sembravano ridondanti/errate
-    // public static function getKey(): string { return self::class; }
-    // public static function getClass(): string { return self::class; }
+    public static function getKey(): string { return self::class; }
+    public static function getClass(): string { return self::class; }
 
     public static function getObj(int $id): ?EUserReview
     {
@@ -28,7 +27,8 @@ class FUserReview
 
     public static function deleteObj(EUserReview $review): bool
     {
-        return FEntityManager::getInstance()->deleteObject($review);
+        // Se FEntityManager non ha deleteObj, ma removeObject, usa quello
+        return FEntityManager::getInstance()->deleteObject($review); 
     }
 
     /**

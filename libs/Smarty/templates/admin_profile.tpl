@@ -1,4 +1,5 @@
-{* File: templates/admin_profile.tpl (RIADATTATO CON NUOVO style.css Yummy) *}
+{* File: templates/admin_profile.tpl *}
+
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -16,67 +17,60 @@
 <body>
 
     <!-- ======= Header ======= -->
-    <header id="header" class="header d-flex align-items-center">
+    <header id="header" class="header d-flex align-items-center mb-5">
         <div class="container d-flex justify-content-between align-items-center">
             <div class="logo">
-                <h1><a href="/Pancia_mia_fatti_capanna/Home/index">Pancia mia <span>fatti capanna</span></a></h1>
+                <h1><a href="/Pancia_mia_fatti_capanna/Home/home">Pancia mia <span>fatti capanna</span></a></h1>
             </div>
         </div>
     </header><!-- End Header -->
 
-    <!-- ======= Page Title Section ======= -->
-    <section class="page-title">
-        <div class="container">
-            <h1>Pannello di Controllo</h1>
-        </div>
-    </section><!-- End Page Title Section -->
+    <main>
+        <div class="container" style="max-width: 1100px;">
+            <div class="surface p-4 rounded shadow-sm">
+                <h1 class="text-center mb-4" style="font-family: var(--heading-font); color: var(--heading-color);">
+                    Pannello di Controllo
+                </h1>
 
-    <!-- ======= Admin Profile Section ======= -->
-    <section class="section">
-        <div class="container">
-
-            <div class="php-email-form bg-white p-4 shadow-sm mx-auto" style="max-width: 800px;">
-                <div class="mb-4">
-                    <h2 class="h4">Dati del Proprietario</h2>
+                <div class="mb-5">
+                    <h2 class="h4" style="color: var(--heading-color); font-family: var(--heading-font);">Dati del Proprietario</h2>
                     <p><strong>Nome Completo:</strong> {$admin->getName()|escape} {$admin->getSurname()|escape}</p>
                     <p><strong>Email:</strong> {$admin->getEmail()|escape}</p>
                 </div>
 
-                <div class="row g-4">
-                    <div class="col-md-6">
-                        <div class="icon-box">
-                            <i class="bi bi-shop"></i>
-                            <h4>Gestione Ristorante</h4>
+                <div class="row g-4 justify-content-center dashboard-buttons">
+                    <div class="col-md-5">
+                        <div class="p-3 rounded border h-100" style="background-color: var(--surface-color);">
+                            <h3 class="h5 mb-3" style="color: var(--heading-color); font-family: var(--heading-font);">Gestione Ristorante</h3>
                             <ul class="list-unstyled">
-                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="btn btn-info">Gestisci Tavoli</a></div>
-                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn btn-info">Gestisci Banchetto</a></div>
-                            <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-info">Gestisci Menù e Prodotti</a></div></div>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Tavoli e Sale</a></li>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Menù e Prodotti</a></li>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/showReservations" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Prenotazioni</a></li>
+                                <li><a href="/Pancia_mia_fatti_capanna/Admin/showOrders" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Ordini</a></li>
                             </ul>
                         </div>
                     </div>
-
-                    <div class="col-md-6">
-                        <div class="icon-box">
-                            <i class="bi bi-people"></i>
-                            <h4>Gestione Utenti</h4>
+                    <div class="col-md-5">
+                        <div class="p-3 rounded border h-100" style="background-color: var(--surface-color);">
+                            <h3 class="h5 mb-3" style="color: var(--heading-color); font-family: var(--heading-font);">Gestione Utenti</h3>
                             <ul class="list-unstyled">
-                                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/manageClients" class="btn btn-info">Gestisci Clienti</a></div>
-                                <div class="mb-2"><a href="/Pancia_mia_fatti_capanna/Waiter/manage" class="btn btn-info">Gestisci Camerieri</a></div>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/manageClients" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Clienti</a></li>
+                                <li><a href="/Pancia_mia_fatti_capanna/Waiter/manage" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Camerieri</a></li>
                             </ul>
                         </div>
                     </div>
                 </div>
 
-                <div class="text-center mt-4">
+                <div class="text-center mt-5">
                     <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary me-2">Torna alla Home</a>
+                    <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Logout</a>
                 </div>
             </div>
-
         </div>
-    </section><!-- End Admin Profile Section -->
+    </main>
 
     <!-- ======= Footer ======= -->
-    <footer id="footer" class="footer">
+    <footer id="footer" class="footer mt-5">
         <div class="container text-center">
             <p>&copy; Copyright <strong>Pancia mia fatti capanna</strong>. All Rights Reserved</p>
         </div>

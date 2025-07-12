@@ -17,7 +17,10 @@ class EClient extends EUser {
 
     #[ORM\Column(type: 'integer')]
     private int $loyaltyPoints = 0;
-
+    /**
+     * @Column(type="string", nullable=true)
+     */
+    private $rememberToken;
     /**
      * CORREZIONE: 'mappedBy' ora punta a 'client' (singolare).
      * cascade e orphanRemoval sono aggiunti per una gestione corretta delle eliminazioni.
@@ -55,4 +58,7 @@ class EClient extends EUser {
     public function getReviews(): Collection { return $this->reviews; }
     public function getCreditCards(): Collection { return $this->creditCards; }
     public function getReservations(): Collection { return $this->reservations; }
+    public function getRememberToken(): ?string { return $this->rememberToken; }
+    public function setRememberToken(?string $rememberToken): void { $this->rememberToken = $rememberToken; }
+
 }

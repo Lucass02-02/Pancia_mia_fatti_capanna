@@ -1,7 +1,7 @@
 <?php
 
 namespace AppORM\Services\Foundation;
-require_once __DIR__ . '/FTable.php';
+
 use AppORM\Services\Foundation\FEntityManager;
 use AppORM\Services\Foundation\FClient;
 use AppORM\Entity\EClient;
@@ -17,7 +17,7 @@ use AppORM\Entity\EReservation;
 use AppORM\Entity\ERestaurantHall;
 use AppORM\Entity\ETable;
 use AppORM\Entity\EReservationTable;
-use AppORM\Entity\DayOfWeek; // Ensure this line is present and correct
+use AppORM\Entity\DayOfWeek; 
 use AppORM\Services\Foundation\FTurn;
 use \DateTime;
 use AppORM\Services\Foundation\FReservation;
@@ -26,18 +26,13 @@ use AppORM\Entity\TableState;
 use AppORM\Services\Foundation\FOrder;
 use AppORM\Entity\EOrder;
 use AppORM\Entity\OrderStatus;
-use AppORM\Entity\EProductCategory; 
-use AppORM\Services\Foundation\FProductCategory;
 use AppORM\Entity\EAdmin;
 use AppORM\Services\Foundation\FAdmin;
 use AppORM\Services\Foundation\FTable;
 use AppORM\Entity\EWaiter;
-use AppORM\Services\Foundation\FWaiter;
+use AppORM\Entity\EProductCategory;
 use AppORM\Entity\EAdminResponse;
-use AppORM\Services\Foundation\FAdminResponse;
-
-
-
+use Exception;
 
 class FPersistentManager {
 
@@ -60,18 +55,26 @@ class FPersistentManager {
     }
 
     public static function registerClient(string $name, string $surname, DateTime $birthDate, string $email, string $password,  ?string $phoneNumber = null, ?string $nickname = null,): ?EClient {
-        if (FClient::getClientByEmail($email) !== null) { return null; }
-        if ($nickname !== null && FClient::getClientByNickname($nickname) !== null) { return null; }
+        if (FClient::getClientByEmail($email) !== null) {
+             return null;
+             }
+        if ($nickname !== null && FClient::getClientByNickname($nickname) !== null) {
+             return null; 
+            }
         $client = new EClient($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT), $phoneNumber, $nickname);
         $client->setNickname($nickname);
         $client->setPhonenumber($phoneNumber);
-        if (FClient::saveObj($client)) { return $client; }
+        if (FClient::saveObj($client)) {
+             return $client; 
+            }
         return null;
     }
     
     public static function authenticateClient(string $email, string $password): ?EClient {
         $client = FClient::getClientByEmail($email);
-        if ($client && password_verify($password, $client->getPassword())) { return $client; }
+        if ($client && password_verify($password, $client->getPassword())) {
+             return $client; 
+            }
         return null;
     }
     
@@ -101,102 +104,6 @@ class FPersistentManager {
             return false;
         }
     }
-    /**
-     * Recupera tutte le recensioni dal database.
-     * @return array
-     */
-    public static function getAllReviews(): array
-    {
-
-        return FUserReview::fetchAll();
-    }
-
-   public static function addAdminResponseToReview(EAdmin $admin, EUserReview $review, string $responseText): bool
-    {
-        try {
-            $response = new EAdminResponse($responseText, new DateTime()); // Crea la nuova risposta
-            $response->setAdmin($admin);   
-            $response->setUserReview($review);    
-            $review->addAdminResponse($response); 
-            return FEntityManager::getInstance()->saveObject($response); 
-        } catch (\Exception $e) {
-            error_log("Errore durante il salvataggio della risposta dell'admin: " . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Elimina una risposta dell'amministratore.
-     * @param EAdminResponse $adminResponse L'oggetto risposta da eliminare.
-     * @return bool True se l'eliminazione è avvenuta con successo, false altrimenti.
-     */
-    public static function deleteAdminResponse(EAdminResponse $adminResponse): bool
-    {
-        try {
-            return FEntityManager::getInstance()->deleteObject($adminResponse); // Usa deleteObject su EAdminResponse
-        } catch (\Exception $e) {
-            error_log("Errore durante l'eliminazione della risposta dell'admin: " . $e->getMessage());
-            return false;
-        }
-    }
-   
-       public static function updateAdminResponse(EAdminResponse $adminResponse): bool
-    {
-        try {
-            return FEntityManager::getInstance()->saveObject($adminResponse);
-        } catch (\Exception $e) {
-            error_log("Errore durante l'aggiornamento della risposta dell'admin: " . $e->getMessage());
-            return false;
-        }
-    }
-
-    /**
-     * Elimina una recensione di un cliente, verificando che il cliente sia il proprietario della recensione.
-     * @param int $reviewId L'ID della recensione da eliminare.
-     * @param int $clientId L'ID del cliente che tenta l'eliminazione (per verifica di proprietà).
-     * @return bool True se la recensione è stata eliminata con successo, false altrimenti.
-     */
-    public static function deleteClientReview(int $reviewId, int $clientId): bool
-    {
-        try {
-            $review = FUserReview::getObj($reviewId); // Recupera la recensione
-
-            if ($review && $review->getClient()->getId() === $clientId) { // Verifica che il cliente sia il proprietario
-                return FUserReview::deleteObj($review); // Elimina la recensione
-            }
-            return false; // Recensione non trovata o cliente non proprietario
-        } catch (\Exception $e) {
-            error_log("Errore durante l'eliminazione della recensione del cliente: " . $e->getMessage());
-            return false;
-        }
-    }
-
-
-
-    /**
-     * Recupera una singola risposta dell'admin tramite ID.
-     * Necessario per recuperare l'oggetto risposta prima di eliminarlo.
-     * @param int $id L'ID della risposta dell'admin.
-     * @return EAdminResponse|null L'oggetto risposta o null se non trovato.
-     */
-    public static function getAdminResponseById(int $id): ?EAdminResponse
-    {
-        return FEntityManager::getInstance()->retriveObject(EAdminResponse::class, $id);
-    }
-
-
-
-        /**
-     * Recupera una singola recensione tramite ID.
-     */
-    public static function getReviewById(int $id): ?EUserReview
-    {
-        return FUserReview::getObj($id);
-    }
-
-
-
-
 
     public static function addCreditCardToClient(EClient $client, string $brand, string $last4, int $expMonth, int $expYear, ?string $cardName): bool
     {
@@ -260,46 +167,6 @@ class FPersistentManager {
     
     public static function removeAllergenFromProduct(EProduct $product, EAllergens $allergen): bool { $product->removeAllergen($allergen); return FProduct::saveObj($product); }
     
-    /**
-     * Salva o aggiorna una categoria di prodotti.
-     */
-    public static function saveProductCategory(EProductCategory $category): bool 
-    { 
-        return FProductCategory::saveObj($category); 
-    }
-    
-    /**
-     * Recupera una categoria tramite ID.
-     */
-    public static function getProductCategoryById(int $id): ?EProductCategory 
-    { 
-        return FProductCategory::getObj($id); 
-    }
-
-    /**
-     * Recupera tutte le categorie di prodotti.
-     */
-    public static function getAllProductCategories(): array
-    {
-        return FProductCategory::selectAll();
-    }
-    
-    /**
-     * Cancella una categoria di prodotti.
-     */
-    public static function deleteProductCategory(EProductCategory $category): bool 
-    { 
-        return FProductCategory::deleteObj($category); 
-    }
-
-    /**
-     * Aggiorna il nome di una categoria esistente.
-     */
-    public static function updateProductCategoryName(EProductCategory $category, string $newName): bool
-    {
-        $category->setName($newName);
-        return FProductCategory::saveObj($category);
-    }
 
     //Funzione che crea una prenotazione, passi in ingeresso solo l'oggetto reservation e l'associazione al client la fai nel controllore
     //mentre l'associazione al tavolo e al turno viene fatta nella funzione
@@ -307,7 +174,7 @@ class FPersistentManager {
         //costanti per gestire la durata dinamica della prenotazione 
         $defaultDuration = 90;
         $minDuration = 60;
-        $maxDuration = 180;
+        $maxDuration = 120;
 
         $date = $reservation->getDate();
         
@@ -318,10 +185,7 @@ class FPersistentManager {
         $turn = FTurn::determineTurnByTime($reservation->getHours());
 
         if (!$turn) {
-            return [
-                'status' => 'error',
-                'message' => "Orario non valido per nessun turno."
-            ];
+            return "Orario non valido per nessun turno.";
         }
 
       
@@ -331,7 +195,7 @@ class FPersistentManager {
         
         $duration = $reservation->getDuration();
         //$turn = FEntityManager::getInstance()->retriveObject(ETurn::getEntity(), $reservation->getTurn()->getIdTurn());
-        $hall = FEntityManager::getInstance()->retriveObject(ERestaurantHall::getEntity(), $reservation->getRestaurantHall()->getIdHall()); 
+        //$hall = FEntityManager::getInstance()->retriveObject(ERestaurantHall::getEntity(), $reservation->getRestaurantHall()->getIdHall()); 
 
     
         //se non è specificata una durata assegna una di default
@@ -341,10 +205,7 @@ class FPersistentManager {
         }
 
         if ($duration < $minDuration || $duration > $maxDuration) {
-            return [
-                'status' => 'error',
-                'message' => "La durata della prenotazione deve essere compresa tra $minDuration e $maxDuration minuti."
-            ];
+            return "La durata della prenotazione deve essere compresa tra $minDuration e $maxDuration minuti.";
         }
 
         
@@ -362,28 +223,19 @@ class FPersistentManager {
         $maxEndTime = (clone $turnEnd)->modify("+30 minutes");
 
         if ($timeStart < $turnStart) {
-            return [
-                'status' => 'error',
-                'message' => "L'orario di inizio della prenotazione non può essere prima dell'orario di inizio del turno."
-            ];
+            return "L'orario di inizio della prenotazione non può essere prima dell'orario di inizio del turno.";
         }
 
         if ($endTime > $maxEndTime) {
-            return [
-                'status' => 'error',
-                'message' => "L'orario di fine della prenotazione non può superare l'orario di fine del turno."
-            ];
+            return "L'orario di fine della prenotazione non può superare l'orario di fine del turno.";
         }
 
         //$tables = FEntityManager::getInstance()->retriveObjectList(ETable::getEntity(), 'restaurantHall', $hall->getIdHall());
         
-        try {
-            $tables = FEntityManager::getInstance()->selectAll(ETable::getEntity());
-            echo "✅ Chiamata riuscita, tavoli caricati\n";
-        } catch (\Exception $e) {
-            echo "❌ ERRORE durante il recupero dei tavoli: " . $e->getMessage() . "\n";
-            
-        }
+        
+
+
+        $tables = FEntityManager::getInstance()->selectAll(ETable::getEntity());
 
         $people = $reservation->getPeopleNum();
         $availableTables = [];   
@@ -429,44 +281,94 @@ class FPersistentManager {
         }
 
         if ($seatsAccumulated < $people) {
-            return [
-                'status' => 'error',
-                'message' => "Non ci sono abbastanza posti disponibili per $people persone."
-            ];
+            return "Non ci sono abbastanza posti disponibili per $people persone";
         }
 
         
-            foreach ($assignedTables as $table) {
+            /*foreach ($assignedTables as $table) {
                 $reservationTable = new EReservationTable();
                 $reservationTable->setReservation($reservation);
                 $reservationTable->setDate($date);
                 $reservationTable->setStartTime($timeStart);
                 $reservationTable->setEndTime($endTime);
                 $reservationTable->setTable($table);
-                self::uploadObject($reservationTable);
 
+                $allReservationTable = FEntityManager::getInstance()->selectAll(EReservationTable::class);
+
+                foreach ($allReservationTable as $singleReservationTable) {
+                    
+                    $startTimeMatch = $singleReservationTable->getStartTime()->format('H:i:s') === $timeStart->format('H:i:s');
+                    $endTimeMatch = $singleReservationTable->getEndTime()->format('H:i:s') === $endTime->format('H:i:s');
+                    $dateMatch = $singleReservationTable->getDate()->format('Y-m-d') === $date->format('Y-m-d');
+                    $tableMatch = $singleReservationTable->getTable()->getIdTable() === $table->getIdTable();
+
+                    if ($tableMatch && $dateMatch && $startTimeMatch && $endTimeMatch) {
+                        return "Non ci sono tavoli liberi per quest'orario";
+                    }
+
+                } 
+                self::uploadObject($reservationTable);
+                
                 $reservation->addTableReservation($reservationTable);
                 //$reservation->addTable($table);
                 $table->setState(TableState::RESERVED);
                 self::uploadObject($table);
-            } 
+            } */
         
+        $atLeastOneAssigned = false;
+
+        foreach ($assignedTables as $table) {
+            $conflictFound = false;
+
+            $allReservationTable = FEntityManager::getInstance()->selectAll(EReservationTable::class);
+
+            foreach ($allReservationTable as $singleReservationTable) {
+                $startTimeMatch = $singleReservationTable->getStartTime()->format('H:i:s') === $timeStart->format('H:i:s');
+                $endTimeMatch = $singleReservationTable->getEndTime()->format('H:i:s') === $endTime->format('H:i:s');
+                $dateMatch = $singleReservationTable->getDate()->format('Y-m-d') === $date->format('Y-m-d');
+                $tableMatch = $singleReservationTable->getTable()->getIdTable() === $table->getIdTable();
+
+                if ($tableMatch && $dateMatch && $startTimeMatch && $endTimeMatch) {
+                    $conflictFound = true;
+                    break;
+                }
+            }
+
+            if (!$conflictFound) {
+                $reservationTable = new EReservationTable();
+                $reservationTable->setReservation($reservation);
+                $reservationTable->setDate($date);
+                $reservationTable->setStartTime($timeStart);
+                $reservationTable->setEndTime($endTime);
+                $reservationTable->setTable($table);
+
+                self::uploadObject($reservationTable);
+                $reservation->addTableReservation($reservationTable);
+
+                $table->setState(TableState::RESERVED);
+                self::uploadObject($table);
+
+                $atLeastOneAssigned = true;
+            }
+        }
+
+        // Se nessun tavolo è stato assegnato
+        if (!$atLeastOneAssigned) {
+            return "Non ci sono tavoli liberi per quest'orario";
+        }
+
+        
+
         self::uploadObject($reservation);
         
-        return [
-            'status' => 'success',
-            'message' => "Prenotazione creata con successo.",
-            'tables' => array_map(fn($t) => $t->getIdTable(), $assignedTables)
-        ];
+        return true;
 
     }
 
 
     public static function createOrderFromReservation(EReservation $reservation) {
-        if ($reservation->getStatus() == ReservationStatus::CREATED) {
+        if ($reservation->getStatus() == ReservationStatus::APPROVED) {
             
-            $reservation->setStatus(ReservationStatus::APPROVED);
-            self::uploadObject($reservation);
             $order = FOrder::createOrder($reservation);
             $results = self::uploadObject($order);
             return $results;
@@ -475,26 +377,22 @@ class FPersistentManager {
 
 
     public static function deleteReservation(EReservation $reservation) {
-        if ($reservation->getStatus() == ReservationStatus::CREATED) {
+        if ($reservation->getStatus() == ReservationStatus::CANCELED) {
             
-            $tables = $reservation->getTable();
+            $reservationTables = $reservation->getTable();
            
-            foreach ($tables as $table) {
-                $table->setState(TableState::AVAILABLE);
-                self::uploadObject($table);
+            foreach ($reservationTables as $reservationTable) {
+                $reservationTable->getTable()->setState(TableState::AVAILABLE);
+                self::uploadObject($reservationTable);
             }
-            $reservation->setStatus(ReservationStatus::CANCELED);
-            $results = self::uploadObject($reservation);
-            return $results;
+
+            return true;
 
         } else {
-            return [
-                'status' => 'error',
-                'message' => "La prenotazione non può essere cancellata perché non è nello stato 'CREATED'."
-            ];
+            return "La prenotazione non può essere cancellata perché non è nello stato 'CREATED'.";
         }
     }
-
+    
     public static function unlockOrder(EOrder $order) {
        $reservation = $order->getReservation();
        
@@ -502,17 +400,14 @@ class FPersistentManager {
             $reservation->setStatus(ReservationStatus::ORDER_IN_PROGRESS);
             self::uploadObject($reservation);
             $order->setStatus(OrderStatus::IN_PROGRESS);
-            $results = self::uploadObject($order);
-            return $results;
+            self::uploadObject($order);
+            return true;
         } else {
-            return [
-                'status' => 'error',
-                'message' => "L'ordine non può essere sbloccato perché la prenotazione non è nello stato 'APPROVED'."
-            ];
+            return "L'ordine non può essere sbloccato perché la prenotazione non è nello stato 'APPROVED'.";
         }
 
     }
-
+    
     public static function confirmOrder(EOrder $order) {
         $reservation = $order->getReservation();
         
@@ -540,12 +435,7 @@ class FPersistentManager {
         ];
     }
 
-    public static function getEntityManager()
-    {
-        // Questo metodo semplicemente inoltra la richiesta a FEntityManager,
-        // che è l'unico a dover conoscere l'istanza di Doctrine.
-        return FEntityManager::getInstance()->getEntityManager();
-    }
+
     public static function authenticateAdmin(string $email, string $password): ?EAdmin  {
         $admin = FAdmin::getAdminByEmail($email);
         // Se l'admin esiste e la password è corretta, restituisce l'oggetto admin
@@ -574,7 +464,7 @@ class FPersistentManager {
      */
     public static function saveTable(ETable $table): bool {
         // La \ iniziale è necessaria perché FTable non ha un namespace
-        return \FTable::save($table);
+        return self::uploadObject($table);
     }
 
     /**
@@ -582,7 +472,7 @@ class FPersistentManager {
      * Chiama il tuo metodo esistente in FTable.
      */
     public static function getTableById(int $id): ?ETable {
-        return \FTable::getTableById($id);
+        return FTable::getTableById($id);
     }
 
     /**
@@ -590,7 +480,7 @@ class FPersistentManager {
      * Chiama il metodo aggiunto a FTable.
      */
     public static function deleteTable(ETable $table): bool {
-        return \FTable::delete($table);
+        return FEntityManager::getInstance()->deleteObject($table);
     }
 
     /**
@@ -598,93 +488,40 @@ class FPersistentManager {
      * Chiama il metodo aggiunto a FTable.
      */
     public static function getAllTables(): array {
-        return \FTable::getAllTables();
+        return FEntityManager::getInstance()->selectAll(ETable::class);
     }
 
     /**
      * Recupera tutte le sale del ristorante.
      */
     public static function getAllRestaurantHalls(): array {
-        return FEntityManager::getInstance()->selectAll(\AppORM\Entity\ERestaurantHall::class);
+        return FEntityManager::getInstance()->selectAll(ERestaurantHall::class);
     }
 
     /**
      * Recupera una sala tramite ID.
      */
-    public static function getRestaurantHallById(int $id): ?\AppORM\Entity\ERestaurantHall {
-        return FEntityManager::getInstance()->retriveObject(\AppORM\Entity\ERestaurantHall::class, $id);
+    public static function getRestaurantHallById(int $id): ?ERestaurantHall {
+        return FEntityManager::getInstance()->retriveObject(ERestaurantHall::class, $id);
     }
 
         /**
      * Salva un'entità ERestaurantHall nel database.
      * @param \AppORM\Entity\ERestaurantHall $hall
      */
-        public static function saveRestaurantHall(string $name, int $totalPlaces): bool
+    public function saveRestaurantHall(ERestaurantHall $hall): void
     {
-        try {
-            $entityManager = self::getInstance()->getEntityManager(); // Usa self::getInstance() per accedere all'istanza
-            $hall = new ERestaurantHall($name, $totalPlaces); // Crea una nuova entità
-            $entityManager->persist($hall);
-            $entityManager->flush();
-            return true;
-        } catch (\Exception $e) {
-            error_log("Errore durante il salvataggio della sala ristorante: " . $e->getMessage());
-            return false;
-        }
-    }
-     public static function deleteRestaurantHall(\AppORM\Entity\ERestaurantHall $hall): bool
-    {
-        try {
-            $entityManager = self::getInstance()->getEntityManager();
-
-            // NUOVO CONTROLLO: Verifica se ci sono camerieri associati a questa sala
-            $waitersInHall = self::getWaitersByRestaurantHall($hall->getIdHall());
-            if (!empty($waitersInHall)) {
-                // Se ci sono camerieri, lancia un'eccezione con il messaggio esatto
-                throw new \Exception("Ci sono camerieri in questa sala ({$hall->getName()}). Spostali in un'altra sala prima di eliminarla.");
-            }
-
-            // Logica per eliminare i tavoli associati (se non ci sono camerieri)
-            $tables = self::getTablesByRestaurantHall($hall->getIdHall());
-            foreach ($tables as $table) {
-                \FTable::delete($table);
-            }
-
-            // Rimuovi la sala ristorante
-            $entityManager->remove($hall);
-            $entityManager->flush();
-            return true; // Operazione di successo
-        } catch (\Exception $e) {
-            throw $e;
-        }
-    }
-
-
-     /**
-     * Recupera tutti i camerieri associati a una specifica sala ristorante.
-     * @param int $hallId L'ID della sala ristorante.
-     * @return array Un array di oggetti EWaiter.
-     */
-    public static function getWaitersByRestaurantHall(int $hallId): array
-    {
-        // Assumendo che EWaiter abbia una relazione con ERestaurantHall chiamata 'restaurantHall'
-        return FEntityManager::getInstance()->retriveObjectList(EWaiter::class, 'restaurantHall', $hallId);
+        self::uploadObject($hall);
     }
 
     /**
-     * Recupera tutti i tavoli associati a una specifica sala ristorante.
-     * @param int $hallId L'ID della sala ristorante.
-     * @return array Un array di oggetti ETable.
+     * Elimina un'entità ERestaurantHall dal database.
+     * @param \AppORM\Entity\ERestaurantHall $hall
      */
-    public static function getTablesByRestaurantHall(int $hallId): array
+    public function deleteRestaurantHall(ERestaurantHall $hall): void
     {
-        // Assumendo che ETable abbia una relazione con ERestaurantHall chiamata 'restaurantHall'
-        return FEntityManager::getInstance()->retriveObjectList(ETable::class, 'restaurantHall', $hallId);
+        FEntityManager::getInstance()->deleteObject($hall);
     }
-
-
-    
-
 
 
 
@@ -705,7 +542,7 @@ class FPersistentManager {
     }
     public static function getAllClients(): array
     {
-        return FEntityManager::getInstance()->selectAll(\AppORM\Entity\EClient::class);
+        return FEntityManager::getInstance()->selectAll(EClient::class);
     }
 
     public static function getWaiterByEmail(string $email): ?EWaiter
@@ -713,7 +550,7 @@ class FPersistentManager {
         return FWaiter::getWaiterByEmail($email);
     }
 
-    public static function registerWaiter(string $name, string $surname, DateTime $birthDate, string $email, string $password, string $serialNumber, int $hallId): ?EWaiter
+    public static function registerWaiter(string $name, string $surname, DateTime $birthDate, string $email, string $password, int $phoneNumber, string $serialNumber, int $hallId): ?EWaiter
     {
         // Ora questa chiamata funziona perché il metodo esiste in questa classe
         if (self::getWaiterByEmail($email)) { return null; }
@@ -721,7 +558,7 @@ class FPersistentManager {
         $hall = self::getRestaurantHallById($hallId);
         if (!$hall) { return null; }
 
-        $waiter = new EWaiter($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT), $serialNumber);
+        $waiter = new EWaiter($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT),$phoneNumber ,$serialNumber);
         $waiter->setRestaurantHall($hall);
 
         if (FWaiter::saveObj($waiter)) {
@@ -743,4 +580,114 @@ class FPersistentManager {
         return FWaiter::saveObj($waiter);
     }
 
+
+    /**
+     * Salva o aggiorna una categoria di prodotti.
+     */
+    public static function saveProductCategory(EProductCategory $category): bool 
+    { 
+        return FProductCategory::saveObj($category); 
+    }
+    
+    /**
+     * Recupera una categoria tramite ID.
+     */
+    public static function getProductCategoryById(int $id): ?EProductCategory 
+    { 
+        return FProductCategory::getObj($id); 
+    }
+
+    /**
+     * Recupera tutte le categorie di prodotti.
+     */
+    public static function getAllProductCategories(): array
+    {
+        return FProductCategory::selectAll();
+    }
+    
+    /**
+     * Cancella una categoria di prodotti.
+     */
+    public static function deleteProductCategory(EProductCategory $category): bool 
+    { 
+        return FProductCategory::deleteObj($category); 
+    }
+
+    /**
+     * Aggiorna il nome di una categoria esistente.
+     */
+    public static function updateProductCategoryName(EProductCategory $category, string $newName): bool
+    {
+        $category->setName($newName);
+        return FProductCategory::saveObj($category);
+    }
+
+    /**
+     * Recupera tutte le recensioni dal database.
+     * @return array
+     */
+    public static function getAllReviews(): array
+    {
+
+        return FUserReview::fetchAll();
+    }
+    
+    /**
+     * Recupera una singola recensione tramite ID.
+     */
+    public static function getReviewById(int $id): ?EUserReview
+    {
+        return FUserReview::getObj($id);
+    }
+
+
+    public static function addAdminResponseToReview(EAdmin $admin, EUserReview $review, string $responseText): bool
+    {
+        try {
+            $response = new EAdminResponse($responseText, new DateTime()); // Crea la nuova risposta
+            $response->setAdmin($admin);   
+            $response->setUserReview($review);    
+            $review->addAdminResponse($response); 
+            return FEntityManager::getInstance()->saveObject($response); 
+        } catch (Exception $e) {
+            error_log("Errore durante il salvataggio della risposta dell'admin: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    /**
+     * Recupera una singola risposta dell'admin tramite ID.
+     * Necessario per recuperare l'oggetto risposta prima di eliminarlo.
+     * @param int $id L'ID della risposta dell'admin.
+     * @return EAdminResponse|null L'oggetto risposta o null se non trovato.
+     */
+    public static function getAdminResponseById(int $id): ?EAdminResponse
+    {
+        return FEntityManager::getInstance()->retriveObject(EAdminResponse::class, $id);
+    }
+
+    /**
+     * Elimina una risposta dell'amministratore.
+     * @param EAdminResponse $adminResponse L'oggetto risposta da eliminare.
+     * @return bool True se l'eliminazione è avvenuta con successo, false altrimenti.
+     */
+    public static function deleteAdminResponse(EAdminResponse $adminResponse): bool
+    {
+        try {
+            return FEntityManager::getInstance()->deleteObject($adminResponse); // Usa deleteObject su EAdminResponse
+        } catch (\Exception $e) {
+            error_log("Errore durante l'eliminazione della risposta dell'admin: " . $e->getMessage());
+            return false;
+        }
+    }
+
+    public static function updateAdminResponse(EAdminResponse $adminResponse): bool
+    {
+        try {
+            return FEntityManager::getInstance()->saveObject($adminResponse);
+        } catch (\Exception $e) {
+            error_log("Errore durante l'aggiornamento della risposta dell'admin: " . $e->getMessage());
+            return false;
+        }
+    }
 }
