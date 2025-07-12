@@ -68,10 +68,11 @@ class EReservation {
     private static $entity = EReservation::class;
 
     //constructor
-    public function __construct( $date, $hours, $peopleNum, $note = null,  $nameReservation) {
+    public function __construct( $date, $hours, ?int $duration , int $peopleNum, string $nameReservation, ?string $note = null)
+ {
         $this->date = $date;
         $this->hours = $hours;
-        $this->duration;
+        $this->duration = $duration;
         $this->peopleNum = $peopleNum;
         $this->note = $note;
         $this->nameReservation = $nameReservation;

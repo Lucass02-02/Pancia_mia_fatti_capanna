@@ -1,43 +1,87 @@
-{* File: templates/add_credit_card.tpl (SINTASSI SMARTY CORRETTA, STYLES.CSS APPLICATO) *}
+{* File: templates/add_credit_card.tpl (RIADATTATO CON NUOVO style.css Yummy) *}
 <!DOCTYPE html>
 <html lang="it">
 <head>
     <meta charset="UTF-8">
     <title>Aggiungi Carta di Credito</title>
+
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom Yummy style -->
     <link rel="stylesheet" href="/Pancia_mia_fatti_capanna/libs/Smarty/css/styles.css">
 </head>
-<body class="bg-light d-flex justify-content-center align-items-center" style="min-height: 100vh;">
-    <div class="container p-4 bg-white rounded shadow-sm" style="max-width: 500px;">
-        <h1 class="text-center text-primary mb-3">Aggiungi Metodo di Pagamento</h1>
-        <p class="text-center small text-muted">Nota: non inserire dati reali. Questa è una simulazione.</p>
 
-        {if isset($error)}
-            <p class="text-danger text-center mb-3">{$error|escape}</p>
-        {/if}
+<body>
 
-        <form action="/Pancia_mia_fatti_capanna/Client/addCreditCard" method="POST">
-            <div class="mb-3">
-                <label for="cardName" class="form-label">Nome Carta (es. La mia Visa)</label>
-                <input type="text" id="cardName" name="cardName" class="form-control">
+    <!-- ======= Header ======= -->
+    <header id="header" class="header d-flex align-items-center">
+        <div class="container d-flex justify-content-between align-items-center">
+            <div class="logo">
+                <h1><a href="/Pancia_mia_fatti_capanna/Home/index">Pancia mia <span>fatti capanna</span></a></h1>
             </div>
-            <div class="mb-3">
-                <label for="brand" class="form-label">Circuito (es. Visa, MasterCard)</label>
-                <input type="text" id="brand" name="brand" class="form-control" required>
+        </div>
+    </header><!-- End Header -->
+
+    <!-- ======= Page Title Section ======= -->
+    <section class="page-title">
+        <div class="container">
+            <h1>Aggiungi Metodo di Pagamento</h1>
+            <p class="fst-italic">Nota: non inserire dati reali. Questa è una simulazione.</p>
+        </div>
+    </section><!-- End Page Title Section -->
+
+    <!-- ======= Add Credit Card Section ======= -->
+    <section class="contact">
+        <div class="container">
+
+            <div class="php-email-form bg-white p-4 shadow-sm mx-auto" style="max-width: 500px;">
+                {if isset($error)}
+                    <div class="error-message text-center">{$error|escape}</div>
+                {/if}
+
+                <form action="/Pancia_mia_fatti_capanna/Client/addCreditCard" method="POST">
+                    <div class="form-group mb-3">
+                        <label for="cardName" class="form-label">Nome Carta (es. La mia Visa)</label>
+                        <input type="text" id="cardName" name="cardName" class="form-control">
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="brand" class="form-label">Circuito (es. Visa, MasterCard)</label>
+                        <input type="text" id="brand" name="brand" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="last4" class="form-label">Ultime 4 Cifre</label>
+                        <input type="text" id="last4" name="last4" maxlength="4" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="expMonth" class="form-label">Mese Scadenza</label>
+                        <input type="number" id="expMonth" name="expMonth" min="1" max="12" class="form-control" required>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label for="expYear" class="form-label">Anno Scadenza</label>
+                        <input type="number" id="expYear" name="expYear" min="2024" class="form-control" required>
+                    </div>
+
+                    <button type="submit" class="btn btn-get-started w-100">Aggiungi Carta</button>
+                </form>
             </div>
-            <div class="mb-3">
-                <label for="last4" class="form-label">Ultime 4 Cifre</label>
-                <input type="text" id="last4" name="last4" maxlength="4" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="expMonth" class="form-label">Mese Scadenza</label>
-                <input type="number" id="expMonth" name="expMonth" min="1" max="12" class="form-control" required>
-            </div>
-            <div class="mb-3">
-                <label for="expYear" class="form-label">Anno Scadenza</label>
-                <input type="number" id="expYear" name="expYear" min="2024" class="form-control" required>
-            </div>
-            <button type="submit" class="btn btn-primary w-100">Aggiungi Carta</button>
-        </form>
-    </div>
+
+        </div>
+    </section><!-- End Add Credit Card Section -->
+
+    <!-- ======= Footer ======= -->
+    <footer id="footer" class="footer">
+        <div class="container text-center">
+            <p>&copy; Copyright <strong>Pancia mia fatti capanna</strong>. All Rights Reserved</p>
+        </div>
+    </footer><!-- End Footer -->
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

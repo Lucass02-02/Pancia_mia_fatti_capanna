@@ -33,7 +33,7 @@ class CClient
             if ($name && $surname && $email && $password && $birthDateStr && $nickname && $phoneNumber) {
                 try {
                     $birthDate = new DateTime($birthDateStr);
-                    $client = FPersistentManager::getInstance()->registerClient($name, $surname, $birthDate, $email, $password, $nickname, $phoneNumber);
+                    $client = FPersistentManager::getInstance()->registerClient($name, $surname, $birthDate, $email, $password, $phoneNumber, $nickname);
                     if ($client) {
                         UView::render('registration', ['success' => true, 'message' => 'Registrazione completata! Ora puoi effettuare il login.']);
                     } else {
@@ -177,6 +177,32 @@ class CClient
         }
     }
 
+
+    public static function deleteReview(): void
+    {
+        if (!USession::isSet('user_id')) {
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
+            exit;
+        }
+
+        if (UHTTPMethods::isPost()) {
+            $reviewId = (int)UHTTPMethods::getPostValue('review_id');
+            $clientId = USession::getValue('user_id');
+
+            if ($reviewId > 0) {
+                $deleted = FPersistentManager::getInstance()->deleteClientReview($reviewId, $clientId);
+                if ($deleted) {
+                    header('Location: /Pancia_mia_fatti_capanna/client/profile');
+                    exit;
+                }
+            }
+        }
+        header('Location: /Pancia_mia_fatti_capanna/client/profile');
+        exit;
+    }
+
+
+
     /**
      * Gestisce l'aggiunta di una nuova carta di credito.
      */
@@ -228,7 +254,7 @@ class CClient
             // Ulteriore sicurezza: l'utente può cancellare solo le proprie carte
             if ($card && $card->getClient()->getId() === $clientId) {
                 FPersistentManager::getInstance()->deleteCreditCard($cardId);
-                header('Location: /Pancia_mia_fatti_capanna/index.php?c=client&a=profile&card=deleted');
+                header('Location: /Pancia_mia_fatti_capanna/Client/profile');
                 exit;
             }
         }
@@ -266,7 +292,7 @@ class CClient
                 $clientId = USession::getValue('user_id');
                 $client = FPersistentManager::getInstance()->getClientById($clientId);
 
-                $reservation = new EReservation($date, $hours, $peopleNum, $note, $nameReservation);
+                $reservation = new EReservation($date, $hours, $duration, $peopleNum, $note, $nameReservation);
                 $reservation->setClient($client);
 
                 $result = FPersistentManager::getInstance()->createReservation($reservation);
@@ -304,8 +330,7 @@ class CClient
             }
             if ( 
                 $reservation->getStatus() === ReservationStatus::CANCELED ||
-                $reservation->getStatus() === ReservationStatus::CREATED 
-                ) {
+                $reservation->getStatus() === ReservationStatus::CREATED ) {
                 break;
             }
             if ($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
@@ -377,5 +402,23 @@ class CClient
         ]);
         }
     }
+
+    /*
+    public static function checkRememberMeLogin() {
+        if (USession::isSet('user_id')) {
+            return; // utente già loggato
+        }
+
+        if (isset($_COOKIE['remember_me'])) {
+            $token = $_COOKIE['remember_me'];
+            $client = FPersistentManager::getInstance()->getClientByRememberToken($token);
+            if ($client) {
+                USession::setValue('user_id', $client->getId());
+                USession::setValue('user_role', 'client');
+                USession::setValue('user_email', $client->getEmail());
+            }
+        }
+    }   
+    */
 
 }

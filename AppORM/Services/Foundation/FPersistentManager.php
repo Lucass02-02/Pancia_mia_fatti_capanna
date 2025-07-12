@@ -34,6 +34,7 @@ use AppORM\Entity\EProductCategory;
 use AppORM\Entity\EAdminResponse;
 use Exception;
 
+
 class FPersistentManager {
 
     private static $instance;
@@ -435,6 +436,7 @@ class FPersistentManager {
             'total' => FOrder::calculateTotalPrice($order),
         ];
     }
+
     */
 
     public static function authenticateAdmin(string $email, string $password): ?EAdmin  {
@@ -551,7 +553,7 @@ class FPersistentManager {
         return FWaiter::getWaiterByEmail($email);
     }
 
-    public static function registerWaiter(string $name, string $surname, DateTime $birthDate, string $email, string $password, int $phoneNumber, string $serialNumber, int $hallId): ?EWaiter
+    public static function registerWaiter(string $name, string $surname, DateTime $birthDate, string $email, string $password,  int $phoneNumber, string $serialNumber, int $hallId): ?EWaiter
     {
         // Ora questa chiamata funziona perché il metodo esiste in questa classe
         if (self::getWaiterByEmail($email)) { return null; }
@@ -559,7 +561,7 @@ class FPersistentManager {
         $hall = self::getRestaurantHallById($hallId);
         if (!$hall) { return null; }
 
-        $waiter = new EWaiter($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT),$phoneNumber ,$serialNumber);
+        $waiter = new EWaiter($name, $surname, $birthDate, $email, password_hash($password, PASSWORD_DEFAULT), $phoneNumber, $serialNumber);
         $waiter->setRestaurantHall($hall);
 
         if (FWaiter::saveObj($waiter)) {
@@ -691,4 +693,30 @@ class FPersistentManager {
             return false;
         }
     }
+
+
+     /**
+     * Elimina una recensione di un cliente, verificando che il cliente sia il proprietario della recensione.
+     * @param int $reviewId L'ID della recensione da eliminare.
+     * @param int $clientId L'ID del cliente che tenta l'eliminazione (per verifica di proprietà).
+     * @return bool True se la recensione è stata eliminata con successo, false altrimenti.
+     */
+    public static function deleteClientReview(int $reviewId, int $clientId): bool
+    {
+        try {
+            $review = FUserReview::getObj($reviewId); // Recupera la recensione
+
+            if ($review && $review->getClient()->getId() === $clientId) { // Verifica che il cliente sia il proprietario
+                return FUserReview::deleteObj($review); // Elimina la recensione
+            }
+            return false; // Recensione non trovata o cliente non proprietario
+        } catch (\Exception $e) {
+            error_log("Errore durante l'eliminazione della recensione del cliente: " . $e->getMessage());
+            return false;
+        }
+    }
+
+
+
+
 }

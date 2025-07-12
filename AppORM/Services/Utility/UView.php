@@ -1,10 +1,9 @@
 <?php // File: AppORM/Services/Utility/UView.php
 
 namespace AppORM\Services\Utility;
-require __DIR__ . '/StartSmarty.php';
+require __DIR__. '/../../../startsmarty.php';
 
-
-use AppORM\Services\Utility\StartSmarty;
+use StartSmarty;
 /**
  * Classe di utilità per la gestione delle viste (template HTML/PHP).
  * Permette di separare la logica del controller dalla presentazione.
@@ -18,14 +17,15 @@ class UView
      * @param array $data Un array associativo di dati da rendere disponibili alla vista.
      * La chiave di ogni elemento diventerà una variabile nella vista.
      */
-    public static function render(string $viewName, array $data = []): void
+    public static function render(string $viewName , array $data = []): void
     {
-        $smarty = StartSmarty::configuration();
+        // Inizializza Smarty
+        $smarty = StartSmarty::configuration(); 
         foreach ($data as $key => $value) {
-
+            // Assegna ogni elemento dell'array come variabile Smarty
             $smarty->assign($key, $value);
         }
-
+    
         // Definisce il percorso base per le viste.
         // Assumiamo che le viste si trovino in una cartella 'View' alla radice del progetto.
         // Modifica questo percorso se la tua struttura è diversa.

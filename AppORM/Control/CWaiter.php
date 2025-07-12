@@ -52,7 +52,7 @@ class CWaiter
             $hallId = (int)UHTTPMethods::getPostValue('hall_id');
 
             // FPersistentManager::getInstance()->registerWaiter ritorna ?EWaiter o null
-            $waiter = FPersistentManager::getInstance()->registerWaiter($name, $surname, $birthDate, $email, $password, $serialNumber, $phoneNumber, $hallId);
+            $waiter = FPersistentManager::getInstance()->registerWaiter($name, $surname, $birthDate, $email, $password,  $phoneNumber, $serialNumber, $hallId);
             // Qui potresti voler aggiungere una gestione per il successo/fallimento della registrazione
             // ad esempio, un flash message nella sessione
             if (!$waiter) {

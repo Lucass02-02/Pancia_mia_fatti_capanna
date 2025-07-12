@@ -194,43 +194,61 @@ class FEntityManager{
             }
     }
 
-    /**
-     * save one object in the db (persistance of Entity)
-     * @return boolean
+      /**
+     * Salva un oggetto nel DB usando una transazione per garantire l'integrità.
+     * @param object $obj L'oggetto da persistere.
+     * @return boolean True se l'operazione ha successo, false altrimenti.
      */
-    public static function saveObject($obj)
+    public static function saveObject($obj): bool
     {
-        try{
-            self::$entityManager->getConnection()->beginTransaction();
+        // 1. Inizia la transazione
+        self::$entityManager->beginTransaction();
+        try {
+            // 2. Prepara l'oggetto per il salvataggio
             self::$entityManager->persist($obj);
+            
+            // 3. Esegue le query di scrittura sul database
             self::$entityManager->flush();
-            self::$entityManager->getConnection()->commit();
+            
+            // 4. Se tutto è andato a buon fine, conferma le modifiche
+            self::$entityManager->commit();
             return true;
-        }catch(\Exception $e){
-            self::$entityManager->getConnection();
-            echo "ERROR: " . $e->getMessage();
+        } catch(\Exception $e) {
+            // 5. Se si verifica un qualsiasi errore, annulla tutte le modifiche
+            self::$entityManager->rollback();
+            // Stampa un errore per il debug
+            error_log("ERRORE IN TRANSAZIONE (saveObject): " . $e->getMessage());
             return false;
         }
     }
 
     /**
-     * delete an object from the db
-     * @return boolean
+     * Rimuove un oggetto dal DB usando una transazione per garantire l'integrità.
+     * @param object $obj L'oggetto da rimuovere.
+     * @return boolean True se l'operazione ha successo, false altrimenti.
      */
-    public static function deleteObject($obj){
-        try{
-            self::$entityManager->getConnection()->beginTransaction();
+    public static function deleteObject($obj): bool
+    {
+        // 1. Inizia la transazione
+        self::$entityManager->beginTransaction();
+        try {
+            // 2. Prepara l'oggetto per la cancellazione
             self::$entityManager->remove($obj);
+
+            // 3. Esegue le query di cancellazione sul database
             self::$entityManager->flush();
-            self::$entityManager->getConnection()->commit();
+
+            // 4. Se tutto è andato a buon fine, conferma la cancellazione
+            self::$entityManager->commit();
             return true;
-        }catch(\Exception $e){
-            self::$entityManager->getConnection();
-            echo "ERROR: " . $e->getMessage();
+        } catch(\Exception $e) {
+            // 5. Se si verifica un qualsiasi errore, annulla la cancellazione
+            self::$entityManager->rollback();
+             // Stampa un errore per il debug
+            error_log("ERRORE IN TRANSAZIONE (deleteObject): " . $e->getMessage());
             return false;
         }
     }
-
     /**
      * return an array of all elemnts of a table
      * @return array

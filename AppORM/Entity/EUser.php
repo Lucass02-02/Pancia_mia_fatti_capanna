@@ -42,7 +42,7 @@ abstract class EUser{
     protected $phonenumber;
 
     //constructor
-    public function __construct($name, $surname, $birthDate, $email, $password,  $phonenumber)
+    public function __construct($name, $surname, $birthDate, $email, $password, $phonenumber)
     {
         $this->name = $name;
         $this->surname = $surname;

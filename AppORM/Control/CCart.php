@@ -50,7 +50,7 @@ class CCart
                         $orderItem = new EOrderItem($quantity);
                         $orderItem->setOrder($order);
                         $orderItem->setProduct($product);
-                        $orderItem->setPrice($product->getCost());
+                        $orderItem->setPrice($product->getPrice());
                         FPersistentManager::getInstance()->uploadObject($orderItem);
                     }
 
@@ -87,7 +87,7 @@ class CCart
                         if (isset($cart[$pId])) {
                             $cart[$pId]['quantity']++;
                         } else {
-                            $cart[$pId] = ['product_id' => $pId, 'name' => $product->getName(), 'price' => $product->getCost(), 'quantity' => 1];
+                            $cart[$pId] = ['product_id' => $pId, 'name' => $product->getName(), 'price' => $product->getPrice(), 'quantity' => 1];
                         }
                     }
                 }
@@ -182,6 +182,8 @@ class CCart
                 if($reservation && $order) {
                     $reservation->setStatus(ReservationStatus::ENDED);
                     $order->setStatus(OrderStatus::PAID);
+                    FPersistentManager::getInstance()->uploadObject($reservation);
+                    FPersistentManager::getInstance()->uploadObject($order);
                 }
             }
         }

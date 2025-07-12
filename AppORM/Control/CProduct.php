@@ -57,7 +57,7 @@ class CProduct {
             if ($product) {
                 $product->setName(UHTTPMethods::getPostValue('name'));
                 $product->setDescription(UHTTPMethods::getPostValue('description'));
-                $product->setCost((float)UHTTPMethods::getPostValue('price'));
+                $product->setPrice((float)UHTTPMethods::getPostValue('price'));
                 
                 // --- Gestione della categoria ---
                 $categoryId = (int)UHTTPMethods::getPostValue('category_id');

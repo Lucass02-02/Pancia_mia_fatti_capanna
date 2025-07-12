@@ -40,7 +40,6 @@ class USession
      */
     public static function setValue(string $key, mixed $value): void
     {
-        self::start();
         $_SESSION[$key] = $value;
     }
 
@@ -52,7 +51,6 @@ class USession
      */
     public static function getValue(string $key): mixed
     {
-        self::start();
         return $_SESSION[$key] ?? null;
     }
 
@@ -64,7 +62,6 @@ class USession
      */
     public static function isSet(string $key): bool
     {
-        self::start();
         return isset($_SESSION[$key]);
     }
 

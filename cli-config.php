@@ -21,7 +21,7 @@ $config = ORMSetup::createAttributeMetadataConfiguration($entityPaths, $isDevMod
 
 // --- 2. Configurazione del Database ---
 $connectionParams = [
-    'dbname'   => 'testdb',
+    'dbname'   => 'test',
     'user'     => 'root',
     'password' => '',
     'host'     => 'localhost',
