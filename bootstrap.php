@@ -15,7 +15,7 @@ $dbParams = [
     'driver'   => 'pdo_mysql',
     'user'     => 'root',
     'password' => '',
-    'dbname'   => 'test', 
+    'dbname'   => 'testdb', 
     'host'     => '127.0.0.1'
 ];
 
