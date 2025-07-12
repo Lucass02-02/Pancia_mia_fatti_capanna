@@ -205,7 +205,10 @@ class CAdmin {
             $enumValues2[$case->name] = $case->value;
         }
 
-        UView::render('manage_turns', ['turns' => $turns, 'enumValues' => $enumValues, 'enumValues2' => $enumValues2]);
+        $error_message = USession::getValue('turn_management_error', null);
+        USession::unsetValue('turn_management_error');
+
+        UView::render('manage_turns', ['turns' => $turns, 'enumValues' => $enumValues, 'enumValues2' => $enumValues2, 'error' => $error_message]);
    }
 
    public static function deleteTurn() {
@@ -219,10 +222,19 @@ class CAdmin {
             if ($id > 0) {
                 $turn = FEntityManager::getInstance()->retriveObjectById(ETurn::class, $id);
                 if ($turn) {
+                    try {
                         FPersistentManager::getInstance()->deleteRestaurantHall($turn);
                         // Successo: nessun errore da impostare in sessione
-                } 
-            } 
+                    } catch (\Exception $e) {
+                        // Cattura l'eccezione e memorizza il suo messaggio direttamente nella sessione
+                        USession::setValue('turn_management_error', $e->getMessage());
+                    }
+                } else {
+                    USession::setValue('turn_management_error', 'Turno non trovato.');
+                }
+            } else {
+                USession::setValue('turn_management_error', 'ID turno non valido.');
+            }
         }
         // Reindirizza sempre alla pagina di gestione
         header('Location: /Pancia_mia_fatti_capanna/Admin/manageTurns');

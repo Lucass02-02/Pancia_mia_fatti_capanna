@@ -39,6 +39,11 @@
 
             <div class="php-email-form bg-white p-4 shadow-sm rounded">
 
+                {if isset($error) && $error}
+                    <div class="alert alert-danger mb-3">
+                        {$error}
+                    </div>
+                {/if}
 
                 <h2 class="h5 mb-3">Aggiungi Nuovo Turno</h2>
                 <form action="/Pancia_mia_fatti_capanna/Admin/createTurn" method="POST" class="mb-4 p-3 border rounded bg-light">

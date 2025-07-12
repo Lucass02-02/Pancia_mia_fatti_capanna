@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-12 19:47:58
+/* Smarty version 5.5.1, created on 2025-07-12 20:06:42
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/manage_turns.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_68729fcee08640_56999673',
+  'unifunc' => 'content_6872a43290f1c0_03277679',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'ddfda0e0b98717fff80ebb81abbfbd6eb7509ae5' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/manage_turns.tpl',
-      1 => 1752342474,
+      1 => 1752343597,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68729fcee08640_56999673 (\Smarty\Template $_smarty_tpl) {
+function content_6872a43290f1c0_03277679 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -62,6 +62,12 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
 
             <div class="php-email-form bg-white p-4 shadow-sm rounded">
 
+                <?php if ((true && ($_smarty_tpl->hasVariable('error') && null !== ($_smarty_tpl->getValue('error') ?? null))) && $_smarty_tpl->getValue('error')) {?>
+                    <div class="alert alert-danger mb-3">
+                        <?php echo $_smarty_tpl->getValue('error');?>
+
+                    </div>
+                <?php }?>
 
                 <h2 class="h5 mb-3">Aggiungi Nuovo Turno</h2>
                 <form action="/Pancia_mia_fatti_capanna/Admin/createTurn" method="POST" class="mb-4 p-3 border rounded bg-light">
