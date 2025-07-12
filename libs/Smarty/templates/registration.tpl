@@ -57,11 +57,11 @@
                         <input type="password" id="password" name="password" class="form-control" required>
                     </div>
                     <div class="mb-3">
-                        <label for="phoneNumber" class="form-label">Numero di Telefono (Opzionale)</label>
+                        <label for="phoneNumber" class="form-label">Numero di Telefono</label>
                         <input type="tel" id="phoneNumber" name="phoneNumber" class="form-control">
                     </div>
                     <div class="mb-3">
-                        <label for="nickname" class="form-label">Nickname (Opzionale)</label>
+                        <label for="nickname" class="form-label">Nickname</label>
                         <input type="text" id="nickname" name="nickname" class="form-control">
                     </div>
                     <button type="submit" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Registrati</button>
