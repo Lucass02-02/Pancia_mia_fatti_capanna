@@ -1,5 +1,28 @@
-{* File: templates/admin_profile.tpl *}
+<?php
+/* Smarty version 5.5.1, created on 2025-07-12 18:20:08
+  from 'file:/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/admin_profile.tpl' */
 
+/* @var \Smarty\Template $_smarty_tpl */
+if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
+  'version' => '5.5.1',
+  'unifunc' => 'content_68728b38c466f7_10951909',
+  'has_nocache_code' => false,
+  'file_dependency' => 
+  array (
+    '80cb44b7110152a7536fc3ef1df1ff4d5f57305b' => 
+    array (
+      0 => '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/AppORM/Services/Utility/../../../libs/Smarty/templates/admin_profile.tpl',
+      1 => 1752337205,
+      2 => 'file',
+    ),
+  ),
+  'includes' => 
+  array (
+  ),
+))) {
+function content_68728b38c466f7_10951909 (\Smarty\Template $_smarty_tpl) {
+$_smarty_current_dir = '/Applications/XAMPP/xamppfiles/htdocs/Pancia_mia_fatti_capanna/libs/Smarty/templates';
+?>
 <!DOCTYPE html>
 <html lang="it">
 <head>
@@ -34,8 +57,11 @@
 
                 <div class="mb-5">
                     <h2 class="h4" style="color: var(--heading-color); font-family: var(--heading-font);">Dati del Proprietario</h2>
-                    <p><strong>Nome Completo:</strong> {$admin->getName()|escape} {$admin->getSurname()|escape}</p>
-                    <p><strong>Email:</strong> {$admin->getEmail()|escape}</p>
+                    <p><strong>Nome Completo:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('admin')->getName(), ENT_QUOTES, 'UTF-8', true);?>
+ <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('admin')->getSurname(), ENT_QUOTES, 'UTF-8', true);?>
+</p>
+                    <p><strong>Email:</strong> <?php echo htmlspecialchars((string)$_smarty_tpl->getValue('admin')->getEmail(), ENT_QUOTES, 'UTF-8', true);?>
+</p>
                 </div>
 
                 <div class="row g-4 justify-content-center dashboard-buttons">
@@ -43,7 +69,7 @@
                         <div class="p-3 rounded border h-100" style="background-color: var(--surface-color);">
                             <h3 class="h5 mb-3" style="color: var(--heading-color); font-family: var(--heading-font);">Gestione Ristorante</h3>
                             <ul class="list-unstyled">
-                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Banchetto</a></li>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Sale</a></li>
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Tavoli</a></li>
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Menù e Prodotti</a></li>
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/showReservations" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Prenotazioni</a></li>
@@ -78,7 +104,11 @@
     </footer><!-- End Footer -->
 
     <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <?php echo '<script'; ?>
+ src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"><?php echo '</script'; ?>
+>
 
 </body>
 </html>
+<?php }
+}
