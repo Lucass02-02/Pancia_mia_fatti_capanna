@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-10 19:39:00
+/* Smarty version 5.5.1, created on 2025-07-12 13:25:59
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/home.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_686ffab40ab272_59276053',
+  'unifunc' => 'content_68724647154ca4_66393448',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'a9951a84d8fe14643be919dbe4d1b3f8698d8b77' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/home.tpl',
-      1 => 1752169137,
+      1 => 1752319556,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_686ffab40ab272_59276053 (\Smarty\Template $_smarty_tpl) {
+function content_68724647154ca4_66393448 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">
@@ -63,8 +63,10 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
                     <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-get-started mx-2 my-2">Pannello di Controllo</a>
                     <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-get-started mx-2 my-2">Logout</a>
                 <?php } elseif ($_smarty_tpl->getValue('user_role') == 'client') {?>
+                    <a href="/Pancia_mia_fatti_capanna/Client/reserve" class="btn btn-get-started mx-2 my-2">Prenota</a>
+                    <a href="/Pancia_mia_fatti_capanna/Client/order" class="btn btn-get-started mx-2 my-2">Ordina</a>
                     <a href="/Pancia_mia_fatti_capanna/Client/profile" class="btn btn-get-started mx-2 my-2">Mio Profilo</a>
-                    <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-get-started mx-2 my-2">Logout</a>
+                    <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-get-started mx-2 my-2">Logout</a>  
                 <?php } elseif ($_smarty_tpl->getValue('user_role') == 'waiter') {?>
                     <a href="/Pancia_mia_fatti_capanna/Waiter/profile" class="btn btn-get-started mx-2 my-2">Dashboard Cameriere</a>
                     <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-get-started mx-2 my-2">Logout</a>

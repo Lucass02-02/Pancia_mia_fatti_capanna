@@ -37,8 +37,10 @@
                     <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn btn-get-started mx-2 my-2">Pannello di Controllo</a>
                     <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-get-started mx-2 my-2">Logout</a>
                 {elseif $user_role == 'client'}
+                    <a href="/Pancia_mia_fatti_capanna/Client/reserve" class="btn btn-get-started mx-2 my-2">Prenota</a>
+                    <a href="/Pancia_mia_fatti_capanna/Client/order" class="btn btn-get-started mx-2 my-2">Ordina</a>
                     <a href="/Pancia_mia_fatti_capanna/Client/profile" class="btn btn-get-started mx-2 my-2">Mio Profilo</a>
-                    <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-get-started mx-2 my-2">Logout</a>
+                    <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-get-started mx-2 my-2">Logout</a>  
                 {elseif $user_role == 'waiter'}
                     <a href="/Pancia_mia_fatti_capanna/Waiter/profile" class="btn btn-get-started mx-2 my-2">Dashboard Cameriere</a>
                     <a href="/Pancia_mia_fatti_capanna/Client/logout" class="btn btn-get-started mx-2 my-2">Logout</a>

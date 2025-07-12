@@ -1,4 +1,4 @@
-{* File: templates/menu.tpl (RIADATTATA CON IMMAGINE DI TITOLO) *}
+{* File: templates/menu.tpl (RIADATTATA CON FUNZIONI CLIENT) *}
 
 <!DOCTYPE html>
 <html lang="it">
@@ -23,7 +23,6 @@
     </div>
 </header>
 
-{* Sezione titolo con immagine background centrata in alto *}
 <section class="page-title" style="
     background: url('https://img.freepik.com/vettori-gratuito/menu-ristorante-digitale-in-formato-verticale_23-2148649586.jpg') center top / cover no-repeat;
     height: 350px;
@@ -33,7 +32,6 @@
     margin-bottom: 30px;
     position: relative;
 ">
-    {* Overlay scuro per leggibilità *}
     <div style="
         position: absolute;
         top: 0; left: 0; right: 0; bottom: 0;
@@ -53,12 +51,11 @@
     </h1>
 </section>
 
-
-
 <main>
     <div class="container my-5" style="max-width: 1100px;">
         <div class="surface p-4 rounded shadow-sm">
-            {* Pulsanti admin gestione menu *}
+
+            {* === SEZIONE GESTIONE ADMIN === *}
             {if $user_role == 'admin'}
                 <div class="text-center mb-4 d-flex flex-wrap justify-content-center gap-3">
                     <a href="/Pancia_mia_fatti_capanna/Product/showCreateForm" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Aggiungi Nuovo Prodotto</a>
@@ -67,7 +64,33 @@
                 </div>
             {/if}
 
-            {* Sezione elenco prodotti *}
+            {* === SEZIONE FILTRO PER ALLERGIE (VISIBILE SOLO AI CLIENT) === *}
+            {if $user_role == 'client'}
+                <div class="bg-white p-4 rounded shadow-sm mb-4 border">
+                    <h2 class="h5 mb-3">Filtra per allergeni (mostra piatti senza):</h2>
+                    <form action="/Pancia_mia_fatti_capanna/Home/menu" method="post" class="row g-3 align-items-end">
+                        <div class="row">
+                            {foreach from=$allAllergens item=allergen}
+                                <div class="col-md-3 col-sm-4 col-6">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="checkbox" name="allergens[]" value="{$allergen->getId()}"
+                                            {if in_array($allergen->getId(), $selectedAllergens)}checked{/if} id="allergen{$allergen->getId()}">
+                                        <label class="form-check-label" for="allergen{$allergen->getId()}">
+                                            {$allergen->getAllergenType()|escape}
+                                        </label>
+                                    </div>
+                                </div>
+                            {/foreach}
+                        </div>
+                        <div class="mt-3">
+                            <button type="submit" class="btn btn-primary">Applica Filtro</button>
+                            <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
+                        </div>
+                    </form>
+                </div>
+            {/if}
+
+            {* === SEZIONE ELENCO PIATTI === *}
             {if empty($products)}
                 <p class="text-center text-muted">Nessun piatto disponibile.</p>
             {else}
@@ -80,16 +103,29 @@
                                     <p class="card-text">{$product->getDescription()|escape}</p>
                                     <p class="fw-bold">€ {$product->getPrice()|number_format:2:",":"."}</p>
 
-                                    {* Pulsanti admin gestione prodotto *}
-                                    <div class="d-flex flex-wrap gap-2 mt-auto">
-                                        <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/{$product->getId()}" class="btn btn-warning btn-sm">Modifica</a>
-                                        {if $product->isAvailable()}
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getId()}" class="btn btn-secondary btn-sm">Rendi Non Disp.</a>
-                                        {else}
-                                            <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getId()}" class="btn btn-success btn-sm">Rendi Disp.</a>
-                                        {/if}
-                                        <a href="/Pancia_mia_fatti_capanna/Product/delete/{$product->getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto? L\'azione è irreversibile.');">Elimina</a>
-                                    </div>
+                                    {* === CLIENT: Aggiunta al carrello === *}
+                                    {if $user_role == 'client' && $product->isAvailable()}
+                                        <form action="/Pancia_mia_fatti_capanna/Cart/add" method="POST" class="mt-auto">
+                                            <input type="hidden" name="product_id" value="{$product->getId()}">
+                                            <div class="input-group">
+                                                <input type="number" name="quantity" value="1" min="1" max="99" class="form-control" aria-label="Quantità">
+                                                <button type="submit" class="btn btn-primary">Aggiungi</button>
+                                            </div>
+                                        </form>
+                                    {/if}
+
+                                    {* === ADMIN: Pulsanti gestione prodotto === *}
+                                    {if $user_role == 'admin'}
+                                        <div class="d-flex flex-wrap gap-2 mt-auto">
+                                            <a href="/Pancia_mia_fatti_capanna/Product/showEditForm/{$product->getId()}" class="btn btn-warning btn-sm">Modifica</a>
+                                            {if $product->isAvailable()}
+                                                <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getId()}" class="btn btn-secondary btn-sm">Rendi Non Disp.</a>
+                                            {else}
+                                                <a href="/Pancia_mia_fatti_capanna/Product/toggleAvailability/{$product->getId()}" class="btn btn-success btn-sm">Rendi Disp.</a>
+                                            {/if}
+                                            <a href="/Pancia_mia_fatti_capanna/Product/delete/{$product->getId()}" class="btn btn-danger btn-sm" onclick="return confirm('Sei sicuro di voler eliminare questo prodotto?');">Elimina</a>
+                                        </div>
+                                    {/if}
                                 </div>
                             </div>
                         </div>
@@ -97,10 +133,15 @@
                 </div>
             {/if}
 
-            {* Pulsanti navigazione *}
-            <div class="text-center mt-5">
+            {* === NAVIGAZIONE IN FONDO === *}
+            <div class="text-center mt-5 d-flex justify-content-center gap-3">
                 <a href="/Pancia_mia_fatti_capanna/Home/home" class="btn btn-secondary">Torna alla Home</a>
-                <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Torna al Pannello di Controllo</a>
+                {if $user_role == 'admin'}
+                    <a href="/Pancia_mia_fatti_capanna/Admin/profile" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Torna al Pannello di Controllo</a>
+                {/if}
+                {if $user_role == 'client'}
+                    <a href="/Pancia_mia_fatti_capanna/Cart/view" class="btn btn-primary">Vai al Carrello</a>
+                {/if}
             </div>
         </div>
     </div>
@@ -112,7 +153,6 @@
     </div>
 </footer>
 
-<!-- Bootstrap JS -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
 </body>

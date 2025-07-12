@@ -1,4 +1,4 @@
-<?php // File: AppORM/Control/CCart.php
+<?php
 namespace AppORM\Control;
 
 use AppORM\Entity\EClient;
@@ -10,28 +10,41 @@ use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UHTTPMethods;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UView;
-use LDAP\Result;
 
 class CCart
 {
-    public static function add(): void
+    private static function getActiveOrder($client)
+    {
+        foreach ($client->getReservations() as $reservation) {
+            if ($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
+                return $reservation->getOrders()->first();
+            }
+        }
+        return null;
+    }
+
+    private static function checkClientAndReservation(): array
     {
         if (!USession::isSet('user_id')) {
-            // URL pulito
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
 
         $clientId = USession::getValue('user_id');
         $client = FEntityManager::getInstance()->retriveObject(EClient::class, $clientId);
-        $reservations = $client->getReservations();
-        
-        foreach($reservations as $reservation) {
-            if($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
-                $order = $reservation->getOrders()->first();
-                $orderId = $order->getIdOrder();
-            }
+        $order = self::getActiveOrder($client);
+
+        if (!$order) {
+            UView::render('client_no_reservation');
+            exit;
         }
+
+        return [$client, $order];
+    }
+
+    public static function add(): void
+    {
+        list($client, $order) = self::checkClientAndReservation();
 
         if (UHTTPMethods::isPost()) {
             $productId = (int) UHTTPMethods::getPostValue('product_id');
@@ -42,92 +55,78 @@ class CCart
                 $product = FPersistentManager::getInstance()->getProductById($productId);
 
                 if ($product) {
-                        
-                    $orderItem = FEntityManager::getInstance()->retriveObjectOnTwoAttributes(EOrderItem::class, 'order_id', $orderId, 'product_id', $productId);
-                    if($orderItem) {
-                        $orderItem->setQuantity($orderItem->getQuantity + $quantity);
+                    $orderItem = FEntityManager::getInstance()->retriveObjectOnTwoAttributes(
+                        EOrderItem::class,
+                        'order', $order,
+                        'product', $product
+                    );
+
+                    if ($orderItem) {
+                        $orderItem->setQuantity($orderItem->getQuantity() + $quantity);
                     } else {
                         $orderItem = new EOrderItem($quantity);
                         $orderItem->setOrder($order);
                         $orderItem->setProduct($product);
                         $orderItem->setPrice($product->getCost());
-                        FPersistentManager::getInstance()->uploadObject($orderItem);
                     }
 
-                    if ($fromCart) {
-                        // URL pulito
-                        header('Location: /Pancia_mia_fatti_capanna/cart/view');
-                    } else {
-                        // URL pulito
-                        header('Location: /Pancia_mia_fatti_capanna/Client/order');
-                    }
+                    FPersistentManager::getInstance()->uploadObject($orderItem);
+
+                    header('Location: ' . ($fromCart ? '/Pancia_mia_fatti_capanna/cart/view' : '/Pancia_mia_fatti_capanna/Client/order'));
                     exit;
                 }
             }
         }
-        // URL pulito
+
         header('Location: /Pancia_mia_fatti_capanna/Client/order');
         exit;
     }
-    
-    public static function addAll(): void {
-        if (!USession::isSet('user_id')) {
-            // URL pulito
-            header('Location: /Pancia_mia_fatti_capanna/client/login');
-            exit;
-        }
-        if (UHTTPMethods::isPost()) {
-            $productIds = UHTTPMethods::getPostValue('product_ids', []);
-            if (!empty($productIds) && is_array($productIds)) {
-                $cart = USession::getValue('cart', []);
-                foreach ($productIds as $productId) {
-                    $product = FPersistentManager::getInstance()->getProductById((int)$productId);
-                    if ($product) {
-                        $pId = $product->getIdProduct();
-                        if (isset($cart[$pId])) {
-                            $cart[$pId]['quantity']++;
-                        } else {
-                            $cart[$pId] = ['product_id' => $pId, 'name' => $product->getName(), 'price' => $product->getCost(), 'quantity' => 1];
-                        }
-                    }
-                }
-                USession::setValue('cart', $cart);
-            }
-        }
-        // URL pulito
-        header('Location: /Pancia_mia_fatti_capanna/home/menu');
-        exit;
-    }
 
-    public static function view(): void {
-        if (!USession::isSet('user_id')) {
-            // URL pulito
-            header('Location: /Pancia_mia_fatti_capanna/client/login');
-            exit;
-        }
+    public static function view(): void
+    {
+        list($client, $order) = self::checkClientAndReservation();
 
-        $clientId = USession::getValue('user_id');
-        $client = FEntityManager::getInstance()->retriveObject(EClient::class, $clientId);
-        $reservations = $client->getReservations();
-
-        foreach($reservations as $reservation) {
-            if($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
-                $order = $reservation->getOrders()->first();
-                $orderId = $order->getIdOrder();
-            }
-        }
-
-        $orderItems = FEntityManager::getInstance()->retriveObjectList(EOrderItem::class, 'order', $orderId);
-
+        $orderItems = FEntityManager::getInstance()->retriveObjectList(EOrderItem::class, 'order', $order);
         UView::render('cart', ['cartItems' => $orderItems]);
     }
 
-    public static function remove(): void {
+    public static function checkout(): void
+    {
+        list($client, $order) = self::checkClientAndReservation();
+
+        foreach ($client->getReservations() as $reservation) {
+            if ($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
+                $reservation->setStatus(ReservationStatus::ENDED);
+                $order->setStatus(OrderStatus::PAID);
+                break;
+            }
+        }
+
+        UView::render('payment_success');
+    }
+
+    public static function clear(): void
+    {
         if (!USession::isSet('user_id')) {
-            // URL pulito
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
+
+        if (UHTTPMethods::isPost()) {
+            USession::setValue('cart', []);
+        }
+
+        header('Location: /Pancia_mia_fatti_capanna/cart/view');
+        exit;
+    }
+
+    public static function remove(): void
+    {
+        if (!USession::isSet('user_id')) {
+            header('Location: /Pancia_mia_fatti_capanna/client/login');
+            exit;
+        }
+
         if (UHTTPMethods::isPost()) {
             $productId = (int) UHTTPMethods::getPostValue('product_id');
             $removeOne = UHTTPMethods::getPostValue('remove_one');
@@ -141,53 +140,43 @@ class CCart
                 USession::setValue('cart', $cart);
             }
         }
-        // URL pulito
+
         header('Location: /Pancia_mia_fatti_capanna/cart/view');
         exit;
     }
-    
-    public static function clear(): void {
+
+    public static function addAll(): void
+    {
         if (!USession::isSet('user_id')) {
-            // URL pulito
             header('Location: /Pancia_mia_fatti_capanna/client/login');
             exit;
         }
+
         if (UHTTPMethods::isPost()) {
-            USession::setValue('cart', []);
-        }
-        // URL pulito
-        header('Location: /Pancia_mia_fatti_capanna/cart/view');
-        exit;
-    }
-
-
-
-    public static function checkout() {
-        if (!USession::isSet('user_id')) {
-            // URL pulito
-            header('Location: /Pancia_mia_fatti_capanna/client/login');
-            exit;
-        }
-
-        //implementa la funzione per pagare
-
-        $clientId = USession::getValue('user_id');
-        $client = FEntityManager::getInstance()->retriveObject(EClient::class, $clientId);
-        $reservations = $client->getReservations();
-        
-        foreach($reservations as $reservation) {
-            if($reservation->getStatus() === ReservationStatus::ORDER_IN_PROGRESS) {
-                $order = $reservation->getOrders()->first();
-                
-                if($reservation && $order) {
-                    $reservation->setStatus(ReservationStatus::ENDED);
-                    $order->setStatus(OrderStatus::PAID);
+            $productIds = UHTTPMethods::getPostValue('product_ids', []);
+            if (!empty($productIds) && is_array($productIds)) {
+                $cart = USession::getValue('cart', []);
+                foreach ($productIds as $productId) {
+                    $product = FPersistentManager::getInstance()->getProductById((int)$productId);
+                    if ($product) {
+                        $pId = $product->getIdProduct();
+                        if (isset($cart[$pId])) {
+                            $cart[$pId]['quantity']++;
+                        } else {
+                            $cart[$pId] = [
+                                'product_id' => $pId,
+                                'name' => $product->getName(),
+                                'price' => $product->getCost(),
+                                'quantity' => 1
+                            ];
+                        }
+                    }
                 }
+                USession::setValue('cart', $cart);
             }
         }
 
-        UView::render('payment_success');
-        
-
+        header('Location: /Pancia_mia_fatti_capanna/home/menu');
+        exit;
     }
 }
