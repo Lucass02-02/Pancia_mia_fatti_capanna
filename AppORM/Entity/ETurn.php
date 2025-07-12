@@ -91,12 +91,21 @@ class ETurn {
         return $this->name;
     }
 
+    public function getNameValue(): string {
+        return $this->name->value;
+    }
+
     public function setName(TurnName $name) {
         $this->name = $name;
     }
 
     public function getDayOfWeek(): DayOfWeek {
         return $this->dayOfWeek;
+    }
+
+    
+    public function getDayOfWeekName(): string {
+        return $this->dayOfWeek->name;
     }
 
     public function setDayOfWeek(DayOfWeek $dayOfWeek) {

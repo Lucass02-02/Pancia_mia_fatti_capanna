@@ -61,19 +61,10 @@ class CRestaurantHall
             if ($id > 0) {
                 $hall = FPersistentManager::getInstance()->getRestaurantHallById($id);
                 if ($hall) {
-                    try {
                         FPersistentManager::getInstance()->deleteRestaurantHall($hall);
                         // Successo: nessun errore da impostare in sessione
-                    } catch (\Exception $e) {
-                        // Cattura l'eccezione e memorizza il suo messaggio direttamente nella sessione
-                        USession::setValue('hall_management_error', $e->getMessage());
-                    }
-                } else {
-                    USession::setValue('hall_management_error', 'Sala non trovata.');
-                }
-            } else {
-                USession::setValue('hall_management_error', 'ID sala non valido.');
-            }
+                } 
+            } 
         }
         // Reindirizza sempre alla pagina di gestione
         header('Location: /Pancia_mia_fatti_capanna/RestaurantHall/manage');

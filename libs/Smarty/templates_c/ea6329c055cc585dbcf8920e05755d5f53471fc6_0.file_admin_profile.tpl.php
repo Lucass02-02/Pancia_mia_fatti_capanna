@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-12 12:33:06
+/* Smarty version 5.5.1, created on 2025-07-12 18:34:20
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/admin_profile.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_687239e2c1bcd1_92299090',
+  'unifunc' => 'content_68728e8c781b67_52581504',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'ea6329c055cc585dbcf8920e05755d5f53471fc6' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/admin_profile.tpl',
-      1 => 1752313802,
+      1 => 1752337957,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_687239e2c1bcd1_92299090 (\Smarty\Template $_smarty_tpl) {
+function content_68728e8c781b67_52581504 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?>
 <!DOCTYPE html>
@@ -69,7 +69,9 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
                         <div class="p-3 rounded border h-100" style="background-color: var(--surface-color);">
                             <h3 class="h5 mb-3" style="color: var(--heading-color); font-family: var(--heading-font);">Gestione Ristorante</h3>
                             <ul class="list-unstyled">
-                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Tavoli e Sale</a></li>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Banchetto</a></li>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/manageTurns" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Turni</a></li>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Tavoli</a></li>
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Menù e Prodotti</a></li>
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/showReservations" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Prenotazioni</a></li>
                                 <li><a href="/Pancia_mia_fatti_capanna/Admin/showOrders" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Ordini</a></li>

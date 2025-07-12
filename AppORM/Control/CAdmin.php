@@ -1,6 +1,7 @@
 <?php // File: AppORM/Control/COwner.php
 namespace AppORM\Control;
 
+use AppORM\Entity\DayOfWeek;
 use AppORM\Entity\EReservation;
 use AppORM\Entity\ReservationStatus;
 use AppORM\Services\Foundation\FEntityManager;
@@ -11,6 +12,8 @@ use AppORM\Services\Utility\UView;
 use DateTime;
 use AppORM\Entity\EOrder;
 use AppORM\Entity\EOrderItem;
+use AppORM\Entity\ETurn;
+use AppORM\Entity\TurnName;
 
 class CAdmin {
 
@@ -178,4 +181,51 @@ class CAdmin {
 
         UView::render('waiter_order_detail', ['order_items' => $order_items, 'user_role' => $userRole]);
     }
-}
+
+
+    public static function manageTurns() {
+        if (USession::getValue('user_role') !== 'admin') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        $turns = FEntityManager::getInstance()->selectAll(ETurn::class);
+
+        $enumCases = DayOfWeek::cases();
+        $enumValues = [];
+
+        foreach($enumCases as $case) {
+            $enumValues[$case->name] = $case->value;
+        }
+
+        $enumCases2 = TurnName::cases();
+        $enumValues2 = [];
+
+        foreach($enumCases2 as $case) {
+            $enumValues2[$case->name] = $case->value;
+        }
+
+        UView::render('manage_turns', ['turns' => $turns, 'enumValues' => $enumValues, 'enumValues2' => $enumValues2]);
+   }
+
+   public static function deleteTurn() {
+        if (USession::getValue('user_role') !== 'admin') {
+             header('Location: /Pancia_mia_fatti_capanna/'); 
+             exit;
+        }
+
+        if (UHTTPMethods::isPost()) {
+            $id = (int)UHTTPMethods::getPostValue('turn_id');
+            if ($id > 0) {
+                $turn = FEntityManager::getInstance()->retriveObjectById(ETurn::class, $id);
+                if ($turn) {
+                        FPersistentManager::getInstance()->deleteRestaurantHall($turn);
+                        // Successo: nessun errore da impostare in sessione
+                } 
+            } 
+        }
+        // Reindirizza sempre alla pagina di gestione
+        header('Location: /Pancia_mia_fatti_capanna/Admin/manageTurns');
+        exit;
+   }
+} 

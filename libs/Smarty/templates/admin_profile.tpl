@@ -44,6 +44,7 @@
                             <h3 class="h5 mb-3" style="color: var(--heading-color); font-family: var(--heading-font);">Gestione Ristorante</h3>
                             <ul class="list-unstyled">
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/RestaurantHall/manage" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Banchetto</a></li>
+                                <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/manageTurns" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Turni</a></li>
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Table/listAll" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Tavoli</a></li>
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Menù e Prodotti</a></li>
                                 <li class="mb-2"><a href="/Pancia_mia_fatti_capanna/Admin/showReservations" class="btn w-100" style="background-color: var(--accent-color); color: var(--contrast-color);">Gestisci Prenotazioni</a></li>
