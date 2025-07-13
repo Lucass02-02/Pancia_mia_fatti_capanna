@@ -43,7 +43,7 @@
                     <a href="/Pancia_mia_fatti_capanna/Waiter/manage" class="btn btn-info">Gestisci Camerieri</a>
                 </div>
 
-                {if isset($error) && $error}
+                {if isset($error)}
                     <div class="alert alert-danger mb-3">
                         Non puoi eliminare questo banchetto perché contiene dei camerieri. Sposta i camerieri in un altro banchetto e riprova.
                     </div>

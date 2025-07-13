@@ -15,9 +15,9 @@ class EAdmin extends EUser
 
     private static $entity = EAdmin::class;
 
-    public function __construct($name, $surname, $email, $password)
+    public function __construct($name, $surname, $birthDate, $email, $password, $phoneNumber)
     {
-        parent::__construct($name, $surname, $email, $password);
+        parent::__construct($name, $surname, $birthDate, $email, $password, $phoneNumber);
         $this->responses = new ArrayCollection(); // Inizializza la collezione
     }
 
