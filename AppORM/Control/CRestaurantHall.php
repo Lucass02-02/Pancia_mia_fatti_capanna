@@ -39,7 +39,7 @@ class CRestaurantHall
             if ($name && $totalPlaces > 0) {
                 
                 $saved = FPersistentManager::getInstance()->saveRestaurantHall($name, $totalPlaces);
-                if (!$saved) {
+                if ($saved === false) {
                     USession::setValue('hall_management_error', 'Errore durante la creazione della sala.');
                 }
             } else {

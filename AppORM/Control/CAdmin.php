@@ -267,5 +267,8 @@ class CAdmin {
                 FPersistentManager::getInstance()->uploadObject($turn);
             } 
         }
+
+        header('Location: /Pancia_mia_fatti_capanna/Admin/manageTurns');
+        exit;
     }
 } 

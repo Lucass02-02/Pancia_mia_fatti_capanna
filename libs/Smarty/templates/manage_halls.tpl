@@ -45,7 +45,7 @@
 
                 {if isset($error)}
                     <div class="alert alert-danger mb-3">
-                        Non puoi eliminare questo banchetto perché contiene dei camerieri. Sposta i camerieri in un altro banchetto e riprova.
+                        {$error|escape}
                     </div>
                 {/if}
 

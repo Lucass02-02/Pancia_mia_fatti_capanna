@@ -480,6 +480,8 @@ class FPersistentManager {
         $hall = new ERestaurantHall($name, $totalPlaces);
  
         self::uploadObject($hall);
+
+        return true;
        
     }
      public static function deleteRestaurantHall(ERestaurantHall $hall)
