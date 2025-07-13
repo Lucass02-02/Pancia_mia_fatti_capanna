@@ -1,5 +1,4 @@
-<?php // File: AppORM/Control/CHome.php 
-
+<?php
 namespace AppORM\Control;
 
 use AppORM\Services\Foundation\FPersistentManager;
@@ -11,6 +10,9 @@ use AppORM\Services\Utility\UHTTPMethods;
 
 class CHome
 {
+    /**
+     * Gestisce la pagina principale del sito (homepage).
+     */
     public static function home(): void
     {
         if (USession::getValue('redirect_page') !== null) {

@@ -31,17 +31,21 @@ class EAllergens
     {
         return $this->id;
     }
+    
 
+    
     public function getAllergenType(): string
     {
         return $this->allergenType;
     }
 
+    
     public function setAllergenType(string $allergenType): void
     {
         $this->allergenType = $allergenType;
     }
 
+    
     public function getProduct(): Collection 
     {
         return $this->product;

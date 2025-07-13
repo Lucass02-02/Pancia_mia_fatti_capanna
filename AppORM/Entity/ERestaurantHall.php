@@ -1,9 +1,12 @@
 <?php
 // File: AppORM/Entity/ERestaurantHall.php (AGGIORNATO)
+// File: AppORM/Entity/ERestaurantHall.php (AGGIORNATO)
 namespace AppORM\Entity;
+
 
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[ORM\Entity]
@@ -13,6 +16,7 @@ class ERestaurantHall {
     #[ORM\Id]
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
+    private ?int $idHall = null;
     private ?int $idHall = null;
 
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
@@ -45,18 +49,22 @@ class ERestaurantHall {
         return self::class;
     }
 
+    
     public function getIdHall(): ?int {
         return $this->idHall;
     }
 
+    
     public function getName(): string {
         return $this->name;
     }
 
+    
     public function getTotalPlaces(): int {
         return $this->totalPlaces;
     }
 
+    
     public function setTotalPlaces(int $totalPlaces): void {
         $this->totalPlaces = $totalPlaces;
     }

@@ -1,4 +1,4 @@
-<?php // File: AppORM/Control/CClient.php (Completo)
+<?php // File: AppORM/Control/CClient.php
 
 namespace AppORM\Control;
 
@@ -162,7 +162,6 @@ class CClient
         $client = FPersistentManager::getInstance()->getClientById($clientId);
 
         if ($client) {
-            // Passiamo alla vista non solo il cliente, ma anche le sue recensioni e carte
             UView::render('profile', [
                 'client' => $client,
                 'reviews' => $client->getReviews(),
@@ -198,7 +197,7 @@ class CClient
             UView::render('add_review');
         } elseif (UHTTPMethods::isPost()) {
             $clientId = USession::getValue('user_id');
-            $client = FPersistentManager::getClientById($clientId);
+            $client = FPersistentManager::getInstance()->getClientById($clientId);
             $rating = (int)UHTTPMethods::getPostValue('rating');
             $comment = UHTTPMethods::getPostValue('comment');
 
@@ -253,7 +252,6 @@ class CClient
             $clientId = USession::getValue('user_id');
             $client = FPersistentManager::getInstance()->getClientById($clientId);
             
-            // In un'app reale, qui ci sarebbe la validazione dei dati della carta
             $brand = UHTTPMethods::getPostValue('brand');
             $last4 = UHTTPMethods::getPostValue('last4');
             $expMonth = (int)UHTTPMethods::getPostValue('expMonth');
@@ -269,17 +267,15 @@ class CClient
         }
     }
 
-    /**
-     * Gestisce la cancellazione di una carta di credito.
-     */
-    public static function deleteCreditCard(): void
+    // Modificato per accettare l'ID della carta come segmento dell'URL se si desidera usarlo così
+    // e per reindirizzare a un URL pulito.
+    public static function deleteCreditCard(): void // La form POST invia l'ID con metodo POST
     {
         if (!USession::isSet('user_id')) {
             header('Location: /Pancia_mia_fatti_capanna/Client/login');
             exit;
         }
         
-        // Per sicurezza, controlliamo che la richiesta sia POST
         if (UHTTPMethods::isPost()) {
             $cardId = (int)UHTTPMethods::getPostValue('card_id');
             $clientId = USession::getValue('user_id');

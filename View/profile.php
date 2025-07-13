@@ -15,6 +15,15 @@
         .delete-form button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
         .nav-links { margin-top: 1.5em; text-align: center; }
         .nav-links a { margin: 0 10px; color: #007bff; text-decoration: none; }
+        body { font-family: sans-serif; background-color: #f9f9f9; line-height: 1.6; }
+        .container { max-width: 900px; margin: 2em auto; padding: 1em; background: #fff; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
+        h1, h2, h3 { color: #e8491d; }
+        .profile-details, .reviews-section, .cards-section { margin-bottom: 2em; padding: 1.5em; border: 1px solid #ddd; border-radius: 5px; }
+        .card-item { display: flex; justify-content: space-between; align-items: center; padding: 10px; border-bottom: 1px solid #eee; }
+        .card-item:last-child { border-bottom: none; }
+        .delete-form button { background-color: #dc3545; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; }
+        .nav-links { margin-top: 1.5em; text-align: center; }
+        .nav-links a { margin: 0 10px; color: #007bff; text-decoration: none; }
     </style>
 </head>
 <body>

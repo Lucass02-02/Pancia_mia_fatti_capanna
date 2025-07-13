@@ -1,6 +1,9 @@
 <?php
 // File: AppORM/Entity/EProduct.php (AGGIORNATO CON I SETTER)
 
+<?php
+// File: AppORM/Entity/EProduct.php (AGGIORNATO CON I SETTER)
+
 namespace AppORM\Entity;
 
 use Collator;
@@ -14,9 +17,12 @@ class EProduct
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
+    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
+    private ?int $id = null;
 
+    #[ORM\Column(type: 'string', length: 255)]
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
@@ -26,13 +32,22 @@ class EProduct
     #[ORM\Column(type: 'float')]
     private float $price;
 
+    private float $price;
+
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $availability = true;
 
     #[ORM\ManyToOne(targetEntity: EProductCategory::class, inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     private EProductCategory $category;
+    private bool $availability = true;
 
+    #[ORM\ManyToOne(targetEntity: EProductCategory::class, inversedBy: 'products')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
+    private EProductCategory $category;
+
+    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'product')]
+    #[ORM\JoinTable(name: 'products_allergens')]
     #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'product')]
     #[ORM\JoinTable(name: 'products_allergens')]
     private Collection $allergens;
@@ -44,6 +59,8 @@ class EProduct
     {
         $this->name = $name;
         $this->description = $description;
+        $this->price = $price;
+        $this->category = $category;
         $this->price = $price;
         $this->category = $category;
         $this->allergens = new ArrayCollection();

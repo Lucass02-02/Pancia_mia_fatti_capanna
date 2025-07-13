@@ -39,6 +39,7 @@ class CCart
             $productId = (int) UHTTPMethods::getPostValue('product_id');
             $quantity = (int) UHTTPMethods::getPostValue('quantity', 1);
             $fromCart = UHTTPMethods::getPostValue('from_cart');
+            $fromCart = UHTTPMethods::getPostValue('from_cart');
 
             if ($productId > 0 && $quantity > 0) {
                 $product = FPersistentManager::getInstance()->getProductById($productId);
@@ -243,6 +244,7 @@ class CCart
         header('Location: /Pancia_mia_fatti_capanna/Cart/view/');
         exit;
     }
+    
     
     public static function clear(): void {
         if (!USession::isSet('user_id')) {

@@ -1,7 +1,9 @@
 <?php // File: AppORM/Control/CReview.php
 
+
 namespace AppORM\Control;
 
+use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UView;
 use AppORM\Services\Utility\USession;
@@ -12,20 +14,7 @@ use AppORM\Entity\EAdminResponse;
 
 class CReview
 {
-    /**
-     * Recupera tutte le recensioni da tutti gli utenti e le mostra in una pagina.
-     */
-    public static function showAll1(): void
-    {
-        $userRole = USession::getValue('user_role');
-        $allReviews = FPersistentManager::getInstance()->getAllReviews();
-
-        UView::render('all_reviews', [
-            'reviews' => $allReviews,
-            'titolo' => 'Tutte le Recensioni',
-            'user_role' => $userRole
-        ]);
-    }
+   
 
     public static function showAll(): void
     {

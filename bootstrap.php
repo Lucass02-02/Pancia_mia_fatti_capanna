@@ -2,10 +2,16 @@
 // File: bootstrap.php (Versione Corretta e Finale)
 
 // La prima istruzione deve essere QUESTA, per caricare tutte le librerie di Composer.
+// File: bootstrap.php (Versione Corretta e Finale)
+
+// La prima istruzione deve essere QUESTA, per caricare tutte le librerie di Composer.
 require_once __DIR__ . '/vendor/autoload.php';
 
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\Configuration;
+use Doctrine\ORM\Mapping\Driver\AttributeDriver;
+use Symfony\Component\Cache\Adapter\ArrayAdapter;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;

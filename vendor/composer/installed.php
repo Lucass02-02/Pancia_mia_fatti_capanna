@@ -154,6 +154,15 @@
             'aliases' => array(),
             'dev_requirement' => false,
         ),
+        'smarty/smarty' => array(
+            'pretty_version' => 'v5.5.1',
+            'version' => '5.5.1.0',
+            'reference' => 'cbcd66e1de017ae3bcbf8b5fa2a34858f5e2adbc',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../smarty/smarty',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
         'symfony/cache' => array(
             'pretty_version' => 'v7.3.1',
             'version' => '7.3.1.0',

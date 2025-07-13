@@ -35,7 +35,6 @@ class FUserReview
 
     public static function deleteObj(EUserReview $review): bool
     {
-        // Se FEntityManager non ha deleteObj, ma removeObject, usa quello
         return FEntityManager::getInstance()->deleteObject($review); 
     }
 
