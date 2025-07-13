@@ -24,8 +24,7 @@ class EClient extends EUser {
 
     #[ORM\Column(type: 'boolean')]
     private bool $receivesNotifications = false;
-    #[ORM\Column(type: 'boolean')]
-    private bool $receivesNotifications = false;
+    
     
     #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'client')] // Assumendo che in EReservation ci sia una prop $client
     #[ORM\OneToMany(targetEntity: EReservation::class, mappedBy: 'client')] // Assumendo che in EReservation ci sia una prop $client

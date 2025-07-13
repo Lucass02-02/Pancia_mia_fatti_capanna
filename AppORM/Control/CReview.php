@@ -4,7 +4,6 @@
 namespace AppORM\Control;
 
 use AppORM\Services\Foundation\FPersistentManager;
-use AppORM\Services\Foundation\FPersistentManager;
 use AppORM\Services\Utility\UView;
 use AppORM\Services\Utility\USession;
 use AppORM\Services\Utility\UHTTPMethods;

@@ -7,7 +7,7 @@ namespace AppORM\Entity;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\ArrayCollection;
+
 
 #[ORM\Entity]
 #[ORM\Table(name: 'restaurant_halls')]
@@ -17,7 +17,7 @@ class ERestaurantHall {
     #[ORM\Column(type: 'integer')]
     #[ORM\GeneratedValue]
     private ?int $idHall = null;
-    private ?int $idHall = null;
+    
 
     #[ORM\Column(type: 'string', length: 255, nullable: false)]
     private string $name;

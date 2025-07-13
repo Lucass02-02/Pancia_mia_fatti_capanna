@@ -616,58 +616,6 @@ class FPersistentManager {
     {
         return FWaiter::saveObj($waiter);
     }
-
-
-    /**
-     * Salva o aggiorna una categoria di prodotti.
-     */
-    public static function saveProductCategory(EProductCategory $category): bool 
-    { 
-        return FProductCategory::saveObj($category); 
-    }
-    
-    /**
-     * Recupera una categoria tramite ID.
-     */
-    public static function getProductCategoryById(int $id): ?EProductCategory 
-    { 
-        return FProductCategory::getObj($id); 
-    }
-
-    /**
-     * Recupera tutte le categorie di prodotti.
-     */
-    public static function getAllProductCategories(): array
-    {
-        return FProductCategory::selectAll();
-    }
-    
-    /**
-     * Cancella una categoria di prodotti.
-     */
-    public static function deleteProductCategory(EProductCategory $category): bool 
-    { 
-        return FProductCategory::deleteObj($category); 
-    }
-
-    /**
-     * Aggiorna il nome di una categoria esistente.
-     */
-    public static function updateProductCategoryName(EProductCategory $category, string $newName): bool
-    {
-        $category->setName($newName);
-        return FProductCategory::saveObj($category);
-    }
-
-    /**
-     * Recupera tutte le recensioni dal database.
-     * @return array
-     */
-    public static function getAllReviews(): array
-    {
-
-        return FUserReview::fetchAll();
-    }
     
     /**
      * Recupera una singola recensione tramite ID.

@@ -1,8 +1,6 @@
 <?php
 // File: AppORM/Entity/EProduct.php (AGGIORNATO CON I SETTER)
 
-<?php
-// File: AppORM/Entity/EProduct.php (AGGIORNATO CON I SETTER)
 
 namespace AppORM\Entity;
 
@@ -20,7 +18,6 @@ class EProduct
     #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
-    private ?int $id = null;
 
     #[ORM\Column(type: 'string', length: 255)]
     #[ORM\Column(type: 'string', length: 255)]
@@ -32,7 +29,6 @@ class EProduct
     #[ORM\Column(type: 'float')]
     private float $price;
 
-    private float $price;
 
     #[ORM\Column(type: 'boolean', options: ['default' => true])]
     private bool $availability = true;
@@ -40,14 +36,7 @@ class EProduct
     #[ORM\ManyToOne(targetEntity: EProductCategory::class, inversedBy: 'products')]
     #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     private EProductCategory $category;
-    private bool $availability = true;
 
-    #[ORM\ManyToOne(targetEntity: EProductCategory::class, inversedBy: 'products')]
-    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
-    private EProductCategory $category;
-
-    #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'product')]
-    #[ORM\JoinTable(name: 'products_allergens')]
     #[ORM\ManyToMany(targetEntity: EAllergens::class, inversedBy: 'product')]
     #[ORM\JoinTable(name: 'products_allergens')]
     private Collection $allergens;

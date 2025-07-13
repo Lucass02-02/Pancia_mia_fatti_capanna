@@ -218,11 +218,8 @@ class FEntityManager{
             self::$entityManager->rollback();
             // Stampa un errore per il debug
             error_log("ERRORE IN TRANSAZIONE (saveObject): " . $e->getMessage());
-<<<<<<< HEAD:AppORM/Services/Foundation/FEntitymanager.php
             error_log($e->getTraceAsString());
             echo "Errore nel salvataggio: " . $e->getMessage();
-=======
->>>>>>> 9b0182078a802fbeac197117c48df553fa5903eb:AppORM/Services/Foundation/FEntityManager.php
             return false;
         }
     }
