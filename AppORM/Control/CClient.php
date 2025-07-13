@@ -79,12 +79,19 @@ class CClient
 
     public static function login(): void
     {
+        $message = USession::getValue('flash_message');
+        if ($message) {
+            USession::setValue('flash_message', null);
+        }
+
         if (UHTTPMethods::isGet()) {
-            UView::render('login');
+            UView::render('login', ['error' => $message]);
         } elseif (UHTTPMethods::isPost()) {
             $email = UHTTPMethods::getPostValue('email');
             $password = UHTTPMethods::getPostValue('password');
             $rememberMe = UHTTPMethods::getPostValue('remember_me'); // Legge il valore della checkbox
+
+
 
             if ($email && $password) {
                 // Autenticazione Client
@@ -377,57 +384,51 @@ class CClient
 
         $selectedAllergensIds = [];
 
-        // Se l'utente invia un nuovo filtro, usalo e salva il cookie
+        // Se clicca Rimuovi Filtro
+        if (isset($_POST['remove_filter'])) {
+            UCookie::delete('allergen_filter');
+            header('Location: /Pancia_mia_fatti_capanna/Client/order');
+            exit;
+        }
+
+        // Se invia nuovi allergeni
         if (isset($_POST['allergens'])) {
             $selectedAllergensIds = array_map('intval', $_POST['allergens']);
-            // Salva gli ID come stringa JSON nel cookie per 1 settimana (604800 secondi)
             UCookie::set('allergen_filter', json_encode($selectedAllergensIds), 604800);
         }
-        // Altrimenti, se non c'è un invio POST, prova a leggere dal cookie
-        elseif (UCookie::get('allergen_filter')) {
-            // Decodifica la stringa JSON salvata nel cookie
+
+        // Se esiste cookie e non c'è nuovo POST allergens
+        if (empty($selectedAllergensIds) && UCookie::get('allergen_filter')) {
             $selectedAllergensIds = json_decode(UCookie::get('allergen_filter'), true);
         }
 
+        // Recupera dati
         $userRole = USession::getValue('user_role');
         $userId = USession::getValue('user_id');
 
-        if ($userRole === 'admin') {
-            $allProducts = FPersistentManager::getInstance()->getAllProducts();
-        } else {
-            $allProducts = FPersistentManager::getInstance()->getAvailableProducts();
-        }
+        $allProducts = ($userRole === 'admin')
+            ? FPersistentManager::getInstance()->getAllProducts()
+            : FPersistentManager::getInstance()->getAvailableProducts();
 
         $allAllergens = FPersistentManager::getInstance()->getAllAllergens();
 
-        if (empty($selectedAllergensIds)) {
-            $filteredProducts = $allProducts;
-        } else {
-            $filteredProducts = [];
-            foreach ($allProducts as $product) {
-                $hasExcludedAllergen = false;
-                foreach ($product->getAllergens() as $allergen) {
-                    if (in_array($allergen->getId(), $selectedAllergensIds)) {
-                        $hasExcludedAllergen = true;
-                        break;
-                    }
-                }
-                if (!$hasExcludedAllergen) {
-                    $filteredProducts[] = $product;
+        // Filtra prodotti
+        $filteredProducts = array_filter($allProducts, function($product) use ($selectedAllergensIds) {
+            foreach ($product->getAllergens() as $allergen) {
+                if (in_array($allergen->getId(), $selectedAllergensIds)) {
+                    return false;
                 }
             }
-        }
+            return true;
+        });
 
-
-        if ($allNotApproved === 'ordine approvato') {
-            UView::render('menu_ordine',  [
+        UView::render('menu_ordine', [
             'products' => $filteredProducts,
             'allAllergens' => $allAllergens,
             'selectedAllergens' => $selectedAllergensIds,
             'user_role' => $userRole,
             'user_id' => $userId,
         ]);
-        }
     }
 
     /**

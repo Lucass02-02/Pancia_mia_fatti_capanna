@@ -49,10 +49,16 @@
                                 </div>
                             {/foreach}
                         </div>
-                        <div class="mt-3 d-flex flex-wrap gap-2">
-                            <button type="submit" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Applica Filtro</button>
-                            <a href="/Pancia_mia_fatti_capanna/Client/order" class="btn btn-secondary">Rimuovi Filtro</a>
+
+                        <div class="mt-3 mb-4 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-primary">Applica Filtro</button>
                         </div>
+                    </form>
+
+                    
+                    <form method="post" action="/Pancia_mia_fatti_capanna/Client/order">
+                        <input type="hidden" name="remove_filter" value="1">
+                        <button type="submit" class="btn btn-secondary">Rimuovi Filtro</button>
                     </form>
                 </div>
 

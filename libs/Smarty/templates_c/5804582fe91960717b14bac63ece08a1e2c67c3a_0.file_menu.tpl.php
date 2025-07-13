@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-12 13:48:55
+/* Smarty version 5.5.1, created on 2025-07-13 03:48:58
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/menu.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_68724ba7819ee6_90302984',
+  'unifunc' => 'content_6873108a88f5a7_06321537',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     '5804582fe91960717b14bac63ece08a1e2c67c3a' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/menu.tpl',
-      1 => 1752320933,
+      1 => 1752371332,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68724ba7819ee6_90302984 (\Smarty\Template $_smarty_tpl) {
+function content_6873108a88f5a7_06321537 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?>
 <!DOCTYPE html>
@@ -89,7 +89,7 @@ $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smart
                         <?php if ($_smarty_tpl->getValue('user_role') == 'client') {?>
                 <div class="bg-white p-4 rounded shadow-sm mb-4 border">
                     <h2 class="h5 mb-3">Filtra per allergeni (mostra piatti senza):</h2>
-                    <form action="/Pancia_mia_fatti_capanna/Home/menu" method="post" class="row g-3 align-items-end">
+                    <form action="/Pancia_mia_fatti_capanna/Home/menu" method="POST">
                         <div class="row">
                             <?php
 $_from = $_smarty_tpl->getSmarty()->getRuntime('Foreach')->init($_smarty_tpl, $_smarty_tpl->getValue('allAllergens'), 'allergen');
@@ -114,12 +114,15 @@ $foreach0DoElse = false;
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </div>
-                        <div class="mt-3">
+                        <div class="mt-3 mb-4 d-flex flex-wrap gap-2">
                             <button type="submit" class="btn btn-primary">Applica Filtro</button>
-                            <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
-                        </div>
                     </form>
-                </div>
+
+                        <form method="post" action="/Pancia_mia_fatti_capanna/Home/menu">
+                            <input type="hidden" name="remove_filter" value="1">
+                            <button type="submit" class="btn btn-secondary">Rimuovi Filtro</button>
+                        </form>
+                    </div>
             <?php }?>
 
                         <?php if (( !$_smarty_tpl->hasVariable('products') || empty($_smarty_tpl->getValue('products')))) {?>

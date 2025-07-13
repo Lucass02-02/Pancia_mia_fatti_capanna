@@ -68,7 +68,7 @@
             {if $user_role == 'client'}
                 <div class="bg-white p-4 rounded shadow-sm mb-4 border">
                     <h2 class="h5 mb-3">Filtra per allergeni (mostra piatti senza):</h2>
-                    <form action="/Pancia_mia_fatti_capanna/Home/menu" method="post" class="row g-3 align-items-end">
+                    <form action="/Pancia_mia_fatti_capanna/Home/menu" method="POST">
                         <div class="row">
                             {foreach from=$allAllergens item=allergen}
                                 <div class="col-md-3 col-sm-4 col-6">
@@ -82,12 +82,15 @@
                                 </div>
                             {/foreach}
                         </div>
-                        <div class="mt-3">
+                        <div class="mt-3 mb-4 d-flex flex-wrap gap-2">
                             <button type="submit" class="btn btn-primary">Applica Filtro</button>
-                            <a href="/Pancia_mia_fatti_capanna/Home/menu" class="btn btn-secondary ms-2">Rimuovi Filtro</a>
-                        </div>
                     </form>
-                </div>
+
+                        <form method="post" action="/Pancia_mia_fatti_capanna/Home/menu">
+                            <input type="hidden" name="remove_filter" value="1">
+                            <button type="submit" class="btn btn-secondary">Rimuovi Filtro</button>
+                        </form>
+                    </div>
             {/if}
 
             {* === SEZIONE ELENCO PIATTI === *}

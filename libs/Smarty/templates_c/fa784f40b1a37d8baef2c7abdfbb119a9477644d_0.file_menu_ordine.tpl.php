@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-12 12:13:37
+/* Smarty version 5.5.1, created on 2025-07-13 03:47:57
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/menu_ordine.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_687235512fee47_09939422',
+  'unifunc' => 'content_6873104d208f98_70822987',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'fa784f40b1a37d8baef2c7abdfbb119a9477644d' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/menu_ordine.tpl',
-      1 => 1752314583,
+      1 => 1752371269,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_687235512fee47_09939422 (\Smarty\Template $_smarty_tpl) {
+function content_6873104d208f98_70822987 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?>
 <!DOCTYPE html>
@@ -82,10 +82,16 @@ $foreach0DoElse = false;
 }
 $_smarty_tpl->getSmarty()->getRuntime('Foreach')->restore($_smarty_tpl, 1);?>
                         </div>
-                        <div class="mt-3 d-flex flex-wrap gap-2">
-                            <button type="submit" class="btn" style="background-color: var(--accent-color); color: var(--contrast-color);">Applica Filtro</button>
-                            <a href="/Pancia_mia_fatti_capanna/Client/order" class="btn btn-secondary">Rimuovi Filtro</a>
+
+                        <div class="mt-3 mb-4 d-flex flex-wrap gap-2">
+                            <button type="submit" class="btn btn-primary">Applica Filtro</button>
                         </div>
+                    </form>
+
+                    
+                    <form method="post" action="/Pancia_mia_fatti_capanna/Client/order">
+                        <input type="hidden" name="remove_filter" value="1">
+                        <button type="submit" class="btn btn-secondary">Rimuovi Filtro</button>
                     </form>
                 </div>
 
