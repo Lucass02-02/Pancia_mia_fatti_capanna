@@ -1,18 +1,18 @@
 <?php
-/* Smarty version 5.5.1, created on 2025-07-12 14:01:36
+/* Smarty version 5.5.1, created on 2025-07-13 04:44:41
   from 'file:C:\xampp\htdocs\Pancia_mia_fatti_capanna\AppORM\Services\Utility/../../../libs/Smarty/templates/create_product.tpl' */
 
 /* @var \Smarty\Template $_smarty_tpl */
 if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   'version' => '5.5.1',
-  'unifunc' => 'content_68724ea03eeab8_10478295',
+  'unifunc' => 'content_68731d9960e629_68353703',
   'has_nocache_code' => false,
   'file_dependency' => 
   array (
     'e2a79c465194815a2fb5d1e8d3199cc5b0fa5c0f' => 
     array (
       0 => 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\AppORM\\Services\\Utility/../../../libs/Smarty/templates/create_product.tpl',
-      1 => 1752313802,
+      1 => 1752373716,
       2 => 'file',
     ),
   ),
@@ -20,7 +20,7 @@ if ($_smarty_tpl->getCompiled()->isFresh($_smarty_tpl, array (
   array (
   ),
 ))) {
-function content_68724ea03eeab8_10478295 (\Smarty\Template $_smarty_tpl) {
+function content_68731d9960e629_68353703 (\Smarty\Template $_smarty_tpl) {
 $_smarty_current_dir = 'C:\\xampp\\htdocs\\Pancia_mia_fatti_capanna\\libs\\Smarty\\templates';
 ?><!DOCTYPE html>
 <html lang="it">

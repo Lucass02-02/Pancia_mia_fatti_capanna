@@ -12,9 +12,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\Configuration;
 use Doctrine\ORM\Mapping\Driver\AttributeDriver;
 use Symfony\Component\Cache\Adapter\ArrayAdapter;
-use Doctrine\ORM\Configuration;
-use Doctrine\ORM\Mapping\Driver\AttributeDriver;
-use Symfony\Component\Cache\Adapter\ArrayAdapter;
+
 
 // --- CONFIGURAZIONE DELLA CONNESSIONE AL DATABASE ---
 $dbParams = [

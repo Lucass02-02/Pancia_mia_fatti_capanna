@@ -15,11 +15,9 @@ class EProduct
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\GeneratedValue]
     #[ORM\Column(type: 'integer')]
     private ?int $id = null;
 
-    #[ORM\Column(type: 'string', length: 255)]
     #[ORM\Column(type: 'string', length: 255)]
     private string $name;
 
@@ -41,7 +39,7 @@ class EProduct
     #[ORM\JoinTable(name: 'products_allergens')]
     private Collection $allergens;
 
-    #[ORM\OneToMany(targetEntity: EOrderItem::class, mappedBy: 'product')]
+    #[ORM\OneToMany(targetEntity: EOrderItem::class, mappedBy: 'product', cascade:['remove'])]
     private Collection $orderItems;
 
     public function __construct(string $name, string $description, float $price, EProductCategory $category)
